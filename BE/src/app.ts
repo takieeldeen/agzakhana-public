@@ -1,8 +1,11 @@
 import express from "express";
 
-import mainRouter from "./routers";
-
 const app = express();
-app.use("", mainRouter);
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+  });
+});
 
 export default app;
