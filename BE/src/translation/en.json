@@ -1,0 +1,11 @@
+{
+  "COMMON": {
+    "FAIL": "Fail",
+    "ERROR": "Error",
+    "SUCCESS": "Success"
+  },
+  "LOGIN": {
+    "MISSING_CREDENTIALS": "Please enter the username and password",
+    "WRONG_CREDENTIALS": "Wrong Username or password"
+  }
+}

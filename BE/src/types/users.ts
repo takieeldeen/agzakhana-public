@@ -1,0 +1,13 @@
+import mongoose from "mongoose";
+export type UserType = {
+  _id: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  imageUrl: string;
+  role: string;
+  createdAt: Date;
+  updatedAt: Date;
+  phoneNumber: string;
+  password: string;
+  passwordConfirmation: string;
+};

@@ -1,0 +1,11 @@
+{
+  "COMMON": {
+    "FAIL": "فشل",
+    "ERROR": "خطأ",
+    "SUCCESS": "نجاح"
+  },
+  "LOGIN": {
+    "MISSING_CREDENTIALS": "يرجى إدخال اسم المستخدم وكلمة المرور",
+    "WRONG_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيح"
+  }
+}
