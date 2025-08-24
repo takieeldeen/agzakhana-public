@@ -8,12 +8,15 @@ import { UserType } from "@/types/users";
 import { useCallback } from "react";
 import { logout } from "@/api/auth";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function UserOptions({ user }: { user: UserType | undefined }) {
   const t = useTranslations();
   const router = useRouter();
+  const { logout: logoutLocally } = useAuth();
   const handleLogout = useCallback(async () => {
     await logout();
+    logoutLocally();
     router.refresh();
   }, []);
   if (!!user)

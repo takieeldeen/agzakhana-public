@@ -7,12 +7,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
 import RHFTextfield from "@/components/rhf-textfield";
-import { Button } from "@/components/ui/button";
+import { Button, LoadingButton } from "@/components/ui/button";
 import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { register } from "@/api/auth";
 
 export default function SignupForm() {
   // State Management ////////////////////////////////
@@ -30,7 +31,7 @@ export default function SignupForm() {
         t("FORM_VALIDATIONS.REQUIRED_FIELD", { field: t("LOGIN.PASSWORD") })
       )
       .min(8, t("VALIDATIONS.PASSWORD_MIN_LENGTH")),
-    confirmPassword: z
+    passwordConfirmation: z
       .string()
       .min(
         1,
@@ -42,7 +43,7 @@ export default function SignupForm() {
   const defaultValues = {
     email: "",
     password: "",
-    confirmPassword: "",
+    passwordConfirmation: "",
   };
   const methods = useForm({
     resolver: zodResolver(loginFormSchema),
@@ -50,21 +51,30 @@ export default function SignupForm() {
   });
   const {
     watch,
-    formState: { dirtyFields },
+    formState: { dirtyFields, isSubmitting },
   } = methods;
   const values = watch();
-  const onSubmit = useCallback((data: any) => {
-    console.log(data);
+  const onSubmit = useCallback(async (data: any) => {
+    try {
+      await register(data);
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
   const IS_DIRTY_PASSWORD = dirtyFields.password;
-  const IS_DIRTY_CONFIRM_PASSWORD = dirtyFields.confirmPassword;
+  const IS_DIRTY_CONFIRM_PASSWORD = dirtyFields.passwordConfirmation;
   // Password validation checks ///////////////////////
+  const PASSWORD_SHORT =
+    values.password.length > 0 && values.password.length < 8;
+  const PASSWORD_MEDIUM =
+    values.password.length >= 8 && values.password.length <= 12;
+  const PASSWORD_STRONG = values.password.length > 12;
   const PASSWORD_LONG_ENOUGH = values.password.length >= 8;
   const PASSWORD_HAS_UPPERCASE = /[A-Z]/.test(values.password);
   const PASSWORD_HAS_SPECIAL_CHAR = /[!@#$%^&*(),.?":{}|<>]/.test(
     values.password
   );
-  const PASSWORDS_MATCH = values.password === values.confirmPassword;
+  const PASSWORDS_MATCH = values.password === values.passwordConfirmation;
   return (
     <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
       <Button className="border-2 bg-transparent flex flex-row gap-2 text-text-primary text-base font-semibold py-6 border-gray-300">
@@ -104,7 +114,7 @@ export default function SignupForm() {
         className="gap-1"
       />
       <RHFTextfield
-        name="confirmPassword"
+        name="passwordConfirmation"
         label={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         placeholder={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         inputProps={{
@@ -118,7 +128,9 @@ export default function SignupForm() {
             >
               <Icon
                 icon={
-                  showPassword ? "majesticons:eye-off-line" : "mdi:eye-outline"
+                  showConfirmPassword
+                    ? "majesticons:eye-off-line"
+                    : "mdi:eye-outline"
                 }
                 className=" w-5! h-5! text-gray-600"
               />
@@ -132,10 +144,9 @@ export default function SignupForm() {
         <span
           className={cn(
             "w-1/3 rounded-l-full rtl:rounded-l-none rtl:rounded-r-full transition-all duration-300",
-            values?.password?.length <= 8 && "bg-red-700",
-            values?.password?.length > 8 &&
-              values?.password?.length <= 12 &&
-              "bg-orange-400",
+            PASSWORD_SHORT && "bg-red-700",
+            PASSWORD_MEDIUM && "bg-orange-400",
+            PASSWORD_STRONG && "bg-agzakhana-primary",
             values?.password?.length > 12 && "bg-agzakhana-primary",
             !IS_DIRTY_PASSWORD && "bg-gray-300"
           )}
@@ -143,10 +154,9 @@ export default function SignupForm() {
         <span
           className={cn(
             "w-1/3 bg-agzakhana-primary",
-            values?.password?.length <= 8 && "bg-red-700",
-            values?.password?.length > 8 &&
-              values?.password?.length <= 12 &&
-              "bg-orange-400",
+            PASSWORD_SHORT && "bg-gray-300",
+            PASSWORD_MEDIUM && "bg-orange-400",
+            PASSWORD_STRONG && "bg-agzakhana-primary",
             values?.password?.length > 12 && "bg-agzakhana-primary",
             !IS_DIRTY_PASSWORD && "bg-gray-300"
           )}
@@ -154,11 +164,9 @@ export default function SignupForm() {
         <span
           className={cn(
             "w-1/3 bg-agzakhana-primary rounded-r-full rtl:rounded-r-none rtl:rounded-l-full",
-            values?.password?.length <= 8 && "bg-red-700",
-            values?.password?.length > 8 &&
-              values?.password?.length <= 12 &&
-              "bg-orange-400",
-            values?.password?.length > 12 && "bg-agzakhana-primary",
+            PASSWORD_SHORT && "bg-gray-300",
+            PASSWORD_MEDIUM && "bg-gray-300",
+            PASSWORD_STRONG && "bg-agzakhana-primary",
             !IS_DIRTY_PASSWORD && "bg-gray-300"
           )}
         ></span>
@@ -259,9 +267,12 @@ export default function SignupForm() {
         </li>
       </ul>
 
-      <Button className="bg-agzakhana-primary text-white text-base font-semibold py-6">
+      <LoadingButton
+        loading={isSubmitting}
+        className="bg-agzakhana-primary text-white text-base font-semibold py-6"
+      >
         {t("SIGNUP.CREATE_ACCOUNT")}
-      </Button>
+      </LoadingButton>
 
       <p className="flex flex-row gap-2 self-center text-gray-800">
         {t("SIGNUP.ALREADY_HAVE_AN_ACCOUNT")}

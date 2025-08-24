@@ -1,10 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import axios, { endpoints } from "./axios";
 import { UserType } from "@/types/users";
+import { AxiosResponse } from "axios";
 
 export async function login(payload: any) {
   const URL = endpoints.auth.login;
-  await axios.post(URL, payload);
+  const res = (await axios.post(URL, payload)) as AxiosResponse<{
+    status: string;
+    user: UserType;
+  }>;
+  return res;
 }
 export async function logout() {
   const URL = endpoints.auth.logout;
@@ -17,32 +22,7 @@ export async function checkAuth() {
   return res?.data;
 }
 
-export function useCheckAuth() {
-  const [res, setRes] = useState<{
-    user?: UserType;
-    isAuthenticated: boolean;
-  }>({ user: undefined, isAuthenticated: false });
-
-  useEffect(() => {
-    const fetchAuth = async () => {
-      try {
-        const auth = await checkAuth();
-        setRes(auth);
-      } catch (err) {
-        setRes({ user: undefined, isAuthenticated: false });
-      }
-    };
-
-    fetchAuth();
-  }, []);
-
-  const memoizedValue = useMemo(
-    () => ({
-      user: res.user,
-      isAuthenticated: res.isAuthenticated,
-    }),
-    [res]
-  );
-  console.log(memoizedValue, res);
-  return memoizedValue;
+export async function register(payload: any) {
+  const URL = endpoints.auth.register;
+  await axios.post(URL, payload);
 }

@@ -13,10 +13,12 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import { login } from "@/api/auth";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginForm() {
   const t = useTranslations();
   const router = useRouter();
+  const { login: loginLocally } = useAuth();
   const loginFormSchema = z.object({
     email: z.email(
       t("FORM_VALIDATIONS.INVALID_FORMAT", { field: t("LOGIN.EMAIL") })
@@ -41,7 +43,8 @@ export default function LoginForm() {
   } = methods;
   const onSubmit = useCallback(async (data: any) => {
     try {
-      await login(data);
+      const res = await login(data);
+      loginLocally(res?.data?.user);
       router.push("/");
     } catch (err) {
       console.log(err);
