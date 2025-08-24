@@ -11,9 +11,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
+import { login } from "@/api/auth";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const t = useTranslations();
+  const router = useRouter();
   const loginFormSchema = z.object({
     email: z.email(
       t("FORM_VALIDATIONS.INVALID_FORMAT", { field: t("LOGIN.EMAIL") })
@@ -33,8 +36,16 @@ export default function LoginForm() {
     resolver: zodResolver(loginFormSchema),
     defaultValues,
   });
-  const onSubmit = useCallback((data: any) => {
-    console.log(data);
+  const {
+    formState: { isSubmitting },
+  } = methods;
+  const onSubmit = useCallback(async (data: any) => {
+    try {
+      await login(data);
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
   return (
     <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
@@ -62,7 +73,10 @@ export default function LoginForm() {
       >
         {t("LOGIN.FORGOT_PASSWORD")}
       </Link>
-      <Button className="bg-agzakhana-primary text-white text-base font-semibold py-6">
+      <Button
+        className="bg-agzakhana-primary text-white text-base font-semibold py-6"
+        disabled={isSubmitting}
+      >
         {t("LOGIN.LOGIN")}
       </Button>
       <Button className="border-2 bg-transparent flex flex-row gap-2 text-text-primary text-base font-semibold py-6 border-gray-300">

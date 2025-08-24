@@ -7,6 +7,7 @@ import Footer from "@/components/footer";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { AuthProvider } from "@/providers/auth-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,12 +45,14 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100! min-h-screen max-w-[2180px] m-auto text-text-primary!`}
       >
-        <NextIntlClientProvider>
-          <Header />
-          <Navbar />
-          <main className="">{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider>
+            <Header />
+            <Navbar />
+            <main className="">{children}</main>
+            <Footer />
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );
