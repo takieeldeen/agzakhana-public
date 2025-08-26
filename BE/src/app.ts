@@ -5,11 +5,14 @@ import middleware from "i18next-http-middleware";
 import i18next from "i18next";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import dataRouter from "./routers/dataRouter";
+import productsRouter from "./routers/productRouter";
+import morgan from "morgan";
 
 const app = express();
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(
   cors({
     origin: "http://localhost:3000", // your frontend origin
@@ -36,6 +39,8 @@ i18next
 app.use(middleware.handle(i18next));
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/data", dataRouter);
 
 app.use(errorController);
 export default app;

@@ -16,19 +16,45 @@ const userSchema = new Schema<UserType>({
   },
   password: {
     type: String,
-    required: [true, "Please enter the password"],
     select: false,
+    default: "",
+    validate: {
+      message: "Please enter the password",
+      validator: function test(val) {
+        const provider = this.provider ?? this.get("provider") ?? "LOCAL";
+        const notEmpty = typeof val === "string" && val !== "";
+        return provider === "LOCAL" ? notEmpty : true;
+      },
+    },
   },
   passwordConfirmation: {
     type: String,
-    required: [true, "Please enter the password confirmation"],
-    validate: {
-      message: "Password and Confirmation doesn't match",
-      validator: function test(val) {
-        return this.password === val;
+    default: "",
+    validate: [
+      {
+        message: "Please enter password confirmation",
+        validator: function test(val) {
+          const provider = this.provider ?? this.get("provider") ?? "LOCAL";
+          const notEmpty = typeof val === "string" && val !== "";
+          return provider === "LOCAL" ? notEmpty : true;
+        },
       },
-    },
+      {
+        message: "Password and Confirmation doesn't match",
+        validator: function test(val) {
+          const password = this.password ?? this.get("password");
+          const provider = this.provider ?? this.get("provider") ?? "LOCAL";
+          const identical = password === val;
+          return provider === "LOCAL" ? identical : true;
+        },
+      },
+    ],
     select: false,
+  },
+  provider: {
+    type: String,
+    default: "LOCAL",
+    enum: ["GOOGLE", "LOCAL"],
   },
   imageUrl: {
     type: String,
@@ -49,6 +75,27 @@ const userSchema = new Schema<UserType>({
     type: String,
   },
 });
+// Pre validations
+// userSchema.pre("validate", function (next) {
+//   console.log("test");
+//   const { provider, password, passwordConfirmation } = this;
+//   if (provider === "LOCAL" && (typeof password !== "string" || password === ""))
+//     this.invalidate("password", "please enter the password");
+//   if (
+//     provider === "LOCAL" &&
+//     (typeof passwordConfirmation !== "string" || passwordConfirmation === "")
+//   )
+//     this.invalidate(
+//       "passwordConfirmation",
+//       "please enter the password confirmation"
+//     );
+//   if (provider === "LOCAL" && password !== passwordConfirmation)
+//     this.invalidate(
+//       "passwordConfirmation",
+//       "please enter the password confirmation"
+//     );
+//   next();
+// });
 
 userSchema.pre("save", async function (next) {
   if (!!this.password) this.password = await hash(this.password, 8);

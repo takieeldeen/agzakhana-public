@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 export type UserType = {
   _id: mongoose.Types.ObjectId;
+  id: mongoose.Types.ObjectId;
   name: string;
   email: string;
   imageUrl: string;
@@ -10,4 +11,5 @@ export type UserType = {
   phoneNumber: string;
   password: string;
   passwordConfirmation: string;
+  provider: "GOOGLE" | "LOCAL";
 };

@@ -3,7 +3,9 @@ import User from "../models/usersModel";
 import { compare } from "bcrypt";
 import catchAsync from "../utils/catchAsync";
 import { AppError } from "../utils/errors";
-import { JwtPayload, sign, verify } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
+import axios from "axios";
+import { generateToken } from "../utils/tokens";
 
 export const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +14,7 @@ export const register = catchAsync(
       password: req?.body?.password,
       passwordConfirmation: req?.body?.passwordConfirmation,
     };
-    await User.insertOne(newUser);
+    await User.create(newUser);
     res.status(201).json({
       status: "success",
     });
@@ -25,23 +27,74 @@ export const login = catchAsync(
     if (!email || !password)
       return next(new AppError(400, req.t("LOGIN.MISSING_CREDENTIALS")));
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email, provider: "LOCAL" }).select(
+      "+password"
+    );
     if (!user?.password)
       return next(new AppError(400, req.t("LOGIN.WRONG_CREDENTIALS")));
     const valid = await compare(password, user.password);
     if (!valid)
       return next(new AppError(400, req.t("LOGIN.WRONG_CREDENTIALS")));
-    const token = sign({ id: user?.id }, process.env.JWT_SECRET!, {
-      expiresIn: process.env.TOKEN_EXP! as any,
-    });
-    res.cookie("token", token, {
-      secure: true,
-      httpOnly: true,
-      maxAge: +process.env.TOKEN_COOKIE_AGE!,
-    });
+    generateToken(res, user);
     res.status(200).json({
       status: req.t("COMMON.SUCCESS"),
+      user: user,
     });
+  }
+);
+// {
+//   id: '107784031126571520019',
+//   email: 'takie.eldeen1998@gmail.com',
+//   verified_email: true,
+//   name: 'Takie Eldeen',
+//   given_name: 'Takie',
+//   family_name: 'Eldeen',
+//   picture: 'https://lh3.googleusercontent.com/a/ACg8ocKMPmnODz1AgKmrSvG5jn7tUgM5-WR1Ash0FN-llXXiEkt9mdN8=s96-c'
+// }
+export const loginWithGoogle = catchAsync(
+  async (req: Request, res: Response) => {
+    const CLIENT_ID = process.env.OAUTH_CLIENT_ID;
+    const REDIRECT_URI = process.env.OAUTH_REDIRECT_URL;
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile email`;
+    res.redirect(url);
+  }
+);
+
+export const googleLoginCallback = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { code } = req.query;
+    const { data } = await axios.post("https://oauth2.googleapis.com/token", {
+      client_id: process.env.OAUTH_CLIENT_ID,
+      client_secret: process.env.OAUTH_CLIENT_SECRET,
+      code,
+      redirect_uri: process.env.OAUTH_REDIRECT_URL,
+      grant_type: "authorization_code",
+    });
+
+    const { access_token, id_token } = data;
+
+    // Use access_token or id_token to fetch user profile
+    const { data: profile } = await axios.get(
+      "https://www.googleapis.com/oauth2/v1/userinfo",
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+      }
+    );
+    let user = await User.findOne({ email: profile?.email });
+    if (!user) {
+      const { email, name, picture } = profile;
+      const newUser = {
+        name,
+        email,
+        imageUrl: picture,
+        provider: "GOOGLE",
+      };
+      user = await User.create(newUser);
+    }
+    generateToken(res, user);
+    res.redirect("http://localhost:3000");
+
+    res.status(200).json({ status: "success" });
   }
 );
 
