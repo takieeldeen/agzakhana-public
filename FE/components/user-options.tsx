@@ -23,7 +23,12 @@ export default function UserOptions({ user }: { user: UserType | undefined }) {
     return (
       <div className="flex flex-row items-center gap-2">
         <Avatar className="h-11 w-11">
-          <AvatarImage src={user?.imageUrl} alt="@shadcn" />
+          <AvatarImage
+            key={user?.imageUrl} // 🔑 ensures reload when URL changes
+            src={user?.imageUrl}
+            alt="@shadcn"
+            referrerPolicy="no-referrer"
+          />
           <AvatarFallback className="bg-gray-300 font-semibold text-xl ">
             {user?.name
               ?.split(" ")
@@ -35,11 +40,10 @@ export default function UserOptions({ user }: { user: UserType | undefined }) {
         <div className="flex flex-col items-start justify-start ">
           <span className="font-bold">{user?.name}</span>
           <Button
-            className="font-bold bg-transparent shadow-none text-gray-500 px-0! py-0!  h-fit gap-2 hover:gap-3"
+            className="font-bold bg-transparent shadow-none text-gray-500 px-0! py-0!  h-fit gap-2 "
             onClick={handleLogout}
           >
             {t("HEADER.SIGN_OUT")}
-            <Icon icon="stash:signout" className="w-6! h-6!" />
           </Button>
         </div>
       </div>

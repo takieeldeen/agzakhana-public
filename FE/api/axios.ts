@@ -11,6 +11,7 @@ const axiosInstance = axios.create({
 export const endpoints = {
   auth: {
     login: "/v1/auth/login",
+    loginWithGoogle: "/v1/auth/login-with-google",
     checkAuth: "/v1/auth/checkAuth",
     register: "/v1/auth/register",
     logout: "/v1/auth/logout",

@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { register } from "@/api/auth";
+import GoogleAuthButton from "@/components/google-auth-button";
 
 export default function SignupForm() {
   // State Management ////////////////////////////////
@@ -77,10 +78,7 @@ export default function SignupForm() {
   const PASSWORDS_MATCH = values.password === values.passwordConfirmation;
   return (
     <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
-      <Button className="border-2 bg-transparent flex flex-row gap-2 text-text-primary text-base font-semibold py-6 border-gray-300">
-        <Icon icon="flat-color-icons:google" className="h-8! w-8!" />
-        {t("SIGNUP.SIGNUP_WITH_GOOGLE")}
-      </Button>
+      <GoogleAuthButton />
       <RHFTextfield
         name="email"
         label={t("LOGIN.EMAIL")}

@@ -11,6 +11,12 @@ export async function login(payload: any) {
   }>;
   return res;
 }
+
+export async function loginWithGoogle() {
+  const URL = endpoints.auth.loginWithGoogle;
+  await axios.get(URL);
+}
+
 export async function logout() {
   const URL = endpoints.auth.logout;
   await axios.post(URL);

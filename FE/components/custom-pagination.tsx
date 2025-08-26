@@ -3,12 +3,14 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "./ui/button";
 import { Pagination, PaginationContent, PaginationItem } from "./ui/pagination";
 import { cn } from "@/lib/utils";
+import { useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface TablePaginationProps {
   totalNoOfRows: number;
   rowsPerPage: number;
   currentPage: number;
-  onPageChange: (newPage: number) => void;
+  onPageChange?: (newPage: number) => void;
 }
 export default function CustomPagination({
   totalNoOfRows,
@@ -30,11 +32,20 @@ export default function CustomPagination({
   }
   if (rightWindow < totalNoOfPages - 1) pageArray.push("...");
   if (totalNoOfPages > 1) pageArray.push(`${totalNoOfPages}`);
-  // TSX ////////////////////////////////////////////////
-
+  // Custom Hooks /////////////////////////////////////////////
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  // Callbacks ////////////////////////////////////////////////
+  const handlePageChange = useCallback((newPage: number) => {
+    if (onPageChange) onPageChange(newPage);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage.toString());
+    router.push(`?${params.toString()}`);
+  }, []);
   return (
     <Pagination className="gap-3">
       <Button
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={isFirstPage}
         className=" text-white hover:bg-card-dark-bg transition-all transition-300 aspect-square cursor-pointer  bg-text-primary"
       >
@@ -44,7 +55,9 @@ export default function CustomPagination({
         {pageArray.map((pageNumber, i) => (
           <PaginationItem key={i}>
             <Button
-              onClick={() => pageNumber !== "..." && onPageChange(+pageNumber)}
+              onClick={() =>
+                pageNumber !== "..." && handlePageChange(+pageNumber)
+              }
               className={cn(
                 "bg-[#BCE3C9] text-text-primary dark:text-modal-dark cursor-pointer  hover:bg-card-dark-bg hover:text-modal-dark transition-all transition-300",
                 pageNumber === `${currentPage}` &&
@@ -59,6 +72,7 @@ export default function CustomPagination({
         ))}
       </PaginationContent>
       <Button
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={isLastPage}
         className=" text-white hover:bg-card-dark-bg transition-all transition-300 aspect-square cursor-pointer bg-text-primary"
       >

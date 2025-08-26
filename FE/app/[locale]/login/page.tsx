@@ -1,6 +1,10 @@
-import CircularProgress from "@/components/circular-progress";
+import { GuestGuard } from "@/components/auth-guard";
 import { LoginView } from "@/sections/auth/views";
 
 export default function Login() {
-  return <LoginView />;
+  return (
+    <GuestGuard>
+      <LoginView />
+    </GuestGuard>
+  );
 }

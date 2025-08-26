@@ -48,7 +48,6 @@ export function AuthProvider({ children }: Props) {
     void checkAuthentication();
   }, []);
 
-  console.log("triggered", user, isAuthenticated);
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}

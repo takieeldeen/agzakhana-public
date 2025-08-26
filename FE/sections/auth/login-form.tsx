@@ -11,9 +11,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
-import { login } from "@/api/auth";
+import { login, loginWithGoogle } from "@/api/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import GoogleAuthButton from "@/components/google-auth-button";
 
 export default function LoginForm() {
   const t = useTranslations();
@@ -41,6 +42,7 @@ export default function LoginForm() {
   const {
     formState: { isSubmitting },
   } = methods;
+
   const onSubmit = useCallback(async (data: any) => {
     try {
       const res = await login(data);
@@ -82,10 +84,7 @@ export default function LoginForm() {
       >
         {t("LOGIN.LOGIN")}
       </Button>
-      <Button className="border-2 bg-transparent flex flex-row gap-2 text-text-primary text-base font-semibold py-6 border-gray-300">
-        <Icon icon="flat-color-icons:google" className="h-8! w-8!" />
-        {t("LOGIN.SIGN_IN_WITH_GOOGLE")}
-      </Button>
+      <GoogleAuthButton />
       <p className="flex flex-row gap-2 self-center text-gray-800">
         {t("LOGIN.DON'T_HAVE_AN_ACCOUNT")}
         <Link
