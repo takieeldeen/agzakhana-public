@@ -1,6 +1,6 @@
-import axios from "axios";
+import axiosConstructor from "axios";
 
-const axiosInstance = axios.create({
+const axios = axiosConstructor.create({
   baseURL: "http://localhost:8080/api",
   withCredentials: true,
   headers: {
@@ -16,6 +16,13 @@ export const endpoints = {
     register: "/v1/auth/register",
     logout: "/v1/auth/logout",
   },
+  products: {
+    list: "/v1/products",
+    manufacturers: "/v1/products/filters/manufacturer",
+  },
+  categories: {
+    all: "/v1/categories",
+  },
 };
 
-export default axiosInstance;
+export default axios;

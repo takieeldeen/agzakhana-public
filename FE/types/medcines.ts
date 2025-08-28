@@ -21,3 +21,8 @@ export type Medicine = {
   dosageAr: string;
   dosageEn: string;
 };
+
+export type ManufacturerListItem = {
+  name: string;
+  count: number;
+};

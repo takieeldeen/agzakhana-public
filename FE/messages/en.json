@@ -45,6 +45,8 @@
   },
   "PRODUCTS_LISTING_PAGE": {
     "FILTERS": "Filters",
+    "FILTERS_MANUFACTURERS": "Manufacturers",
+
     "CATEGORIES": "Categories",
     "WE_HAVE_FOUND": "We have found",
     "FOR_YOU": "for you!",

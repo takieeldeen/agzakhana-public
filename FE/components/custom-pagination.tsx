@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "./ui/button";
 import { Pagination, PaginationContent, PaginationItem } from "./ui/pagination";
 import { cn } from "@/lib/utils";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface TablePaginationProps {
@@ -36,12 +36,31 @@ export default function CustomPagination({
   const searchParams = useSearchParams();
   const router = useRouter();
   // Callbacks ////////////////////////////////////////////////
-  const handlePageChange = useCallback((newPage: number) => {
-    if (onPageChange) onPageChange(newPage);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", newPage.toString());
-    router.push(`?${params.toString()}`);
-  }, []);
+  const handlePageChange = useCallback(
+    (newPage: number, replace: boolean = false) => {
+      if (onPageChange) onPageChange(newPage);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", newPage.toString());
+      const newParams = params.toString();
+      router?.[replace ? "replace" : "push"](`?${params.toString()}`);
+    },
+    []
+  );
+  // LifeCycleHooks ////////////////////////////////////////////////
+  useEffect(() => {
+    if (!searchParams.get("page") && !searchParams.get("size")) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("size", rowsPerPage.toString());
+      params.set("page", "1");
+      router?.replace(`?${params.toString()}`);
+    } else if (!searchParams.get("page")) {
+      handlePageChange(1, true);
+    } else if (!searchParams.get("size")) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("size", rowsPerPage.toString());
+      router?.replace(`?${params.toString()}`);
+    }
+  }, [searchParams, handlePageChange, rowsPerPage, router]);
   return (
     <Pagination className="gap-3">
       <Button

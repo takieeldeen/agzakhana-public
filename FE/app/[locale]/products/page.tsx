@@ -1,4 +1,5 @@
 import { getAllProducts } from "@/api/products";
+import ListingProvider from "@/providers/listing-provider";
 import { ListView } from "@/sections/dashboard/products/views";
 import { Metadata } from "next";
 
@@ -13,12 +14,19 @@ export default async function ProductsListingPage({
   searchParams: Promise<{ page: string; size: string; category: string }>;
 }) {
   const { page, size, category } = await searchParams;
-  const { results, content, status } = await getAllProducts(
+  const { results, content, status, error } = await getAllProducts(
     page,
     size,
     category
   );
   return (
-    <ListView products={content} results={results} page={page} size={size} />
+    <ListingProvider
+      content={content}
+      results={results}
+      status={status}
+      error={error}
+    >
+      <ListView products={content} results={results} page={page} size={size} />
+    </ListingProvider>
   );
 }

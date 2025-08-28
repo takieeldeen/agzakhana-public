@@ -8,6 +8,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { AuthProvider } from "@/providers/auth-provider";
+import TanstackProvider from "@/providers/tanstack-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,10 +48,12 @@ export default async function RootLayout({
       >
         <AuthProvider>
           <NextIntlClientProvider>
-            <Header />
-            <Navbar />
-            <main className="">{children}</main>
-            <Footer />
+            <TanstackProvider>
+              <Header />
+              <Navbar />
+              <main className="">{children}</main>
+              <Footer />
+            </TanstackProvider>
           </NextIntlClientProvider>
         </AuthProvider>
       </body>

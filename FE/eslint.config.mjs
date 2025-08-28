@@ -9,13 +9,15 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+const lintingConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
   {
     rules: {
-      "@typescript-eslint/no-explicit-any": "0",
+      "@typescript-eslint/no-explicit-any": "off",
+      "react-hooks/exhaustive-deps": "warn",
+      semi: ["error", "always"], // ← needs style option
     },
   },
 ];
 
-export default eslintConfig;
+export default lintingConfig;
