@@ -11,6 +11,11 @@ const categorySchema = new Schema<CategoryType>({
     required: true,
   },
   icon: String,
+  status: {
+    type: String,
+    enum: ["ACTIVE", "INACTIVE"],
+    default: "ACTIVE",
+  },
 });
 
 const Category = mongoose.model<CategoryType>("Category", categorySchema);

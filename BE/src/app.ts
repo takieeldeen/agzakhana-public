@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import dataRouter from "./routers/dataRouter";
 import productsRouter from "./routers/productRouter";
 import morgan from "morgan";
+import categoryRouter from "./routers/categoriesRouter";
 
 const app = express();
 app.use(morgan("dev"));
@@ -41,6 +42,7 @@ app.use(middleware.handle(i18next));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/data", dataRouter);
+app.use("/api/v1/categories", categoryRouter);
 
 app.use(errorController);
 export default app;
