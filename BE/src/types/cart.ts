@@ -11,5 +11,4 @@ export type CartType = {
   }[];
   createdAt: Date;
   updatedAt: Date;
-  qty: number;
 };
