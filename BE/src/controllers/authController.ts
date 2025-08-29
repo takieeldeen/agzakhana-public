@@ -42,15 +42,7 @@ export const login = catchAsync(
     });
   }
 );
-// {
-//   id: '107784031126571520019',
-//   email: 'takie.eldeen1998@gmail.com',
-//   verified_email: true,
-//   name: 'Takie Eldeen',
-//   given_name: 'Takie',
-//   family_name: 'Eldeen',
-//   picture: 'https://lh3.googleusercontent.com/a/ACg8ocKMPmnODz1AgKmrSvG5jn7tUgM5-WR1Ash0FN-llXXiEkt9mdN8=s96-c'
-// }
+
 export const loginWithGoogle = catchAsync(
   async (req: Request, res: Response) => {
     const CLIENT_ID = process.env.OAUTH_CLIENT_ID;

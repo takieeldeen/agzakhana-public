@@ -1,0 +1,100 @@
+import { NextFunction, Response } from "express";
+import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
+import Cart from "../models/cartModel";
+import mongoose from "mongoose";
+// Helper Constants ///////////////////////////////////////
+const PRODUCT_VISIBLE_FIELDS =
+  "_id nameAr nameEn concentration price beforeDiscount qty total availableQty imageUrl";
+// Delete /////////////////////////////////////////////////
+export const removeFromCart = catchAsync(
+  async (req: ProtectedRequest, res: Response, next: NextFunction) => {
+    const { cartItemId } = req.params;
+    const userId = req?.user?._id;
+    const newCart = await Cart.findOneAndUpdate(
+      { userId },
+      { $pull: { cart: { _id: cartItemId } } },
+      { new: true }
+    ).populate({
+      path: "cart.product",
+      select: PRODUCT_VISIBLE_FIELDS,
+    });
+    res.status(200).json({
+      status: "success",
+      content: newCart,
+    });
+  }
+);
+// Read /////////////////////////////////////////////////
+export const getCart = catchAsync(
+  async (req: ProtectedRequest, res: Response) => {
+    const cart = await Cart.findOne({ userId: req?.user?._id }).populate({
+      path: "cart.product",
+      select: PRODUCT_VISIBLE_FIELDS,
+    });
+    res.status(200).json({
+      status: "success",
+      content: cart,
+    });
+  }
+);
+
+// Create /////////////////////////////////////////////////
+export const addToCart = catchAsync(
+  async (req: ProtectedRequest, res: Response) => {
+    const userId = req?.user?._id;
+    const currentCart = await Cart.findOne({ userId });
+    const { productId, qty } = req?.body;
+    const cartItem = {
+      product: new mongoose.Types.ObjectId(productId as string),
+      qty: +(qty ?? 1),
+    };
+    let cart;
+    if (!currentCart) {
+      const newCart = {
+        userId: new mongoose.Types.ObjectId(userId),
+        cart: [cartItem],
+      };
+      cart = await Cart.create(newCart);
+      cart = await cart.populate({
+        path: "cart.product",
+        select: PRODUCT_VISIBLE_FIELDS,
+      });
+    } else {
+      cart = await Cart.findByIdAndUpdate(
+        currentCart?._id,
+        {
+          $push: { cart: cartItem },
+        },
+        { new: true }
+      ).populate({
+        path: "cart.product",
+        select: PRODUCT_VISIBLE_FIELDS,
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      content: cart,
+    });
+  }
+);
+// Update /////////////////////////////////////////////////
+export const updateCartItem = catchAsync(
+  async (req: ProtectedRequest, res: Response) => {
+    const userId = req?.user?._id;
+    const { cartItemId } = req?.params;
+    const { qty } = req?.body;
+    const cart = await Cart.findOneAndUpdate(
+      { userId, "cart._id": cartItemId },
+      {
+        $set: {
+          "cart.$.qty": +(qty ?? 0),
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json({
+      status: "success",
+      content: cart,
+    });
+  }
+);

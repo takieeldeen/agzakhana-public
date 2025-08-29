@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 export const getAllProducts = catchAsync(
   async (req: Request, res: Response) => {
-    const { page, limit, category } = req?.query;
+    const { page, limit, category, manufacturer } = req?.query;
 
     const params: {
       page: number;
@@ -22,6 +22,10 @@ export const getAllProducts = catchAsync(
         ?.split(",")
         ?.map((category) => new mongoose.Types.ObjectId(category));
       params.filters.category = { $in: categories };
+    }
+    if (manufacturer) {
+      const manufacturers = manufacturer?.toString()?.split(",");
+      params.filters.manufacturer = { $in: manufacturers };
     }
     const count = await Product.countDocuments(params.filters);
 
@@ -46,6 +50,15 @@ export const getAllProducts = catchAsync(
     });
   }
 );
+
+export const getProductDetails = catchAsync(async (req, res, next) => {
+  const { productId } = req.params;
+  const product = await Product.findById(productId);
+  res.status(200).json({
+    status: "success",
+    content: product,
+  });
+});
 
 export const getAllManufacturer = catchAsync(
   async (req: Request, res: Response) => {

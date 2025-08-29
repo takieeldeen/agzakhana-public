@@ -1,22 +1,20 @@
-import { NextFunction, request, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { UserType } from "../types/users";
 
 export interface ProtectedRequest extends Request {
-  user: UserType;
+  user?: UserType;
 }
 
-type ControllerFn = (
-  req: Request | ProtectedRequest,
+type ControllerFn<T extends Request = Request> = (
+  req: T,
   res: Response,
   next: NextFunction
 ) => Promise<void>;
 
-export default function catchAsync(controllerFn: ControllerFn) {
-  return async (
-    req: Request | ProtectedRequest,
-    res: Response,
-    next: NextFunction
-  ) => {
+export default function catchAsync<T extends Request = Request>(
+  controllerFn: ControllerFn<T>
+) {
+  return async (req: T, res: Response, next: NextFunction) => {
     try {
       await controllerFn(req, res, next);
     } catch (err: any) {

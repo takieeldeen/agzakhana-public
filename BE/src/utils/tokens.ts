@@ -3,7 +3,7 @@ import { UserType } from "../types/users";
 import { sign } from "jsonwebtoken";
 
 export function generateToken(res: Response, user: UserType) {
-  const token = sign({ id: user?.id }, process.env.JWT_SECRET!, {
+  const token = sign({ id: user?._id }, process.env.JWT_SECRET!, {
     expiresIn: process.env.TOKEN_EXP! as any,
   });
   res.cookie("token", token, {
