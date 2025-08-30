@@ -29,8 +29,8 @@ i18next
     fallbackLng: "en",
     preload: ["en", "ar"],
     resources: {
-      en: { translation: require("./translation/en.json") },
-      ar: { translation: require("./translation/ar.json") },
+      en: { translation: require("../translation/en.json") },
+      ar: { translation: require("../translation/ar.json") },
     },
     detection: {
       // 👇 configure detection order

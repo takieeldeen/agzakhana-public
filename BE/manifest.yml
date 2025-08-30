@@ -1,0 +1,7 @@
+applications:
+  - name: agzakhana
+    memory: 1G
+    instances: 1
+    random-route: true
+    buildpack: nodejs_buildpack
+    command: npm run start

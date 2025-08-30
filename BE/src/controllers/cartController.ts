@@ -21,9 +21,27 @@ export const removeFromCart = catchAsync(
     res.status(200).json({
       status: "success",
       content: newCart,
+      results: newCart?.cart?.length,
     });
   }
 );
+
+export const clearCart = catchAsync(
+  async (req: ProtectedRequest, res: Response) => {
+    const userId = req?.user?._id;
+    const newCart = await Cart.findOneAndUpdate(
+      { userId },
+      { $set: { cart: [] } },
+      { new: true }
+    );
+    res.status(200).json({
+      status: "succcess",
+      content: newCart,
+      results: 0,
+    });
+  }
+);
+
 // Read /////////////////////////////////////////////////
 export const getCart = catchAsync(
   async (req: ProtectedRequest, res: Response) => {
@@ -33,6 +51,7 @@ export const getCart = catchAsync(
     });
     res.status(200).json({
       status: "success",
+      results: cart?.cart?.length,
       content: cart,
     });
   }
@@ -73,6 +92,7 @@ export const addToCart = catchAsync(
     }
     res.status(200).json({
       status: "success",
+      results: cart?.cart?.length,
       content: cart,
     });
   }

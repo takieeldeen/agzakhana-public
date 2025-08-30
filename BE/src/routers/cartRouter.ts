@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   addToCart,
+  clearCart,
   getCart,
   removeFromCart,
   updateCartItem,
@@ -12,7 +13,8 @@ const cartRouter = Router();
 cartRouter
   .route("/")
   .get(authenticateUser, getCart)
-  .post(authenticateUser, addToCart);
+  .post(authenticateUser, addToCart)
+  .delete(authenticateUser, clearCart);
 
 cartRouter
   .route("/:cartItemId")

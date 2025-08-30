@@ -13,6 +13,7 @@ const cartSchema = new Schema<CartType>({
   userId: {
     type: mongoose.Types.ObjectId,
     ref: "User",
+    select: false,
   },
   cart: {
     type: [cartItemSchema],
