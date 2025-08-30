@@ -1,5 +1,4 @@
 "use client";
-import { MANUFACTURER_LIST } from "@/_mock/_manufacturer";
 import { useGetCategories } from "@/api/categories";
 import { useGetAllManufacturers } from "@/api/products";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,6 +15,16 @@ export default function FiltersToolbar() {
   const { pushToFilter, removeFromFilter } = useListing();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category");
+  const handleManufacturerChange = useCallback(
+    (push: boolean, value: string) => {
+      if (push) {
+        pushToFilter("manufacturer", value);
+      } else {
+        removeFromFilter("manufacturer", value);
+      }
+    },
+    [pushToFilter, removeFromFilter]
+  );
   const handleFilterChange = useCallback(
     (key: string, value: string) => {
       if (currentCategory?.includes(value)) {
@@ -46,8 +55,16 @@ export default function FiltersToolbar() {
                   key={manufacturer?.name}
                   className="flex flex-row gap-2 items-center font-semibold"
                 >
-                  <Checkbox id="terms" />
-                  <label htmlFor="terms" className="">
+                  <Checkbox
+                    checked={searchParams
+                      .get("manufacturer")
+                      ?.includes(manufacturer?.name)}
+                    id={manufacturer?.name}
+                    onCheckedChange={(e: boolean) =>
+                      handleManufacturerChange(e, manufacturer?.name)
+                    }
+                  />
+                  <label htmlFor={manufacturer?.name} className="">
                     {`${manufacturer?.name} (${manufacturer?.count})`}
                   </label>
                 </div>

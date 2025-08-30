@@ -1,6 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createContext, useCallback } from "react";
+import { createContext, useCallback, useMemo } from "react";
 
 type Props<T> = {
   children: React.ReactNode;
@@ -75,19 +75,31 @@ export default function ListingProvider<T>({
     },
     [clearFilter, router, searchParams]
   );
+  const memoizedContext = useMemo(
+    () => ({
+      content,
+      results,
+      status,
+      error,
+      changeFilter,
+      pushToFilter,
+      removeFromFilter,
+      clearFilter,
+    }),
+    [
+      changeFilter,
+      clearFilter,
+      content,
+      error,
+      pushToFilter,
+      removeFromFilter,
+      results,
+      status,
+    ]
+  );
+
   return (
-    <ListingContext.Provider
-      value={{
-        content,
-        results,
-        status,
-        error,
-        changeFilter,
-        pushToFilter,
-        removeFromFilter,
-        clearFilter,
-      }}
-    >
+    <ListingContext.Provider value={memoizedContext}>
       {children}
     </ListingContext.Provider>
   );

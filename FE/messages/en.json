@@ -29,6 +29,9 @@
     "SALE": "Sale",
     "NEW": "New",
     "ADD": "Add",
+    "REMOVE": "Remove",
+    "CLEAR": "Clear Cart",
+    "EMPTY_CART": "It seems like your cart is empty.",
     "BY": "By",
     "DEALS_OF_THE_DAY": "Deals of the Day",
     "SHOW_ALL_DEALS": "All Deals",
@@ -44,6 +47,8 @@
     "TOP_RATED_TITLE": "Top Rated"
   },
   "PRODUCTS_LISTING_PAGE": {
+    "NO_DATA": "No Data Found",
+
     "FILTERS": "Filters",
     "FILTERS_MANUFACTURERS": "Manufacturers",
 

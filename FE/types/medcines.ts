@@ -3,7 +3,7 @@ import { LocalizedObject } from "./common";
 export type Tags = "HOT" | "SALE" | "NEW" | "DISCOUNT";
 
 export type Medicine = {
-  id: string;
+  _id: string;
   nameAr: string;
   nameEn: string;
   category: LocalizedObject;

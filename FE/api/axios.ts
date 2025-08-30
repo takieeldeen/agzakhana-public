@@ -18,10 +18,15 @@ export const endpoints = {
   },
   products: {
     list: "/v1/products",
+    details: (productId: string) => `/v1/products/${productId}`,
     manufacturers: "/v1/products/filters/manufacturer",
   },
   categories: {
     all: "/v1/categories",
+  },
+  cart: {
+    list: "/v1/cart",
+    single: (cartItem: string) => `/v1/cart/${cartItem}`,
   },
 };
 

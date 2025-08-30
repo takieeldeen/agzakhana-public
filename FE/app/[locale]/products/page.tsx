@@ -11,13 +11,19 @@ export const metadata: Metadata = {
 export default async function ProductsListingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page: string; size: string; category: string }>;
+  searchParams: Promise<{
+    page: string;
+    size: string;
+    category: string;
+    manufacturer: string;
+  }>;
 }) {
-  const { page, size, category } = await searchParams;
+  const { page, size, category, manufacturer } = await searchParams;
   const { results, content, status, error } = await getAllProducts(
     page,
     size,
-    category
+    category,
+    manufacturer
   );
   return (
     <ListingProvider

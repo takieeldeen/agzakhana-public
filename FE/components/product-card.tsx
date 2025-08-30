@@ -1,11 +1,11 @@
 import ProductTag from "@/components/product-tag";
-import { Button } from "@/components/ui/button";
 import { Medicine } from "@/types/medcines";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import FallbackImage from "./image";
 import { Skeleton } from "./ui/skeleton";
+import AddToCartButton from "./add-to-cart";
 
 export default async function ProductCard({
   medicine,
@@ -14,14 +14,13 @@ export default async function ProductCard({
 }) {
   const t = await getTranslations();
   const locale = await getLocale();
-
   return (
     <li
       className="border-2 border-[#ECECEC] w-[250px] h-[401px] rounded-2xl overflow-hidden relative min-w-[20rem]"
       dir="rtl"
     >
       <Link
-        href={`/products/${medicine?.id}`}
+        href={`/products/${medicine?._id}`}
         className="h-full flex flex-col gap-1"
       >
         <ProductTag tag={medicine?.tag} />
@@ -66,13 +65,7 @@ export default async function ProductCard({
               price: medicine?.beforeDiscount,
             })}
           </span>
-          <Button
-            // onClick={(e) => e.stopPropagation()}
-            className="bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200 "
-          >
-            <Icon icon="mynaui:cart" />
-            {t("HOME_PAGE.ADD")}
-          </Button>
+          <AddToCartButton product={medicine} />
         </div>
       </Link>
     </li>

@@ -3,12 +3,13 @@ import axios, { endpoints } from "./axios";
 import { useQuery } from "@tanstack/react-query";
 import { getFetcher } from "./api";
 import { useMemo } from "react";
-import { ManufacturerListItem } from "@/types/medcines";
+import { ManufacturerListItem, Medicine } from "@/types/medcines";
 
 export async function getAllProducts(
   page: string | undefined,
   limit: string | undefined,
-  category: string | undefined
+  category: string | undefined,
+  manufacturer: string | undefined
 ) {
   try {
     const URL: [string, AxiosRequestConfig] = [
@@ -18,14 +19,33 @@ export async function getAllProducts(
           page: page ?? "1",
           limit: limit ?? "20",
           category,
+          manufacturer,
         },
       },
     ];
     const res = await axios.get(URL[0], URL[1]);
     const { content, results, status } = res?.data;
+    console.log(content, results, status);
     return { content, results, status, error: null };
+  } catch (err: any) {
+    return {
+      content: [],
+      results: 0,
+      status: "fail",
+      error: err?.response?.data,
+    };
+  }
+}
+
+export async function getProductDetails(productId: string | undefined) {
+  try {
+    if (!productId) return { product: null, status: "fail", error: null };
+    const URL = endpoints.products.details(productId);
+    const res = await axios.get(URL);
+    const { content, status } = res?.data;
+    return { product: content as Medicine, status, error: null };
   } catch (err) {
-    return { content: [], results: 0, status: "fail", error: err };
+    return { product: null, status: "fail", error: err };
   }
 }
 

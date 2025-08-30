@@ -30,6 +30,9 @@
     "NEW": "جديد",
     "ADD": "أضف",
     "BY": "بواسطة",
+    "REMOVE": "حذف",
+    "CLEAR": "تفريغ السلة",
+    "EMPTY_CART": "يبدو أن سلة التسوق الخاصة بك فارغة.",
     "DEALS_OF_THE_DAY": "عروض اليوم",
     "SHOW_ALL_DEALS": "عرض جميع العروض",
     "DAYS": "أيام",
@@ -44,6 +47,7 @@
     "TOP_RATED_TITLE": "الأعلى تقييمًا"
   },
   "PRODUCTS_LISTING_PAGE": {
+    "NO_DATA": "لا يوجد نتائج",
     "FILTERS": "التصفية",
     "FILTERS_MANUFACTURERS": "الشركات المصنعة",
     "CATEGORIES": "الفئات",
