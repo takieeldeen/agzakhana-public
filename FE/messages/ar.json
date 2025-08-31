@@ -16,7 +16,8 @@
     "CONTACT_US": "اتصل بنا"
   },
   "COMMON": {
-    "EGP": "{price} ج.م."
+    "EGP": "{price} ج.م.",
+    "EGP_CURRENCY": "ج.م."
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
@@ -47,6 +48,8 @@
     "TOP_RATED_TITLE": "الأعلى تقييمًا"
   },
   "PRODUCTS_LISTING_PAGE": {
+    "IN_YOUR_CART": "في العربة",
+    "AVAILABLE_QTY": "الكمية المتاحة: {count}",
     "NO_DATA": "لا يوجد نتائج",
     "FILTERS": "التصفية",
     "FILTERS_MANUFACTURERS": "الشركات المصنعة",

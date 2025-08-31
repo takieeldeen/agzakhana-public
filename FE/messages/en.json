@@ -16,7 +16,8 @@
     "CONTACT_US": "Contact Us"
   },
   "COMMON": {
-    "EGP": "{price} EGP"
+    "EGP": "{price} EGP",
+    "EGP_CURRENCY": "EGP"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -47,8 +48,10 @@
     "TOP_RATED_TITLE": "Top Rated"
   },
   "PRODUCTS_LISTING_PAGE": {
-    "NO_DATA": "No Data Found",
+    "IN_YOUR_CART": "In your cart",
 
+    "NO_DATA": "No Data Found",
+    "AVAILABLE_QTY": "Available Quantity: {count}",
     "FILTERS": "Filters",
     "FILTERS_MANUFACTURERS": "Manufacturers",
 

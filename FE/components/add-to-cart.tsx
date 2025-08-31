@@ -44,7 +44,8 @@ export default function AddToCartButton({ product, ...other }: Props) {
       className={cn(
         "bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200 ",
         ALREADY_IN_CART &&
-          "bg-agzakhana-primary hover:bg-agzakhana-primary text-green-100"
+          "bg-agzakhana-primary hover:bg-agzakhana-primary text-green-100",
+        other?.className
       )}
       disabled={IS_LOADING}
     >
