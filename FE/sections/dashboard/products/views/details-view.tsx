@@ -6,7 +6,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import ReviewsSection from "../reviews-section";
 import { SimilarProductsSection } from "../similar-products";
 import ProductPurchaseSpecs from "@/components/product-purchase-specs";
-import { IncartTag } from "@/components/tags";
+import { FreeShippingTag, IncartTag } from "@/components/tags";
 import ImageMagnifier from "@/components/image-magnifier";
 
 export default async function DetailsView({ product }: { product: Medicine }) {
@@ -41,8 +41,9 @@ export default async function DetailsView({ product }: { product: Medicine }) {
               {locale === "en" ? product?.nameEn : product?.nameAr}
             </h2>
           </div>
-          <div>
+          <div className="flex flex-row gap-2">
             <IncartTag />
+            <FreeShippingTag />
           </div>
           <div className="flex flex-row gap-1  items-center mb-4">
             <Icon
@@ -57,7 +58,10 @@ export default async function DetailsView({ product }: { product: Medicine }) {
           </div>
           <div className="flex flex-row gap-1  items-center mb-6">
             <strong className="text-5xl font-black text-agzakhana-primary">
-              {t("COMMON.EGP", { price: product?.price })}
+              {product?.price}
+              <span className="text-base font-medium">
+                {t("COMMON.EGP_CURRENCY")}
+              </span>
             </strong>
             <div className="flex flex-col ">
               <span className="font-semibold leading-none text-orange-500 text-sm">

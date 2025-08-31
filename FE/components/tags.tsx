@@ -20,3 +20,18 @@ export function IncartTag(props: Props) {
     </span>
   );
 }
+export function FreeShippingTag(props: Props) {
+  const t = useTranslations();
+  return (
+    <span
+      {...props}
+      className={cn(
+        "bg-[#2980b9] rounded-full text-white px-4 py-1 flex flex-row items-center gap-2 w-fit font-semibold",
+        props.className
+      )}
+    >
+      <Icon icon="la:shipping-fast" />
+      {t("PRODUCTS_LISTING_PAGE.FREE_SHIPPING_TAG")}
+    </span>
+  );
+}

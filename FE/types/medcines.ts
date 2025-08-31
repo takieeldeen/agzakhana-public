@@ -20,6 +20,8 @@ export type Medicine = {
   indicationsEn: string;
   dosageAr: string;
   dosageEn: string;
+  qty: number;
+  maxQty: number;
 };
 
 export type ManufacturerListItem = {
