@@ -10,6 +10,7 @@ import productsRouter from "./routers/productRouter";
 import morgan from "morgan";
 import categoryRouter from "./routers/categoriesRouter";
 import cartRouter from "./routers/cartRouter";
+import dealsRouter from "./routers/dealsRouter";
 
 const app = express();
 app.use(morgan("dev"));
@@ -45,6 +46,7 @@ app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/data", dataRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/cart", cartRouter);
+app.use("/api/v1/deals", dealsRouter);
 
 app.use(errorController);
 export default app;

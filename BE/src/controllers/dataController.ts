@@ -4,6 +4,8 @@ import Product from "../models/productsModel";
 import { PRODUCTS } from "../mock/_products";
 import { CATEGORIES } from "../mock/_categories";
 import Category from "../models/categoriesModel";
+import Deal from "../models/dealsModel";
+import { DEALS } from "../mock/_deals";
 
 export const prefillProducts = catchAsync(
   async (req: Request, res: Response) => {
@@ -21,3 +23,10 @@ export const prefillCategories = catchAsync(
     });
   }
 );
+
+export const prefillDeals = catchAsync(async (req: Request, res: Response) => {
+  await Deal.insertMany(DEALS);
+  res.status(200).json({
+    status: "success",
+  });
+});
