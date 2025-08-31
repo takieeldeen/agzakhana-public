@@ -21,6 +21,11 @@ export const endpoints = {
     details: (productId: string) => `/v1/products/${productId}`,
     manufacturers: "/v1/products/filters/manufacturer",
   },
+  deals: {
+    list: "/v1/deals",
+    manufacturers: "/v1/deals/filters/manufacturer",
+    categories: "/v1/deals/filters/category",
+  },
   categories: {
     all: "/v1/categories",
   },

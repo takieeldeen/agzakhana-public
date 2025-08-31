@@ -1,12 +1,21 @@
-import ProductCard from "@/components/product-card";
 import FiltersToolbar from "../filters-toolbar";
-import { PRODUCT_LISTING_PAGE } from "@/_mock/_products_listing";
 import { getTranslations } from "next-intl/server";
 import CustomPagination from "@/components/custom-pagination";
-import { OFFERS_LIST } from "@/_mock/_offers";
 import OffersCard from "../../home/offers-card";
 
-export default async function DealsListingView() {
+type Props = {
+  list: any[];
+  results: number;
+  page: string | undefined;
+  size: string | undefined;
+};
+
+export default async function ProductsListingView({
+  list,
+  results,
+  page,
+  size,
+}: Props) {
   const t = await getTranslations();
 
   return (
@@ -17,22 +26,23 @@ export default async function DealsListingView() {
           <div className="flex flex-col gap-2">
             <p className="text-lg font-semibold">
               {t("PRODUCTS_LISTING_PAGE.WE_HAVE_FOUND")}
-              <span className="text-agzakhana-primary font-bold"> 29 </span>
+              <span className="text-agzakhana-primary font-bold">
+                {results ? ` ${results} ` : " -- "}
+              </span>
               {t("PRODUCTS_LISTING_PAGE.FOR_YOU")}
             </p>
             <ul className="w-full flex flex-row flex-wrap gap-4 justify-start">
-              {OFFERS_LIST?.content?.map((offerData) => (
-                <OffersCard key={offerData?.id} offer={offerData} />
+              {list?.map((offerData) => (
+                <OffersCard key={offerData?._id} offer={offerData} />
               ))}
             </ul>
           </div>
         </div>
       </div>
       <CustomPagination
-        totalNoOfRows={PRODUCT_LISTING_PAGE?.results}
-        rowsPerPage={6}
-        // onPageChange={(newPage) => console.log(newPage)}
-        currentPage={2}
+        totalNoOfRows={results}
+        rowsPerPage={size ? parseInt(size) : 20}
+        currentPage={page ? parseInt(page) : 1}
       />
     </div>
   );

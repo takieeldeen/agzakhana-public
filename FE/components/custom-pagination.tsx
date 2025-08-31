@@ -41,10 +41,9 @@ export default function CustomPagination({
       if (onPageChange) onPageChange(newPage);
       const params = new URLSearchParams(searchParams.toString());
       params.set("page", newPage.toString());
-      const newParams = params.toString();
       router?.[replace ? "replace" : "push"](`?${params.toString()}`);
     },
-    []
+    [onPageChange, router, searchParams]
   );
   // LifeCycleHooks ////////////////////////////////////////////////
   useEffect(() => {
@@ -61,6 +60,8 @@ export default function CustomPagination({
       router?.replace(`?${params.toString()}`);
     }
   }, [searchParams, handlePageChange, rowsPerPage, router]);
+  if (totalNoOfRows === 0 && totalNoOfRows > (rowsPerPage ? rowsPerPage : 20))
+    return null;
   return (
     <Pagination className="gap-3">
       <Button
