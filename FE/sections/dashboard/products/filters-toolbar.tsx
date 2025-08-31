@@ -88,7 +88,7 @@ export default function FiltersToolbar() {
               onClick={() => handleFilterChange("category", category?._id)}
               key={category?._id}
               className={cn(
-                "h-12 border-2 border-gray-200 rounded-md flex flex-row items-center px-2 gap-2 cursor-pointer hover:border-gray-400 transition-all duration-300",
+                "h-12 border-2 border-gray-200 rounded-md flex flex-row items-center px-2 gap-2 cursor-pointer hover:border-gray-400 transition-all duration-300 whitespace-nowrap",
                 currentCategory?.includes(category?._id) &&
                   " border-gray-400 translate-x-2"
               )}
@@ -99,7 +99,7 @@ export default function FiltersToolbar() {
                 height={36}
                 className="text-gray-600"
               />
-              <p className="text-lg font-semibold mr-auto rtl:ml-auto rtl:mr-0 text-text-primary">
+              <p className="text-sm font-semibold mr-auto rtl:ml-auto rtl:mr-0 text-text-primary">
                 {category?.[locale === "ar" ? "nameAr" : "nameEn"]}
               </p>
               <span className="font-semibold bg-[#BCE3C9] w-8 h-8 aspect-square flex items-center justify-center rounded-full text-sm">

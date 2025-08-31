@@ -12,7 +12,7 @@ export default async function DetailsView({ product }: { product: Medicine }) {
   const locale = await getLocale();
   const t = await getTranslations();
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 px-4">
       <div className="p-3 flex flex-row gap-12">
         <div className="border-[1px] border-gray-300 h-128 w-128 min-w-128 rounded-xl flex items-center justify-center relative">
           <FallbackImage
