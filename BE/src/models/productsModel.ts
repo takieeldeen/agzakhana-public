@@ -27,6 +27,15 @@ const productSchema = new Schema<ProductType>({
   indicationsEn: String,
   dosageAr: String,
   dosageEn: String,
+  qty: {
+    type: Number,
+    default: 1,
+    required: true,
+  },
+  maxQty: {
+    type: Number,
+    default: 1,
+  },
 });
 
 const Product = mongoose.model("Product", productSchema);

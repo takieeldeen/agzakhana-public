@@ -18,4 +18,6 @@ export type ProductType = {
   indicationsEn: string;
   dosageAr: string;
   dosageEn: string;
+  qty: number;
+  maxQty: number;
 };
