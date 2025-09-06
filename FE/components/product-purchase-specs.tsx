@@ -4,20 +4,27 @@ import { Medicine } from "@/types/medcines";
 import { useTranslations } from "next-intl";
 import { useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { LoadingButton } from "./ui/button";
+import { Button } from "./ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import RHFForm from "./rhf-form";
-import RHFTextfield from "./rhf-textfield";
+import { useGetCartItems, useMutateCart } from "@/api/cart";
+import CircularProgress from "./circular-progress";
+import RHFError from "./rhf-error";
+import Fade from "./Fade";
 
 type Props = {
   product: Medicine;
 };
 export default function ProductPurchaseSpecs({ product }: Props) {
   const t = useTranslations();
-
+  const { addToCart, removeFromCart, updateCartItem } = useMutateCart();
+  const { isPending: isAdding } = addToCart;
+  const { isPending: isRemoving } = removeFromCart;
+  const { isPending: isUpdating } = updateCartItem;
+  const { cart } = useGetCartItems(false);
   const specsSchema = z.object({
     qty: z.coerce
       .number()
@@ -40,7 +47,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
     resolver: zodResolver(specsSchema),
     mode: "onChange",
   });
-  const { watch, setValue } = methods;
+  const { watch, setValue, trigger } = methods;
   const values = watch();
   const handleToggleVariant = useCallback(
     (newVal: string) => {
@@ -52,11 +59,49 @@ export default function ProductPurchaseSpecs({ product }: Props) {
     },
     [setValue, values?.concentration]
   );
-  const onSubmit = useCallback((data: any) => {
-    alert(JSON.stringify(data));
-  }, []);
+  // Helper Constants //////////////////////////////////
+  const CART_ITEM = cart?.find((item) => item?.product?._id === product?._id);
+  const ALREADY_IN_CART = !!CART_ITEM;
+  const IS_LOADING = isAdding || isRemoving || isUpdating;
+  const onSubmit = useCallback(
+    (data: any) => {
+      console.log(data);
+      if (data?.qty === 0) {
+        removeFromCart.mutate(CART_ITEM!._id);
+      } else if (!CART_ITEM) {
+        addToCart.mutate({ productId: product?._id, qty: data?.qty });
+      } else {
+        updateCartItem.mutate({
+          cartItemId: CART_ITEM._id,
+          payload: { qty: data?.qty },
+        });
+      }
+    },
+    [CART_ITEM, addToCart, product?._id, removeFromCart, updateCartItem]
+  );
+  const handleDecrements = useCallback(async () => {
+    const currentQty = values.qty as number;
+    if (currentQty > 1) {
+      setValue("qty", currentQty - 1, { shouldValidate: true });
+      const isValid = await trigger("qty");
+      if (isValid) {
+        onSubmit({ ...values, qty: currentQty - 1 });
+      }
+    } else {
+      onSubmit({ ...values, qty: 0 });
+    }
+  }, [onSubmit, setValue, trigger, values]);
+  const handleIncrements = useCallback(async () => {
+    const currentQty = values.qty as number;
+    setValue("qty", currentQty + 1, { shouldValidate: true });
+    const isValid = await trigger("qty");
+    console.log(isValid, "valid input");
+    if (isValid) {
+      onSubmit({ ...values, qty: currentQty + 1 });
+    }
+  }, [onSubmit, setValue, trigger, values]);
   return (
-    <RHFForm methods={methods} onSubmit={onSubmit}>
+    <RHFForm methods={methods} onSubmit={onSubmit} className="">
       <div>
         <div className="flex flex-col mb-2">
           <p className="font-bold text-lg mb-3">
@@ -80,29 +125,43 @@ export default function ProductPurchaseSpecs({ product }: Props) {
             ))}
           </ul>
         </div>
-        <div className="flex flex-row gap-2 items-stretch">
-          {/* <input
-            type="number"
-            className="border-agzakhana-primary border-2 px-3 py-2 text-xl font-semibold rounded-lg w-28 text-center"
-            value={quantity}
-            onChange={(e) => setQuantity(+e.target.value)}
-          /> */}
-          <RHFTextfield
-            name="qty"
-            inputProps={{
-              type: "number",
-              className:
-                "border-agzakhana-primary border-2 px-3 py-2 text-xl! font-semibold rounded-lg w-28 text-center h-12",
-            }}
-          />
-          <LoadingButton
-            className="h-full text-base bg-agzakhana-primary"
-            onClick={onSubmit}
-          >
-            <Icon icon="mynaui:cart" />
-            {t("PRODUCTS_LISTING_PAGE.ADD_TO_CART")}
-          </LoadingButton>
+        <div
+          className={cn(
+            "flex flex-row gap-2 items-center bg-agzakhana-primary rounded-md px-2 py-2 text-white w-fit min-w-64 justify-center transition-all min-h-13 mb-2",
+            !ALREADY_IN_CART && "hover:brightness-90 cursor-pointer "
+          )}
+        >
+          <Fade condition={!ALREADY_IN_CART && !IS_LOADING}>
+            <Button className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-100">
+              {t("PRODUCTS_LISTING_PAGE.ADD_TO_CART")}
+            </Button>
+          </Fade>
+          {ALREADY_IN_CART && !IS_LOADING && (
+            <div className="flex flex-row items-center justify-between w-full">
+              <Button
+                type="button"
+                onClick={handleDecrements}
+                className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-80"
+              >
+                <Icon
+                  icon={values?.qty === 1 ? "iconamoon:trash" : "tabler:minus"}
+                  className="w-6! h-6!"
+                />
+              </Button>
+              <span className="font-bold">{values?.qty as number}</span>
+              <Button
+                disabled={values?.qty === product?.maxQty}
+                type="button"
+                onClick={handleIncrements}
+                className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-80"
+              >
+                <Icon icon="tabler:plus" className="w-6! h-6!" />
+              </Button>
+            </div>
+          )}
+          {IS_LOADING && <CircularProgress className="border-white w-6 h-6" />}
         </div>
+        <RHFError name="qty" />
         <span className="text-lg text-gray-500 font-semibold">
           {t("PRODUCTS_LISTING_PAGE.AVAILABLE_QTY", { count: 9 })}
         </span>

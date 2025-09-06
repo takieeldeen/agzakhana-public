@@ -1,4 +1,8 @@
 {
+  "BREADCRUMBS": {
+    "Home": "الرئيسية",
+    "products": "المنتجات"
+  },
   "HEADER": {
     "WHISHLIST": "قائمة الرغبات",
     "CART": "عربة التسوق",
@@ -65,7 +69,8 @@
     "REVIEW": "{count} مراجعة",
     "DISCOUNT": "{discount} خصم",
     "CONCENTRATION": "التركيز",
-    "ADD_TO_CART": "إضافة إلى العربة",
+    "ADD_TO_CART": "أضف إلى العربة",
+    "REMOVE_FROM_CART": "حذف من العربة",
     "INDICATIONS_FOR_USE": "دواعي الاستعمال",
     "DOSAGE": "الجرعة",
     "WARNING": "التنبيهات",

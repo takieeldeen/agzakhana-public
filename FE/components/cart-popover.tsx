@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useGetCartItems, useMutateCart } from "@/api/cart";
 import { useCallback } from "react";
 import CircularProgress from "./circular-progress";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function CartPopover() {
   const t = useTranslations();
@@ -41,11 +42,18 @@ export function CartPopover() {
         <Button className="bg-transparent shadow-none flex flex-row gap-4 p-0    items-end">
           <div className="relative">
             <Icon icon="mynaui:cart" className="text-text-primary h-7! w-7!" />
-            {!cartEmpty && (
-              <span className="absolute top-0 right-0  rtl:left-0 rtl:right-auto bg-[#3BB77E] text-white flex items-center justify-center aspect-square min-w-[20px] min-h-[20px] rounded-full translate-x-1/2 rtl:-translate-x-1/2 -translate-y-1/2 p-1 text-[12px]">
-                {totalItems ?? "--"}
-              </span>
-            )}
+            <AnimatePresence>
+              {!cartEmpty && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                  className="absolute top-0 right-0  rtl:left-0 rtl:right-auto bg-[#3BB77E] text-white flex items-center justify-center aspect-square min-w-[20px] min-h-[20px] rounded-full translate-x-1/2 rtl:-translate-x-1/2 -translate-y-1/2 p-1 text-[12px]"
+                >
+                  {totalItems ?? "--"}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
           <span className="font-semibold text-text-primary text-[16px]">
             {t("HEADER.CART")}

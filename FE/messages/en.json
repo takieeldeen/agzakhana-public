@@ -1,4 +1,8 @@
 {
+  "BREADCRUMBS": {
+    "Home": "Home",
+    "products": "Products"
+  },
   "HEADER": {
     "WHISHLIST": "Wishlist",
     "CART": "Cart",
@@ -67,6 +71,7 @@
     "DISCOUNT": "{discount} Discount",
     "CONCENTRATION": "Concentration",
     "ADD_TO_CART": "Add to Cart",
+    "REMOVE_FROM_CART": "Remove From Cart",
     "INDICATIONS_FOR_USE": "Indications for Use",
     "DOSAGE": "Dosage",
     "WARNING": "Warnings",

@@ -6,22 +6,17 @@ import { getLocale, getTranslations } from "next-intl/server";
 import ReviewsSection from "../reviews-section";
 import { SimilarProductsSection } from "../similar-products";
 import ProductPurchaseSpecs from "@/components/product-purchase-specs";
-import { FreeShippingTag, IncartTag } from "@/components/tags";
 import ImageMagnifier from "@/components/image-magnifier";
+import ProductsTags from "../products-tags";
+import CustomBreadCrump from "@/components/custom-breadcrump";
 
 export default async function DetailsView({ product }: { product: Medicine }) {
   const locale = await getLocale();
   const t = await getTranslations();
   return (
     <div className="flex flex-col gap-3 px-4">
+      <CustomBreadCrump className="p-3" />
       <div className="p-3 flex flex-row gap-12">
-        {/* <div className="border-[1px] border-gray-300 h-128 w-128 min-w-128 rounded-xl flex items-center justify-center relative"> */}
-        {/* <FallbackImage
-            src={product?.imageUrl}
-            fill
-            alt={product?.nameAr}
-            style={{ objectFit: "contain" }}
-          /> */}
         <ImageMagnifier
           src={product?.imageUrl}
           alt={locale === "ar" ? product?.nameAr : product?.nameEn}
@@ -37,14 +32,11 @@ export default async function DetailsView({ product }: { product: Medicine }) {
             className="relative text-lg rounded-md "
           />
           <div className="flex flex-row gap-2">
-            <h2 style={{ fontSize: "40px" }} className="font-bold">
+            <h2 style={{ fontSize: "40px" }} className="font-semibold">
               {locale === "en" ? product?.nameEn : product?.nameAr}
             </h2>
           </div>
-          <div className="flex flex-row gap-2">
-            <IncartTag />
-            <FreeShippingTag />
-          </div>
+          <ProductsTags product={product} />
           <div className="flex flex-row gap-1  items-center mb-4">
             <Icon
               icon="material-symbols:star-rounded"
