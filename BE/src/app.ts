@@ -11,6 +11,7 @@ import morgan from "morgan";
 import categoryRouter from "./routers/categoriesRouter";
 import cartRouter from "./routers/cartRouter";
 import dealsRouter from "./routers/dealsRouter";
+import commentRouter from "./routers/commentRouter";
 
 const app = express();
 app.use(morgan("dev"));

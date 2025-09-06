@@ -7,13 +7,15 @@ export const authenticateUser = catchAsync(
   async (req: ProtectedRequest, res: Response, next: NextFunction) => {
     const { token } = req.cookies;
     const userId = (decode(token) as any)?.id;
-    if (!userId)
+    if (!userId) {
       res.status(401).json({
         status: "fail",
         message: "Please Log in to be able to use this endpoint",
       });
-    const user = await User.findById(userId);
-    req.user = user!;
-    next();
+    } else {
+      const user = await User.findById(userId);
+      req.user = user!;
+      next();
+    }
   }
 );
