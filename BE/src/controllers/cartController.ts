@@ -100,6 +100,7 @@ export const addToCart = catchAsync(
 // Update /////////////////////////////////////////////////
 export const updateCartItem = catchAsync(
   async (req: ProtectedRequest, res: Response) => {
+    console.log("triggered");
     const userId = req?.user?._id;
     const { cartItemId } = req?.params;
     const { qty } = req?.body;
@@ -111,10 +112,15 @@ export const updateCartItem = catchAsync(
         },
       },
       { new: true }
-    );
+    ).populate({
+      path: "cart.product",
+      select: PRODUCT_VISIBLE_FIELDS,
+    });
+    console.log(cart);
     res.status(200).json({
       status: "success",
       content: cart,
+      results: cart?.cart?.length,
     });
   }
 );
