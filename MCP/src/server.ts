@@ -14,7 +14,7 @@ import {
   getIssueDetails,
 } from "./utils/jira";
 import { runCommand } from "./utils/terminal";
-import { createGitBranch } from "./utils/github";
+import { createGitBranch, createPullRequest } from "./utils/github";
 const server = new McpServer({
   name: "test",
   version: "1.0.0",
@@ -204,25 +204,39 @@ server.tool(
   "create-pr",
   "Create a Pull request for the currently under development feature.",
   {
-    issueId: z.string(),
+    branchName: z.string(),
+    title: z.string(),
+    body: z.string(),
   },
   {
-    title: "Create a New Feature ",
+    title: "Create a Pull Request ",
     readOnlyHint: false,
     destructiveHint: false,
     idempotentHint: false,
     openWorldHint: true,
   },
-  async ({ issueId }) => {
-    await addIssueComment(issueId, "PR_CREATION");
-    return {
-      content: [
-        {
-          type: "text",
-          text: "JIRA Issue Found and status will be converted to In Progress",
-        },
-      ],
-    };
+  async ({ branchName, title, body }) => {
+    try {
+      await createPullRequest(branchName, title, body);
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Pull request was made succesfully to main`,
+          },
+        ],
+      };
+    } catch (err: any) {
+      return {
+        content: [
+          {
+            type: "text",
+            text: `Something went wrong while creating the pull request: ${err?.response?.data?.message}`,
+          },
+        ],
+      };
+    }
+    // await addIssueComment(issueId, "PR_CREATION");
   }
 );
 

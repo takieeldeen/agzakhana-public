@@ -1,18 +1,7 @@
-import axios from "axios";
 import dotenv from "dotenv";
+import { jiraAxios } from "./axios";
 
 dotenv.config();
-
-const JIRA_URL = `https://${process.env.JIRA_DOMAIN}.atlassian.net/rest/api/3`;
-const JIRA_AUTH = {
-  username: process.env.JIRA_USERNAME!,
-  password: process.env.JIRA_API_KEY!,
-};
-
-const jiraAxios = axios.create({
-  baseURL: JIRA_URL,
-  auth: JIRA_AUTH,
-});
 
 export async function getIssueDetails(issueId: string) {
   try {

@@ -71,12 +71,15 @@ async function handleTool(tool: Tool) {
       })`,
     });
   }
-  const res = await client.callTool({
-    name: tool.name,
-    arguments: args,
-  });
-
-  console.log((res.content as [{ text: string }])[0].text);
+  try {
+    const res = await client.callTool({
+      name: tool.name,
+      arguments: args,
+    });
+    console.log((res.content as [{ text: string }])[0].text);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 main();
