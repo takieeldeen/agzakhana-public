@@ -2,11 +2,49 @@ import { NextFunction, Request, Response } from "express";
 import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
 import Comment from "../models/commentModel";
 import { AppError } from "../utils/errors";
+import mongoose from "mongoose";
 
 export const getAllComments = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { productId } = req.params;
-    const comments = await Comment.find({ productId });
+    const comments = await Comment.aggregate([
+      {
+        $match: { productId: new mongoose.Types.ObjectId(productId) },
+      },
+      {
+        $lookup: {
+          from: "users",
+          as: "user",
+          let: { userId: "$userId" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$_id", "$$userId"] },
+              },
+            },
+            {
+              $project: {
+                email: 1,
+                name: 1,
+                imageUrl: 1,
+                isActive: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $match: { "user.isActive": true },
+      },
+      {
+        $project: {
+          "user.isActive": 0,
+        },
+      },
+    ]);
     res.status(200).json({
       status: "success",
       content: comments,

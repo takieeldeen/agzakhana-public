@@ -12,4 +12,5 @@ export type UserType = {
   password: string;
   passwordConfirmation: string;
   provider: "GOOGLE" | "LOCAL";
+  isActive: boolean;
 };

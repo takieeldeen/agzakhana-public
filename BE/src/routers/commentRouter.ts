@@ -7,7 +7,7 @@ import {
   updateComment,
 } from "../controllers/commentController";
 
-const commentRouter = Router();
+const commentRouter = Router({ mergeParams: true });
 
 commentRouter
   .route("/")

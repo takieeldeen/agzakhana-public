@@ -74,6 +74,10 @@ const userSchema = new Schema<UserType>({
   phoneNumber: {
     type: String,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
 });
 // Pre validations
 // userSchema.pre("validate", function (next) {
