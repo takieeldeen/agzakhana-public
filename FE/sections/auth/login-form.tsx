@@ -43,15 +43,18 @@ export default function LoginForm() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(async (data: any) => {
-    try {
-      const res = await login(data);
-      loginLocally(res?.data?.user);
-      router.push("/");
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (data: any) => {
+      try {
+        const res = await login(data);
+        loginLocally(res?.data?.user);
+        router.push("/");
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [loginLocally, router]
+  );
   return (
     <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
       <RHFTextfield

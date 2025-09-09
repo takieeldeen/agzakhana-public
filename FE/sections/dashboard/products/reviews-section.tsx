@@ -1,6 +1,5 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { REVIEWS_MOCK_DATA } from "@/_mock/_reviews";
+
 import { CustomerReview } from "@/components/customer-review";
 import StarRating from "@/components/star-rating";
 import {
@@ -16,41 +15,44 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import ReviewNewEditForm from "./review-new-edit-form";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useParams } from "next/navigation";
+import { useGetReviews } from "@/api/reviews";
 
 export default function ReviewsSection() {
   const [commentsSize, setCommentsSize] = useState<"collapsed" | "expanded">(
     "collapsed"
   );
   const t = useTranslations();
+  const { productId }: { productId: string } = useParams();
+  const { reviews, overAllRating, reviewsFrequency, reviewCount } =
+    useGetReviews(productId);
   return (
     <div className="flex flex-row gap-6">
       <div className="flex flex-col gap-2">
         <div className="flex flex-row items-center gap-4 mb-4">
           <strong className=" font-bold text-7xl leading-none">
-            {REVIEWS_MOCK_DATA?.overAllRating?.toString()?.replace(".", ",")}
+            {overAllRating?.toString()?.replace(".", ",")}
           </strong>
           <div className="flex flex-col">
             <span className="font-semibold text-gray-600 text-lg">
               {t("PRODUCTS_LISTING_PAGE.BASED_ON_REVIEWS", {
-                count: REVIEWS_MOCK_DATA?.reviewsCount,
+                count: reviewCount,
               })}
             </span>
-            <StarRating rating={REVIEWS_MOCK_DATA?.overAllRating} disabled />
+            <StarRating rating={overAllRating} disabled />
           </div>
         </div>
         <div className="flex flex-col gap-12">
           <div>
-            {Object.keys(REVIEWS_MOCK_DATA?.reviewsFrequency)?.map((rating) => (
+            {Object.keys(reviewsFrequency)?.map((rating) => (
               <div key={rating} className="flex flex-row items-center gap-4">
                 <p className="font-bold text-xl text-center w-6">{rating}</p>
                 <Progress
                   className="w-[25rem]"
-                  value={(REVIEWS_MOCK_DATA as any)?.reviewsFrequency?.[rating]}
+                  value={reviewsFrequency?.[rating]}
                   progressProps={{ className: "bg-agzakhana-primary" }}
                 />
-                <p className="font-bold text-[16px]">{`${
-                  (REVIEWS_MOCK_DATA as any)?.reviewsFrequency?.[rating]
-                }%`}</p>
+                <p className="font-bold text-[16px]">{`${reviewsFrequency?.[rating]}%`}</p>
               </div>
             ))}
           </div>
@@ -75,7 +77,7 @@ export default function ReviewsSection() {
         <h5 className="text-2xl font-bold">
           {t("PRODUCTS_LISTING_PAGE.CUSTOMER_FEEDBACK")}
         </h5>
-        {REVIEWS_MOCK_DATA?.comments?.length === 0 && (
+        {reviewCount === 0 && (
           <div className="w-full flex items-center justify-center min-h-96 flex-col gap-3">
             <Icon
               icon="material-symbols-light:comments-disabled-outline"
@@ -88,10 +90,10 @@ export default function ReviewsSection() {
             </p>
           </div>
         )}
-        {REVIEWS_MOCK_DATA?.comments?.length > 0 && (
+        {reviewCount > 0 && (
           <ul className="flex flex-col gap-6">
-            {REVIEWS_MOCK_DATA?.comments?.slice(0, 2)?.map((review) => (
-              <CustomerReview key={review?.id} review={review} />
+            {reviews?.slice(0, 2)?.map((review) => (
+              <CustomerReview key={review?._id} review={review} />
             ))}
             <Accordion
               type="single"
@@ -103,13 +105,11 @@ export default function ReviewsSection() {
             >
               <AccordionItem value="expanded">
                 <AccordionContent className="flex flex-col gap-4 text-balance">
-                  {REVIEWS_MOCK_DATA?.comments
-                    ?.slice(2, REVIEWS_MOCK_DATA?.comments?.length)
-                    ?.map((review) => (
-                      <CustomerReview key={review?.id} review={review} />
-                    ))}
+                  {reviews?.slice(2, reviewCount)?.map((review) => (
+                    <CustomerReview key={review?._id} review={review} />
+                  ))}
                 </AccordionContent>
-                {REVIEWS_MOCK_DATA?.comments?.length > 2 && (
+                {reviewCount > 2 && (
                   <AccordionTrigger className="justify-center font-bold text-xl items-center hover:no-underline cursor-pointer">
                     {commentsSize !== "expanded"
                       ? t("PRODUCTS_LISTING_PAGE.SHOW_MORE_COMMENTS")
@@ -144,7 +144,7 @@ export function ReviewsSectionSkeleton() {
         </div>
         <div className="flex flex-col gap-12">
           <div className="flex flex-col gap-2">
-            {Object.keys(REVIEWS_MOCK_DATA?.reviewsFrequency)?.map((rating) => (
+            {Array.from({ length: 5 }, (_, el) => el)?.map((rating) => (
               <div key={rating} className="flex flex-row items-center gap-4">
                 <Skeleton className="w-3 h-3 rounded-sm" />
                 <Skeleton className="w-full h-3" />

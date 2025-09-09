@@ -35,6 +35,9 @@ export const endpoints = {
     list: "/v1/cart",
     single: (cartItem: string) => `/v1/cart/${cartItem}`,
   },
+  reviews: {
+    list: (productId: string) => `/v1/products/${productId}/reviews`,
+  },
 };
 
 export default axios;

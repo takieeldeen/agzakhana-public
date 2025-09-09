@@ -11,6 +11,8 @@ import { SimilarProductsSection } from "../similar-products";
 export default async function DetailsView({ product }: { product: Medicine }) {
   const locale = await getLocale();
   const t = await getTranslations();
+  console.log("test");
+
   return (
     <div className="flex flex-col gap-3">
       <div className="p-3 flex flex-row gap-12">

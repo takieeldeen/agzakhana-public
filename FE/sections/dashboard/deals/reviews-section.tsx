@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { REVIEWS_MOCK_DATA } from "@/_mock/_reviews";
 import { CustomerReview } from "@/components/customer-review";
 import StarRating from "@/components/star-rating";
@@ -21,6 +21,8 @@ export default function ReviewsSection() {
   const [commentsSize, setCommentsSize] = useState<"collapsed" | "expanded">(
     "collapsed"
   );
+  console.log("testttttttttttttttttttttttttttttttt");
+
   const t = useTranslations();
   return (
     <div className="flex flex-row gap-6">

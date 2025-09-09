@@ -2,14 +2,16 @@
 
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function StarRating({
   rating = 0,
   disabled = false,
+  onChange,
 }: {
   rating?: number;
   disabled?: boolean;
+  onChange?: (newVal: number) => void;
 }) {
   const [currentRating, setCurrentRating] = useState<number>(
     Math.floor(rating)
@@ -20,12 +22,17 @@ export default function StarRating({
       if (disabled) return;
       if (currentRating === newRating) {
         setCurrentRating(0);
+        onChange?.(0);
       } else {
         setCurrentRating(newRating);
+        onChange?.(newRating);
       }
     },
-    [currentRating, disabled]
+    [currentRating, disabled, onChange]
   );
+  useEffect(() => {
+    setCurrentRating(rating);
+  }, [rating]);
 
   return (
     <div className="flex flex-row items-center gap-1 justify-between">
