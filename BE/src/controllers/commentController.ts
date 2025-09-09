@@ -44,6 +44,72 @@ export const getAllComments = catchAsync(
           "user.isActive": 0,
         },
       },
+      {
+        $facet: {
+          comments: [],
+          reviewsCount: [{ $count: "count" }],
+          overAllRating: [
+            {
+              $group: { _id: "$productId", avg: { $avg: "$rate" } },
+            },
+          ],
+          existingRates: [
+            { $group: { _id: "$rate", count: { $sum: 1 } } },
+            {
+              $project: { _id: 0, rate: "$_id", count: 1 },
+            },
+          ],
+          allRates: [
+            {
+              $limit: 1,
+            },
+            { $project: { rate: [1, 2, 3, 4, 5] } },
+            { $unwind: "$rate" },
+            { $project: { _id: 0, rate: 1, count: { $literal: 0 } } },
+          ],
+        },
+      },
+
+      {
+        $project: {
+          comments: 1,
+          reviewsCount: 1,
+          overAllRating: 1,
+          mergedRates: { $concatArrays: ["$allRates", "$existingRates"] },
+        },
+      },
+      { $unwind: "$mergedRates" },
+      {
+        $group: {
+          _id: {
+            comments: "$comments",
+            reviewsCount: "$reviewsCount",
+            overAllRating: "$overAllRating",
+            rate: "$mergedRates.rate",
+          },
+          count: { $sum: "$mergedRates.count" },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            comments: "$_id.comments",
+            reviewsCount: "$_id.reviewsCount",
+            overAllRating: "$_id.overAllRating",
+          },
+          mergedRates: {
+            $push: { rate: "$_id.rate", count: "$count" },
+          },
+        },
+      },
+      {
+        $project: {
+          comments: "$_id.comments",
+          reviewCount: { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+          overAllRating: { $arrayElemAt: ["$_id.overAllRating.avg", 0] },
+          mergedRates: { $o },
+        },
+      },
     ]);
     res.status(200).json({
       status: "success",

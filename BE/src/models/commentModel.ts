@@ -9,6 +9,8 @@ const commentSchema = new Schema<CommentType>({
   rate: {
     type: Number,
     required: true,
+    min: 0,
+    max: 5,
   },
   createdAt: {
     type: Date,
