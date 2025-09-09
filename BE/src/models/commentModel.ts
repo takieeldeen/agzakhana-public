@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { CommentType } from "../types/comment";
+import i18next, { t } from "i18next";
 
 const commentSchema = new Schema<CommentType>({
   comment: {
@@ -9,7 +10,7 @@ const commentSchema = new Schema<CommentType>({
   rate: {
     type: Number,
     required: true,
-    min: 0,
+    min: [1, (() => t("COMMON.FIELD_MIN_VAL"))()] as any,
     max: 5,
   },
   createdAt: {

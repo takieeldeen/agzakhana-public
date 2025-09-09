@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { UserType } from "../types/users";
 import validator from "validator";
 import { hash } from "bcrypt";
+
 const userSchema = new Schema<UserType>({
   name: {
     type: String,

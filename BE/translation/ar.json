@@ -2,7 +2,8 @@
   "COMMON": {
     "FAIL": "فشل",
     "ERROR": "خطأ",
-    "SUCCESS": "نجاح"
+    "SUCCESS": "نجاح",
+    "FIELD_MIN_VAL": "الحد الأدنى ل{{field}} هو {{min}}"
   },
   "LOGIN": {
     "MISSING_CREDENTIALS": "يرجى إدخال اسم المستخدم وكلمة المرور",

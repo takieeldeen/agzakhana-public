@@ -3,6 +3,7 @@ import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
 import Comment from "../models/commentModel";
 import { AppError } from "../utils/errors";
 import mongoose from "mongoose";
+import { t } from "i18next";
 
 export const getAllComments = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -98,22 +99,36 @@ export const getAllComments = catchAsync(
             overAllRating: "$_id.overAllRating",
           },
           mergedRates: {
-            $push: { rate: "$_id.rate", count: "$count" },
+            $push: {
+              k: { $toString: "$_id.rate" },
+              v: {
+                $multiply: [
+                  {
+                    $divide: [
+                      "$count",
+                      { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+                    ],
+                  },
+                  100,
+                ],
+              },
+            },
           },
         },
       },
       {
         $project: {
+          _id: 0,
           comments: "$_id.comments",
           reviewCount: { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
           overAllRating: { $arrayElemAt: ["$_id.overAllRating.avg", 0] },
-          mergedRates: { $o },
+          reviewsFrequency: { $arrayToObject: "$mergedRates" },
         },
       },
     ]);
     res.status(200).json({
       status: "success",
-      content: comments,
+      content: comments?.[0] ?? {},
       results: comments.length,
     });
   }
@@ -129,6 +144,7 @@ export const createComment = catchAsync(
       rate,
       userId: req?.user?._id,
     };
+    console.log(t("COMMON.FIELD_MIN_VAL"));
     const previousComments = await Comment.findOne({
       userId: req?.user?._id,
       productId,

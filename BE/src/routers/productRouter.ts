@@ -10,7 +10,7 @@ const productsRouter = Router();
 
 productsRouter.route("/").get(getAllProducts);
 productsRouter.route("/:productId").get(getProductDetails);
-productsRouter.use("/:productId/comments", commentRouter);
+productsRouter.use("/:productId/reviews", commentRouter);
 
 productsRouter.route("/filters/manufacturer").get(getAllManufacturer);
 export default productsRouter;
