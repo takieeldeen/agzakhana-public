@@ -4,13 +4,22 @@ import Comment from "../models/commentModel";
 import { AppError } from "../utils/errors";
 import mongoose from "mongoose";
 import { t } from "i18next";
+import { decode } from "jsonwebtoken";
+import User from "../models/usersModel";
 
 export const getAllComments = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req?.cookies;
+    const userId = (decode(token) as any)?.id;
+    const currentUser = await User.findById(userId);
+    console.log(currentUser);
     const { productId } = req.params;
     const comments = await Comment.aggregate([
       {
         $match: { productId: new mongoose.Types.ObjectId(productId) },
+      },
+      {
+        $sort: { createdAt: -1 },
       },
       {
         $lookup: {
@@ -47,7 +56,17 @@ export const getAllComments = catchAsync(
       },
       {
         $facet: {
-          comments: [],
+          comments: [
+            {
+              $addFields: {
+                editable: {
+                  $expr: {
+                    $eq: ["$userId", new mongoose.Types.ObjectId(userId)],
+                  },
+                },
+              },
+            },
+          ],
           reviewsCount: [{ $count: "count" }],
           overAllRating: [
             {
@@ -102,14 +121,19 @@ export const getAllComments = catchAsync(
             $push: {
               k: { $toString: "$_id.rate" },
               v: {
-                $multiply: [
+                $round: [
                   {
-                    $divide: [
-                      "$count",
-                      { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+                    $multiply: [
+                      {
+                        $divide: [
+                          "$count",
+                          { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+                        ],
+                      },
+                      100,
                     ],
                   },
-                  100,
+                  1,
                 ],
               },
             },
@@ -123,6 +147,23 @@ export const getAllComments = catchAsync(
           reviewCount: { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
           overAllRating: { $arrayElemAt: ["$_id.overAllRating.avg", 0] },
           reviewsFrequency: { $arrayToObject: "$mergedRates" },
+        },
+      },
+      {
+        $addFields: {
+          canReview: {
+            $not: {
+              $anyElementTrue: {
+                $map: {
+                  input: "$comments",
+                  as: "c",
+                  in: {
+                    $eq: ["$$c.userId", new mongoose.Types.ObjectId(userId)],
+                  },
+                },
+              },
+            },
+          },
         },
       },
     ]);
@@ -144,7 +185,6 @@ export const createComment = catchAsync(
       rate,
       userId: req?.user?._id,
     };
-    console.log(t("COMMON.FIELD_MIN_VAL"));
     const previousComments = await Comment.findOne({
       userId: req?.user?._id,
       productId,
@@ -166,7 +206,6 @@ export const deleteComment = catchAsync(
       _id: commentId,
       userId: req?.user?._id,
     });
-    console.log(comment);
     if (!comment)
       return next(new AppError(500, "No Comment found for this user."));
     res.status(204).json({
