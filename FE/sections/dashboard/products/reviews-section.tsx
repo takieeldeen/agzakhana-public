@@ -12,7 +12,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ReviewNewEditForm from "./review-new-edit-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useParams } from "next/navigation";
@@ -22,10 +22,14 @@ export default function ReviewsSection() {
   const [commentsSize, setCommentsSize] = useState<"collapsed" | "expanded">(
     "collapsed"
   );
+  const [showCreationModal, setShowCreationModal] = useState<boolean>(false);
   const t = useTranslations();
   const { productId }: { productId: string } = useParams();
-  const { reviews, overAllRating, reviewsFrequency, reviewCount } =
+  const { reviews, overAllRating, reviewsFrequency, reviewCount, canReview } =
     useGetReviews(productId);
+  const handleCloseModal = useCallback(() => {
+    setShowCreationModal(false);
+  }, []);
   return (
     <div className="flex flex-row gap-6">
       <div className="flex flex-col gap-2">
@@ -56,21 +60,26 @@ export default function ReviewsSection() {
               </div>
             ))}
           </div>
-          <div className="flex flex-col gap-3">
-            <p className="text-2xl font-semibold">
-              {t("PRODUCTS_LISTING_PAGE.WRITE_YOUR_REVIEWS")}
-            </p>
-            <p className="text-base  font-semibold">
-              {t("PRODUCTS_LISTING_PAGE.SHARE_YOUR_REVIEW")}
-            </p>
-            <Dialog>
-              <DialogTrigger className="bg-agzakhana-primary hover:bg-agzakhana-primary py-2 px-4 w-fit font-semibold text-lg rounded-md flex items-center justify-center gap-2 text-white cursor-pointer hover:brightness-90 transition-all duration-300">
-                <Icon icon="solar:pen-linear" />
-                {t("PRODUCTS_LISTING_PAGE.SUBMIT_REVIEWS")}
-              </DialogTrigger>
-              <ReviewNewEditForm />
-            </Dialog>
-          </div>
+          {canReview && (
+            <div className="flex flex-col gap-3">
+              <p className="text-2xl font-semibold">
+                {t("PRODUCTS_LISTING_PAGE.WRITE_YOUR_REVIEWS")}
+              </p>
+              <p className="text-base  font-semibold">
+                {t("PRODUCTS_LISTING_PAGE.SHARE_YOUR_REVIEW")}
+              </p>
+              <Dialog
+                open={showCreationModal}
+                onOpenChange={(newVal) => setShowCreationModal(newVal)}
+              >
+                <DialogTrigger className="bg-agzakhana-primary hover:bg-agzakhana-primary py-2 px-4 w-fit font-semibold text-lg rounded-md flex items-center justify-center gap-2 text-white cursor-pointer hover:brightness-90 transition-all duration-300">
+                  <Icon icon="solar:pen-linear" />
+                  {t("PRODUCTS_LISTING_PAGE.SUBMIT_REVIEWS")}
+                </DialogTrigger>
+                <ReviewNewEditForm onClose={handleCloseModal} />
+              </Dialog>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex flex-col gap-2 w-full">

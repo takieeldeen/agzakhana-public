@@ -91,7 +91,9 @@
     "POST": "Post",
     "NO_REVIEWS": "There are no reviews for this product at the moment.",
     "PRODUCT_NOT_FOUND": "Sorry, it seems this product is not available.",
-    "QUANTITY": "Quantity"
+    "QUANTITY": "Quantity",
+    "DELETE_REVIEW": "Delete Review",
+    "EDIT_REVIEW": "Update Review"
   },
   "CART": {
     "MY_SHOPPING_CART": "My Shopping Cart",

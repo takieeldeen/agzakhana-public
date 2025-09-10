@@ -37,6 +37,8 @@ export const endpoints = {
   },
   reviews: {
     list: (productId: string) => `/v1/products/${productId}/reviews`,
+    single: (productId: string, reviewId: string) =>
+      `/v1/products/${productId}/reviews/${reviewId}`,
   },
 };
 

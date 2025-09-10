@@ -1,4 +1,5 @@
 "use client";
+import { useMutateReview } from "@/api/reviews";
 import RHFError from "@/components/rhf-error";
 import RHFForm from "@/components/rhf-form";
 import StarRating from "@/components/star-rating";
@@ -7,12 +8,19 @@ import { DialogClose, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-export default function ReviewNewEditForm() {
+export default function ReviewNewEditForm({
+  onClose,
+}: {
+  onClose: VoidFunction;
+}) {
   const t = useTranslations();
+  const { createReview } = useMutateReview();
+  const { productId }: { productId: string } = useParams();
   const formSchema = z.object({
     rate: z.number().min(1, "Minimum Rate is 1").max(5, "Maximum Rate is 5"),
     comment: z.string().min(1, "Please enter the comment"),
@@ -25,17 +33,24 @@ export default function ReviewNewEditForm() {
     resolver: zodResolver(formSchema),
     defaultValues,
   });
-  const { watch, setValue, register } = methods;
+  const { watch, setValue, register, reset } = methods;
   const values = watch();
 
-  const onSubmit = useCallback(async (data: any) => {
-    try {
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-  console.log(values);
+  const onSubmit = useCallback(
+    async (data: any) => {
+      try {
+        await createReview?.mutateAsync?.({
+          payload: data,
+          productId,
+        });
+        reset();
+        onClose();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [createReview, onClose, productId, reset]
+  );
   return (
     <DialogContent>
       <h3 className="text-2xl font-bold">

@@ -8,7 +8,9 @@ export async function dummyPromise() {
   return test;
 }
 
-export function getFetcher<T>(url: string | [string, AxiosRequestConfig]) {
+export function getFetcher<T = unknown>(
+  url: string | [string, AxiosRequestConfig]
+) {
   return async () => {
     const URL = Array.isArray(url) ? url?.[0] : url;
     const config = Array.isArray(url) ? url?.[1] : undefined;

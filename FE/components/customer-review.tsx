@@ -4,11 +4,58 @@ import { Review } from "@/types/reviews";
 import { useParams } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StarRating from "./star-rating";
+import { Button } from "./ui/button";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { useMutateReview } from "@/api/reviews";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useTranslations } from "next-intl";
+import { Separator } from "./ui/separator";
+import { useState } from "react";
 
 export function CustomerReview({ review }: { review: Review }) {
-  const { locale } = useParams();
+  const [showOptions, setShowOptions] = useState<boolean>(false);
+  const { locale, productId }: { locale: "ar" | "en"; productId: string } =
+    useParams();
+  const { deleteReview } = useMutateReview();
+  const t = useTranslations();
   return (
-    <li className="border-gray-300 border-[1px] rounded-md py-6 px-4">
+    <li className="border-gray-300 border-[1px] rounded-md py-6 px-4 relative">
+      {review.editable && (
+        <Popover open={showOptions} onOpenChange={setShowOptions}>
+          <PopoverTrigger className=" text-black bg-transparent text-xl aspect-square p-2 absolute top-2 rtl:left-2 ltr:right-2 cursor-pointer">
+            <Icon icon="charm:menu-kebab" className="w-4! h-4!" />
+          </PopoverTrigger>
+          <PopoverContent className="p-0! min-w-fit w-fit">
+            <ul>
+              <li className="flex flex-row gap-2 items-center cursor-pointer hover:bg-gray-100 px-4 py-4 transition-all duration-300">
+                <Icon icon="fluent:edit-20-regular" className="w-6! h-6!" />
+                <p className="font-semibold">
+                  {t("PRODUCTS_LISTING_PAGE.EDIT_REVIEW")}
+                </p>
+              </li>
+              <Separator />
+              <li
+                className="flex flex-row gap-2 items-center cursor-pointer hover:bg-gray-100 px-4 py-4 transition-all duration-300"
+                onClick={() => {
+                  deleteReview.mutateAsync({
+                    reviewId: review?._id,
+                    productId,
+                  });
+                  setShowOptions(false);
+                }}
+              >
+                <Icon
+                  icon="material-symbols:delete-outline"
+                  className="w-6! h-6!"
+                />
+                <p className="font-semibold">
+                  {t("PRODUCTS_LISTING_PAGE.DELETE_REVIEW")}
+                </p>
+              </li>
+            </ul>
+          </PopoverContent>
+        </Popover>
+      )}
       <div className="flex flex-col gap-4">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row gap-2">
