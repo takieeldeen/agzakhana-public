@@ -94,7 +94,7 @@ export const getAllComments = catchAsync(
         $project: {
           comments: 1,
           reviewsCount: 1,
-          overAllRating: 1,
+          overAllRating: { $round: ["$overAllRating", 2] },
           mergedRates: { $concatArrays: ["$allRates", "$existingRates"] },
         },
       },
