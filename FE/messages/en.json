@@ -151,7 +151,9 @@
   },
   "FORM_VALIDATIONS": {
     "INVALID_FORMAT": "Please enter a valid {field}",
-    "REQUIRED_FIELD": "Please enter {field}"
+    "REQUIRED_FIELD": "Please enter {field}",
+    "MIN_VAL": "{field} must be at least {min}",
+    "MAX_VAL": "{field} can't be greater than {max}"
   },
   "VALIDATIONS": {
     "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters long",

@@ -6,31 +6,35 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { PRODUCT_LISTING_PAGE } from "@/_mock/_products_listing";
 import ProductCard from "@/components/product-card";
 import { Separator } from "@/components/ui/separator";
 import { getTranslations } from "next-intl/server";
+import { POPULAR_ITEM_LIST } from "@/_mock/_popular_items";
 
 export async function SimilarProductsSection() {
   const t = await getTranslations();
   return (
-    <section className="flex flex-col gap-3">
-      <Carousel className="w-full" dir="ltr">
-        <div className="flex justify-between flex-row rtl:flex-row-reverse">
-          <p className="font-bold text-3xl">
-            {t("PRODUCTS_LISTING_PAGE.SIMILAR_PRODUCTS")}
-          </p>
-          <div className="flex flex-row gap-4">
-            <CarouselPrevious className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto" />
-            <CarouselNext className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto" />
+    <section className="flex flex-col gap-3 p-8 px-4">
+      <Carousel className="w-full">
+        <div className="flex justify-between flex-row ">
+          <div className="flex items-center gap-2 flex-row ">
+            <h5 className="text-3xl font-bold mb-3">
+              {t("PRODUCTS_LISTING_PAGE.SIMILAR_PRODUCTS")}
+            </h5>
+          </div>
+          <div className="flex flex-row  gap-4">
+            <CarouselPrevious className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180" />
+            <CarouselNext className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180" />
           </div>
         </div>
         <Separator className="mb-4" />
-        <CarouselContent className="gap-8 px-8">
-          {PRODUCT_LISTING_PAGE?.content?.map((product) => (
-            <ProductCard key={product?.id} medicine={product} />
-          ))}
-        </CarouselContent>
+        <ul className="list-none">
+          <CarouselContent className="gap-8">
+            {POPULAR_ITEM_LIST?.content?.map((product) => (
+              <ProductCard key={product?._id} medicine={product} />
+            ))}
+          </CarouselContent>
+        </ul>
       </Carousel>
     </section>
   );

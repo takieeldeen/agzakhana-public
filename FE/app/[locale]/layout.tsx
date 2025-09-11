@@ -51,7 +51,7 @@ export default async function RootLayout({
             <TanstackProvider>
               <Header />
               <Navbar />
-              <main className="">{children}</main>
+              <main className="px-8">{children}</main>
               <Footer />
             </TanstackProvider>
           </NextIntlClientProvider>

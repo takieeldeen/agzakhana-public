@@ -149,7 +149,9 @@
   },
   "FORM_VALIDATIONS": {
     "INVALID_FORMAT": "يرجى إدخال {field} صالح",
-    "REQUIRED_FIELD": "يرجى إدخال {field}"
+    "REQUIRED_FIELD": "يرجى إدخال {field}",
+    "MIN_VAL": "يجب ألا تقل {field} عن {min}",
+    "MAX_VAL": "لا يمكن أن تزيد {field} عن {max}"
   },
   "VALIDATIONS": {
     "PASSWORD_MIN_LENGTH": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",

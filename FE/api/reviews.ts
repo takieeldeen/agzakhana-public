@@ -94,5 +94,28 @@ export function useMutateReview() {
       });
     },
   });
-  return { createReview, deleteReview };
+  // -------------------------
+  // Edit Review
+  // -------------------------
+  const editReview = useMutation({
+    mutationFn: async ({
+      reviewId,
+      productId,
+      payload,
+    }: {
+      reviewId: string;
+      productId: string;
+      payload: any;
+    }) => {
+      const URL = endpoints.reviews.single(productId, reviewId);
+      return await axios.patch(URL, payload);
+    },
+    onSuccess: (res, { productId }) => {
+      queryClient.setQueryData(["reviews", productId], res.data);
+      queryClient.invalidateQueries({
+        queryKey: ["reviews", productId],
+      });
+    },
+  });
+  return { createReview, deleteReview, editReview };
 }

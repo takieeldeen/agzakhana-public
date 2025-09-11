@@ -2,55 +2,101 @@
 import { useMutateReview } from "@/api/reviews";
 import RHFError from "@/components/rhf-error";
 import RHFForm from "@/components/rhf-form";
+import RHFTextarea from "@/components/rhf-textarea";
 import StarRating from "@/components/star-rating";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/button";
 import { DialogClose, DialogContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { Review } from "@/types/reviews";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
 export default function ReviewNewEditForm({
   onClose,
+  review,
 }: {
   onClose: VoidFunction;
+  review?: Review;
 }) {
   const t = useTranslations();
-  const { createReview } = useMutateReview();
+  const { createReview, editReview } = useMutateReview();
   const { productId }: { productId: string } = useParams();
   const formSchema = z.object({
-    rate: z.number().min(1, "Minimum Rate is 1").max(5, "Maximum Rate is 5"),
-    comment: z.string().min(1, "Please enter the comment"),
+    rate: z
+      .number()
+      .min(
+        1,
+        t("FORM_VALIDATIONS.MIN_VAL", {
+          field: t("PRODUCTS_LISTING_PAGE.RATING"),
+          min: 1,
+        })
+      )
+      .max(
+        5,
+        t("FORM_VALIDATIONS.MAX_VAL", {
+          field: t("PRODUCTS_LISTING_PAGE.RATING"),
+          max: 5,
+        })
+      ),
+    comment: z.string().min(
+      1,
+      t("FORM_VALIDATIONS.REQUIRED_FIELD", {
+        field: t("PRODUCTS_LISTING_PAGE.REVIEW_FIELD"),
+      })
+    ),
   });
-  const defaultValues = {
-    rate: 1,
-    comment: "",
-  };
+  const defaultValues = useMemo(
+    () => ({
+      rate: review?.rate ?? 1,
+      comment: review?.comment ?? "",
+    }),
+    [review?.comment, review?.rate]
+  );
   const methods = useForm({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
-  const { watch, setValue, register, reset } = methods;
+  const {
+    watch,
+    setValue,
+    reset,
+    formState: { isSubmitting },
+  } = methods;
   const values = watch();
 
   const onSubmit = useCallback(
     async (data: any) => {
       try {
-        await createReview?.mutateAsync?.({
-          payload: data,
-          productId,
-        });
+        if (!review) {
+          await createReview?.mutateAsync?.({
+            payload: data,
+            productId,
+          });
+        } else {
+          await editReview?.mutateAsync?.({
+            productId,
+            reviewId: review?._id,
+            payload: data,
+          });
+        }
         reset();
         onClose();
       } catch (err) {
         console.log(err);
       }
     },
-    [createReview, onClose, productId, reset]
+    [createReview, editReview, onClose, productId, reset, review]
   );
+  useEffect(() => {
+    return () => {
+      reset(defaultValues);
+    };
+  }, [defaultValues, reset]);
   return (
     <DialogContent>
       <h3 className="text-2xl font-bold">
@@ -80,18 +126,27 @@ export default function ReviewNewEditForm({
           <p className="font-semibold text-gray-600">
             {t("PRODUCTS_LISTING_PAGE.REVIEW_FIELD")}
           </p>
-          <textarea
-            className="border-[1px] border-gray-200 h-72 rounded-md p-2"
-            {...register("comment")}
-          />
+
+          <RHFTextarea name="comment" className="rounded-md h-48" />
         </div>
         <div className="flex flex-row gap-2 ">
-          <DialogClose className="w-[calc(50%-0.25rem)] rounded-md cursor-pointer text-lg bg-transparent text-agzakhana-primary border-2 border-agzakhana-primary">
+          <DialogClose
+            disabled={isSubmitting}
+            className={cn(
+              "w-[calc(50%-0.25rem)] rounded-md cursor-pointer text-lg bg-transparent text-agzakhana-primary border-2 border-agzakhana-primary",
+              isSubmitting && "cursor-not-allowed"
+            )}
+          >
             {t("PRODUCTS_LISTING_PAGE.CANCEL")}
           </DialogClose>
-          <Button className="w-[calc(50%-0.25rem)] py-5 text-lg bg-agzakhana-primary border-2 border-agzakhana-primary">
-            {t("PRODUCTS_LISTING_PAGE.POST")}
-          </Button>
+          <LoadingButton
+            loading={isSubmitting}
+            className="w-[calc(50%-0.25rem)] py-5 text-lg bg-agzakhana-primary border-2 border-agzakhana-primary"
+          >
+            {!!review
+              ? t("PRODUCTS_LISTING_PAGE.EDIT_REVIEW")
+              : t("PRODUCTS_LISTING_PAGE.POST")}
+          </LoadingButton>
         </div>
       </RHFForm>
     </DialogContent>
