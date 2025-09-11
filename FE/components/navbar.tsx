@@ -19,7 +19,7 @@ export default function Navbar() {
   return (
     <NavigationMenu
       viewport={false}
-      className="py-3 border-b-2 border-gray-200 w-full  max-w-full justify-start [&>div]:w-full"
+      className="py-3 border-b-2 border-gray-200 w-full  max-w-full justify-start [&>div]:w-full px-8"
     >
       <NavigationMenuList className=" max-w-full w-full rtl:flex-row-reverse">
         <Link

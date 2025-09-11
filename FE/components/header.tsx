@@ -5,7 +5,7 @@ import SearchBox from "./search-box";
 
 export default async function Header() {
   return (
-    <header className="py-2 flex flex-row justify-between items-center border-b-2 border-gray-200 px-4">
+    <header className="py-2 flex flex-row justify-between items-center border-b-2 border-gray-200 px-8">
       <Link href="/">
         <Image
           src="https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(1).png"
