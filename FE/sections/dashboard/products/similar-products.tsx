@@ -10,8 +10,13 @@ import ProductCard from "@/components/product-card";
 import { Separator } from "@/components/ui/separator";
 import { getTranslations } from "next-intl/server";
 import { POPULAR_ITEM_LIST } from "@/_mock/_popular_items";
+import { Medicine } from "@/types/medcines";
 
-export async function SimilarProductsSection() {
+export async function SimilarProductsSection({
+  similarProducts,
+}: {
+  similarProducts: Medicine[];
+}) {
   const t = await getTranslations();
   return (
     <section className="flex flex-col gap-3 p-8 px-4">
@@ -30,7 +35,7 @@ export async function SimilarProductsSection() {
         <Separator className="mb-4" />
         <ul className="list-none">
           <CarouselContent className="gap-8">
-            {POPULAR_ITEM_LIST?.content?.map((product) => (
+            {similarProducts?.map((product) => (
               <ProductCard key={product?._id} medicine={product} />
             ))}
           </CarouselContent>

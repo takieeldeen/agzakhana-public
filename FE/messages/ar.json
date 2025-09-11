@@ -160,5 +160,21 @@
     "PASSWORD_CASE": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل وحرف صغير واحد على الأقل",
     "PASSWORD_SPECIAL_CHAR": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل",
     "MAX_VAL": "لا يمكن أن تزيد {field} عن {max}"
+  },
+  "FOOTER": {
+    "ALL_RIGHT_RESERVED": "جميع الحقوق محفوظة لمجموعة صيدليات أجزاخانة",
+    "DAILY_CARE": "منتجات العناية اليومية",
+    "HAIR_CARE": "العناية بالشعر",
+    "SKIN_CARE": "العناية بالبشرة",
+    "PERSONAL_CARE": "العناية الشخصية",
+    "FIRST_AID_PRODUCTS": "منتجات الاسعافات الاولية",
+    "INJURY_CARE_PRODUCTS": "منتجات العناية بالجروح",
+    "FIRST_AIDS": "الاسعافات الاولية",
+    "LONG_TERM_PRODUCTS": "منتجات الأمراض المزمنة",
+    "DIGESTION_MEDICINES": "أدوية الهضم",
+    "DIABETES_PRODUCTS": "منتجات السكري",
+    "BLOOD_PRESSURE_PRODUCTS": "منتجات ضغط الدم",
+    "HEART_PRODUCTS": "منتجات القلب",
+    "VITAMINS_AND_SUPPLEMENTS": "الفيتامينات والمكملات الغذائية"
   }
 }

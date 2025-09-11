@@ -10,7 +10,13 @@ import ImageMagnifier from "@/components/image-magnifier";
 import ProductsTags from "../products-tags";
 import CustomBreadCrump from "@/components/custom-breadcrump";
 
-export default async function DetailsView({ product }: { product: Medicine }) {
+export default async function DetailsView({
+  product,
+  similarProducts,
+}: {
+  product: Medicine;
+  similarProducts: Medicine[];
+}) {
   const locale = await getLocale();
   const t = await getTranslations();
   return (
@@ -113,7 +119,7 @@ export default async function DetailsView({ product }: { product: Medicine }) {
           <ReviewsSection />
         </li>
         <li className="flex flex-col gap-2">
-          <SimilarProductsSection />
+          <SimilarProductsSection similarProducts={similarProducts} />
         </li>
       </ul>
     </div>

@@ -1,4 +1,4 @@
-import { getProductDetails } from "@/api/products";
+import { getProductDetails, getSimilarProducts } from "@/api/products";
 import { DetailsView } from "@/sections/dashboard/products/views";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -13,6 +13,7 @@ type Props = {
 export default async function ProductDetaillsPage({ params }: Props) {
   const { productId } = await params;
   const { product } = await getProductDetails(productId);
+  const { products } = await getSimilarProducts(productId);
   if (!product) notFound();
-  return <DetailsView product={product} />;
+  return <DetailsView product={product} similarProducts={products} />;
 }

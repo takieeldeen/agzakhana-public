@@ -66,3 +66,16 @@ export function useGetAllManufacturers() {
   );
   return memoizedValue;
 }
+
+export async function getSimilarProducts(productId: string) {
+  try {
+    if (!productId)
+      return { products: [], status: "fail", error: null, results: 0 };
+    const URL = endpoints.products.similarProducts(productId);
+    const res = await axios.get(URL);
+    const { content, status, results } = res?.data;
+    return { products: content as Medicine[], status, error: null, results };
+  } catch (err) {
+    return { products: [], status: "fail", error: err, results: 0 };
+  }
+}

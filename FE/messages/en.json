@@ -162,5 +162,22 @@
     "PASSWORD_CASE": "Password must contain at least one uppercase and one lowercase letter",
     "PASSWORD_SPECIAL_CHAR": "Password must contain at least one special character",
     "MAX_VAL": "{field} can't be greater than {max}."
+  },
+  "FOOTER": {
+    "ALL_RIGHT_RESERVED": "All rights reserved for Agzakhana group.",
+    "DAILY_CARE": "Daily Care Products",
+    "HAIR_CARE": "Hair Care",
+    "SKIN_CARE": "Skin Care",
+    "PERSONAL_CARE": "Personal Care",
+    "FIRST_AID_PRODUCTS": "First Aid Products",
+    "INJURY_CARE_PRODUCTS": "Injury Care Products",
+    "PAIN_KILLERS": "Pain Killers",
+    "FIRST_AIDS": "First Aids",
+    "LONG_TERM_PRODUCTS": "Long Term Products",
+    "DIGESTION_MEDICINES": "Digestion Medicines",
+    "DIABETES_PRODUCTS": "Diabetes Products",
+    "BLOOD_PRESSURE_PRODUCTS": "Blood Pressure Products",
+    "HEART_PRODUCTS": "Heart Products",
+    "VITAMINS_AND_SUPPLEMENTS": "Vitamins & Supplements"
   }
 }

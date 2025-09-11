@@ -1,97 +1,55 @@
 // import { Logo, LogoImage, LogoText } from "@/components/shadcnblocks/logo";
 
-interface MenuItem {
-  title: string;
-  links: {
-    text: string;
-    url: string;
-  }[];
-}
+import { getTranslations } from "next-intl/server";
+import Image from "next/image";
+import Link from "next/link";
 
-interface Footer2Props {
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-    title: string;
-  };
-  tagline?: string;
-  menuItems?: MenuItem[];
-  copyright?: string;
-  bottomLinks?: {
-    text: string;
-    url: string;
-  }[];
-}
-
-export default function Footer({
-  tagline = "Components made easy.",
-  menuItems = [
+export default async function Footer() {
+  const t = await getTranslations();
+  const footerData = [
     {
-      title: "Product",
+      title: t("FOOTER.DAILY_CARE"),
       links: [
-        { text: "Overview", url: "#" },
-        { text: "Pricing", url: "#" },
-        { text: "Marketplace", url: "#" },
-        { text: "Features", url: "#" },
-        { text: "Integrations", url: "#" },
-        { text: "Pricing", url: "#" },
+        { text: t("FOOTER.HAIR_CARE"), url: "#" },
+        { text: t("FOOTER.SKIN_CARE"), url: "#" },
+        { text: t("FOOTER.PERSONAL_CARE"), url: "#" },
       ],
     },
     {
-      title: "Company",
+      title: t("FOOTER.FIRST_AID_PRODUCTS"),
       links: [
-        { text: "About", url: "#" },
-        { text: "Team", url: "#" },
-        { text: "Blog", url: "#" },
-        { text: "Careers", url: "#" },
-        { text: "Contact", url: "#" },
-        { text: "Privacy", url: "#" },
+        { text: t("FOOTER.INJURY_CARE_PRODUCTS"), url: "#" },
+        { text: t("FOOTER.FIRST_AIDS"), url: "#" },
       ],
     },
     {
-      title: "Resources",
+      title: t("FOOTER.LONG_TERM_PRODUCTS"),
       links: [
-        { text: "Help", url: "#" },
-        { text: "Sales", url: "#" },
-        { text: "Advertise", url: "#" },
+        { text: t("FOOTER.DIGESTION_MEDICINES"), url: "#" },
+        { text: t("FOOTER.DIABETES_PRODUCTS"), url: "#" },
+        { text: t("FOOTER.BLOOD_PRESSURE_PRODUCTS"), url: "#" },
+        { text: t("FOOTER.HEART_PRODUCTS"), url: "#" },
+        { text: t("FOOTER.VITAMINS_AND_SUPPLEMENTS"), url: "#" },
       ],
     },
-    {
-      title: "Social",
-      links: [
-        { text: "Twitter", url: "#" },
-        { text: "Instagram", url: "#" },
-        { text: "LinkedIn", url: "#" },
-      ],
-    },
-  ],
-  copyright = "© 2024 Shadcnblocks.com. All rights reserved.",
-  bottomLinks = [
-    { text: "Terms and Conditions", url: "#" },
-    { text: "Privacy Policy", url: "#" },
-  ],
-}: Footer2Props) {
+  ];
   return (
-    <footer className="py-32 ">
-      <div className=" w-full ">
+    <footer className="py-16 px-16">
+      <div className=" w-full">
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">
-              <div className="flex items-center gap-2 lg:justify-start">
-                {/* <Logo url="https://shadcnblocks.com">
-                  <LogoImage
-                    src={logo.src}
-                    alt={logo.alt}
-                    title={logo.title}
-                    className="h-10"
-                  />
-                  <LogoText className="text-xl">{logo.title}</LogoText>
-                </Logo> */}
-              </div>
-              <p className="mt-4 font-bold">{tagline}</p>
+              <Link href="/">
+                <Image
+                  src="https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(1).png"
+                  height={140}
+                  width={280}
+                  alt="Agzakhana"
+                  priority
+                />
+              </Link>
             </div>
-            {menuItems.map((section, sectionIdx) => (
+            {footerData.map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 <h3 className="mb-4 font-bold">{section.title}</h3>
                 <ul className="text-muted-foreground space-y-4">
@@ -108,14 +66,7 @@ export default function Footer({
             ))}
           </div>
           <div className="text-muted-foreground mt-24 flex flex-col justify-between gap-4 border-t pt-8 text-sm font-medium md:flex-row md:items-center">
-            <p>{copyright}</p>
-            <ul className="flex gap-4">
-              {bottomLinks.map((link, linkIdx) => (
-                <li key={linkIdx} className="hover:text-primary underline">
-                  <a href={link.url}>{link.text}</a>
-                </li>
-              ))}
-            </ul>
+            <p>{t("FOOTER.ALL_RIGHT_RESERVED")}</p>
           </div>
         </footer>
       </div>
