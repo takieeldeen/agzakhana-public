@@ -2,7 +2,8 @@
   "COMMON": {
     "FAIL": "Fail",
     "ERROR": "Error",
-    "SUCCESS": "Success"
+    "SUCCESS": "Success",
+    "FIELD_MIN_VAL": "The minimum value for is "
   },
   "LOGIN": {
     "MISSING_CREDENTIALS": "Please enter the username and password",

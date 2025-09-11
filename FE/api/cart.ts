@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { endpoints } from "./axios";
-import { getFetcher } from "./api";
+import { APIResponse, getFetcher } from "./api";
 import { useMemo } from "react";
 import { CartList } from "@/types/cart";
 
@@ -8,12 +8,12 @@ export function useGetCartItems(fetch: boolean = true) {
   const URL = endpoints.cart.list;
   const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ["cart"],
-    queryFn: getFetcher(URL),
+    queryFn: getFetcher<APIResponse<{ cart: CartList }>>(URL),
     enabled: fetch,
   });
   const memoizedValue = useMemo(
     () => ({
-      cart: (data?.content?.cart as CartList) || [],
+      cart: data?.content?.cart || [],
       totalItems: data?.results,
       cartLoading: isLoading,
       cartValidating: isFetching,

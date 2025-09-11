@@ -12,17 +12,6 @@ import categoryRouter from "./routers/categoriesRouter";
 import cartRouter from "./routers/cartRouter";
 import dealsRouter from "./routers/dealsRouter";
 
-const app = express();
-app.use(morgan("dev"));
-app.use(express.json());
-app.use(cookieParser());
-app.use(
-  cors({
-    origin: "http://localhost:3000", // your frontend origin
-    credentials: true, // allow cookies/authorization headers
-  })
-);
-
 i18next
   .use(middleware.LanguageDetector) // 👈 enable language detection
   //   .use(Backend) // optional, if loading translation files from disk
@@ -38,7 +27,19 @@ i18next
       order: ["header"], // detect from Accept-Language header
       caches: false, // don’t cache
     },
-  });
+  })
+  .then(() => console.log("initiated i18n"));
+const app = express();
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your frontend origin
+    credentials: true, // allow cookies/authorization headers
+  })
+);
+
 app.use(middleware.handle(i18next));
 
 app.use("/api/v1/auth", authRouter);

@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { REVIEWS_MOCK_DATA } from "@/_mock/_reviews";
 import { CustomerReview } from "@/components/customer-review";
 import StarRating from "@/components/star-rating";
@@ -13,7 +13,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ReviewNewEditForm from "./review-new-edit-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import AuthenticateComponent from "@/components/authenticate-component";
@@ -22,7 +22,11 @@ export default function ReviewsSection() {
   const [commentsSize, setCommentsSize] = useState<"collapsed" | "expanded">(
     "collapsed"
   );
+  const [showCreationModal, setShowCreationModal] = useState<boolean>(false);
   const t = useTranslations();
+  const handleCloseModal = useCallback(() => {
+    setShowCreationModal(false);
+  }, []);
   return (
     <div className="flex flex-row gap-6">
       <div className="flex flex-col gap-2">
