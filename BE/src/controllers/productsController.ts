@@ -80,3 +80,71 @@ export const getAllManufacturer = catchAsync(
     });
   }
 );
+
+export const getSimilarProducts = catchAsync(
+  async (req: Request, res: Response, next) => {
+    const { productId } = req.params;
+    const currentProduct = await Product.findById(productId);
+    const priceRange = 0.2;
+    const products = await Product.aggregate([
+      {
+        $match: { _id: { $ne: new mongoose.Types.ObjectId(productId) } },
+      },
+      {
+        $addFields: {
+          score: {
+            $sum: [
+              {
+                $cond: [{ $eq: ["$category", currentProduct?.category] }, 3, 0],
+              },
+              {
+                $cond: [
+                  {
+                    $and: [
+                      {
+                        price: {
+                          $gte: [
+                            "$price",
+                            (currentProduct?.price ?? 0) * (1 - priceRange),
+                          ],
+                        },
+                      },
+                      {
+                        price: {
+                          $lte: [
+                            "$price",
+                            (currentProduct?.price ?? 0) * (1 + priceRange),
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                  2,
+                  0,
+                ],
+              },
+              {
+                $cond: [
+                  { $eq: ["$manufacturer", currentProduct?.manufacturer] },
+                  1,
+                  0,
+                ],
+              },
+            ],
+          },
+        },
+      },
+      {
+        $sort: { score: -1 },
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+    res.status(200).json({
+      status: "success",
+      content: products,
+      results: products.length,
+    });
+  }
+);

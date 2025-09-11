@@ -12,7 +12,6 @@ export const getAllComments = catchAsync(
     const { token } = req?.cookies;
     const userId = (decode(token) as any)?.id;
     const currentUser = await User.findById(userId);
-    console.log(currentUser);
     const { productId } = req.params;
     const comments = await Comment.aggregate([
       {
@@ -94,7 +93,7 @@ export const getAllComments = catchAsync(
         $project: {
           comments: 1,
           reviewsCount: 1,
-          overAllRating: { $round: ["$overAllRating", 2] },
+          overAllRating: 1,
           mergedRates: { $concatArrays: ["$allRates", "$existingRates"] },
         },
       },
@@ -145,7 +144,9 @@ export const getAllComments = catchAsync(
           _id: 0,
           comments: "$_id.comments",
           reviewCount: { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
-          overAllRating: { $arrayElemAt: ["$_id.overAllRating.avg", 0] },
+          overAllRating: {
+            $round: [{ $arrayElemAt: ["$_id.overAllRating.avg", 0] }, 1],
+          },
           reviewsFrequency: { $arrayToObject: "$mergedRates" },
         },
       },
