@@ -17,6 +17,7 @@ export const prefillProducts = catchAsync(
     });
   }
 );
+
 export const prefillCategories = catchAsync(
   async (req: Request, res: Response) => {
     await Category.insertMany(CATEGORIES);

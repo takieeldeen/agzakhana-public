@@ -17,6 +17,7 @@ export const getAllDeals = catchAsync(async (req: Request, res: Response) => {
     limit: limit ? +limit : 20,
     filters: {
       expiresAt: { $gt: new Date() },
+      qty: { $gt: 0 },
     },
   };
   if (category) {
@@ -36,20 +37,19 @@ export const getAllDeals = catchAsync(async (req: Request, res: Response) => {
     .populate("category")
     .limit(params.limit)
     .skip(params.limit * (params.page - 1));
-  // .select([
-  //   "nameAr",
-  //   "nameEn",
-  //   "tag",
-  //   "imageUrl",
-  //   "category",
-  //   "manufacturer",
-  //   "price",
-  //   "beforeDiscount",
-  // ]);
   res.status(200).json({
     status: "success",
     results: count,
     content: products,
+  });
+});
+
+export const getDealDetails = catchAsync(async (req, res, next) => {
+  const { dealId } = req.params;
+  const deal = await Deal.findById(dealId);
+  res.status(200).json({
+    status: "success",
+    content: deal,
   });
 });
 
@@ -107,22 +107,6 @@ export const getAllDealsCategory = catchAsync(
           count: "$count",
         },
       },
-      // {
-      //   $group: { _id: "$manufacturer", count: { $sum: 1 } },
-      // },
-      // {
-      //   $project: {
-      //     _id: 0,
-      //     name: "$_id",
-      //     count: 1,
-      //   },
-      // },
-      // {
-      //   $sort: {
-      //     count: -1,
-      //     name: 1,
-      //   },
-      // },
     ]);
     res.status(200).json({
       status: "success",
