@@ -1,5 +1,5 @@
 export type Offer = {
-  id: string;
+  _id: string;
   nameAr: string;
   nameEn: string;
   rating: number;

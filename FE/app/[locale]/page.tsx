@@ -9,6 +9,5 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const test = await dummyPromise();
-  console.log(test);
   return <ListView />;
 }

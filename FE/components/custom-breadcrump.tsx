@@ -24,7 +24,6 @@ export default function CustomBreadCrump({ ...props }: Props) {
     label: t("Home"),
     href: "/",
   };
-  console.log(paths);
   return (
     <Breadcrumb {...props}>
       <BreadcrumbList>

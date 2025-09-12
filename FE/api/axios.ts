@@ -26,6 +26,8 @@ export const endpoints = {
   },
   deals: {
     list: "/v1/deals",
+    details: (dealId: string) => `/v1/deals/${dealId}`,
+
     manufacturers: "/v1/deals/filters/manufacturer",
     categories: "/v1/deals/filters/category",
   },

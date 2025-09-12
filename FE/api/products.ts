@@ -25,7 +25,6 @@ export async function getAllProducts(
     ];
     const res = await axios.get(URL[0], URL[1]);
     const { content, results, status } = res?.data;
-    console.log(content, results, status);
     return { content, results, status, error: null };
   } catch (err: any) {
     return {

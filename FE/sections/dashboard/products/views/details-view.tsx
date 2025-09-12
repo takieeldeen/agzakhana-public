@@ -27,7 +27,7 @@ export default async function DetailsView({
           src={product?.imageUrl}
           alt={locale === "ar" ? product?.nameAr : product?.nameEn}
           containerProps={{
-            className: "h-128",
+            className: "h-128 max-w-96",
           }}
           zoomLevel={1.5}
         />

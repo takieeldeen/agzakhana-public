@@ -65,7 +65,6 @@ export default function ProductPurchaseSpecs({ product }: Props) {
   const IS_LOADING = isAdding || isRemoving || isUpdating;
   const onSubmit = useCallback(
     (data: any) => {
-      console.log(data);
       if (data?.qty === 0) {
         removeFromCart.mutate(CART_ITEM!._id);
       } else if (!CART_ITEM) {
@@ -95,7 +94,6 @@ export default function ProductPurchaseSpecs({ product }: Props) {
     const currentQty = values.qty as number;
     setValue("qty", currentQty + 1, { shouldValidate: true });
     const isValid = await trigger("qty");
-    console.log(isValid, "valid input");
     if (isValid) {
       onSubmit({ ...values, qty: currentQty + 1 });
     }

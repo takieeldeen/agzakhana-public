@@ -11,39 +11,44 @@ export default async function OffersCard({ offer }: { offer: Offer }) {
   const locale = await getLocale();
   const t = await getTranslations();
   return (
-    <li className="  rounded-2xl overflow-hidden flex flex-col gap-1 w-[calc(20%-0.5rem)] items-center shrink-0 min-w-[22rem]">
-      <div className="h-[300px]! w-full rounded-xl flex items-start justify-center bg-gray-200 relative py-8">
-        <Image
-          src={offer?.imageUrl}
-          height={250}
-          width={125}
-          alt={offer?.nameEn}
-        />
-        <div className="absolute bottom-10">
-          <OfferTimer expiresIn={offer?.expiresAt} />
+    <li className="  rounded-2xl overflow-hidden flex flex-col gap-1 w-[calc(20%-0.5rem)] items-center shrink-0 min-w-[20rem]">
+      <Link href={`/deals/${offer?._id}`} className="w-full">
+        <div className="h-[300px]! w-full rounded-xl flex items-start justify-center bg-gray-200 relative py-8 ">
+          <Image
+            src={offer?.imageUrl}
+            height={250}
+            width={125}
+            alt={offer?.nameEn}
+          />
+          <div className="absolute bottom-10">
+            <OfferTimer expiresIn={offer?.expiresAt} />
+          </div>
         </div>
-      </div>
+      </Link>
       <div className="shadow-md w-[90%] rounded-2xl -translate-y-9 z-10 relative bg-gray-100 p-2">
-        <div className="p-2 mb-auto">
-          <p className="text-text-primary  font-bold leading-none mb-2">
-            {offer?.[locale === "ar" ? "nameAr" : "nameEn"]}
-          </p>
-          <div className="flex flex-row gap-1  items-center mb-2">
-            <Icon
-              icon="material-symbols:star-rounded"
-              className="text-green-500 "
-            />
-            <span className="text-text-secondary leading-0">
-              {offer?.rating}
-            </span>
+        <Link href={`/deals/${offer?._id}`} className="w-full bg-green-500">
+          <div className="p-2 mb-auto">
+            <p className="text-text-primary  font-bold leading-none mb-2">
+              {offer?.[locale === "ar" ? "nameAr" : "nameEn"]}
+            </p>
+            <div className="flex flex-row gap-1  items-center mb-2">
+              <Icon
+                icon="material-symbols:star-rounded"
+                className="text-green-500 "
+              />
+              <span className="text-text-secondary leading-0">
+                {offer?.rating}
+              </span>
+            </div>
+            <div className="flex flex-row gap-0.5 text-sm">
+              {t("HOME_PAGE.BY")}
+              <Link href="/" className="text-agzakhana-primary font-semibold">
+                {offer?.manufacturer}
+              </Link>
+            </div>
           </div>
-          <div className="flex flex-row gap-0.5 text-sm">
-            {t("HOME_PAGE.BY")}
-            <Link href="/" className="text-agzakhana-primary font-semibold">
-              {offer?.manufacturer}
-            </Link>
-          </div>
-        </div>
+        </Link>
+
         <div className="p-2 text-lg text-agzakhana-primary flex flex-row gap-2 items-center">
           <strong className="leading-none text-nowrap text-2xl">
             {t("COMMON.EGP", { price: offer?.price ?? 0 })}

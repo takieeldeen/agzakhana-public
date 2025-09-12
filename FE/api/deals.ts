@@ -5,6 +5,8 @@ import { getFetcher } from "./api";
 import { useMemo } from "react";
 import { ManufacturerListItem } from "@/types/medcines";
 import { Category } from "@/types/categories";
+import { APIListResponse } from "@/types/common";
+import { Offer } from "@/types/offers";
 
 export async function getAllDeals(
   page: string | undefined,
@@ -26,7 +28,6 @@ export async function getAllDeals(
     ];
     const res = await axios.get(URL[0], URL[1]);
     const { content, results, status } = res?.data;
-    console.log(content, results, status);
     return { content, results, status, error: null };
   } catch (err: any) {
     return {
@@ -38,15 +39,27 @@ export async function getAllDeals(
   }
 }
 
+export async function getDealDetails(dealId: string | undefined) {
+  try {
+    if (!dealId) return { deal: null, status: "fail", error: null };
+    const URL = endpoints.deals.details(dealId);
+    const res = await axios.get(URL);
+    const { content, status } = res?.data;
+    return { deal: content as Offer, status, error: null };
+  } catch (err) {
+    return { deal: null, status: "fail", error: err };
+  }
+}
+
 export function useGetAllDealsManufacturers() {
   const URL = endpoints.deals.manufacturers;
   const { data, refetch, isLoading, error } = useQuery({
     queryKey: ["filters", "manufacturer"],
-    queryFn: getFetcher(URL),
+    queryFn: getFetcher<APIListResponse<ManufacturerListItem>>(URL),
   });
   const memoizedValue = useMemo(
     () => ({
-      manufacturers: (data?.content as ManufacturerListItem[]) ?? [],
+      manufacturers: data?.content ?? [],
       manufacturersLoading: isLoading,
       refetch,
       manufacturersError: error,

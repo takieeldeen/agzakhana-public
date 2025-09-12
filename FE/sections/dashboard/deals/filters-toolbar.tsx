@@ -1,8 +1,6 @@
 "use client";
-import {
-  useGetAllDealsManufacturers,
-  useGetDealsCategories,
-} from "@/api/deals";
+import { useGetCategories } from "@/api/categories";
+import { useGetAllManufacturers } from "@/api/products";
 import { Checkbox } from "@/components/ui/checkbox";
 import useListing from "@/hooks/useListing";
 import { cn } from "@/lib/utils";
@@ -37,8 +35,8 @@ export default function FiltersToolbar() {
     },
     [currentCategory, pushToFilter, removeFromFilter]
   );
-  const { categories } = useGetDealsCategories();
-  const { manufacturers } = useGetAllDealsManufacturers();
+  const { categories } = useGetCategories();
+  const { manufacturers } = useGetAllManufacturers();
   return (
     <aside className="w-1/5 flex flex-col gap-3">
       <div className="shadow-lg w-full rounded-2xl px-4 py-6 border-gray-100 border-[1px]">
@@ -48,6 +46,9 @@ export default function FiltersToolbar() {
         <div className="w-36 h-1 -translate-y-[3px] rounded-md bg-[#BCE3C9] mb-2" />
         <div className="flex flex-col gap-5">
           <div>
+            <p className="text-gray-500 text-lg font-bold mb-1">
+              {t("PRODUCTS_LISTING_PAGE.MANUFACTURER")}
+            </p>
             <div className="px-2">
               {manufacturers?.map((manufacturer) => (
                 <div
@@ -70,9 +71,13 @@ export default function FiltersToolbar() {
               ))}
             </div>
           </div>
+          {/* <div>
+            <p className="text-gray-500 text-lg font-bold mb-1">Price Range</p>
+            <div className="flex flex-row"></div>
+          </div> */}
         </div>
       </div>
-      <div className="shadow-lg w-full min-h-64 rounded-2xl px-4 py-6 border-gray-100 border-[1px]">
+      <div className="shadow-lg w-full min-h-72 rounded-2xl px-4 py-6 border-gray-100 border-[1px]">
         <h5 className="text-2xl font-bold border-b-2 border-gray-200 pb-2">
           {t("PRODUCTS_LISTING_PAGE.CATEGORIES")}
         </h5>
@@ -83,7 +88,7 @@ export default function FiltersToolbar() {
               onClick={() => handleFilterChange("category", category?._id)}
               key={category?._id}
               className={cn(
-                "h-12 border-2 border-gray-200 rounded-md flex flex-row items-center px-2 gap-2 cursor-pointer hover:border-gray-400 transition-all duration-300",
+                "h-12 border-2 border-gray-200 rounded-md flex flex-row items-center px-2 gap-2 cursor-pointer hover:border-gray-400 transition-all duration-300 whitespace-nowrap",
                 currentCategory?.includes(category?._id) &&
                   " border-gray-400 translate-x-2"
               )}
@@ -94,7 +99,7 @@ export default function FiltersToolbar() {
                 height={36}
                 className="text-gray-600"
               />
-              <p className="text-lg font-semibold mr-auto rtl:ml-auto rtl:mr-0 text-text-primary">
+              <p className="text-sm font-semibold mr-auto rtl:ml-auto rtl:mr-0 text-text-primary">
                 {category?.[locale === "ar" ? "nameAr" : "nameEn"]}
               </p>
               <span className="font-semibold bg-[#BCE3C9] w-8 h-8 aspect-square flex items-center justify-center rounded-full text-sm">

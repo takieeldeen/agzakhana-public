@@ -14,7 +14,6 @@ export function AuthGuard({ children }: { children: ReactNode }) {
 }
 
 export function GuestGuard({ children }: { children: ReactNode }) {
-  console.log("test");
   const { isAuthenticated } = useAuth();
   const router = useRouter();
   if (isAuthenticated) {

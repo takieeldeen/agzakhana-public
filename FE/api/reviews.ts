@@ -61,7 +61,6 @@ export function useMutateReview() {
       return await axios.post(URL, payload);
     },
     onSuccess: (res) => {
-      console.log("called", res.data);
       queryClient.setQueryData(
         ["reviews", res?.data?.content?.productId],
         res.data
@@ -86,8 +85,6 @@ export function useMutateReview() {
       return await axios.delete(URL);
     },
     onSuccess: (res, { productId }) => {
-      console.log("called", res.data);
-
       queryClient.setQueryData(["reviews", productId], res.data);
       queryClient.invalidateQueries({
         queryKey: ["reviews", productId],
