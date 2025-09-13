@@ -1,36 +1,42 @@
-import FallbackImage from "@/components/image";
 import ProductTag from "@/components/product-tag";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Medicine } from "@/types/medcines";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getLocale, getTranslations } from "next-intl/server";
 import ReviewsSection from "../reviews-section";
-import { SimilarProductsSection } from "../similar-products";
+import ProductPurchaseSpecs from "@/components/product-purchase-specs";
+import ImageMagnifier from "@/components/image-magnifier";
+import ProductsTags from "../products-tags";
+import CustomBreadCrump from "@/components/custom-breadcrump";
+import { handleEmptyString } from "@/utils/string";
+import { Offer } from "@/types/offers";
 
-export default async function DetailsView({ product }: { product: Medicine }) {
+export default async function DetailsView({ deal }: { deal: Offer }) {
   const locale = await getLocale();
   const t = await getTranslations();
-
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 px-4">
+      <CustomBreadCrump className="p-3" />
       <div className="p-3 flex flex-row gap-12">
-        <div className="border-[1px] border-gray-300 h-128 w-128 min-w-128 rounded-xl flex items-center justify-center relative">
-          <FallbackImage
-            src={product?.imageUrl}
-            fill
-            alt={product?.nameAr}
-            style={{ objectFit: "contain" }}
-          />
-        </div>
+        <ImageMagnifier
+          src={deal?.imageUrl}
+          alt={locale === "ar" ? deal?.nameAr : deal?.nameEn}
+          containerProps={{
+            className: "h-128 max-w-96",
+          }}
+          zoomLevel={1.5}
+        />
+        {/* </div> */}
         <div className="flex flex-col gap-1">
           <ProductTag
-            tag={product?.tag}
-            className="relative text-lg rounded-md"
+            tag={deal?.tag}
+            className="relative text-lg rounded-md "
           />
-          <h2 style={{ fontSize: "40px" }} className="font-bold">
-            {locale === "en" ? product?.nameEn : product?.nameAr}
-          </h2>
+          <div className="flex flex-row gap-2">
+            <h2 style={{ fontSize: "40px" }} className="font-semibold">
+              {locale === "en" ? deal?.nameEn : deal?.nameAr}
+            </h2>
+          </div>
+          <ProductsTags product={deal} />
           <div className="flex flex-row gap-1  items-center mb-4">
             <Icon
               icon="material-symbols:star-rounded"
@@ -44,52 +50,30 @@ export default async function DetailsView({ product }: { product: Medicine }) {
           </div>
           <div className="flex flex-row gap-1  items-center mb-6">
             <strong className="text-5xl font-black text-agzakhana-primary">
-              {t("COMMON.EGP", { price: product?.price })}
+              {deal?.price}
+              <span className="text-base font-medium">
+                {t("COMMON.EGP_CURRENCY")}
+              </span>
             </strong>
             <div className="flex flex-col ">
               <span className="font-semibold leading-none text-orange-500 text-sm">
                 {t("PRODUCTS_LISTING_PAGE.DISCOUNT", {
                   discount: `${Math.ceil(
-                    ((product.beforeDiscount - product.price) / product.price) *
-                      100
+                    ((deal.beforeDiscount - deal.price) / deal.price) * 100
                   )}
                 %`,
                 })}
               </span>
               <span className="font-semibold leading-none text-2xl line-through text-text-secondary">
-                {t("COMMON.EGP", { price: product?.beforeDiscount })}
+                {t("COMMON.EGP", { price: deal?.beforeDiscount })}
               </span>
             </div>
           </div>
           <p className="text-xl mb-8">
-            {locale === "ar" ? product?.descriptionAr : product?.descriptionEn}
+            {locale === "ar" ? deal?.descriptionAr : deal?.descriptionEn}
           </p>
-          <div className="flex flex-col mb-2">
-            <p className="font-bold text-lg mb-3">
-              {t("PRODUCTS_LISTING_PAGE.CONCENTRATION")}
-            </p>
-            <ul className="flex flex-row gap-2 font-semibold text-gray-500 ">
-              {product?.concentration?.map((el) => (
-                <li
-                  className="border-2 p-2 px-4 rounded-md select-none cursor-pointer"
-                  key={el}
-                >
-                  {el}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-row gap-2">
-            <input
-              type="number"
-              className="border-agzakhana-primary border-2 px-3 py-2 text-xl font-semibold rounded-lg w-28 text-center"
-              value={1}
-            />
-            <Button className="h-12 w-48 bg-agzakhana-primary text-white text-[16px] hover:bg-agzakhana-primary flex items-center justify-center gap-2">
-              <Icon icon="mynaui:cart" className="h-6! w-6!" />
-              {t("PRODUCTS_LISTING_PAGE.ADD_TO_CART")}
-            </Button>
-          </div>
+
+          <ProductPurchaseSpecs product={deal} />
         </div>
       </div>
       <ul className="flex flex-col gap-8">
@@ -99,7 +83,10 @@ export default async function DetailsView({ product }: { product: Medicine }) {
           </p>
           <Separator />
           <p className="text-gray-500 font-semibold">
-            {locale === "ar" ? product?.indicationsAr : product?.indicationsEn}
+            {handleEmptyString(
+              locale === "ar" ? deal?.indicationsAr : deal?.indicationsEn,
+              t("PRODUCTS_LISTING_PAGE.NO_INFO")
+            )}
           </p>
         </li>
         <li className="flex flex-col gap-2">
@@ -108,7 +95,10 @@ export default async function DetailsView({ product }: { product: Medicine }) {
           </p>
           <Separator />
           <p className="text-gray-500 font-semibold">
-            {locale === "ar" ? product?.dosageAr : product?.dosageEn}
+            {handleEmptyString(
+              locale === "ar" ? deal?.dosageAr : deal?.dosageEn,
+              t("PRODUCTS_LISTING_PAGE.NO_INFO")
+            )}
           </p>
         </li>
         <li className="flex flex-col gap-2">
@@ -126,9 +116,6 @@ export default async function DetailsView({ product }: { product: Medicine }) {
           </p>
           <Separator />
           <ReviewsSection />
-        </li>
-        <li className="flex flex-col gap-2">
-          <SimilarProductsSection />
         </li>
       </ul>
     </div>

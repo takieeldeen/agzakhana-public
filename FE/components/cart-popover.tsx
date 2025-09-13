@@ -20,22 +20,14 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export function CartPopover() {
   const t = useTranslations();
-  const { locale } = useParams();
   const { cart, totalItems, cartEmpty } = useGetCartItems();
   const { removeFromCart, clearCart } = useMutateCart();
   const { isPending: isRemoving } = removeFromCart;
   const { isPending: isClearing } = clearCart;
   const isLoading = isRemoving || isClearing;
-  const handleRemove = useCallback(
-    (itemId: string) => {
-      removeFromCart.mutate(itemId);
-    },
-    [removeFromCart]
-  );
   const handleClearCart = useCallback(() => {
     clearCart.mutate();
   }, [clearCart]);
-  // const handleClearCart = useCallback()
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -98,67 +90,13 @@ export function CartPopover() {
                 </span>
               </div>
             )}
-            {cart?.map((cartItem, i) => (
-              <li
-                key={cartItem?._id}
-                className={cn(
-                  "flex flex-row gap-2 items-center py-2 relative ",
-                  i !== CART_DUMMY_DATA?.length - 1
-                    ? "border-b-[1px] border-gray-200"
-                    : ""
-                )}
-              >
-                <div className="flex flex-row gap-2 items-center mr-auto rtl:mr-0 rtl:ml-auto">
-                  <div className="w-16 h-16 aspect-square flex items-center justify-center border-[1px] border-gray-300 rounded-md relative">
-                    <FallbackImage
-                      src={cartItem?.product?.imageUrl ?? ""}
-                      alt={cartItem?.product?.nameAr ?? ""}
-                      height={30}
-                      width={30}
-                    />
-                  </div>
-                  <div className="flex flex-col ">
-                    <p className="font-bold text-sm">
-                      {locale === "ar"
-                        ? cartItem?.product?.nameAr ?? "--"
-                        : cartItem?.product?.nameEn ?? "--"}
-                    </p>
-                    <p className="font-bold text-text-secondary">
-                      {
-                        cartItem?.product?.category?.[
-                          locale === "ar" ? "nameAr" : "nameEn"
-                        ]
-                      }
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-end ">
-                  <strong className="text-sm">
-                    {t("COMMON.EGP", {
-                      price: cartItem?.product?.price ?? 0,
-                    })}
-                  </strong>
-                  <strong className="text-xs line-through text-text-secondary">
-                    {t("COMMON.EGP", {
-                      price: cartItem?.product?.beforeDiscount ?? 0,
-                    })}
-                  </strong>
-                </div>
-                <Button
-                  className="bg-transparent text-gray-600 text-3xl shadow-none hover:-translate-y-1 px-0! py-0! rounded-full w-8 h-8 absolute  -translate-y-0.5 -translate-x-0.5 -right-2 rtl:-left-2 rtl:right-auto -top-2"
-                  disabled={isRemoving}
-                  onClick={() => handleRemove(cartItem?._id)}
-                >
-                  {!isRemoving && (
-                    <Icon
-                      icon="material-symbols:close-rounded"
-                      className="w-5! h-5!"
-                    />
-                  )}
-                </Button>
-              </li>
-            ))}
+            {cart?.map((cartItem, i) =>
+              cartItem?.product ? (
+                <ProductItem cartItem={cartItem} i={i} key={cartItem?._id} />
+              ) : (
+                <DealItem cartItem={cartItem} i={i} key={cartItem?._id} />
+              )
+            )}
           </div>
           {!cartEmpty && (
             <Link
@@ -175,5 +113,142 @@ export function CartPopover() {
         </div>
       </PopoverContent>
     </Popover>
+  );
+}
+
+function ProductItem({ cartItem, i }: { cartItem: any; i: number }) {
+  const t = useTranslations();
+  const { locale } = useParams();
+  const { removeFromCart } = useMutateCart();
+  const { isPending: isRemoving } = removeFromCart;
+  const handleRemove = useCallback(
+    (itemId: string) => {
+      removeFromCart.mutate(itemId);
+    },
+    [removeFromCart]
+  );
+  return (
+    <li
+      key={cartItem?._id}
+      className={cn(
+        "flex flex-row gap-2 items-center py-2 relative ",
+        i !== CART_DUMMY_DATA?.length - 1
+          ? "border-b-[1px] border-gray-200"
+          : ""
+      )}
+    >
+      <div className="flex flex-row gap-2 items-center mr-auto rtl:mr-0 rtl:ml-auto">
+        <div className="w-16 h-16 aspect-square flex items-center justify-center border-[1px] border-gray-300 rounded-md relative">
+          <FallbackImage
+            src={cartItem?.product?.imageUrl ?? ""}
+            alt={cartItem?.product?.nameAr ?? ""}
+            height={30}
+            width={30}
+          />
+        </div>
+        <div className="flex flex-col ">
+          <p className="font-bold text-sm">
+            {locale === "ar"
+              ? cartItem?.product?.nameAr ?? "--"
+              : cartItem?.product?.nameEn ?? "--"}
+          </p>
+          <p className="font-bold text-text-secondary">
+            {
+              cartItem?.product?.category?.[
+                locale === "ar" ? "nameAr" : "nameEn"
+              ]
+            }
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-end ">
+        <strong className="text-sm">
+          {t("COMMON.EGP", {
+            price: cartItem?.product?.price ?? 0,
+          })}
+        </strong>
+        <strong className="text-xs line-through text-text-secondary">
+          {t("COMMON.EGP", {
+            price: cartItem?.product?.beforeDiscount ?? 0,
+          })}
+        </strong>
+      </div>
+      <Button
+        className="bg-transparent text-gray-600 text-3xl shadow-none hover:-translate-y-1 px-0! py-0! rounded-full w-8 h-8 absolute  -translate-y-0.5 -translate-x-0.5 -right-2 rtl:-left-2 rtl:right-auto -top-2"
+        disabled={isRemoving}
+        onClick={() => handleRemove(cartItem?._id)}
+      >
+        {!isRemoving && (
+          <Icon icon="material-symbols:close-rounded" className="w-5! h-5!" />
+        )}
+      </Button>
+    </li>
+  );
+}
+function DealItem({ cartItem, i }: { cartItem: any; i: number }) {
+  const t = useTranslations();
+  const { locale } = useParams();
+  const { removeFromCart } = useMutateCart();
+  const { isPending: isRemoving } = removeFromCart;
+  const handleRemove = useCallback(
+    (itemId: string) => {
+      removeFromCart.mutate(itemId);
+    },
+    [removeFromCart]
+  );
+  return (
+    <li
+      key={cartItem?._id}
+      className={cn(
+        "flex flex-row gap-2 items-center py-2 relative ",
+        i !== CART_DUMMY_DATA?.length - 1
+          ? "border-b-[1px] border-gray-200"
+          : ""
+      )}
+    >
+      <div className="flex flex-row gap-2 items-center mr-auto rtl:mr-0 rtl:ml-auto">
+        <div className="w-16 h-16 aspect-square flex items-center justify-center border-[1px] border-gray-300 rounded-md relative">
+          <FallbackImage
+            src={cartItem?.deal?.imageUrl ?? ""}
+            alt={cartItem?.deal?.nameAr ?? ""}
+            height={30}
+            width={30}
+          />
+        </div>
+        <div className="flex flex-col ">
+          <p className="font-bold text-sm">
+            {locale === "ar"
+              ? cartItem?.deal?.nameAr ?? "--"
+              : cartItem?.deal?.nameEn ?? "--"}
+          </p>
+          <p className="font-bold text-text-secondary">
+            {cartItem?.deal?.category?.[locale === "ar" ? "nameAr" : "nameEn"]}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col items-end ">
+        <strong className="text-sm">
+          {t("COMMON.EGP", {
+            price: cartItem?.deal?.price ?? 0,
+          })}
+        </strong>
+        <strong className="text-xs line-through text-text-secondary">
+          {t("COMMON.EGP", {
+            price: cartItem?.deal?.beforeDiscount ?? 0,
+          })}
+        </strong>
+      </div>
+      <Button
+        className="bg-transparent text-gray-600 text-3xl shadow-none hover:-translate-y-1 px-0! py-0! rounded-full w-8 h-8 absolute  -translate-y-0.5 -translate-x-0.5 -right-2 rtl:-left-2 rtl:right-auto -top-2"
+        disabled={isRemoving}
+        onClick={() => handleRemove(cartItem?._id)}
+      >
+        {!isRemoving && (
+          <Icon icon="material-symbols:close-rounded" className="w-5! h-5!" />
+        )}
+      </Button>
+    </li>
   );
 }

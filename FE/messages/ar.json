@@ -1,7 +1,8 @@
 {
   "BREADCRUMBS": {
     "Home": "الرئيسية",
-    "products": "المنتجات"
+    "products": "المنتجات",
+    "deals": "العروض"
   },
   "HEADER": {
     "WHISHLIST": "قائمة الرغبات",
@@ -92,7 +93,8 @@
     "PRODUCT_NOT_FOUND": "عفوا يبدو ان هذا المنتج غير متاح.",
     "QUANTITY": "الكمية",
     "DELETE_REVIEW": "حذف المراجعة",
-    "EDIT_REVIEW": "تعديل المراجعة"
+    "EDIT_REVIEW": "تعديل المراجعة",
+    "NO_INFO": "لا يوجد بيانات متاحة لهذا المنتج"
   },
   "CART": {
     "MY_SHOPPING_CART": "سلة التسوق الخاصة بي",

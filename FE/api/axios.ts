@@ -39,9 +39,12 @@ export const endpoints = {
     single: (cartItem: string) => `/v1/cart/${cartItem}`,
   },
   reviews: {
+    dealsList: (dealId: string) => `/v1/deals/${dealId}/reviews`,
     list: (productId: string) => `/v1/products/${productId}/reviews`,
     single: (productId: string, reviewId: string) =>
       `/v1/products/${productId}/reviews/${reviewId}`,
+    dealsSingle: (dealId: string, reviewId: string) =>
+      `/v1/products/${dealId}/reviews/${reviewId}`,
   },
 };
 

@@ -1,6 +1,5 @@
 import { getDealDetails } from "@/api/deals";
-import { getSimilarProducts } from "@/api/products";
-import { DetailsView } from "@/sections/dashboard/products/views";
+import { DetailsView } from "@/sections/dashboard/deals/views";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -14,8 +13,7 @@ type Props = {
 export default async function ProductDetaillsPage({ params }: Props) {
   const { dealId } = await params;
   const { deal } = await getDealDetails(dealId);
-  const { products } = await getSimilarProducts(dealId);
   console.log(deal);
   if (!deal) notFound();
-  return <DetailsView product={deal} similarProducts={products} />;
+  return <DetailsView deal={deal} />;
 }

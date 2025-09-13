@@ -43,7 +43,7 @@ export function useGetReviews(prooductId: string) {
   return memoizedValue;
 }
 
-export function useMutateReview() {
+export function useMutateProductReviews() {
   const queryClient = useQueryClient();
 
   // -------------------------
@@ -111,6 +111,80 @@ export function useMutateReview() {
       queryClient.setQueryData(["reviews", productId], res.data);
       queryClient.invalidateQueries({
         queryKey: ["reviews", productId],
+      });
+    },
+  });
+  return { createReview, deleteReview, editReview };
+}
+
+export function useMutateDealsReviews() {
+  const queryClient = useQueryClient();
+
+  // -------------------------
+  // Add Review
+  // -------------------------
+  const createReview = useMutation({
+    mutationFn: async ({
+      payload,
+      dealId,
+    }: {
+      payload: any;
+      dealId: string;
+    }) => {
+      const URL = endpoints.reviews.dealsList(dealId);
+      return await axios.post(URL, payload);
+    },
+    onSuccess: (res) => {
+      queryClient.setQueryData(
+        ["reviews", res?.data?.content?.dealId],
+        res.data
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["reviews", res?.data?.content?.dealId],
+      });
+    },
+  });
+  // -------------------------
+  // Delete Review
+  // -------------------------
+  const deleteReview = useMutation({
+    mutationFn: async ({
+      reviewId,
+      dealId,
+    }: {
+      reviewId: string;
+      dealId: string;
+    }) => {
+      const URL = endpoints.reviews.dealsSingle(dealId, reviewId);
+      return await axios.delete(URL);
+    },
+    onSuccess: (res, { dealId }) => {
+      queryClient.setQueryData(["reviews", dealId], res.data);
+      queryClient.invalidateQueries({
+        queryKey: ["reviews", dealId],
+      });
+    },
+  });
+  // -------------------------
+  // Edit Review
+  // -------------------------
+  const editReview = useMutation({
+    mutationFn: async ({
+      reviewId,
+      dealId,
+      payload,
+    }: {
+      reviewId: string;
+      dealId: string;
+      payload: any;
+    }) => {
+      const URL = endpoints.reviews.dealsSingle(dealId, reviewId);
+      return await axios.patch(URL, payload);
+    },
+    onSuccess: (res, { dealId }) => {
+      queryClient.setQueryData(["reviews", dealId], res.data);
+      queryClient.invalidateQueries({
+        queryKey: ["reviews", dealId],
       });
     },
   });

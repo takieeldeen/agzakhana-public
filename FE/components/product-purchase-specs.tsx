@@ -14,9 +14,10 @@ import { useGetCartItems, useMutateCart } from "@/api/cart";
 import CircularProgress from "./circular-progress";
 import RHFError from "./rhf-error";
 import Fade from "./Fade";
+import { Offer } from "@/types/offers";
 
 type Props = {
-  product: Medicine;
+  product: Medicine | Offer;
 };
 export default function ProductPurchaseSpecs({ product }: Props) {
   const t = useTranslations();
@@ -36,11 +37,15 @@ export default function ProductPurchaseSpecs({ product }: Props) {
           max: product?.maxQty,
         })
       ),
-    concentration: z.string().min(1, "Please Select a concentration"),
+    concentration: product?.hasOwnProperty("concentration")
+      ? z.string().min(1, "Please Select a concentration")
+      : z.string(),
   });
   const defaultValues = {
     qty: 1,
-    concentration: product?.concentration?.[0] ?? "",
+    concentration: product?.hasOwnProperty("concentration")
+      ? (product as Medicine)?.concentration?.[0] ?? ""
+      : "",
   };
   const methods = useForm({
     defaultValues,
@@ -68,7 +73,15 @@ export default function ProductPurchaseSpecs({ product }: Props) {
       if (data?.qty === 0) {
         removeFromCart.mutate(CART_ITEM!._id);
       } else if (!CART_ITEM) {
-        addToCart.mutate({ productId: product?._id, qty: data?.qty });
+        addToCart.mutate({
+          productId: !product?.hasOwnProperty("concentration")
+            ? undefined
+            : product?._id,
+          qty: data?.qty,
+          offerId: product?.hasOwnProperty("concentration")
+            ? undefined
+            : product?._id,
+        });
       } else {
         updateCartItem.mutate({
           cartItemId: CART_ITEM._id,
@@ -76,7 +89,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
         });
       }
     },
-    [CART_ITEM, addToCart, product?._id, removeFromCart, updateCartItem]
+    [CART_ITEM, addToCart, product, removeFromCart, updateCartItem]
   );
   const handleDecrements = useCallback(async () => {
     const currentQty = values.qty as number;
@@ -105,23 +118,25 @@ export default function ProductPurchaseSpecs({ product }: Props) {
           <p className="font-bold text-lg mb-3">
             {t("PRODUCTS_LISTING_PAGE.CONCENTRATION")}
           </p>
-          <ul className="flex flex-row gap-2 font-semibold text-gray-500 ">
-            {product?.concentration?.map((el) => (
-              <li
-                onClick={() => {
-                  handleToggleVariant(el);
-                }}
-                className={cn(
-                  "border-2 p-2 px-4 rounded-md select-none cursor-pointer hover:border-gray-500 transition-all duration-300",
-                  values.concentration === el &&
-                    "border-2 border-gray-500 text-gray-700 font-bold"
-                )}
-                key={el}
-              >
-                {el}
-              </li>
-            ))}
-          </ul>
+          {product.hasOwnProperty("concentration") && (
+            <ul className="flex flex-row gap-2 font-semibold text-gray-500 ">
+              {(product as Medicine)?.concentration?.map((el) => (
+                <li
+                  onClick={() => {
+                    handleToggleVariant(el);
+                  }}
+                  className={cn(
+                    "border-2 p-2 px-4 rounded-md select-none cursor-pointer hover:border-gray-500 transition-all duration-300",
+                    values.concentration === el &&
+                      "border-2 border-gray-500 text-gray-700 font-bold"
+                  )}
+                  key={el}
+                >
+                  {el}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div
           className={cn(

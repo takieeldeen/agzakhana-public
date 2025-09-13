@@ -1,3 +1,5 @@
+import { Tags } from "./medcines";
+
 export type Offer = {
   _id: string;
   nameAr: string;
@@ -9,4 +11,13 @@ export type Offer = {
   imageUrl: string;
   expiresAt: string;
   createdAt: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  indicationsAr: string;
+  indicationsEn: string;
+  dosageAr: string;
+  dosageEn: string;
+  tag: Tags | null;
+  maxQty: number;
+  qty: number;
 };

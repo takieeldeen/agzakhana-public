@@ -33,106 +33,127 @@ export default function ReviewsSection() {
   }, []);
   return (
     <div className="flex flex-row gap-6">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-row items-center gap-4 mb-4">
-          <strong className=" font-bold text-7xl leading-none">
-            {overAllRating?.toString()?.replace(".", ",")}
-          </strong>
-          <div className="flex flex-col">
-            <span className="font-semibold text-gray-600 text-lg">
-              {t("PRODUCTS_LISTING_PAGE.BASED_ON_REVIEWS", {
-                count: reviewCount,
-              })}
-            </span>
-            <StarRating rating={overAllRating} disabled />
+      <Dialog
+        open={showCreationModal}
+        onOpenChange={(newVal) => setShowCreationModal(newVal)}
+      >
+        {reviewCount !== 0 && (
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row items-center gap-4 mb-4">
+              <strong className=" font-bold text-7xl leading-none">
+                {overAllRating?.toString()?.replace(".", ",")}
+              </strong>
+              <div className="flex flex-col">
+                <span className="font-semibold text-gray-600 text-lg">
+                  {t("PRODUCTS_LISTING_PAGE.BASED_ON_REVIEWS", {
+                    count: reviewCount,
+                  })}
+                </span>
+                <StarRating rating={overAllRating} disabled />
+              </div>
+            </div>
+            <div className="flex flex-col gap-12">
+              <div>
+                {Object.keys(reviewsFrequency)?.map((rating) => (
+                  <div
+                    key={rating}
+                    className="flex flex-row items-center gap-4"
+                  >
+                    <p className="font-bold text-xl text-center w-6">
+                      {rating}
+                    </p>
+                    <Progress
+                      className="w-[25rem]"
+                      value={reviewsFrequency?.[rating]}
+                      progressProps={{ className: "bg-agzakhana-primary" }}
+                    />
+                    <p className="font-bold text-[16px]">{`${reviewsFrequency?.[rating]}%`}</p>
+                  </div>
+                ))}
+              </div>
+              {canReview && (
+                <Authenticate>
+                  <div className="flex flex-col gap-3">
+                    <p className="text-2xl font-semibold">
+                      {t("PRODUCTS_LISTING_PAGE.WRITE_YOUR_REVIEWS")}
+                    </p>
+                    <p className="text-base  font-semibold">
+                      {t("PRODUCTS_LISTING_PAGE.SHARE_YOUR_REVIEW")}
+                    </p>
+
+                    <DialogTrigger className="bg-agzakhana-primary hover:bg-agzakhana-primary py-2 px-4 w-fit font-semibold text-lg rounded-md flex items-center justify-center gap-2 text-white cursor-pointer hover:brightness-90 transition-all duration-300">
+                      <Icon icon="solar:pen-linear" />
+                      {t("PRODUCTS_LISTING_PAGE.SUBMIT_REVIEWS")}
+                    </DialogTrigger>
+                    <ReviewNewEditForm onClose={handleCloseModal} />
+                  </div>
+                </Authenticate>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-12">
-          <div>
-            {Object.keys(reviewsFrequency)?.map((rating) => (
-              <div key={rating} className="flex flex-row items-center gap-4">
-                <p className="font-bold text-xl text-center w-6">{rating}</p>
-                <Progress
-                  className="w-[25rem]"
-                  value={reviewsFrequency?.[rating]}
-                  progressProps={{ className: "bg-agzakhana-primary" }}
+        )}
+        <div className="flex flex-col gap-2 w-full">
+          {reviewCount === 0 && (
+            <>
+              <div className="w-full flex items-center justify-center min-h-96 flex-col gap-3">
+                <Icon
+                  icon="material-symbols-light:comments-disabled-outline"
+                  width={200}
+                  height={200}
+                  className="text-gray-600"
                 />
-                <p className="font-bold text-[16px]">{`${reviewsFrequency?.[rating]}%`}</p>
+                <p className="text-xl font-semibold text-gray-600">
+                  {t("PRODUCTS_LISTING_PAGE.NO_REVIEWS")}
+                </p>
+                <Authenticate>
+                  <div className="flex flex-col gap-3">
+                    <DialogTrigger className="bg-agzakhana-primary hover:bg-agzakhana-primary py-2 px-4 w-fit font-semibold text-lg rounded-md flex items-center justify-center gap-2 text-white cursor-pointer hover:brightness-90 transition-all duration-300">
+                      <Icon icon="solar:pen-linear" />
+                      {t("PRODUCTS_LISTING_PAGE.SUBMIT_REVIEWS")}
+                    </DialogTrigger>
+                    <ReviewNewEditForm onClose={handleCloseModal} />
+                  </div>
+                </Authenticate>
               </div>
-            ))}
-          </div>
-          {canReview && (
-            <Authenticate>
-              <div className="flex flex-col gap-3">
-                <p className="text-2xl font-semibold">
-                  {t("PRODUCTS_LISTING_PAGE.WRITE_YOUR_REVIEWS")}
-                </p>
-                <p className="text-base  font-semibold">
-                  {t("PRODUCTS_LISTING_PAGE.SHARE_YOUR_REVIEW")}
-                </p>
-                <Dialog
-                  open={showCreationModal}
-                  onOpenChange={(newVal) => setShowCreationModal(newVal)}
+            </>
+          )}
+          {reviewCount > 0 && (
+            <>
+              <h5 className="text-2xl font-bold">
+                {t("PRODUCTS_LISTING_PAGE.CUSTOMER_FEEDBACK")}
+              </h5>
+              <ul className="flex flex-col gap-6">
+                {reviews?.slice(0, 2)?.map((review) => (
+                  <CustomerReview key={review?._id} review={review} />
+                ))}
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full"
+                  defaultValue="expanded"
+                  value={commentsSize}
+                  onValueChange={(newVal) => setCommentsSize(newVal as any)}
                 >
-                  <DialogTrigger className="bg-agzakhana-primary hover:bg-agzakhana-primary py-2 px-4 w-fit font-semibold text-lg rounded-md flex items-center justify-center gap-2 text-white cursor-pointer hover:brightness-90 transition-all duration-300">
-                    <Icon icon="solar:pen-linear" />
-                    {t("PRODUCTS_LISTING_PAGE.SUBMIT_REVIEWS")}
-                  </DialogTrigger>
-                  <ReviewNewEditForm onClose={handleCloseModal} />
-                </Dialog>
-              </div>
-            </Authenticate>
+                  <AccordionItem value="expanded">
+                    <AccordionContent className="flex flex-col gap-4 text-balance">
+                      {reviews?.slice(2, reviewCount)?.map((review) => (
+                        <CustomerReview key={review?._id} review={review} />
+                      ))}
+                    </AccordionContent>
+                    {reviewCount > 2 && (
+                      <AccordionTrigger className="justify-center font-bold text-xl items-center hover:no-underline cursor-pointer">
+                        {commentsSize !== "expanded"
+                          ? t("PRODUCTS_LISTING_PAGE.SHOW_MORE_COMMENTS")
+                          : t("PRODUCTS_LISTING_PAGE.SHOW_LESS_COMMENTS")}
+                      </AccordionTrigger>
+                    )}
+                  </AccordionItem>
+                </Accordion>
+              </ul>
+            </>
           )}
         </div>
-      </div>
-      <div className="flex flex-col gap-2 w-full">
-        <h5 className="text-2xl font-bold">
-          {t("PRODUCTS_LISTING_PAGE.CUSTOMER_FEEDBACK")}
-        </h5>
-        {reviewCount === 0 && (
-          <div className="w-full flex items-center justify-center min-h-96 flex-col gap-3">
-            <Icon
-              icon="material-symbols-light:comments-disabled-outline"
-              width={200}
-              height={200}
-              className="text-gray-600"
-            />
-            <p className="text-xl font-semibold text-gray-600">
-              {t("PRODUCTS_LISTING_PAGE.NO_REVIEWS")}
-            </p>
-          </div>
-        )}
-        {reviewCount > 0 && (
-          <ul className="flex flex-col gap-6">
-            {reviews?.slice(0, 2)?.map((review) => (
-              <CustomerReview key={review?._id} review={review} />
-            ))}
-            <Accordion
-              type="single"
-              collapsible
-              className="w-full"
-              defaultValue="expanded"
-              value={commentsSize}
-              onValueChange={(newVal) => setCommentsSize(newVal as any)}
-            >
-              <AccordionItem value="expanded">
-                <AccordionContent className="flex flex-col gap-4 text-balance">
-                  {reviews?.slice(2, reviewCount)?.map((review) => (
-                    <CustomerReview key={review?._id} review={review} />
-                  ))}
-                </AccordionContent>
-                {reviewCount > 2 && (
-                  <AccordionTrigger className="justify-center font-bold text-xl items-center hover:no-underline cursor-pointer">
-                    {commentsSize !== "expanded"
-                      ? t("PRODUCTS_LISTING_PAGE.SHOW_MORE_COMMENTS")
-                      : t("PRODUCTS_LISTING_PAGE.SHOW_LESS_COMMENTS")}
-                  </AccordionTrigger>
-                )}
-              </AccordionItem>
-            </Accordion>
-          </ul>
-        )}
-      </div>
+      </Dialog>
     </div>
   );
 }

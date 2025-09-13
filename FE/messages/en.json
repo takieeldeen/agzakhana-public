@@ -1,7 +1,8 @@
 {
   "BREADCRUMBS": {
     "Home": "Home",
-    "products": "Products"
+    "products": "Products",
+    "deals": "Deals"
   },
   "HEADER": {
     "WHISHLIST": "Wishlist",
@@ -93,7 +94,8 @@
     "PRODUCT_NOT_FOUND": "Sorry, it seems this product is not available.",
     "QUANTITY": "Quantity",
     "DELETE_REVIEW": "Delete Review",
-    "EDIT_REVIEW": "Update Review"
+    "EDIT_REVIEW": "Update Review",
+    "NO_INFO": "No information available for this product."
   },
   "CART": {
     "MY_SHOPPING_CART": "My Shopping Cart",

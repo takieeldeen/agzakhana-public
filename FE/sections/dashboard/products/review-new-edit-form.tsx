@@ -1,5 +1,5 @@
 "use client";
-import { useMutateReview } from "@/api/reviews";
+import { useMutateProductReviews } from "@/api/reviews";
 import RHFError from "@/components/rhf-error";
 import RHFForm from "@/components/rhf-form";
 import RHFTextarea from "@/components/rhf-textarea";
@@ -24,7 +24,7 @@ export default function ReviewNewEditForm({
   review?: Review;
 }) {
   const t = useTranslations();
-  const { createReview, editReview } = useMutateReview();
+  const { createReview, editReview } = useMutateProductReviews();
   const { productId }: { productId: string } = useParams();
   const formSchema = z.object({
     rate: z

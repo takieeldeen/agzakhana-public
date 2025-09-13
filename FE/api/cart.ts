@@ -36,13 +36,15 @@ export function useMutateCart() {
   const addToCart = useMutation({
     mutationFn: async ({
       productId,
+      offerId,
       qty,
     }: {
-      productId: string;
+      productId: string | undefined;
+      offerId: string | undefined;
       qty: number | undefined;
     }) => {
       const URL = endpoints.cart.list;
-      return axios.post(URL, { productId, qty });
+      return axios.post(URL, { productId, offerId, qty });
     },
     onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
   });
