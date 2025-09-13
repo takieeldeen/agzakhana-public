@@ -18,7 +18,10 @@
     "HOME": "Home",
     "CATEGORIES": "Categories",
     "ABOUT": "About ",
-    "CONTACT_US": "Contact Us"
+    "CONTACT_US": "Contact Us",
+    "SKIN_CARE_SUBTITLE": "Products for skin care, including creams, lotions, and serums.",
+    "HAIR_CARE_SUBTITLE": "Products for hair care, including shampoos, conditioners, and treatments.",
+    "VITAMINS_AND_SUPPLEMENTS_SUBTITLE": "A range of vitamins and supplements for health and wellness."
   },
   "COMMON": {
     "EGP": "{price} EGP",

@@ -25,9 +25,10 @@ export default function ReviewsSection() {
   );
   const [showCreationModal, setShowCreationModal] = useState<boolean>(false);
   const t = useTranslations();
-  const { productId }: { productId: string } = useParams();
+  const { dealId }: { dealId: string } = useParams();
   const { reviews, overAllRating, reviewsFrequency, reviewCount, canReview } =
-    useGetReviews(productId);
+    useGetReviews(dealId, "DEAL");
+  console.log(dealId);
   const handleCloseModal = useCallback(() => {
     setShowCreationModal(false);
   }, []);

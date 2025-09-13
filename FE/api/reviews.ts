@@ -4,8 +4,11 @@ import { APIResponse, getFetcher } from "./api";
 import { useMemo } from "react";
 import { Review } from "@/types/reviews";
 
-export function useGetReviews(prooductId: string) {
-  const URL = endpoints.reviews.list(prooductId);
+export function useGetReviews(prooductId: string, type: "DEAL" | "PRODUCT") {
+  const URL =
+    type === "PRODUCT"
+      ? endpoints.reviews.list(prooductId)
+      : endpoints.reviews.dealsList(prooductId);
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ["reviews", prooductId],
     queryFn: getFetcher<
@@ -58,6 +61,7 @@ export function useMutateProductReviews() {
       productId: string;
     }) => {
       const URL = endpoints.reviews.list(productId);
+      payload.type = "PRODUCT";
       return await axios.post(URL, payload);
     },
     onSuccess: (res) => {
@@ -132,6 +136,7 @@ export function useMutateDealsReviews() {
       dealId: string;
     }) => {
       const URL = endpoints.reviews.dealsList(dealId);
+      payload.type = "DEAL";
       return await axios.post(URL, payload);
     },
     onSuccess: (res) => {
@@ -155,11 +160,13 @@ export function useMutateDealsReviews() {
       reviewId: string;
       dealId: string;
     }) => {
+      console.log("triggered");
       const URL = endpoints.reviews.dealsSingle(dealId, reviewId);
       return await axios.delete(URL);
     },
     onSuccess: (res, { dealId }) => {
       queryClient.setQueryData(["reviews", dealId], res.data);
+      console.log(dealId);
       queryClient.invalidateQueries({
         queryKey: ["reviews", dealId],
       });

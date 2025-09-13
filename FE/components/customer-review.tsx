@@ -17,8 +17,11 @@ export function CustomerReview({ review }: { review: Review }) {
   // State Management //////////////////////////////
   const [showCreationModal, setShowCreationModal] = useState<boolean>(false);
   const [showOptions, setShowOptions] = useState<boolean>(false);
-  const { locale, productId }: { locale: "ar" | "en"; productId: string } =
-    useParams();
+  const {
+    locale,
+    productId,
+    dealId,
+  }: { locale: "ar" | "en"; productId: string; dealId: string } = useParams();
   const { deleteReview } = useMutateProductReviews();
   const t = useTranslations();
   return (
@@ -61,7 +64,7 @@ export function CustomerReview({ review }: { review: Review }) {
                 onClick={() => {
                   deleteReview.mutateAsync({
                     reviewId: review?._id,
-                    productId,
+                    productId: productId ?? dealId,
                   });
                   setShowOptions(false);
                 }}

@@ -13,9 +13,52 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export default function Navbar() {
   const t = useTranslations("");
+  const { locale } = useParams();
+  const defaultCategory = {
+    id: 0,
+    title: t("HOME_PAGE.ALL_CATEGORIES"),
+    subtitle: t("NAV_BAR.BROWSE_ALL_CATEGORIES"),
+    imageUrl:
+      "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/codoral.png",
+    link: "/products",
+  };
+  const [currentSelection, setCurrentSelection] =
+    React.useState<any>(defaultCategory);
+  const categories = React.useMemo(
+    () => [
+      {
+        id: 1,
+        title: t("FOOTER.SKIN_CARE"),
+        subtitle: t("NAV_BAR.SKIN_CARE_SUBTITLE"),
+        imageUrl:
+          "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/skin-care-products.png",
+        link: "/products?category=68ae00041d5513897936eaa2",
+      },
+      {
+        id: 2,
+        title: t("FOOTER.HAIR_CARE"),
+        subtitle: t("NAV_BAR.HAIR_CARE_SUBTITLE"),
+        imageUrl:
+          "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/hair-care-products.png",
+        link: "/products?category=68ae00041d5513897936eaa1",
+      },
+      {
+        id: 3,
+        title: t("FOOTER.VITAMINS_AND_SUPPLEMENTS"),
+        subtitle: t("NAV_BAR.VITAMINS_AND_SUPPLEMENTS_SUBTITLE"),
+        imageUrl:
+          "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/supplements.png",
+        link: "/products?category=68ae00041d5513897936eaa4",
+      },
+    ],
+    [t]
+  );
   return (
     <NavigationMenu
       viewport={false}
@@ -61,49 +104,50 @@ export default function Navbar() {
             {t("NAV_BAR.CATEGORIES")}
           </NavigationMenuTrigger>
           <NavigationMenuContent className="z-20">
-            <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[1fr_1fr]">
-              {/* <li className="row-span-3">
-                <NavigationMenuLink asChild>
+            <ul
+              className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[1fr_1fr]"
+              dir={locale === "ar" ? "rtl" : "ltr"}
+            >
+              <li className="row-span-3">
+                <NavigationMenuLink asChild className="">
                   <Link
-                    className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md "
-                    href="/"
+                    className="from-muted/50 to-muted flex w-full flex-col rounded-md bg-linear-to-b px-6 no-underline outline-hidden select-none focus:shadow-md items-start h-full"
+                    href={currentSelection?.link}
                   >
-                    <div className="mt-4 mb-2 text-lg font-medium">
-                      shadcn/ui
+                    <div className="relative flex h-full w-full">
+                      <Image
+                        src={currentSelection?.imageUrl}
+                        alt={currentSelection?.title}
+                        className="top-1/2 left-1/2 object-contain"
+                        fill
+                      />
                     </div>
-                    <p className="text-muted-foreground text-sm leading-tight">
-                      Beautifully designed components built with Tailwind CSS.
-                    </p>
+                    <div className="h-16 max-h-16 w-52 max-w-52">
+                      <div className="text-lg font-medium rtl:text-right truncate leading-snug">
+                        {currentSelection?.title ?? "--"}
+                      </div>
+                      <p className="text-muted-foreground text-sm leading-tight rtl:text-right line-clamp-2">
+                        {currentSelection?.subtitle ?? "--"}
+                      </p>
+                    </div>
                   </Link>
                 </NavigationMenuLink>
-              </li> */}
-              <ListItem href="/products?category=skin-care" title="Skin Care">
-                Products for skin care, including creams, lotions, and serums.
-              </ListItem>
-              <ListItem href="/products?category=hare-care" title="Hair Care">
-                Products for hair care, including shampoos, conditioners, and
-                treatments.
-              </ListItem>
-              <ListItem
-                href="products?category=vitamins"
-                title="Vitamin and Supplements"
-              >
-                A range of vitamins and supplements for health and wellness.
-              </ListItem>
+              </li>
+              {categories?.map((category) => (
+                <ListItem
+                  key={category?.id}
+                  onMouseEnter={() => setCurrentSelection(category)}
+                  onMouseLeave={() => setCurrentSelection(defaultCategory)}
+                  href={category?.link}
+                  title={category?.title}
+                >
+                  {category?.subtitle}
+                </ListItem>
+              ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        <NavigationMenuItem className="">
-          <NavigationMenuLink asChild className="font-semibold">
-            <Link
-              href="/docs"
-              className="inline-flex flex-row gap-2 items-center text-[16px]"
-            >
-              {t("NAV_BAR.ABOUT")}
-            </Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
         <NavigationMenuItem className="ml-auto rtl:mr-auto rtl:ml-0">
           <NavigationMenuLink asChild className="font-semibold">
             <Link
@@ -125,12 +169,13 @@ function ListItem({
   href,
   ...props
 }: React.ComponentPropsWithoutRef<"li"> & { href: string }) {
+  const { locale } = useParams();
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
-        <Link href={href}>
-          <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+        <Link href={href} className={cn(locale === "ar" && "text-right")}>
+          <div className="text-sm leading-none font-medium  ">{title}</div>
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug rtl:text-right ">
             {children}
           </p>
         </Link>

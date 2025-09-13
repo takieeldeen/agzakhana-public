@@ -25,7 +25,7 @@ export default function CustomPagination({
   const leftWindow = Math.max(2, currentPage - pageWindow);
   const rightWindow = Math.min(totalNoOfPages - 1, currentPage + pageWindow);
   const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalNoOfPages;
+  const isLastPage = currentPage >= totalNoOfPages;
   if (leftWindow > 2) pageArray.push("...");
   for (let i = leftWindow; i <= rightWindow; i++) {
     pageArray.push(`${i}`);
