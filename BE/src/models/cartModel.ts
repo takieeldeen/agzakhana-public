@@ -6,6 +6,10 @@ const cartItemSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: "Product",
   },
+  deal: {
+    type: mongoose.Types.ObjectId,
+    ref: "Deal",
+  },
   qty: Number,
 });
 

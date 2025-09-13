@@ -14,10 +14,16 @@ export const removeFromCart = catchAsync(
       { userId },
       { $pull: { cart: { _id: cartItemId } } },
       { new: true }
-    ).populate({
-      path: "cart.product",
-      select: PRODUCT_VISIBLE_FIELDS,
-    });
+    ).populate([
+      {
+        path: "cart.product",
+        select: PRODUCT_VISIBLE_FIELDS,
+      },
+      {
+        path: "cart.deal",
+        select: PRODUCT_VISIBLE_FIELDS,
+      },
+    ]);
     res.status(200).json({
       status: "success",
       content: newCart,
@@ -45,10 +51,16 @@ export const clearCart = catchAsync(
 // Read /////////////////////////////////////////////////
 export const getCart = catchAsync(
   async (req: ProtectedRequest, res: Response) => {
-    const cart = await Cart.findOne({ userId: req?.user?._id }).populate({
-      path: "cart.product",
-      select: PRODUCT_VISIBLE_FIELDS,
-    });
+    const cart = await Cart.findOne({ userId: req?.user?._id }).populate([
+      {
+        path: "cart.product",
+        select: PRODUCT_VISIBLE_FIELDS,
+      },
+      {
+        path: "cart.deal",
+        select: PRODUCT_VISIBLE_FIELDS,
+      },
+    ]);
     res.status(200).json({
       status: "success",
       results: cart?.cart?.length,
@@ -62,9 +74,13 @@ export const addToCart = catchAsync(
   async (req: ProtectedRequest, res: Response) => {
     const userId = req?.user?._id;
     const currentCart = await Cart.findOne({ userId });
-    const { productId, qty } = req?.body;
+    const { productId, qty, offerId } = req?.body;
     const cartItem = {
-      product: new mongoose.Types.ObjectId(productId as string),
+      product: productId
+        ? new mongoose.Types.ObjectId(productId as string)
+        : null,
+      deal: offerId ? new mongoose.Types.ObjectId(offerId as string) : null,
+
       qty: +(qty ?? 1),
     };
     let cart;
@@ -85,10 +101,16 @@ export const addToCart = catchAsync(
           $push: { cart: cartItem },
         },
         { new: true }
-      ).populate({
-        path: "cart.product",
-        select: PRODUCT_VISIBLE_FIELDS,
-      });
+      ).populate([
+        {
+          path: "cart.product",
+          select: PRODUCT_VISIBLE_FIELDS,
+        },
+        {
+          path: "cart.deal",
+          select: PRODUCT_VISIBLE_FIELDS,
+        },
+      ]);
     }
     res.status(200).json({
       status: "success",
@@ -112,10 +134,16 @@ export const updateCartItem = catchAsync(
         },
       },
       { new: true }
-    ).populate({
-      path: "cart.product",
-      select: PRODUCT_VISIBLE_FIELDS,
-    });
+    ).populate([
+      {
+        path: "cart.product",
+        select: PRODUCT_VISIBLE_FIELDS,
+      },
+      {
+        path: "cart.deal",
+        select: PRODUCT_VISIBLE_FIELDS,
+      },
+    ]);
     console.log(cart);
     res.status(200).json({
       status: "success",

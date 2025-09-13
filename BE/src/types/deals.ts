@@ -4,6 +4,8 @@ export type DealType = {
   _id: string;
   nameAr: string;
   nameEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
   rating: number;
   manufacturer: string;
   price: number;

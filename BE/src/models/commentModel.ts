@@ -28,6 +28,12 @@ const commentSchema = new Schema<CommentType>({
   productId: {
     type: mongoose.Types.ObjectId,
     ref: "Product",
+    default: null,
+  },
+  dealId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Deal",
+    default: null,
   },
 });
 

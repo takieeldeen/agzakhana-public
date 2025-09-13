@@ -11,163 +11,13 @@ export const getAllComments = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req?.cookies;
     const userId = (decode(token) as any)?.id;
-    const currentUser = await User.findById(userId);
-    const { productId } = req.params;
-    const comments = await Comment.aggregate([
-      {
-        $match: { productId: new mongoose.Types.ObjectId(productId) },
-      },
-      {
-        $sort: { createdAt: -1 },
-      },
-      {
-        $lookup: {
-          from: "users",
-          as: "user",
-          let: { userId: "$userId" },
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ["$_id", "$$userId"] },
-              },
-            },
-            {
-              $project: {
-                email: 1,
-                name: 1,
-                imageUrl: 1,
-                isActive: 1,
-              },
-            },
-          ],
-        },
-      },
-      {
-        $unwind: "$user",
-      },
-      {
-        $match: { "user.isActive": true },
-      },
-      {
-        $project: {
-          "user.isActive": 0,
-        },
-      },
-      {
-        $facet: {
-          comments: [
-            {
-              $addFields: {
-                editable: {
-                  $expr: {
-                    $eq: ["$userId", new mongoose.Types.ObjectId(userId)],
-                  },
-                },
-              },
-            },
-          ],
-          reviewsCount: [{ $count: "count" }],
-          overAllRating: [
-            {
-              $group: { _id: "$productId", avg: { $avg: "$rate" } },
-            },
-          ],
-          existingRates: [
-            { $group: { _id: "$rate", count: { $sum: 1 } } },
-            {
-              $project: { _id: 0, rate: "$_id", count: 1 },
-            },
-          ],
-          allRates: [
-            {
-              $limit: 1,
-            },
-            { $project: { rate: [1, 2, 3, 4, 5] } },
-            { $unwind: "$rate" },
-            { $project: { _id: 0, rate: 1, count: { $literal: 0 } } },
-          ],
-        },
-      },
-
-      {
-        $project: {
-          comments: 1,
-          reviewsCount: 1,
-          overAllRating: 1,
-          mergedRates: { $concatArrays: ["$allRates", "$existingRates"] },
-        },
-      },
-      { $unwind: "$mergedRates" },
-      {
-        $group: {
-          _id: {
-            comments: "$comments",
-            reviewsCount: "$reviewsCount",
-            overAllRating: "$overAllRating",
-            rate: "$mergedRates.rate",
-          },
-          count: { $sum: "$mergedRates.count" },
-        },
-      },
-      {
-        $group: {
-          _id: {
-            comments: "$_id.comments",
-            reviewsCount: "$_id.reviewsCount",
-            overAllRating: "$_id.overAllRating",
-          },
-          mergedRates: {
-            $push: {
-              k: { $toString: "$_id.rate" },
-              v: {
-                $round: [
-                  {
-                    $multiply: [
-                      {
-                        $divide: [
-                          "$count",
-                          { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
-                        ],
-                      },
-                      100,
-                    ],
-                  },
-                  1,
-                ],
-              },
-            },
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          comments: "$_id.comments",
-          reviewCount: { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
-          overAllRating: {
-            $round: [{ $arrayElemAt: ["$_id.overAllRating.avg", 0] }, 1],
-          },
-          reviewsFrequency: { $arrayToObject: "$mergedRates" },
-        },
-      },
-      {
-        $addFields: {
-          canReview: {
-            $not: {
-              $anyElementTrue: {
-                $map: {
-                  input: "$comments",
-                  as: "c",
-                  in: {
-                    $eq: ["$$c.userId", new mongoose.Types.ObjectId(userId)],
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    ]);
+    const { productId, dealId } = req.params;
+    let comments: any[] = [];
+    if (!!productId) {
+      comments = await getProductComments(productId!, userId);
+    } else {
+      comments = await getDealComments(dealId!, userId);
+    }
     res.status(200).json({
       status: "success",
       content: comments?.[0] ?? {},
@@ -178,10 +28,11 @@ export const getAllComments = catchAsync(
 
 export const createComment = catchAsync(
   async (req: ProtectedRequest, res: Response, next: NextFunction) => {
-    const { productId } = req.params;
-    const { comment, rate } = req.body;
+    const { productId, dealId } = req.params;
+    const { comment, rate, type } = req.body;
     const newComment = {
       productId,
+      dealId,
       comment,
       rate,
       userId: req?.user?._id,
@@ -189,6 +40,7 @@ export const createComment = catchAsync(
     const previousComments = await Comment.findOne({
       userId: req?.user?._id,
       productId,
+      dealId,
     });
     if (previousComments)
       return next(new AppError(500, "User already reviewed this product"));
@@ -240,3 +92,321 @@ export const updateComment = catchAsync(
     });
   }
 );
+
+async function getProductComments(productId: string, userId: string) {
+  const comments = await Comment.aggregate([
+    {
+      $match: { productId: new mongoose.Types.ObjectId(productId) },
+    },
+    {
+      $sort: { createdAt: -1 },
+    },
+    {
+      $lookup: {
+        from: "users",
+        as: "user",
+        let: { userId: "$userId" },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$_id", "$$userId"] },
+            },
+          },
+          {
+            $project: {
+              email: 1,
+              name: 1,
+              imageUrl: 1,
+              isActive: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: "$user",
+    },
+    {
+      $match: { "user.isActive": true },
+    },
+    {
+      $project: {
+        "user.isActive": 0,
+      },
+    },
+    {
+      $facet: {
+        comments: [
+          {
+            $addFields: {
+              editable: {
+                $expr: {
+                  $eq: ["$userId", new mongoose.Types.ObjectId(userId)],
+                },
+              },
+            },
+          },
+        ],
+        reviewsCount: [{ $count: "count" }],
+        overAllRating: [
+          {
+            $group: { _id: "$productId", avg: { $avg: "$rate" } },
+          },
+        ],
+        existingRates: [
+          { $group: { _id: "$rate", count: { $sum: 1 } } },
+          {
+            $project: { _id: 0, rate: "$_id", count: 1 },
+          },
+        ],
+        allRates: [
+          {
+            $limit: 1,
+          },
+          { $project: { rate: [1, 2, 3, 4, 5] } },
+          { $unwind: "$rate" },
+          { $project: { _id: 0, rate: 1, count: { $literal: 0 } } },
+        ],
+      },
+    },
+
+    {
+      $project: {
+        comments: 1,
+        reviewsCount: 1,
+        overAllRating: 1,
+        mergedRates: { $concatArrays: ["$allRates", "$existingRates"] },
+      },
+    },
+    { $unwind: "$mergedRates" },
+    {
+      $group: {
+        _id: {
+          comments: "$comments",
+          reviewsCount: "$reviewsCount",
+          overAllRating: "$overAllRating",
+          rate: "$mergedRates.rate",
+        },
+        count: { $sum: "$mergedRates.count" },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          comments: "$_id.comments",
+          reviewsCount: "$_id.reviewsCount",
+          overAllRating: "$_id.overAllRating",
+        },
+        mergedRates: {
+          $push: {
+            k: { $toString: "$_id.rate" },
+            v: {
+              $round: [
+                {
+                  $multiply: [
+                    {
+                      $divide: [
+                        "$count",
+                        { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+                      ],
+                    },
+                    100,
+                  ],
+                },
+                1,
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        comments: "$_id.comments",
+        reviewCount: { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+        overAllRating: {
+          $round: [{ $arrayElemAt: ["$_id.overAllRating.avg", 0] }, 1],
+        },
+        reviewsFrequency: { $arrayToObject: "$mergedRates" },
+      },
+    },
+    {
+      $addFields: {
+        canReview: {
+          $not: {
+            $anyElementTrue: {
+              $map: {
+                input: "$comments",
+                as: "c",
+                in: {
+                  $eq: ["$$c.userId", new mongoose.Types.ObjectId(userId)],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  ]);
+  return comments;
+}
+
+async function getDealComments(dealId: string, userId: string) {
+  const comments = await Comment.aggregate([
+    {
+      $match: { dealId: new mongoose.Types.ObjectId(dealId) },
+    },
+    {
+      $sort: { createdAt: -1 },
+    },
+    {
+      $lookup: {
+        from: "users",
+        as: "user",
+        let: { userId: "$userId" },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$_id", "$$userId"] },
+            },
+          },
+          {
+            $project: {
+              email: 1,
+              name: 1,
+              imageUrl: 1,
+              isActive: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: "$user",
+    },
+    {
+      $match: { "user.isActive": true },
+    },
+    {
+      $project: {
+        "user.isActive": 0,
+      },
+    },
+    {
+      $facet: {
+        comments: [
+          {
+            $addFields: {
+              editable: {
+                $expr: {
+                  $eq: ["$userId", new mongoose.Types.ObjectId(userId)],
+                },
+              },
+            },
+          },
+        ],
+        reviewsCount: [{ $count: "count" }],
+        overAllRating: [
+          {
+            $group: { _id: "$dealId", avg: { $avg: "$rate" } },
+          },
+        ],
+        existingRates: [
+          { $group: { _id: "$rate", count: { $sum: 1 } } },
+          {
+            $project: { _id: 0, rate: "$_id", count: 1 },
+          },
+        ],
+        allRates: [
+          {
+            $limit: 1,
+          },
+          { $project: { rate: [1, 2, 3, 4, 5] } },
+          { $unwind: "$rate" },
+          { $project: { _id: 0, rate: 1, count: { $literal: 0 } } },
+        ],
+      },
+    },
+
+    {
+      $project: {
+        comments: 1,
+        reviewsCount: 1,
+        overAllRating: 1,
+        mergedRates: { $concatArrays: ["$allRates", "$existingRates"] },
+      },
+    },
+    { $unwind: "$mergedRates" },
+    {
+      $group: {
+        _id: {
+          comments: "$comments",
+          reviewsCount: "$reviewsCount",
+          overAllRating: "$overAllRating",
+          rate: "$mergedRates.rate",
+        },
+        count: { $sum: "$mergedRates.count" },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          comments: "$_id.comments",
+          reviewsCount: "$_id.reviewsCount",
+          overAllRating: "$_id.overAllRating",
+        },
+        mergedRates: {
+          $push: {
+            k: { $toString: "$_id.rate" },
+            v: {
+              $round: [
+                {
+                  $multiply: [
+                    {
+                      $divide: [
+                        "$count",
+                        { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+                      ],
+                    },
+                    100,
+                  ],
+                },
+                1,
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        comments: "$_id.comments",
+        reviewCount: { $arrayElemAt: ["$_id.reviewsCount.count", 0] },
+        overAllRating: {
+          $round: [{ $arrayElemAt: ["$_id.overAllRating.avg", 0] }, 1],
+        },
+        reviewsFrequency: { $arrayToObject: "$mergedRates" },
+      },
+    },
+    {
+      $addFields: {
+        canReview: {
+          $not: {
+            $anyElementTrue: {
+              $map: {
+                input: "$comments",
+                as: "c",
+                in: {
+                  $eq: ["$$c.userId", new mongoose.Types.ObjectId(userId)],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  ]);
+  return comments;
+}

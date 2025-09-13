@@ -4,6 +4,8 @@ import { DealType } from "../types/deals";
 const dealsSchema = new Schema<DealType>({
   nameAr: String,
   nameEn: String,
+  descriptionAr: String,
+  descriptionEn: String,
   rating: Number,
   manufacturer: String,
   price: Number,
