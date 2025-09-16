@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { AuthProvider } from "@/providers/auth-provider";
 import TanstackProvider from "@/providers/tanstack-provider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,6 +53,7 @@ export default async function RootLayout({
               <Header />
               <Navbar />
               <main className="px-8">{children}</main>
+              <Toaster />
               <Footer />
             </TanstackProvider>
           </NextIntlClientProvider>

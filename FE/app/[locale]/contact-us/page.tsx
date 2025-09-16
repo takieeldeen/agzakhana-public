@@ -1,7 +1,9 @@
 "use client";
+import { sendMessage } from "@/api/messages";
 import RHFForm from "@/components/rhf-form";
 import RHFTextarea from "@/components/rhf-textarea";
 import RHFTextfield from "@/components/rhf-textfield";
+import { pushMessage } from "@/components/toast-message";
 import { LoadingButton } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -62,11 +64,23 @@ export default function ContactUsPage() {
   } = methods;
   console.log(isSubmitting);
   const onSubmit = useCallback(
-    (data: any) => {
-      console.log(data);
-      reset();
+    async (data: any) => {
+      try {
+        await sendMessage(data);
+        pushMessage({
+          variant: "success",
+          subtitle: t("TOAST.MESSAGE_SENT"),
+        });
+        reset();
+      } catch (err) {
+        console.log(err);
+        pushMessage({
+          variant: "fail",
+          subtitle: t("TOAST.ERROR_SENDING_MESSAGE"),
+        });
+      }
     },
-    [reset]
+    [reset, t]
   );
   return (
     <section className="grid grid-cols-2 py-16">
@@ -74,15 +88,11 @@ export default function ContactUsPage() {
       <div className="flex items-center justify-center ">
         {/* Form Card */}
         <div className="w-4/5 bg-gray-200 rounded-md p-4 flex flex-col gap-4 py-8">
-          <div className="bg-white rounded-md min-w-96 w-fit py-4 border-2 ">
-            <div className="h-full" />
-            test
-          </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-4xl font-bold">
               {t("CONTACT_US.CONTACT_US_TITLE")}
             </h3>
-            <span className="w-4/5 text-lg font-semibold text-gray-500">
+            <span className="w-full font-semibold text-gray-500">
               {t("CONTACT_US.CONTACT_US_SUBTITLE")}
             </span>
           </div>

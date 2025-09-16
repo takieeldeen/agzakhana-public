@@ -46,6 +46,9 @@ export const endpoints = {
     dealsSingle: (dealId: string, reviewId: string) =>
       `/v1/products/${dealId}/reviews/${reviewId}`,
   },
+  messages: {
+    send: "/v1/messages/contact-us",
+  },
 };
 
 export default axios;

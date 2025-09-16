@@ -201,5 +201,11 @@
     "WORKING_HOURS": "ساعات العمل",
     "WORKING_HOURS_VAL_1": "من السبت إلى الخميس - ٨ صباحًا حتى ١ صباحًا",
     "WORKING_HOURS_VAL_2": "الجمعة - ٨ صباحًا حتى ١٠ مساءً"
+  },
+  "TOAST": {
+    "SUCCESSFUL_PROCESS": "تمت العملية بنجاح",
+    "UNSUCCESSFUL_PROCESS": "عملية غير ناجحة",
+    "MESSAGE_SENT": "تم إرسال رسالتك بنجاح",
+    "ERROR_SENDING_MESSAGE": "حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى لاحقًا."
   }
 }

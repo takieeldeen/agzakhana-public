@@ -204,5 +204,11 @@
     "WORKING_HOURS": "Working Hours",
     "WORKING_HOURS_VAL_1": "Saturday to Thurusday - 8 am to 1am",
     "WORKING_HOURS_VAL_2": "Friday - 8 am to 10pm"
+  },
+  "TOAST": {
+    "SUCCESSFUL_PROCESS": "Successful Process",
+    "UNSUCCESSFUL_PROCESS": "Unsuccessful Process",
+    "MESSAGE_SENT": "Your message has been sent successfully",
+    "ERROR_SENDING_MESSAGE": "An error occurred while sending your message. Please try again later."
   }
 }
