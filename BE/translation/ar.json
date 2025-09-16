@@ -8,5 +8,26 @@
   "LOGIN": {
     "MISSING_CREDENTIALS": "يرجى إدخال اسم المستخدم وكلمة المرور",
     "WRONG_CREDENTIALS": "اسم المستخدم أو كلمة المرور غير صحيح"
+  },
+  "REVIEWS": {
+    "COMMENT": "التعليق",
+    "RATE": "التقييم"
+  },
+  "VALIDATIONS": {
+    "REQUIRED_FIELD": "من فضلك ارسل {{field}}",
+    "MIN_VAL": "أقل قيمة ل{{field}} هي {{value}}",
+    "MAX_VAL": "أقصى قيمة ل{{field}} هي {{value}}",
+    "INVALID_FIELD": "{{field}} بتنسيق غير صالح",
+    "INVALID_EMAIL": "من فضلك أدخل بريد إلكتروني صالح",
+    "INVALID_PHONE": "من فضلك أدخل رقم هاتف صالح",
+    "MIN_LENGTH": "يجب أن لا يقل {{field}} عن {{value}} حروف",
+    "MAX_LENGTH": "يجب أن لا يزيد {{field}} عن {{value}} حروف",
+    "MATCHES": "يجب أن يتوافق {{field}} مع التنسيق المطلوب",
+    "CONFIRMATION": "{{field}} لا يطابق {{otherField}}",
+    "NUMBER_ONLY": "يجب أن يحتوي {{field}} على أرقام فقط",
+    "LETTERS_ONLY": "يجب أن يحتوي {{field}} على حروف فقط",
+    "DATE_INVALID": "يجب أن يكون {{field}} تاريخ صالح",
+    "FUTURE_DATE": "يجب أن يكون {{field}} في المستقبل",
+    "PAST_DATE": "يجب أن يكون {{field}} في الماضي"
   }
 }

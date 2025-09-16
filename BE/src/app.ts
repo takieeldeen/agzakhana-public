@@ -3,6 +3,8 @@ import authRouter from "./routers/authRouter";
 import errorController from "./controllers/errorController";
 import middleware from "i18next-http-middleware";
 import i18next from "i18next";
+import Backend from "i18next-fs-backend"; // Missing backend for file loading
+
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dataRouter from "./routers/dataRouter";
@@ -13,8 +15,8 @@ import cartRouter from "./routers/cartRouter";
 import dealsRouter from "./routers/dealsRouter";
 
 i18next
+  .use(Backend) // optional, if loading translation files from disk
   .use(middleware.LanguageDetector) // 👈 enable language detection
-  //   .use(Backend) // optional, if loading translation files from disk
   .init({
     fallbackLng: "en",
     preload: ["en", "ar"],

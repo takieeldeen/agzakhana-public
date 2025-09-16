@@ -8,5 +8,26 @@
   "LOGIN": {
     "MISSING_CREDENTIALS": "Please enter the username and password",
     "WRONG_CREDENTIALS": "Wrong Username or password"
+  },
+  "REVIEWS": {
+    "COMMENT": "Comment",
+    "RATE": "Rate"
+  },
+  "VALIDATIONS": {
+    "REQUIRED_FIELD": "Please provide the {{field}}",
+    "MIN_VAL": "The minimum value for {{field}} is {{value}}",
+    "MAX_VAL": "The maximum value for {{field}} is {{value}}",
+    "INVALID_FIELD": "{{field}} has invalid format",
+    "INVALID_EMAIL": "Please provide a valid email address",
+    "INVALID_PHONE": "Please provide a valid phone number",
+    "MIN_LENGTH": "{{field}} must be at least {{value}} characters long",
+    "MAX_LENGTH": "{{field}} must not exceed {{value}} characters",
+    "MATCHES": "{{field}} must match the required format",
+    "CONFIRMATION": "{{field}} does not match {{otherField}}",
+    "NUMBER_ONLY": "{{field}} must contain only numbers",
+    "LETTERS_ONLY": "{{field}} must contain only letters",
+    "DATE_INVALID": "The {{field}} must be a valid date",
+    "FUTURE_DATE": "The {{field}} must be in the future",
+    "PAST_DATE": "The {{field}} must be in the past"
   }
 }
