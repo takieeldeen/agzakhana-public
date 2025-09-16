@@ -17,6 +17,7 @@ type Props = {
   inputProps?: React.ComponentProps<"textarea">;
   labelProps?: ComponentProps<"label">;
   helperTextProps?: ComponentProps<"p">;
+  mandatoryField?: boolean;
 } & ComponentProps<"div">;
 export default function RHFTextarea({
   name,
@@ -25,6 +26,7 @@ export default function RHFTextarea({
   inputProps,
   labelProps,
   helperTextProps,
+  mandatoryField,
   ...other
 }: Props) {
   const methods = useFormContext();
@@ -34,7 +36,14 @@ export default function RHFTextarea({
       name={name}
       render={({ field }) => (
         <FormItem {...other}>
-          {!!label && <FormLabel {...labelProps}>{label}</FormLabel>}
+          {!!label && (
+            <FormLabel {...labelProps}>
+              {label}
+              {mandatoryField && (
+                <span className="font-bold text-red-700">*</span>
+              )}
+            </FormLabel>
+          )}
           <FormControl>
             <Textarea placeholder={placeholder} {...field} {...inputProps} />
           </FormControl>

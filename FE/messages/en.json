@@ -184,5 +184,25 @@
     "BLOOD_PRESSURE_PRODUCTS": "Blood Pressure Products",
     "HEART_PRODUCTS": "Heart Products",
     "VITAMINS_AND_SUPPLEMENTS": "Vitamins & Supplements"
+  },
+  "CONTACT_US": {
+    "CONTACT_US_TITLE": "Contact with agzakhana team",
+    "CONTACT_US_SUBTITLE": "We are deeply committed to delivering unparalleled service and unwavering support to ensure your experience exceeds expectations.",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "EMAIL": "Email",
+    "MESSAGE": "Message",
+    "SUBMIT": "Submit",
+    "ADDRESS": "Address",
+    "ADDRESS_VAL_1": "123, Agzakhana St, Agzakahana City",
+    "ADDRESS_VAL_2": "01234-52134",
+    "CONTACT": "Contact",
+    "EMAIL_VAL_1": "We usually respond within 24 hours of your email",
+    "EMAIL_VAL_2": "agzakhana_email@gmail.com",
+    "CONTACT_VAL_1": "Call us, we will do whatever we can to fullfill your need",
+    "CONTACT_VAL_2": "01234-52134",
+    "WORKING_HOURS": "Working Hours",
+    "WORKING_HOURS_VAL_1": "Saturday to Thurusday - 8 am to 1am",
+    "WORKING_HOURS_VAL_2": "Friday - 8 am to 10pm"
   }
 }

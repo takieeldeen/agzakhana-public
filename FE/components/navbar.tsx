@@ -151,7 +151,7 @@ export default function Navbar() {
         <NavigationMenuItem className="ml-auto rtl:mr-auto rtl:ml-0">
           <NavigationMenuLink asChild className="font-semibold">
             <Link
-              href="/docs"
+              href="/contact-us "
               className="inline-flex flex-row gap-2 items-center text-[16px]"
             >
               {t("NAV_BAR.CONTACT_US")}

@@ -13,6 +13,8 @@ import {
   type FieldValues,
 } from "react-hook-form";
 
+import { motion, AnimatePresence } from "framer-motion";
+
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 
@@ -141,19 +143,29 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message ?? "") : props.children;
 
-  if (!body) {
-    return null;
-  }
+  // if (!body) {
+  //   return null;
+  // }
 
   return (
-    <p
-      data-slot="form-message"
-      id={formMessageId}
-      className={cn("text-destructive text-sm font-semibold", className)}
-      {...props}
-    >
-      {body}
-    </p>
+    <AnimatePresence>
+      {!!body && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <p
+            data-slot="form-message"
+            id={formMessageId}
+            className={cn("text-destructive text-sm font-semibold", className)}
+            {...props}
+          >
+            {body}
+          </p>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

@@ -17,6 +17,7 @@ type Props = {
   inputProps?: InputProps;
   labelProps?: ComponentProps<"label">;
   helperTextProps?: ComponentProps<"p">;
+  mandatoryField?: boolean;
 } & ComponentProps<"div">;
 export default function RHFTextfield({
   name,
@@ -25,6 +26,7 @@ export default function RHFTextfield({
   inputProps,
   labelProps,
   helperTextProps,
+  mandatoryField,
   ...other
 }: Props) {
   const methods = useFormContext();
@@ -34,11 +36,20 @@ export default function RHFTextfield({
       name={name}
       render={({ field }) => (
         <FormItem {...other}>
-          {!!label && <FormLabel {...labelProps}>{label}</FormLabel>}
+          {!!label && (
+            <FormLabel {...labelProps}>
+              {label}
+              {mandatoryField && (
+                <span className="font-bold text-red-700">*</span>
+              )}
+            </FormLabel>
+          )}
           <FormControl>
             <Input placeholder={placeholder} {...field} {...inputProps} />
           </FormControl>
-          <FormMessage {...helperTextProps} />
+          <div className="min-h-4">
+            <FormMessage {...helperTextProps} />
+          </div>
         </FormItem>
       )}
     />
