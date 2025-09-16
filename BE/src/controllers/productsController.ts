@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import Product from "../models/productsModel";
 import mongoose from "mongoose";
+import Comment from "../models/commentModel";
 
 export const getAllProducts = catchAsync(
   async (req: Request, res: Response) => {
@@ -145,6 +146,45 @@ export const getSimilarProducts = catchAsync(
       status: "success",
       content: products,
       results: products.length,
+    });
+  }
+);
+
+export const getPopularProducts = catchAsync(
+  async (req: Request, res: Response) => {
+    console.log("test");
+    const products = await Comment.aggregate([
+      { $match: { productId: { $ne: null } } },
+      {
+        $group: {
+          _id: "$productId",
+          popularity: { $avg: "$rate" },
+        },
+      },
+
+      { $sort: { popularity: -1 } },
+      {
+        $project: { _id: 1 },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "product",
+        },
+      },
+      {
+        $unwind: "$product",
+      },
+      {
+        $limit: 10,
+      },
+    ]);
+    res.status(200).json({
+      status: " success",
+      results: products?.length,
+      content: products,
     });
   }
 );

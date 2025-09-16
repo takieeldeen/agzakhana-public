@@ -29,5 +29,11 @@
     "DATE_INVALID": "The {{field}} must be a valid date",
     "FUTURE_DATE": "The {{field}} must be in the future",
     "PAST_DATE": "The {{field}} must be in the past"
+  },
+  "FIELDS": {
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "EMAIL": "Email Address",
+    "MESSAGE": "Message"
   }
 }

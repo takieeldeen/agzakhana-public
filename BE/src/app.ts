@@ -13,6 +13,7 @@ import morgan from "morgan";
 import categoryRouter from "./routers/categoriesRouter";
 import cartRouter from "./routers/cartRouter";
 import dealsRouter from "./routers/dealsRouter";
+import messageRouter from "./routers/messageRouter";
 
 i18next
   .use(Backend) // optional, if loading translation files from disk
@@ -50,6 +51,7 @@ app.use("/api/v1/data", dataRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/deals", dealsRouter);
+app.use("/api/v1/messages", messageRouter);
 
 app.use(errorController);
 export default app;

@@ -29,5 +29,11 @@
     "DATE_INVALID": "يجب أن يكون {{field}} تاريخ صالح",
     "FUTURE_DATE": "يجب أن يكون {{field}} في المستقبل",
     "PAST_DATE": "يجب أن يكون {{field}} في الماضي"
+  },
+  "FIELDS": {
+    "FIRST_NAME": "الاسم الأول",
+    "LAST_NAME": "اسم العائلة",
+    "EMAIL": "البريد الالكتروني",
+    "MESSAGE": "الرسالة"
   }
 }
