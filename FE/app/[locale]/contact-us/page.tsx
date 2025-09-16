@@ -62,7 +62,6 @@ export default function ContactUsPage() {
     reset,
     formState: { isSubmitting },
   } = methods;
-  console.log(isSubmitting);
   const onSubmit = useCallback(
     async (data: any) => {
       try {

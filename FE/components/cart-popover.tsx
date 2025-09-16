@@ -17,10 +17,12 @@ import { useGetCartItems, useMutateCart } from "@/api/cart";
 import { useCallback } from "react";
 import CircularProgress from "./circular-progress";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
 
 export function CartPopover() {
   const t = useTranslations();
-  const { cart, totalItems, cartEmpty } = useGetCartItems();
+  const { isAuthenticated } = useAuth();
+  const { cart, totalItems, cartEmpty } = useGetCartItems(isAuthenticated);
   const { removeFromCart, clearCart } = useMutateCart();
   const { isPending: isRemoving } = removeFromCart;
   const { isPending: isClearing } = clearCart;
@@ -28,6 +30,7 @@ export function CartPopover() {
   const handleClearCart = useCallback(() => {
     clearCart.mutate();
   }, [clearCart]);
+  if (!isAuthenticated) return null;
   return (
     <Popover>
       <PopoverTrigger asChild>
