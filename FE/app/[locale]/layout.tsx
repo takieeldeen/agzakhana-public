@@ -29,9 +29,19 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
   params,
+  popularProducts,
+  newsLetter,
+  latestDeals,
+  shopByCategory,
+  shopBy,
 }: Readonly<{
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
+  popularProducts: React.ReactNode;
+  newsLetter: React.ReactNode;
+  latestDeals: React.ReactNode;
+  shopByCategory: React.ReactNode;
+  shopBy: React.ReactNode;
 }>) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
@@ -52,7 +62,20 @@ export default async function RootLayout({
             <TanstackProvider>
               <Header />
               <Navbar />
-              <main className="px-8">{children}</main>
+              <main className="px-8">
+                <div className="flex flex-row p-2">
+                  {/* <FiltersToolbar /> */}
+                  <div className="flex flex-col w-full">
+                    {newsLetter}
+                    {popularProducts}
+                    {latestDeals}
+                    {shopByCategory}
+                    {shopBy}
+                    {children}
+                    {newsLetter}
+                  </div>
+                </div>
+              </main>
               <Toaster />
               <Footer />
             </TanstackProvider>

@@ -1,5 +1,3 @@
-import { dummyPromise } from "@/api/api";
-import { ListView } from "@/sections/dashboard/home/views";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,6 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const test = await dummyPromise();
-  return <ListView />;
+  return null;
 }

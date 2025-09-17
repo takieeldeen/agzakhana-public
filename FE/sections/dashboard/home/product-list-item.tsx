@@ -24,9 +24,12 @@ export default async function ProductListItem({
         />
       </div>
       <div className="w-full">
-        <p className="font-bold">
+        <Link
+          href={`/products/${product?._id}`}
+          className="font-bold w-full text-ellipsis overflow-hidden whitespace-nowrap"
+        >
           {product?.[locale === "ar" ? "nameAr" : "nameEn"]}
-        </p>
+        </Link>
         <div className="flex flex-row gap-1  items-center mb-2">
           <Icon
             icon="material-symbols:star-rounded"
@@ -46,9 +49,9 @@ export default async function ProductListItem({
           <strong className="leading-none text-nowrap ">
             {t("COMMON.EGP", { price: product?.price ?? 0 })}
           </strong>
-          <span className="text-xs font-semibold leading-none text-text-secondary line-through mr-auto rtl:mr-0 rtl:ml-auto text-nowrap">
+          {/* <span className="text-xs font-semibold leading-none text-text-secondary line-through mr-auto rtl:mr-0 rtl:ml-auto text-nowrap">
             {t("COMMON.EGP", { price: product?.beforeDiscount ?? 0 })}
-          </span>
+          </span> */}
           <Button className="bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200 ">
             <Icon icon="mynaui:cart" />
             {t("HOME_PAGE.ADD")}

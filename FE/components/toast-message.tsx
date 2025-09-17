@@ -40,7 +40,7 @@ export default function ToastMessage({
           variantProps?.[variant]?.color
         )}
       />
-      <div className="min-h-12 flex flex-row items-start  gap-3 mr-auto py-4">
+      <div className="min-h-12 flex flex-row items-start  gap-3 mr-auto rtl:ml-auto rtl:mr-0 py-4">
         <div
           className={cn(
             "h-8 w-8 bg-agzakhana-primary text-white flex items-center justify-center rounded-full aspect-square text-xl",
