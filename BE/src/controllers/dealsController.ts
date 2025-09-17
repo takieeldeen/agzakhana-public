@@ -115,12 +115,17 @@ export const getAllDealsCategory = catchAsync(
   }
 );
 
-export const getTodaysDeals = catchAsync(
+export const getLatestDeals = catchAsync(
   async (req: Request, res: Response) => {
+    const deals = await Deal.find({
+      expiresAt: { $gt: new Date() },
+    })
+      .limit(10)
+      .sort({ createdAt: -1 });
     res.status(200).json({
       status: "success",
-      results: 0,
-      content: [],
+      results: deals?.length,
+      content: deals,
     });
   }
 );
