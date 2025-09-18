@@ -102,14 +102,15 @@
   },
   "CART": {
     "MY_SHOPPING_CART": "My Shopping Cart",
-    "PAYMENT_SUMMARY": "Payment Summary",
+    "PAYMENT_SUMMARY": "Order Summary",
     "SUB_TOTAL": "Subtotal",
     "DELIVERY": "Delivery",
     "VAT": "Value additional Taxes (VAT 14%)",
     "TOTAL": "Total",
     "PROCEED_TO_CHECKOUT": "Proceed to Checkout",
     "CONTINUE_SHOPPING": "Continue Shopping",
-    "SHOW_ALL": "Show My Shopping Cart"
+    "SHOW_ALL": "Show My Shopping Cart",
+    "PRODUCT": "{count, plural, one {1 product} two {2 products} few {{count} products} many {{count} products} other {{count} products}}"
   },
   "LOGIN": {
     "PAGE_TITLE": "Login to your account",

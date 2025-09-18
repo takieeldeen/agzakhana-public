@@ -101,14 +101,15 @@
   },
   "CART": {
     "MY_SHOPPING_CART": "سلة التسوق الخاصة بي",
-    "PAYMENT_SUMMARY": "ملخص الدفع",
+    "PAYMENT_SUMMARY": "ملخص الطلب",
     "SUB_TOTAL": "المجموع الفرعي",
     "DELIVERY": "التوصيل (تتراوح من يوم إلى ثلاث أيام عمل)",
     "VAT": "ضريبة القيمة المضافة (14%)",
     "TOTAL": "الإجمالي",
     "PROCEED_TO_CHECKOUT": "المتابعة لإتمام الشراء",
     "CONTINUE_SHOPPING": "متابعة التسوق",
-    "SHOW_ALL": "اعرض عربة التسوق الخاصة بي"
+    "SHOW_ALL": "اعرض عربة التسوق الخاصة بي",
+    "PRODUCT": "{count, plural, one {منتج واحد} two {منتجان} few {{count} منتجات} many {{count} منتج} other {{count} منتج}}"
   },
   "LOGIN": {
     "PAGE_TITLE": "تسجيل الدخول إلى حسابك",
