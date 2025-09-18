@@ -14,7 +14,14 @@ const productSchema = new Schema<ProductType>({
     type: Types.ObjectId,
     ref: "Category",
   },
-  rating: Number,
+  rating: {
+    type: Number,
+    default: 0,
+  },
+  reviewers: {
+    type: Number,
+    default: 0,
+  },
   manufacturer: String,
   price: Number,
   beforeDiscount: Number,

@@ -152,7 +152,6 @@ export const getSimilarProducts = catchAsync(
 
 export const getPopularProducts = catchAsync(
   async (req: Request, res: Response) => {
-    console.log("test");
     const products = await Comment.aggregate([
       { $match: { productId: { $ne: null } } },
       {
@@ -178,6 +177,9 @@ export const getPopularProducts = catchAsync(
         $unwind: "$product",
       },
       {
+        $replaceRoot: { newRoot: "$product" },
+      },
+      {
         $limit: 10,
       },
     ]);
@@ -185,6 +187,36 @@ export const getPopularProducts = catchAsync(
       status: " success",
       results: products?.length,
       content: products,
+    });
+  }
+);
+
+export const getProductsHighlights = catchAsync(
+  async (req: Request, res: Response) => {
+    const products = await Product.aggregate([
+      {
+        $facet: {
+          latest: [
+            { $sort: { createdAt: -1 } },
+            {
+              $limit: 3,
+            },
+          ],
+          trending: [{ $sort: { reviewers: -1 } }, { $limit: 3 }],
+          popular: [{ $sort: { rating: -1 } }, { $limit: 3 }],
+          bestSelling: [{ $sort: { rating: -1 } }, { $limit: 3 }],
+        },
+      },
+    ]);
+    res.status(200).json({
+      status: " success",
+      results: Math.max(
+        products?.[0]?.latest?.length,
+        products?.[0]?.trending?.length,
+        products?.[0]?.popular?.length,
+        products?.[0]?.bestSelling?.length
+      ),
+      content: products?.[0],
     });
   }
 );

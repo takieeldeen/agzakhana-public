@@ -3,10 +3,8 @@ import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
 import Comment from "../models/commentModel";
 import { AppError } from "../utils/errors";
 import mongoose from "mongoose";
-import { t } from "i18next";
 import { decode } from "jsonwebtoken";
-import User from "../models/usersModel";
-
+import * as commentServices from "../services/commentServices";
 export const getAllComments = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token } = req?.cookies;
@@ -45,6 +43,9 @@ export const createComment = catchAsync(
     if (previousComments)
       return next(new AppError(500, "User already reviewed this product"));
     const createdComment = await Comment.create(newComment);
+    if (!!productId) {
+      await commentServices.recalculateRating(productId);
+    }
     res.status(201).json({
       status: "success",
       content: createdComment,
@@ -59,6 +60,11 @@ export const deleteComment = catchAsync(
       _id: commentId,
       userId: req?.user?._id,
     });
+    if (!!comment?.productId) {
+      await commentServices.recalculateRating(
+        comment.productId as mongoose.Types.ObjectId
+      );
+    }
     if (!comment)
       return next(new AppError(500, "No Comment found for this user."));
     res.status(204).json({
@@ -83,6 +89,11 @@ export const updateComment = catchAsync(
         new: true,
       }
     );
+    if (!!updatedComment?.productId) {
+      await commentServices.recalculateRating(
+        updatedComment.productId as mongoose.Types.ObjectId
+      );
+    }
     if (!updatedComment)
       return next(new AppError(500, "No Comment found with that ID"));
 

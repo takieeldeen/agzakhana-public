@@ -6,6 +6,7 @@ export type ProductType = {
   nameEn: string;
   category: LocalizaedObject;
   rating: number;
+  reviewers: number;
   manufacturer: string;
   price: number;
   beforeDiscount: number;

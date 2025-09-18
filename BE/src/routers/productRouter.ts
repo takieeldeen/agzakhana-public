@@ -4,6 +4,7 @@ import {
   getAllProducts,
   getPopularProducts,
   getProductDetails,
+  getProductsHighlights,
   getSimilarProducts,
 } from "../controllers/productsController";
 import commentRouter from "./commentRouter";
@@ -11,6 +12,7 @@ import commentRouter from "./commentRouter";
 const productsRouter = Router();
 
 productsRouter.get("/popular-products", getPopularProducts);
+productsRouter.get("/highlights", getProductsHighlights);
 
 productsRouter.route("/").get(getAllProducts);
 productsRouter.route("/:productId").get(getProductDetails);
