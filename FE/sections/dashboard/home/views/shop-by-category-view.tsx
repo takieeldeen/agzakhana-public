@@ -1,4 +1,3 @@
-import { CATEGORIES_LIST } from "@/_mock/_categories";
 import {
   Carousel,
   CarouselContent,
@@ -10,10 +9,18 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import CategoryCard from "../category-card";
+import { Category } from "@/types/categories";
 
-export default async function ShopByCategoryView() {
+export default async function ShopByCategoryView({
+  categories,
+  results,
+}: {
+  categories: Category[];
+  results: number;
+}) {
   const locale = await getLocale();
   const t = await getTranslations();
+  if (!results) return null;
   return (
     <div className="p-8 px-4">
       <Carousel className="w-full">
@@ -40,7 +47,7 @@ export default async function ShopByCategoryView() {
         <Separator className="mb-4" />
         <ul className="list-none">
           <CarouselContent className="gap-8 px-8">
-            {CATEGORIES_LIST?.content?.map((category) => (
+            {categories?.map((category) => (
               <CategoryCard category={category} key={category?._id} />
             ))}
           </CarouselContent>

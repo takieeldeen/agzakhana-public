@@ -5,6 +5,6 @@ export const metadata: Metadata = {
   description: "Find Any Medicine you're looking for.",
 };
 
-export default async function Home() {
+export default function Home() {
   return null;
 }

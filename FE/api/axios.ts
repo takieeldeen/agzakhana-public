@@ -23,11 +23,13 @@ export const endpoints = {
     details: (productId: string) => `/v1/products/${productId}`,
     manufacturers: "/v1/products/filters/manufacturer",
     similarProducts: (productId: string) => `/v1/products/${productId}/similar`,
+    popularProducts: "/v1/products/popular-products",
+    highlights: "/v1/products/highlights",
   },
   deals: {
     list: "/v1/deals",
     details: (dealId: string) => `/v1/deals/${dealId}`,
-
+    today: "/v1/deals/today",
     manufacturers: "/v1/deals/filters/manufacturer",
     categories: "/v1/deals/filters/category",
   },

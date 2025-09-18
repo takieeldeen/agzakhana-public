@@ -8,20 +8,30 @@ import { useGetCartItems, useMutateCart } from "@/api/cart";
 import { ComponentProps, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import CircularProgress from "./circular-progress";
+import { useAuth } from "@/hooks/useAuth";
+import { Offer } from "@/types/offers";
 
 type Props = {
-  product: Medicine;
+  product: Medicine | Offer;
+  isProduct?: boolean;
 } & ComponentProps<"button">;
-export default function AddToCartButton({ product, ...other }: Props) {
+export default function AddToCartButton({
+  product,
+  isProduct = true,
+  ...other
+}: Props) {
   // Custom Hooks //////////////////////////////////////////
   const t = useTranslations();
+  const { isAuthenticated } = useAuth();
   // Data Fetching Hooks //////////////////////////////////
   const { addToCart, removeFromCart } = useMutateCart();
   const { isPending: isAdding } = addToCart;
   const { isPending: isRemoving } = removeFromCart;
   const { cart } = useGetCartItems(false);
   // Helper Constants //////////////////////////////////
-  const CART_ITEM = cart?.find((item) => item?.product?._id === product?._id);
+  const CART_ITEM = isProduct
+    ? cart?.find((item) => item?.product?._id === product?._id)
+    : cart?.find((item) => item?.deal?._id === product?._id);
   const ALREADY_IN_CART = !!CART_ITEM;
   const IS_LOADING = isAdding || isRemoving;
   // Callbacks  ////////////////////////////////////////
@@ -32,11 +42,23 @@ export default function AddToCartButton({ product, ...other }: Props) {
       if (ALREADY_IN_CART) {
         removeFromCart.mutate(CART_ITEM?._id);
       } else {
-        addToCart.mutate({ productId: product?._id, qty: 1 });
+        addToCart.mutate({
+          productId: isProduct ? product?._id : undefined,
+          offerId: isProduct ? undefined : product?._id,
+          qty: 1,
+        });
       }
     },
-    [ALREADY_IN_CART, CART_ITEM?._id, addToCart, product?._id, removeFromCart]
+    [
+      ALREADY_IN_CART,
+      CART_ITEM?._id,
+      addToCart,
+      isProduct,
+      product?._id,
+      removeFromCart,
+    ]
   );
+  if (!isAuthenticated) return null;
   return (
     <Button
       {...other}
@@ -45,6 +67,7 @@ export default function AddToCartButton({ product, ...other }: Props) {
         "bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200 ",
         ALREADY_IN_CART &&
           "bg-agzakhana-primary hover:bg-agzakhana-primary text-green-100",
+
         other?.className
       )}
       disabled={IS_LOADING}

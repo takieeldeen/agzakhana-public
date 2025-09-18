@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import axios, { endpoints } from "./axios";
 import { useQuery } from "@tanstack/react-query";
-import { getFetcher } from "./api";
+import { APIResponse, getFetcher } from "./api";
 import { useMemo } from "react";
 import { ManufacturerListItem } from "@/types/medcines";
 import { Category } from "@/types/categories";
@@ -72,11 +72,11 @@ export function useGetAllDealsCategories() {
   const URL = endpoints.deals.manufacturers;
   const { data, refetch, isLoading, error } = useQuery({
     queryKey: ["filters", "manufacturer"],
-    queryFn: getFetcher(URL),
+    queryFn: getFetcher<APIResponse<ManufacturerListItem[]>>(URL),
   });
   const memoizedValue = useMemo(
     () => ({
-      manufacturers: (data?.content as ManufacturerListItem[]) ?? [],
+      manufacturers: data?.content ?? [],
       manufacturersLoading: isLoading,
       refetch,
       manufacturersError: error,
@@ -90,11 +90,11 @@ export function useGetDealsCategories() {
   const URL = endpoints.deals.categories;
   const { data, isLoading, error, isFetching, refetch } = useQuery({
     queryKey: ["categories"],
-    queryFn: getFetcher(URL),
+    queryFn: getFetcher<APIResponse<Category[]>>(URL),
   });
   const memoizedValues = useMemo(
     () => ({
-      categories: (data?.content as Category[]) ?? [],
+      categories: data?.content ?? [],
       categoriesLoading: isLoading,
       error,
       categoriesValidating: isFetching,
@@ -103,4 +103,20 @@ export function useGetDealsCategories() {
     [data?.content, error, isFetching, isLoading, refetch]
   );
   return memoizedValues;
+}
+
+export async function getLatestDeals() {
+  try {
+    const URL = endpoints.deals.today;
+    const res = await axios.get(URL);
+    const { content, results, status } = res?.data;
+    return { content, results, status, error: null };
+  } catch (err: any) {
+    return {
+      content: [],
+      results: 0,
+      status: "fail",
+      error: err?.response?.data,
+    };
+  }
 }

@@ -1,5 +1,5 @@
+import AddToCartButton from "@/components/add-to-cart";
 import { OfferTimer } from "@/components/discount-counter";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Offer } from "@/types/offers";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -26,28 +26,29 @@ export default async function OffersCard({ offer }: { offer: Offer }) {
         </div>
       </Link>
       <div className="shadow-md w-[90%] rounded-2xl -translate-y-9 z-10 relative bg-gray-100 p-2">
-        <Link href={`/deals/${offer?._id}`} className="w-full bg-green-500">
-          <div className="p-2 mb-auto">
-            <p className="text-text-primary  font-bold leading-none mb-2">
-              {offer?.[locale === "ar" ? "nameAr" : "nameEn"]}
-            </p>
-            <div className="flex flex-row gap-1  items-center mb-2">
-              <Icon
-                icon="material-symbols:star-rounded"
-                className="text-green-500 "
-              />
-              <span className="text-text-secondary leading-0">
-                {offer?.rating}
-              </span>
-            </div>
-            <div className="flex flex-row gap-0.5 text-sm">
-              {t("HOME_PAGE.BY")}
-              <Link href="/" className="text-agzakhana-primary font-semibold">
-                {offer?.manufacturer}
-              </Link>
-            </div>
+        <div className="p-2 mb-auto">
+          <Link
+            href={`/deals/${offer?._id}`}
+            className="text-text-primary  font-bold leading-none mb-2"
+          >
+            {offer?.[locale === "ar" ? "nameAr" : "nameEn"]}
+          </Link>
+          <div className="flex flex-row gap-1  items-center mb-2">
+            <Icon
+              icon="material-symbols:star-rounded"
+              className="text-green-500 "
+            />
+            <span className="text-text-secondary leading-0">
+              {offer?.rating}
+            </span>
           </div>
-        </Link>
+          <div className="flex flex-row gap-0.5 text-sm">
+            {t("HOME_PAGE.BY")}
+            <Link href="/" className="text-agzakhana-primary font-semibold">
+              {offer?.manufacturer}
+            </Link>
+          </div>
+        </div>
 
         <div className="p-2 text-lg text-agzakhana-primary flex flex-row gap-2 items-center">
           <strong className="leading-none text-nowrap text-2xl">
@@ -56,10 +57,7 @@ export default async function OffersCard({ offer }: { offer: Offer }) {
           <span className="text-xs font-semibold leading-none text-text-secondary line-through mr-auto rtl:mr-0 rtl:ml-auto text-nowrap">
             {t("COMMON.EGP", { price: offer?.beforeDiscount ?? 0 })}
           </span>
-          <Button className="bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200 ">
-            <Icon icon="mynaui:cart" />
-            {t("HOME_PAGE.ADD")}
-          </Button>
+          <AddToCartButton product={offer} isProduct={false} />
         </div>
       </div>
     </li>

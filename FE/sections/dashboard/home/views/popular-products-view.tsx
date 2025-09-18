@@ -1,4 +1,3 @@
-import { POPULAR_ITEM_LIST } from "@/_mock/_popular_items";
 import ProductCard from "@/components/product-card";
 import {
   Carousel,
@@ -7,13 +6,22 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Separator } from "@/components/ui/separator";
+import { Medicine } from "@/types/medcines";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-export default async function PopularProductsView() {
+type Props = {
+  products: Medicine[];
+  results: number;
+};
+export default async function PopularProductsView({
+  products,
+  results,
+}: Props) {
   const t = await getTranslations();
   const locale = await getLocale();
+  if (results === 0) return null;
   return (
     <div className="py-8">
       <Carousel className="w-full">
@@ -39,8 +47,8 @@ export default async function PopularProductsView() {
         </div>
         <Separator className="mb-4" />
         <ul className="list-none">
-          <CarouselContent className="gap-8 px-8">
-            {POPULAR_ITEM_LIST?.content?.map((product) => (
+          <CarouselContent className="gap-8 pl-5">
+            {products?.map((product) => (
               <ProductCard key={product?._id} medicine={product} />
             ))}
           </CarouselContent>

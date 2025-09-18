@@ -1,5 +1,8 @@
+import { getLatestDeals } from "@/api/deals";
 import LatestDealsView from "@/sections/dashboard/home/views/latest-deals-view";
 
-export default function LatestDeals() {
-  return <LatestDealsView />;
+export default async function LatestDeals() {
+  const res = await getLatestDeals();
+  const { content: deals, results } = res;
+  return <LatestDealsView deals={deals} results={results} />;
 }

@@ -1,5 +1,7 @@
+import { getPopularProducts } from "@/api/products";
 import PopularProductsView from "@/sections/dashboard/home/views/popular-products-view";
 
-export default function PopularProductsSection() {
-  return <PopularProductsView />;
+export default async function PopularProductsSection() {
+  const { content: products, results } = await getPopularProducts();
+  return <PopularProductsView products={products} results={results} />;
 }

@@ -1,9 +1,19 @@
-import { POPULAR_ITEM_LIST } from "@/_mock/_popular_items";
 import { getTranslations } from "next-intl/server";
 import ProductListItem from "../product-list-item";
+import { Medicine } from "@/types/medcines";
 
-export default async function ShopByView() {
+type Props = {
+  products: {
+    latest: Medicine[];
+    trending: Medicine[];
+    popular: Medicine[];
+    bestSelling: Medicine[];
+  };
+  results: number;
+};
+export default async function ShopByView({ products, results }: Props) {
   const t = await getTranslations();
+  if (!results) return null;
   return (
     <div className="flex flex-row p-8 px-4 gap-4 ">
       <div className="w-[calc(25%-1rem)]">
@@ -12,7 +22,7 @@ export default async function ShopByView() {
         </h6>
         <div className="h-[2px] w-24 bg-green-500 -translate-y-0.5" />
         <ul className="flex flex-col gap-3 py-4">
-          {POPULAR_ITEM_LIST?.content?.slice(0, 3)?.map((productData) => (
+          {products?.bestSelling?.map((productData) => (
             <ProductListItem product={productData} key={productData?._id} />
           ))}
         </ul>
@@ -23,7 +33,7 @@ export default async function ShopByView() {
         </h6>
         <div className="h-[2px] w-24 bg-green-500 -translate-y-0.5" />
         <ul className="flex flex-col gap-3 py-4">
-          {POPULAR_ITEM_LIST?.content?.slice(3, 6)?.map((productData) => (
+          {products?.trending?.map((productData) => (
             <ProductListItem product={productData} key={productData?._id} />
           ))}
         </ul>
@@ -34,7 +44,7 @@ export default async function ShopByView() {
         </h6>
         <div className="h-[2px] w-24 bg-green-500 -translate-y-0.5" />
         <ul className="flex flex-col gap-3 py-4">
-          {POPULAR_ITEM_LIST?.content?.slice(6, 9)?.map((productData) => (
+          {products?.latest?.map((productData) => (
             <ProductListItem product={productData} key={productData?._id} />
           ))}
         </ul>
@@ -45,7 +55,7 @@ export default async function ShopByView() {
         </h6>
         <div className="h-[2px] w-24 bg-green-500 -translate-y-0.5" />
         <ul className="flex flex-col gap-3 py-4">
-          {POPULAR_ITEM_LIST?.content?.slice(3, 6)?.map((productData) => (
+          {products?.trending?.map((productData) => (
             <ProductListItem product={productData} key={productData?._id} />
           ))}
         </ul>

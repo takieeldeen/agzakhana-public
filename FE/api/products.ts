@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import axios, { endpoints } from "./axios";
 import { useQuery } from "@tanstack/react-query";
-import { getFetcher } from "./api";
+import { APIResponse, getFetcher } from "./api";
 import { useMemo } from "react";
 import { ManufacturerListItem, Medicine } from "@/types/medcines";
 
@@ -52,7 +52,7 @@ export function useGetAllManufacturers() {
   const URL = endpoints.products.manufacturers;
   const { data, refetch, isLoading, error } = useQuery({
     queryKey: ["filters", "manufacturer"],
-    queryFn: getFetcher(URL),
+    queryFn: getFetcher<APIResponse<ManufacturerListItem[]>>(URL),
   });
   const memoizedValue = useMemo(
     () => ({
@@ -76,5 +76,37 @@ export async function getSimilarProducts(productId: string) {
     return { products: content as Medicine[], status, error: null, results };
   } catch (err) {
     return { products: [], status: "fail", error: err, results: 0 };
+  }
+}
+
+export async function getPopularProducts() {
+  try {
+    const URL = endpoints.products.popularProducts;
+    const res = await axios.get(URL);
+    const { content, results, status } = res?.data;
+    return { content, results, status, error: null };
+  } catch (err: any) {
+    return {
+      content: [],
+      results: 0,
+      status: "fail",
+      error: err?.response?.data,
+    };
+  }
+}
+
+export async function getProductHighlights() {
+  try {
+    const URL = endpoints.products.highlights;
+    const res = await axios.get(URL);
+    const { content, results, status } = res?.data;
+    return { content, results, status, error: null };
+  } catch (err: any) {
+    return {
+      content: [],
+      results: 0,
+      status: "fail",
+      error: err?.response?.data,
+    };
   }
 }

@@ -1,4 +1,3 @@
-import { OFFERS_LIST } from "@/_mock/_offers";
 import {
   Carousel,
   CarouselContent,
@@ -10,10 +9,18 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import OffersCard from "../offers-card";
+import { Offer } from "@/types/offers";
 
-export default async function LatestDealsView() {
+export default async function LatestDealsView({
+  deals,
+  results,
+}: {
+  deals: Offer[];
+  results: number;
+}) {
   const locale = await getLocale();
   const t = await getTranslations();
+  if (!results) return null;
   return (
     <div className="py-8">
       <Carousel className="w-full">
@@ -40,7 +47,7 @@ export default async function LatestDealsView() {
         <Separator className="mb-4" />
         <ul className="list-none">
           <CarouselContent className="gap-8 px-8">
-            {OFFERS_LIST?.content?.map((offerData) => (
+            {deals.map((offerData) => (
               <OffersCard key={offerData?._id} offer={offerData} />
             ))}
           </CarouselContent>

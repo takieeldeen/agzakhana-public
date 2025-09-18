@@ -15,10 +15,7 @@ export default async function ProductCard({
   const t = await getTranslations();
   const locale = await getLocale();
   return (
-    <li
-      className="border-2 border-[#ECECEC] w-[250px] h-[401px] rounded-2xl overflow-hidden relative min-w-[20rem]"
-      dir="rtl"
-    >
+    <li className="border-2 border-[#ECECEC] w-[250px] h-[401px] rounded-2xl overflow-hidden relative min-w-[20rem]">
       <Link
         href={`/products/${medicine?._id}`}
         className="h-full flex flex-col gap-1"
@@ -47,7 +44,7 @@ export default async function ProductCard({
           <p className="text-text-primary text-lg font-bold leading-none mb-2">
             {medicine?.[locale === "ar" ? "nameAr" : "nameEn"]}
           </p>
-          <div className="flex flex-row gap-0.5">
+          <div className="flex flex-row   gap-0.5">
             {t("HOME_PAGE.BY")}
             <span className="text-agzakhana-primary font-semibold bg-transparent p-0">
               {medicine?.manufacturer}

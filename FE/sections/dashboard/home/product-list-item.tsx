@@ -1,9 +1,10 @@
+import AddToCartButton from "@/components/add-to-cart";
+import FallbackImage from "@/components/image";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Medicine } from "@/types/medcines";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getLocale, getTranslations } from "next-intl/server";
-import Image from "next/image";
 import Link from "next/link";
 
 export default async function ProductListItem({
@@ -16,7 +17,7 @@ export default async function ProductListItem({
   return (
     <li className="flex flex-row items-start gap-2 w-full ">
       <div className="h-24 w-24 aspect-square bg-gray-200 rounded-md flex items-center justify-center">
-        <Image
+        <FallbackImage
           src={product?.imageUrl}
           height={100}
           width={50}
@@ -52,10 +53,7 @@ export default async function ProductListItem({
           {/* <span className="text-xs font-semibold leading-none text-text-secondary line-through mr-auto rtl:mr-0 rtl:ml-auto text-nowrap">
             {t("COMMON.EGP", { price: product?.beforeDiscount ?? 0 })}
           </span> */}
-          <Button className="bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200 ">
-            <Icon icon="mynaui:cart" />
-            {t("HOME_PAGE.ADD")}
-          </Button>
+          <AddToCartButton product={product} />
         </div>
       </div>
     </li>

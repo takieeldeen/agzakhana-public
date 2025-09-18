@@ -29,10 +29,10 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
   params,
-  popularProducts,
   newsLetter,
-  latestDeals,
+  popularProducts,
   shopByCategory,
+  latestDeals,
   shopBy,
 }: Readonly<{
   children: React.ReactNode;
@@ -67,11 +67,11 @@ export default async function RootLayout({
                   {/* <FiltersToolbar /> */}
                   <div className="flex flex-col w-full">
                     {newsLetter}
+                    {children}
                     {popularProducts}
                     {latestDeals}
                     {shopByCategory}
                     {shopBy}
-                    {children}
                     {newsLetter}
                   </div>
                 </div>
