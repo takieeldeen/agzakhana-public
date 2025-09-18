@@ -152,3 +152,24 @@ export const updateCartItem = catchAsync(
     });
   }
 );
+
+export const getCartDetails = catchAsync(
+  async (req: ProtectedRequest, res: Response) => {
+    const cart = await Cart.findOne({ userId: req?.user?._id }).populate([
+      {
+        path: "cart.product",
+        select: PRODUCT_VISIBLE_FIELDS + " " + "descriptionAr descriptionEn",
+      },
+      {
+        path: "cart.deal",
+        select: PRODUCT_VISIBLE_FIELDS + " " + "descriptionAr descriptionEn",
+      },
+    ]);
+    console.log(cart);
+    res.status(200).json({
+      status: "success",
+      results: cart?.cart?.length,
+      content: cart,
+    });
+  }
+);

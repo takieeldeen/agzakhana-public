@@ -1,15 +1,17 @@
-import { CART_DUMMY_DATA } from "@/_mock/_cart";
+"use client";
+import { useGetCartDetails, useMutateCart } from "@/api/cart";
 import FallbackImage from "@/components/image";
-import { Button } from "@/components/ui/button";
+import { Button, MotionButton } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Cart } from "@/types/cart";
+import { CartListItem } from "@/types/cart";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { getLocale, getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 
-export default async function CartListView() {
-  const t = await getTranslations();
-  const locale = await getLocale();
+export default function CartListView() {
+  const t = useTranslations();
+  const { cart } = useGetCartDetails();
   return (
     <div className="flex flex-row gap-16 py-8">
       <div className="flex flex-col gap-2  w-4/6">
@@ -18,93 +20,18 @@ export default async function CartListView() {
           <p className="text-gray-500">
             (
             {t("CART.PRODUCT", {
-              count: 12,
+              count: cart?.length ?? 0,
             })}
             )
           </p>
         </div>
         <ul className="flex flex-col gap-4">
-          {CART_DUMMY_DATA?.map((cartItem, i) => (
-            <li
-              key={cartItem?.id}
-              className={cn(
-                "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-2 drop-shadow-sm",
-                i !== CART_DUMMY_DATA?.length - 1
-                  ? "border-b-[1px] border-gray-200"
-                  : ""
-              )}
-            >
-              <div className="flex flex-row gap-2 w-1/3 max-w-1/3">
-                {/* <Button className="bg-transparent text-gray-600 text-3xl shadow-none hover:-translate-y-1 border-2 border-gray-600 px-0! py-0! rounded-full w-8 h-8">
-                  <Icon
-                    icon="material-symbols:close-rounded"
-                    className="w-4! h-4!"
-                  />
-                </Button> */}
-                <div className="w-32 h-32 shrink-0 flex items-center justify-center rounded-md relative">
-                  <FallbackImage
-                    src={cartItem?.imageUrl}
-                    alt={cartItem?.nameAr}
-                    // height={70}
-                    // width={70}
-                    fill
-                    className="object-contain p-2"
-                  />
-                </div>
-                <div className="flex flex-col ">
-                  <p className="font-semibold text-base">
-                    {locale === "ar"
-                      ? cartItem?.nameAr ?? "--"
-                      : cartItem?.nameEn ?? "--"}
-                  </p>
-                  <p className="font-semibold text-base text-gray-500">
-                    {locale === "ar"
-                      ? cartItem?.nameAr ?? "--"
-                      : cartItem?.nameEn ?? "--"}
-                  </p>
-                  <p className="font-bold text-text-secondary">
-                    {cartItem.concentration}
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-row items-center gap-4 w-1/3 justify-center">
-                <Button className="w-8 h-8 rounded-full bg-transparent border-2 border-text-primary text-primary text-lg hover:bg-text-primary hover:text-white">
-                  <Icon icon="mynaui:minus-solid" />
-                </Button>
-                <span className="font-bold text-xl">1</span>
-                <Button className="w-8 h-8 rounded-full bg-transparent border-2 border-text-primary text-primary text-lg hover:bg-text-primary hover:text-white">
-                  <Icon icon="mynaui:plus-solid" />
-                </Button>
-              </div>
-              <div className="flex flex-col items-end w-1/3">
-                <strong className="text-xl">
-                  {new Intl.NumberFormat("en-us", {
-                    maximumFractionDigits: 2,
-                    minimumFractionDigits: 2,
-                  }).format(1200)}
-                  <span className="font-normal text-base">
-                    {t("COMMON.EGP_CURRENCY")}
-                  </span>
-                </strong>
-                <div className="flex flex-row gap-2 text-sm">
-                  <span className="line-through text-text-secondary">
-                    {new Intl.NumberFormat("en-us", {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    }).format(1560)}
-                  </span>
-                  <span className="font-bold text-agzakhana-primary">
-                    {t("PRODUCTS_LISTING_PAGE.DISCOUNT", {
-                      discount: "12%",
-                    })}
-                  </span>
-                </div>
-              </div>
-            </li>
+          {cart?.map((cartItem) => (
+            <CartItem cartItem={cartItem} key={cartItem?._id} />
           ))}
         </ul>
       </div>
-      <aside className="w-2/6 flex flex-col gap-3">
+      <aside className="w-2/6 flex flex-col gap-3 sticky self-start top-8">
         <h4 className="font-bold text-2xl">{t("CART.PAYMENT_SUMMARY")}</h4>
         <Separator />
         <ul>
@@ -177,62 +104,107 @@ export default async function CartListView() {
 }
 
 type CartItemProps = {
-  cartItem: Cart;
+  cartItem: CartListItem;
 };
 function CartItem({ cartItem }: CartItemProps) {
+  const cartItemData = cartItem?.product ? cartItem?.product : cartItem?.deal;
+  const { locale } = useParams();
+  const t = useTranslations();
+  const { updateCartItem } = useMutateCart();
+
   return (
     <li
-      key={cartItem?._id}
+      key={cartItemData?._id}
       className={cn(
-        "flex flex-row gap-2 items-center py-5",
-        i !== CART_DUMMY_DATA?.length - 1
-          ? "border-b-[1px] border-gray-200"
-          : ""
+        "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-4 drop-shadow-sm border-b-[1px] border-gray-200 justify-between "
       )}
     >
-      <div className="flex flex-row gap-2 items-center w-1/3 max-w-1/3">
-        <Button className="bg-transparent text-gray-600 text-3xl shadow-none hover:-translate-y-1 border-2 border-gray-600 px-0! py-0! rounded-full w-8 h-8">
-          <Icon icon="material-symbols:close-rounded" className="w-4! h-4!" />
-        </Button>
-        <div className="w-32 h-32 flex items-center justify-center border-[1px] border-gray-300 rounded-md relative">
+      {/* LEFT SECTION */}
+      <div className="flex flex-row gap-2">
+        <div className="w-32 h-32 shrink-0 flex items-center justify-center rounded-md relative">
           <FallbackImage
-            src={cartItem?.imageUrl}
-            alt={cartItem?.nameAr}
-            height={70}
-            width={70}
+            src={cartItemData?.imageUrl ?? ""}
+            alt={cartItemData?.[locale === "ar" ? "nameAr" : "nameEn"] ?? ""}
+            className="object-contain p-2"
+            fill
           />
         </div>
-        <div className="flex flex-col ">
-          <p className="font-bold text-lg">
+
+        <div className="flex flex-col">
+          <p className="font-semibold text-base">
             {locale === "ar"
-              ? cartItem?.nameAr ?? "--"
-              : cartItem?.nameEn ?? "--"}
+              ? cartItemData?.nameAr ?? "--"
+              : cartItemData?.nameEn ?? "--"}
           </p>
-          <p className="font-bold text-text-secondary">
-            {cartItem.concentration}
+          <p className="font-semibold text-base text-gray-500 line-clamp-2 mb-2">
+            {locale === "ar"
+              ? cartItemData?.descriptionAr ?? "--"
+              : cartItemData?.descriptionEn ?? "--"}
           </p>
+          <Button
+            className="flex flex-row gap-2 items-center w-18 drop-shadow-none shadow-none"
+            variant="outline"
+          >
+            <Icon icon="mynaui:trash" className="w-5! h-5!" />
+            {t("HOME_PAGE.REMOVE")}
+          </Button>
         </div>
       </div>
-      <div className="flex flex-row items-center gap-4 w-1/3 justify-center">
-        <Button className="w-8 h-8 rounded-full bg-transparent border-2 border-text-primary text-primary text-lg hover:bg-text-primary hover:text-white">
-          <Icon icon="mynaui:minus-solid" />
-        </Button>
-        <span className="font-bold text-xl">1</span>
-        <Button className="w-8 h-8 rounded-full bg-transparent border-2 border-text-primary text-primary text-lg hover:bg-text-primary hover:text-white">
-          <Icon icon="mynaui:plus-solid" />
-        </Button>
-      </div>
-      <div className="flex flex-col items-end w-1/3">
-        <strong className="text-xl">
+      <div className="flex flex-col items-end">
+        <strong className="text-xl whitespace-nowrap">
           {t("COMMON.EGP", {
-            price: cartItem?.price,
+            price: cartItemData?.price ?? 0,
           })}
         </strong>
-        <strong className="text-lg line-through text-text-secondary">
-          {t("COMMON.EGP", {
-            price: cartItem?.beforeDiscount,
-          })}
-        </strong>
+        <div className="flex flex-row gap-2 text-sm mb-2">
+          <span className="line-through text-text-secondary whitespace-nowrap">
+            {t("COMMON.EGP", {
+              price: cartItemData?.beforeDiscount ?? 0,
+            })}
+          </span>
+          {cartItemData?.price && cartItemData?.beforeDiscount && (
+            <span className="font-bold text-agzakhana-primary whitespace-nowrap">
+              {t("PRODUCTS_LISTING_PAGE.DISCOUNT", {
+                discount: `${Math.round(
+                  (1 - cartItemData.price / cartItemData.beforeDiscount) * 100
+                )}%`,
+              })}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <MotionButton
+            whileTap={{ scale: 2 }}
+            transition={{ duration: 0.15, ease: "easeInOut" }}
+            className="rounded-full bg-agzakhana-primary aspect-square p-0! h-7 w-7"
+            onClick={() => {
+              updateCartItem.mutate({
+                cartItemId: cartItem?._id,
+                payload: {
+                  qty: (cartItemData?.qty ?? 0) - 1,
+                },
+              });
+            }}
+          >
+            <Icon icon="ic:round-minus" />
+          </MotionButton>
+          <span>1</span>
+          <MotionButton
+            whileTap={{ scale: 2 }}
+            transition={{ duration: 0.15, ease: "easeInOut" }}
+            className="rounded-full bg-agzakhana-primary aspect-square p-0! h-7 w-7"
+            onClick={() => {
+              updateCartItem.mutate({
+                cartItemId: cartItem?._id,
+                payload: {
+                  qty: (cartItemData?.qty ?? 0) + 1,
+                },
+              });
+            }}
+          >
+            <Icon icon="ic:round-plus" />
+          </MotionButton>
+        </div>
       </div>
     </li>
   );

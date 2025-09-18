@@ -89,3 +89,27 @@ export function useMutateCart() {
   });
   return { addToCart, removeFromCart, clearCart, updateCartItem };
 }
+
+export function useGetCartDetails() {
+  const URL = endpoints.cart.details;
+  const { data, isFetching, isLoading, error, refetch } = useQuery({
+    queryKey: ["cart"],
+    queryFn: getFetcher<APIResponse<{ cart: CartList }>>(URL),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    staleTime: Infinity,
+  });
+
+  const memoizedValue = useMemo(
+    () => ({
+      cart: data?.content?.cart,
+      cartLoading: isLoading,
+      cartValidating: isFetching,
+      cartError: error,
+      mutate: refetch,
+    }),
+    [data, error, isFetching, isLoading, refetch]
+  );
+  return memoizedValue;
+}

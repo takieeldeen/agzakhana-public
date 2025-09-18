@@ -3,12 +3,15 @@ import {
   addToCart,
   clearCart,
   getCart,
+  getCartDetails,
   removeFromCart,
   updateCartItem,
 } from "../controllers/cartController";
 import { authenticateUser } from "../utils/auth";
 
 const cartRouter = Router();
+
+cartRouter.route("/cart-details").get(authenticateUser, getCartDetails);
 
 cartRouter
   .route("/")
