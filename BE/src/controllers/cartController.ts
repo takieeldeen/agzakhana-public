@@ -12,7 +12,7 @@ export const removeFromCart = catchAsync(
     const userId = req?.user?._id;
     const newCart = await Cart.findOneAndUpdate(
       { userId },
-      { $pull: { cart: { _id: cartItemId } } },
+      { $pull: { cart: { _id: new mongoose.Types.ObjectId(cartItemId) } } },
       { new: true }
     ).populate([
       {
@@ -122,7 +122,6 @@ export const addToCart = catchAsync(
 // Update /////////////////////////////////////////////////
 export const updateCartItem = catchAsync(
   async (req: ProtectedRequest, res: Response) => {
-    console.log("triggered");
     const userId = req?.user?._id;
     const { cartItemId } = req?.params;
     const { qty } = req?.body;
