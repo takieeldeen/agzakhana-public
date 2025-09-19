@@ -4,7 +4,7 @@ import Cart from "../models/cartModel";
 import mongoose from "mongoose";
 // Helper Constants ///////////////////////////////////////
 const PRODUCT_VISIBLE_FIELDS =
-  "_id nameAr nameEn concentration price beforeDiscount qty total availableQty imageUrl";
+  "_id nameAr nameEn concentration price beforeDiscount qty total availableQty imageUrl descriptionAr descriptionEn";
 // Delete /////////////////////////////////////////////////
 export const removeFromCart = catchAsync(
   async (req: ProtectedRequest, res: Response, next: NextFunction) => {
@@ -158,11 +158,11 @@ export const getCartDetails = catchAsync(
     const cart = await Cart.findOne({ userId: req?.user?._id }).populate([
       {
         path: "cart.product",
-        select: PRODUCT_VISIBLE_FIELDS + " " + "descriptionAr descriptionEn",
+        select: PRODUCT_VISIBLE_FIELDS,
       },
       {
         path: "cart.deal",
-        select: PRODUCT_VISIBLE_FIELDS + " " + "descriptionAr descriptionEn",
+        select: PRODUCT_VISIBLE_FIELDS,
       },
     ]);
     console.log(cart);
