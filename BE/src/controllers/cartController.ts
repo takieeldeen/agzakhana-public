@@ -2,12 +2,19 @@ import { NextFunction, Response } from "express";
 import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
 import Cart from "../models/cartModel";
 import mongoose from "mongoose";
+import { DealType } from "../types/deals";
 // Helper Constants ///////////////////////////////////////
 const PRODUCT_VISIBLE_FIELDS =
-  "_id nameAr nameEn concentration price beforeDiscount qty total availableQty imageUrl descriptionAr descriptionEn";
+  "_id nameAr nameEn concentration price beforeDiscount qty total availableQty imageUrl descriptionAr descriptionEn maxQty";
 // Delete /////////////////////////////////////////////////
 export const removeFromCart = catchAsync(
   async (req: ProtectedRequest, res: Response, next: NextFunction) => {
+    const test = new Promise((res) => {
+      setTimeout(() => {
+        res({ name: "test" });
+      }, 3000);
+    });
+    await test;
     const { cartItemId } = req.params;
     const userId = req?.user?._id;
     const newCart = await Cart.findOneAndUpdate(
@@ -164,11 +171,26 @@ export const getCartDetails = catchAsync(
         select: PRODUCT_VISIBLE_FIELDS,
       },
     ]);
-    console.log(cart);
+    const subtotal = cart?.cart?.reduce(
+      (acc, cur: any) =>
+        cur?.deal
+          ? acc + (cur?.deal?.price ?? 0) * (cur?.qty ?? 0)
+          : acc + (cur?.product?.price ?? 0) * (cur?.qty ?? 0),
+      0
+    );
+    const delivery = Math.min(100, 0.1 * (subtotal ?? 0));
+    const vat = 0.14 * (subtotal ?? 0);
+    const total = (subtotal ?? 0) + delivery + vat;
+    const orderSummary = {
+      subtotal,
+      delivery,
+      vat,
+      total,
+    };
     res.status(200).json({
       status: "success",
       results: cart?.cart?.length,
-      content: cart,
+      content: { cart: cart?.cart, orderSummary },
     });
   }
 );
