@@ -110,7 +110,7 @@ function CartItem({ cartItem }: CartItemProps) {
   const cartItemData = cartItem?.product ? cartItem?.product : cartItem?.deal;
   const { locale } = useParams();
   const t = useTranslations();
-  const { updateCartItem } = useMutateCart();
+  const { updateCartItem, removeFromCart } = useMutateCart();
 
   return (
     <li
@@ -142,8 +142,11 @@ function CartItem({ cartItem }: CartItemProps) {
               : cartItemData?.descriptionEn ?? "--"}
           </p>
           <Button
-            className="flex flex-row gap-2 items-center w-18 drop-shadow-none shadow-none"
+            className="flex flex-row gap-2 items-center w-fit drop-shadow-none shadow-none"
             variant="outline"
+            onClick={() => {
+              removeFromCart.mutate(cartItemData?._id ?? "");
+            }}
           >
             <Icon icon="mynaui:trash" className="w-5! h-5!" />
             {t("HOME_PAGE.REMOVE")}

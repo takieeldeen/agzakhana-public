@@ -57,7 +57,14 @@ export function useMutateCart() {
       const URL = endpoints.cart.single(cartItemId);
       return await axios.delete(URL);
     },
-    onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
+    onSuccess: (res) => {
+      queryClient.setQueryData(["cart"], res?.data);
+      queryClient.setQueryData(["cart-details"], (oldData: any) => {
+        const modifiedData = JSON.parse(JSON.stringify(oldData));
+        modifiedData.content.cart = res?.data;
+        return modifiedData;
+      });
+    },
   });
 
   // -------------------------
@@ -68,7 +75,7 @@ export function useMutateCart() {
       const URL = endpoints.cart.list;
       return await axios.delete(URL);
     },
-    mutationKey: ["cart"],
+    mutationKey: ["cart-details"],
     onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
   });
   // -------------------------
@@ -103,7 +110,7 @@ export function useGetCartDetails() {
 
   const memoizedValue = useMemo(
     () => ({
-      cart: data?.content?.cart,
+      cart: data?.content?.cart || [],
       cartLoading: isLoading,
       cartValidating: isFetching,
       cartError: error,
