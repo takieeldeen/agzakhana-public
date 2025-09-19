@@ -90,7 +90,7 @@ export function useMutateCart() {
       payload: any;
     }) => {
       const URL = endpoints.cart.single(cartItemId);
-      return await axios.patch(URL, { cartItemId, payload });
+      return await axios.patch(URL, { cartItemId, ...payload });
     },
     onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
   });

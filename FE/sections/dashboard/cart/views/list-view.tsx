@@ -8,10 +8,13 @@ import { CartListItem } from "@/types/cart";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import CircularProgress from "@/components/circular-progress";
 
 export default function CartListView() {
   const t = useTranslations();
   const { cart } = useGetCartDetails();
+  console.log(cart);
   return (
     <div className="flex flex-row gap-16 py-8">
       <div className="flex flex-col gap-2  w-4/6">
@@ -25,10 +28,12 @@ export default function CartListView() {
             )
           </p>
         </div>
-        <ul className="flex flex-col gap-4">
-          {cart?.map((cartItem) => (
-            <CartItem cartItem={cartItem} key={cartItem?._id} />
-          ))}
+        <ul className="flex flex-col gap-4 relative">
+          <AnimatePresence mode="popLayout">
+            {cart?.map((cartItem) => (
+              <CartItem cartItem={cartItem} key={cartItem?._id} />
+            ))}
+          </AnimatePresence>
         </ul>
       </div>
       <aside className="w-2/6 flex flex-col gap-3 sticky self-start top-8">
@@ -111,14 +116,21 @@ function CartItem({ cartItem }: CartItemProps) {
   const { locale } = useParams();
   const t = useTranslations();
   const { updateCartItem, removeFromCart } = useMutateCart();
-
+  const IS_LOADING = updateCartItem.isPending || removeFromCart.isPending;
   return (
-    <li
-      key={cartItemData?._id}
+    <motion.li
+      layout="position"
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      transition={{ type: "spring" }}
       className={cn(
-        "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-4 drop-shadow-sm border-b-[1px] border-gray-200 justify-between "
+        "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-4 drop-shadow-sm border-b-[1px] border-gray-200 justify-between h-44 w-full relative",
+        IS_LOADING && "brightness-90 pointer-events-none blur-xs"
       )}
     >
+      {IS_LOADING && (
+        <CircularProgress className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-24 h-24" />
+      )}
       {/* LEFT SECTION */}
       <div className="flex flex-row gap-2">
         <div className="w-32 h-32 shrink-0 flex items-center justify-center rounded-md relative">
@@ -145,7 +157,7 @@ function CartItem({ cartItem }: CartItemProps) {
             className="flex flex-row gap-2 items-center w-fit drop-shadow-none shadow-none"
             variant="outline"
             onClick={() => {
-              removeFromCart.mutate(cartItemData?._id ?? "");
+              removeFromCart.mutate(cartItem?._id ?? "");
             }}
           >
             <Icon icon="mynaui:trash" className="w-5! h-5!" />
@@ -180,19 +192,21 @@ function CartItem({ cartItem }: CartItemProps) {
             whileTap={{ scale: 2 }}
             transition={{ duration: 0.15, ease: "easeInOut" }}
             className="rounded-full bg-agzakhana-primary aspect-square p-0! h-7 w-7"
+            disabled={cartItem?.qty === 1}
             onClick={() => {
               updateCartItem.mutate({
                 cartItemId: cartItem?._id,
                 payload: {
-                  qty: (cartItemData?.qty ?? 0) - 1,
+                  qty: (cartItem?.qty ?? 0) - 1,
                 },
               });
             }}
           >
             <Icon icon="ic:round-minus" />
           </MotionButton>
-          <span>1</span>
+          <span>{cartItem?.qty}</span>
           <MotionButton
+            disabled={cartItem?.qty === cartItemData?.maxQty}
             whileTap={{ scale: 2 }}
             transition={{ duration: 0.15, ease: "easeInOut" }}
             className="rounded-full bg-agzakhana-primary aspect-square p-0! h-7 w-7"
@@ -200,7 +214,7 @@ function CartItem({ cartItem }: CartItemProps) {
               updateCartItem.mutate({
                 cartItemId: cartItem?._id,
                 payload: {
-                  qty: (cartItemData?.qty ?? 0) + 1,
+                  qty: (cartItem?.qty ?? 0) + 1,
                 },
               });
             }}
@@ -209,6 +223,6 @@ function CartItem({ cartItem }: CartItemProps) {
           </MotionButton>
         </div>
       </div>
-    </li>
+    </motion.li>
   );
 }
