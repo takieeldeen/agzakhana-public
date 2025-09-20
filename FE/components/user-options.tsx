@@ -4,13 +4,14 @@ import { useTranslations } from "next-intl";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { UserType } from "@/types/users";
 import { useCallback } from "react";
 import { logout } from "@/api/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { Skeleton } from "./ui/skeleton";
 
-export default function UserOptions({ user }: { user: UserType | undefined }) {
+export default function UserOptions() {
+  const { user, userLoading } = useAuth();
   const t = useTranslations();
   const router = useRouter();
   const { logout: logoutLocally } = useAuth();
@@ -18,7 +19,17 @@ export default function UserOptions({ user }: { user: UserType | undefined }) {
     await logout();
     logoutLocally();
     router.refresh();
-  }, []);
+  }, [logoutLocally, router]);
+  if (userLoading)
+    return (
+      <div className="flex flex-row items-center gap-2">
+        <Skeleton className="h-12 w-12 rounded-full aspect-square" />
+        <div className="flex flex-col items-start justify-start gap-2">
+          <Skeleton className="h-3 w-32 rounded-md" />
+          <Skeleton className="h-3 w-16 rounded-md" />
+        </div>
+      </div>
+    );
   if (!!user)
     return (
       <div className="flex flex-row items-center gap-2">
