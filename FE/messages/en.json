@@ -211,5 +211,9 @@
     "UNSUCCESSFUL_PROCESS": "Unsuccessful Process",
     "MESSAGE_SENT": "Your message has been sent successfully",
     "ERROR_SENDING_MESSAGE": "An error occurred while sending your message. Please try again later."
+  },
+  "PAYMENT_STATUS": {
+    "PAYMENT_SUCCESS": "Successful Payment Process",
+    "PAYMENT_FAILED": "Unsuccessful Payment Process"
   }
 }

@@ -208,5 +208,9 @@
     "UNSUCCESSFUL_PROCESS": "عملية غير ناجحة",
     "MESSAGE_SENT": "تم إرسال رسالتك بنجاح",
     "ERROR_SENDING_MESSAGE": "حدث خطأ أثناء إرسال رسالتك. يرجى المحاولة مرة أخرى لاحقًا."
+  },
+  "PAYMENT_STATUS": {
+    "PAYMENT_SUCCESS": "عملية دفع ناجحة",
+    "PAYMENT_FAILED": "عملية دفع فاشلة"
   }
 }

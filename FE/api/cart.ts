@@ -120,3 +120,10 @@ export function useGetCartDetails() {
   );
   return memoizedValue;
 }
+
+export async function checkout() {
+  const URL = endpoints.cart.checkout;
+  const res = await axios.post(URL);
+  window.location.href = res?.data?.url;
+  console.log(res);
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useGetCartDetails, useMutateCart } from "@/api/cart";
+import { checkout, useGetCartDetails, useMutateCart } from "@/api/cart";
 import FallbackImage from "@/components/image";
 import { Button, MotionButton } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -14,7 +14,6 @@ import CircularProgress from "@/components/circular-progress";
 export default function CartListView() {
   const t = useTranslations();
   const { cart } = useGetCartDetails();
-  console.log(cart);
   return (
     <div className="flex flex-row gap-16 py-8">
       <div className="flex flex-col gap-2  w-4/6">
@@ -95,7 +94,10 @@ export default function CartListView() {
           </li>
         </ul>
         <div className="flex flex-col gap-2">
-          <Button className="py-6 bg-agzakhana-primary text-lg">
+          <Button
+            className="py-6 bg-agzakhana-primary text-lg"
+            onClick={checkout}
+          >
             {t("CART.PROCEED_TO_CHECKOUT")}
           </Button>
           <Button className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none">
