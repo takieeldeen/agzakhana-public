@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { DealType } from "../types/deals";
 import { checkout } from "../services/paymentServices";
 // Helper Constants ///////////////////////////////////////
-const PRODUCT_VISIBLE_FIELDS =
+export const PRODUCT_VISIBLE_FIELDS =
   "_id nameAr nameEn concentration price beforeDiscount qty total availableQty imageUrl descriptionAr descriptionEn maxQty";
 // Delete /////////////////////////////////////////////////
 export const removeFromCart = catchAsync(

@@ -14,6 +14,8 @@ import categoryRouter from "./routers/categoriesRouter";
 import cartRouter from "./routers/cartRouter";
 import dealsRouter from "./routers/dealsRouter";
 import messageRouter from "./routers/messageRouter";
+import { paymentRouter } from "./routers/paymentRouter";
+import { stripeWebhookHandler } from "./controllers/paymentController";
 
 i18next
   .use(Backend) // optional, if loading translation files from disk
@@ -34,6 +36,14 @@ i18next
   .then(() => console.log("initiated i18n"));
 const app = express();
 app.use(morgan("dev"));
+
+// This endpoints required raw body for signature checking
+app.post(
+  "/api/v1/payments/webhook/stripe",
+  express.raw({ type: "application/json" }),
+  stripeWebhookHandler
+);
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -52,6 +62,7 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/deals", dealsRouter);
 app.use("/api/v1/messages", messageRouter);
+app.use("/api/v1/payments", paymentRouter);
 
 app.use(errorController);
 export default app;
