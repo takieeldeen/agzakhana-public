@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { endpoints } from "./axios";
 import { APIResponse, getFetcher } from "./api";
 import { useMemo } from "react";
-import { CartList } from "@/types/cart";
+import { CartList, OrderSummary } from "@/types/cart";
 
 export function useGetCartItems(fetch: boolean = true) {
   const URL = endpoints.cart.list;
@@ -61,7 +61,7 @@ export function useMutateCart() {
       queryClient.setQueryData(["cart"], res?.data);
       queryClient.setQueryData(["cart-details"], (oldData: any) => {
         const modifiedData = JSON.parse(JSON.stringify(oldData));
-        modifiedData.content.cart = res?.data;
+        modifiedData.content.cart = res?.data?.content?.cart;
         return modifiedData;
       });
     },
@@ -75,7 +75,7 @@ export function useMutateCart() {
       const URL = endpoints.cart.list;
       return await axios.delete(URL);
     },
-    mutationKey: ["cart-details"],
+    mutationKey: ["cart"],
     onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
   });
   // -------------------------
@@ -100,8 +100,11 @@ export function useMutateCart() {
 export function useGetCartDetails() {
   const URL = endpoints.cart.details;
   const { data, isFetching, isLoading, error, refetch } = useQuery({
-    queryKey: ["cart"],
-    queryFn: getFetcher<APIResponse<{ cart: CartList }>>(URL),
+    queryKey: ["cart-details"],
+    queryFn:
+      getFetcher<APIResponse<{ cart: CartList; orderSummary: OrderSummary }>>(
+        URL
+      ),
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
@@ -111,6 +114,7 @@ export function useGetCartDetails() {
   const memoizedValue = useMemo(
     () => ({
       cart: data?.content?.cart || [],
+      orderSummary: data?.content?.orderSummary,
       cartLoading: isLoading,
       cartValidating: isFetching,
       cartError: error,

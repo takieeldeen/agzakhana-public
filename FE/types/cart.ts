@@ -16,3 +16,10 @@ export type Cart = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type OrderSummary = {
+  subtotal: number;
+  delivery: number;
+  vat: number;
+  total: number;
+};

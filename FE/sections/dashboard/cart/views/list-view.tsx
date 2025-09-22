@@ -13,7 +13,7 @@ import CircularProgress from "@/components/circular-progress";
 
 export default function CartListView() {
   const t = useTranslations();
-  const { cart } = useGetCartDetails();
+  const { cart, mutate, orderSummary } = useGetCartDetails();
   console.log(cart);
   return (
     <div className="flex flex-row gap-16 py-8">
@@ -31,7 +31,11 @@ export default function CartListView() {
         <ul className="flex flex-col gap-4 relative">
           <AnimatePresence mode="popLayout">
             {cart?.map((cartItem) => (
-              <CartItem cartItem={cartItem} key={cartItem?._id} />
+              <CartItem
+                cartItem={cartItem}
+                key={cartItem?._id}
+                onMutate={mutate}
+              />
             ))}
           </AnimatePresence>
         </ul>
@@ -49,7 +53,7 @@ export default function CartListView() {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(1000),
+                }).format(orderSummary?.subtotal ?? 0),
               })}
             </strong>
           </li>
@@ -62,7 +66,7 @@ export default function CartListView() {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(10),
+                }).format(orderSummary?.delivery ?? 0),
               })}
             </strong>
           </li>
@@ -76,7 +80,7 @@ export default function CartListView() {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(75),
+                }).format(orderSummary?.vat ?? 0),
               })}
             </strong>
           </li>
@@ -89,7 +93,7 @@ export default function CartListView() {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                }).format(1526),
+                }).format(orderSummary?.total ?? 0),
               })}
             </strong>
           </li>
@@ -110,8 +114,9 @@ export default function CartListView() {
 
 type CartItemProps = {
   cartItem: CartListItem;
+  onMutate: VoidFunction;
 };
-function CartItem({ cartItem }: CartItemProps) {
+function CartItem({ cartItem, onMutate }: CartItemProps) {
   const cartItemData = cartItem?.product ? cartItem?.product : cartItem?.deal;
   const { locale } = useParams();
   const t = useTranslations();
@@ -125,11 +130,11 @@ function CartItem({ cartItem }: CartItemProps) {
       transition={{ type: "spring" }}
       className={cn(
         "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-4 drop-shadow-sm border-b-[1px] border-gray-200 justify-between h-44 w-full relative",
-        IS_LOADING && "brightness-90 pointer-events-none blur-xs"
+        IS_LOADING && "brightness-90 pointer-events-none "
       )}
     >
       {IS_LOADING && (
-        <CircularProgress className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-24 h-24" />
+        <CircularProgress className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-24 h-24 " />
       )}
       {/* LEFT SECTION */}
       <div className="flex flex-row gap-2">
@@ -193,13 +198,14 @@ function CartItem({ cartItem }: CartItemProps) {
             transition={{ duration: 0.15, ease: "easeInOut" }}
             className="rounded-full bg-agzakhana-primary aspect-square p-0! h-7 w-7"
             disabled={cartItem?.qty === 1}
-            onClick={() => {
-              updateCartItem.mutate({
+            onClick={async () => {
+              await updateCartItem.mutateAsync({
                 cartItemId: cartItem?._id,
                 payload: {
                   qty: (cartItem?.qty ?? 0) - 1,
                 },
               });
+              onMutate();
             }}
           >
             <Icon icon="ic:round-minus" />
@@ -210,13 +216,14 @@ function CartItem({ cartItem }: CartItemProps) {
             whileTap={{ scale: 2 }}
             transition={{ duration: 0.15, ease: "easeInOut" }}
             className="rounded-full bg-agzakhana-primary aspect-square p-0! h-7 w-7"
-            onClick={() => {
-              updateCartItem.mutate({
+            onClick={async () => {
+              await updateCartItem.mutateAsync({
                 cartItemId: cartItem?._id,
                 payload: {
                   qty: (cartItem?.qty ?? 0) + 1,
                 },
               });
+              onMutate();
             }}
           >
             <Icon icon="ic:round-plus" />
