@@ -16,6 +16,7 @@ import dealsRouter from "./routers/dealsRouter";
 import messageRouter from "./routers/messageRouter";
 import { paymentRouter } from "./routers/paymentRouter";
 import { stripeWebhookHandler } from "./controllers/paymentController";
+import ordersRouter from "./routers/orderRouter";
 
 i18next
   .use(Backend) // optional, if loading translation files from disk
@@ -63,6 +64,14 @@ app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/deals", dealsRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/payments", paymentRouter);
+app.use("/api/v1/orders", ordersRouter);
+
+app.use("/*splat", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: "No handler found for this endpoint",
+  });
+});
 
 app.use(errorController);
 export default app;

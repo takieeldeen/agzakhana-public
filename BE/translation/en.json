@@ -28,12 +28,23 @@
     "LETTERS_ONLY": "{{field}} must contain only letters",
     "DATE_INVALID": "The {{field}} must be a valid date",
     "FUTURE_DATE": "The {{field}} must be in the future",
-    "PAST_DATE": "The {{field}} must be in the past"
+    "PAST_DATE": "The {{field}} must be in the past",
+    "POSITVE_NUMBER": "The {{field}} must be a positive number"
   },
   "FIELDS": {
     "FIRST_NAME": "First Name",
     "LAST_NAME": "Last Name",
     "EMAIL": "Email Address",
-    "MESSAGE": "Message"
+    "MESSAGE": "Message",
+    "USER": "User",
+    "TOTAL": "Total",
+    "STATUS": "Status",
+    "NAME_AR": "Name in Arabic",
+    "NAME_EN": "Name in English",
+    "PRICE": "Price",
+    "QTY": "Quantity",
+    "ITEMS": "Items",
+    "CITY": "City",
+    "ADDRESS": "Address"
   }
 }

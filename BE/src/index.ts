@@ -12,6 +12,6 @@ mongoose.connect(CONNECTION_STRING!).then(() => {
   console.log("connected to the database");
 });
 
-app.listen(8080, () => {
-  console.log(`Listening on Port ${8080}`);
+app.listen(process.env.port || 8080, () => {
+  console.log(`Listening on Port ${process.env.port || 8080}`);
 });
