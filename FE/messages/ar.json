@@ -25,7 +25,9 @@
   },
   "COMMON": {
     "EGP": "{price} ج.م.",
-    "EGP_CURRENCY": "ج.م."
+    "EGP_CURRENCY": "ج.م.",
+    "BACK_TO_HOME": "العودة إلى الصفحة الرئيسية",
+    "GENERIC_ERROR": "حدث خطأ ما من جانبنا برجاء المحاولة مرة أخرى في وقت لاحق."
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
@@ -211,6 +213,31 @@
   },
   "PAYMENT_STATUS": {
     "PAYMENT_SUCCESS": "عملية دفع ناجحة",
-    "PAYMENT_FAILED": "عملية دفع فاشلة"
+    "PAYMENT_SUCCESS_SUBTITLE": "تم تأكيد طلبك وسيتم إرسالة خلال ثلاث أيام عمل, وقد تم إرسال تفاصيل الطلب إلى بريدك الالكتروني.",
+    "PAYMENT_FAILED": "عملية دفع فاشلة",
+    "PAYMENT_FAILED_SUBTITLE": "حدث خطأ أثناء معالجة دفعتك. يرجى المحاولة مرة أخرى أو الاتصال بدعم العملاء للمساعدة.",
+    "BACK_TO_HOME": "العودة إلى الصفحة الرئيسية",
+    "TRANSACTION_DATE": " تاريخ المعاملة",
+    "PAYMENT_METHOD": " وسيلة الدفع",
+    "DELIVERY_TIME": " وقت التوصيل",
+    "DEILVERY_ADDRESS": "عنوان التوصيل",
+    "DELIVERY_DURATION": "{START_DATE} - {END_DATE} أيام عمل",
+    "TOTAL_PAID": "إجمالي المدفوع",
+    "CARD_ENDING_WITH": "بطاقة منتهية بـ {LAST_DIGITS}"
+  },
+  "PROFILE": {
+    "PERSONAL_INFO": "المعلومات الشخصية",
+    "PRODUCT_INFO": "معلومات التسوق",
+    "USERNAME": "اسم المستخدم",
+    "EMAIL": "البريد الإلكتروني",
+    "PHONE": "رقم الهاتف",
+    "ORDERS": "الطلبات",
+    "CART": "عربة التسوق"
+  },
+  "MY_ORDERS": {
+    "ID": "الرقم التعريفي",
+    "STATUS": "الحالة",
+    "ITEMS": "المنتجات",
+    "TOTAL": "الإجمالي"
   }
 }

@@ -25,7 +25,9 @@
   },
   "COMMON": {
     "EGP": "{price} EGP",
-    "EGP_CURRENCY": "EGP"
+    "EGP_CURRENCY": "EGP",
+    "BACK_TO_HOME": "Back to Home",
+    "GENERIC_ERROR": "Something went wrong from our side, please try again later."
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -213,7 +215,33 @@
     "ERROR_SENDING_MESSAGE": "An error occurred while sending your message. Please try again later."
   },
   "PAYMENT_STATUS": {
-    "PAYMENT_SUCCESS": "Successful Payment Process",
-    "PAYMENT_FAILED": "Unsuccessful Payment Process"
+    "PAYMENT_SUCCESS": "Successful Payment",
+    "PAYMENT_SUCCESS_SUBTITLE": "Your order has been confirmed and will be delivered within three business days. Order details have been sent to your email.",
+    "PAYMENT_FAILED": "Failed Payment",
+    "PAYMENT_FAILED_SUBTITLE": "An error occurred while processing your payment. Please try again or contact customer support for assistance.",
+    "BACK_TO_HOME": "Back to Home",
+    "TRANSACTION_DATE": " Transaction Date",
+    "PAYMENT_METHOD": " Payment Method",
+    "DELIVERY_TIME": " Delivery Time",
+    "DEILVERY_ADDRESS": "Delivery Address",
+    "DELIVERY_DURATION": "{START_DATE} - {END_DATE} Working days.",
+    "CARD_ENDING_WITH": "Card ending with {LAST_DIGITS}",
+
+    "TOTAL_PAID": " Total Paid"
+  },
+  "PROFILE": {
+    "PERSONAL_INFO": "Personal Information",
+    "PRODUCT_INFO": "Shopping Information",
+    "USERNAME": "Username",
+    "EMAIL": "Email Address",
+    "PHONE": "Phone Number",
+    "ORDERS": "Orders",
+    "CART": "Cart"
+  },
+  "MY_ORDERS": {
+    "ID": "Id",
+    "STATUS": "Status",
+    "ITEMS": "Products",
+    "TOTAL": "Total"
   }
 }

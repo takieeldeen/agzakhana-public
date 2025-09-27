@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/popover";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Separator } from "./ui/separator";
-import { CART_DUMMY_DATA } from "@/_mock/_cart";
 import { cn } from "@/lib/utils";
 import FallbackImage from "./image";
 import { useTranslations } from "next-intl";
@@ -18,6 +17,7 @@ import { useCallback } from "react";
 import CircularProgress from "./circular-progress";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 export function CartPopover() {
   const t = useTranslations();
@@ -102,15 +102,14 @@ export function CartPopover() {
             )}
           </div>
           {!cartEmpty && (
-            <Link
-              href="/cart"
-              className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none text-center justify-center items-center"
-            >
-              {t("CART.SHOW_ALL")}
-              <Icon
-                icon="humbleicons:chevron-left"
-                className="rotate-180 rtl:rotate-0"
-              />
+            <Link href="/cart" className="justify-center items-center flex">
+              <PopoverClose className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none text-center justify-center items-center">
+                {t("CART.SHOW_ALL")}
+                <Icon
+                  icon="humbleicons:chevron-left"
+                  className="rotate-180 rtl:rotate-0"
+                />
+              </PopoverClose>
             </Link>
           )}
         </div>
@@ -119,7 +118,7 @@ export function CartPopover() {
   );
 }
 
-function ProductItem({ cartItem, i }: { cartItem: any; i: number }) {
+function ProductItem({ cartItem }: { cartItem: any; i: number }) {
   const t = useTranslations();
   const { locale } = useParams();
   const { removeFromCart } = useMutateCart();
@@ -135,13 +134,11 @@ function ProductItem({ cartItem, i }: { cartItem: any; i: number }) {
       key={cartItem?._id}
       className={cn(
         "flex flex-row gap-2 items-center py-2 relative ",
-        i !== CART_DUMMY_DATA?.length - 1
-          ? "border-b-[1px] border-gray-200"
-          : ""
+        "border-b-[1px] border-gray-200"
       )}
     >
       <div className="flex flex-row gap-2 items-center mr-auto rtl:mr-0 rtl:ml-auto">
-        <div className="w-16 h-16 aspect-square flex items-center justify-center border-[1px] border-gray-300 rounded-md relative">
+        <div className="w-16 h-16 aspect-square flex items-center justify-center rounded-md relative">
           <FallbackImage
             src={cartItem?.product?.imageUrl ?? ""}
             alt={cartItem?.product?.nameAr ?? ""}
@@ -189,7 +186,7 @@ function ProductItem({ cartItem, i }: { cartItem: any; i: number }) {
     </li>
   );
 }
-function DealItem({ cartItem, i }: { cartItem: any; i: number }) {
+function DealItem({ cartItem }: { cartItem: any; i: number }) {
   const t = useTranslations();
   const { locale } = useParams();
   const { removeFromCart } = useMutateCart();
@@ -205,18 +202,16 @@ function DealItem({ cartItem, i }: { cartItem: any; i: number }) {
       key={cartItem?._id}
       className={cn(
         "flex flex-row gap-2 items-center py-2 relative ",
-        i !== CART_DUMMY_DATA?.length - 1
-          ? "border-b-[1px] border-gray-200"
-          : ""
+        "border-b-[1px] border-gray-200"
       )}
     >
       <div className="flex flex-row gap-2 items-center mr-auto rtl:mr-0 rtl:ml-auto">
-        <div className="w-16 h-16 aspect-square flex items-center justify-center border-[1px] border-gray-300 rounded-md relative">
+        <div className="w-16 h-16 aspect-square flex items-center justify-center rounded-md relative">
           <FallbackImage
             src={cartItem?.deal?.imageUrl ?? ""}
             alt={cartItem?.deal?.nameAr ?? ""}
-            height={30}
-            width={30}
+            fill
+            className="object-contain"
           />
         </div>
         <div className="flex flex-col ">

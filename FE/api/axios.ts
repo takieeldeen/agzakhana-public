@@ -1,15 +1,10 @@
-import axiosConstructor from "axios";
+const IS_SERVER = typeof window === "undefined";
+const axiosModule = IS_SERVER
+  ? await import("./axios-server")
+  : await import("./axios-client");
 
-const axios = axiosConstructor.create({
-  // baseURL: "http://localhost:8080/api",
-  baseURL: "http://localhost:8080/api",
-  // "https://agzakhana-responsible-bilby-wa.cfapps.us10-001.hana.ondemand.com/api",
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
+const axios = axiosModule.default;
+console.log(axios, axiosModule);
 export const endpoints = {
   auth: {
     login: "/v1/auth/login",
@@ -52,6 +47,9 @@ export const endpoints = {
   },
   messages: {
     send: "/v1/messages/contact-us",
+  },
+  orders: {
+    details: (orderId: string) => `/v1/orders/${orderId}`,
   },
 };
 

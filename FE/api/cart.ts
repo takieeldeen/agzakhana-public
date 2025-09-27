@@ -114,6 +114,7 @@ export function useGetCartDetails() {
       cartLoading: isLoading,
       cartValidating: isFetching,
       cartError: error,
+      cartEmpty: data?.content?.cart?.length === 0,
       mutate: refetch,
     }),
     [data, error, isFetching, isLoading, refetch]

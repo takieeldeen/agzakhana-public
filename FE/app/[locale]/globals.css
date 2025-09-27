@@ -132,4 +132,26 @@ input[type="number"]::-webkit-outer-spin-button {
   body {
     @apply bg-background text-foreground;
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: oklch(96.7% 0.003 264.542);
+    border-radius: 99999px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #3bb77e;
+    border-radius: 999px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 }
