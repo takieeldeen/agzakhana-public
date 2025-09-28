@@ -28,11 +28,12 @@ export function useGetMyOrders() {
     () => ({
       orders: data?.content ?? [],
       ordersLoading: isLoading,
+      ordersResults: data?.results ?? 0,
       ordersError: error,
       ordersValidating: isFetching,
       mutate: refetch,
     }),
-    [data?.content, error, isFetching, isLoading, refetch]
+    [data?.content, data?.results, error, isFetching, isLoading, refetch]
   );
   return memoizedValues;
 }

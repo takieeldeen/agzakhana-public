@@ -2,14 +2,16 @@
 import TableHeadCustom, {
   TableHeadColumn,
 } from "@/components/table-head-custom";
-import { Table, TableBody } from "@/components/ui/table";
-import { useTranslations } from "next-intl";
+import { Table, TableBody, TableSkeleton } from "@/components/ui/table";
+import { useLocale, useTranslations } from "next-intl";
 import MyOrdersTableRow from "../table-row";
 import { useGetMyOrders } from "@/api/orders";
+import { TablePagination } from "@/components/ui/tabs";
 
 export function MyOrdersListView() {
   const t = useTranslations();
-  const { orders, ordersLoading } = useGetMyOrders();
+  const locale = useLocale();
+  const { orders, ordersLoading, ordersResults } = useGetMyOrders();
   console.log(orders);
   const TABLE_HEAD: TableHeadColumn[] = [
     { id: "id", label: t("MY_ORDERS.ID") },
@@ -41,16 +43,34 @@ export function MyOrdersListView() {
       props: { className: "text-center!" },
     },
   ];
+
   return (
     <div className="">
-      <Table>
-        <TableHeadCustom columns={TABLE_HEAD} />
-        <TableBody>
-          {orders?.map((order) => (
-            <MyOrdersTableRow order={order} key={order?._id} />
-          ))}
-        </TableBody>
-      </Table>
+      {!ordersLoading && (
+        <>
+          <Table>
+            <TableHeadCustom columns={TABLE_HEAD} />
+            <TableBody>
+              {orders?.map((order) => (
+                <MyOrdersTableRow order={order} key={order?._id} />
+              ))}
+            </TableBody>
+          </Table>
+          <div
+            className="py-4 flex items-start mx-0 flex-row-reverse"
+            dir={locale === "ar" ? "rtl" : "ltr"}
+          >
+            <TablePagination
+              totalNoOfRows={ordersResults}
+              // rowsPerPage={size ? parseInt(size) : 20}
+              rowsPerPage={9}
+              // currentPage={page ? parseInt(page) : 1}
+              currentPage={1}
+            />
+          </div>
+        </>
+      )}
+      {ordersLoading && <TableSkeleton columns={TABLE_HEAD} />}
     </div>
   );
 }

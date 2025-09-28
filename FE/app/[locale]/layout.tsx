@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { AuthProvider } from "@/providers/auth-provider";
 import TanstackProvider from "@/providers/tanstack-provider";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/providers/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -70,31 +71,39 @@ export default async function RootLayout({
       lang={locale}
       className={locale === "ar" ? "font-cairo" : "font-quicksand"}
       dir={locale === "ar" ? "rtl" : "ltr"}
+      suppressHydrationWarning
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100! min-h-screen max-w-[2180px] m-auto text-text-primary!`}
+        className={`${geistSans.variable} ${geistMono.variable}  antialiased bg-gray-100 dark:bg-agzakhana-background-dark min-h-screen max-w-[2180px] m-auto text-text-primary!`}
       >
         <AuthProvider>
           <NextIntlClientProvider>
             <TanstackProvider>
-              <Header />
-              <Navbar />
-              <main className="px-8">
-                <div className="flex flex-row p-2">
-                  {/* <FiltersToolbar /> */}
-                  <div className="flex flex-col w-full">
-                    {newsLetter}
-                    {children}
-                    {popularProducts}
-                    {latestDeals}
-                    {shopByCategory}
-                    {shopBy}
-                    {newsLetter}
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Header />
+                <Navbar />
+                <main className="px-8">
+                  <div className="flex flex-row p-2">
+                    {/* <FiltersToolbar /> */}
+                    <div className="flex flex-col w-full">
+                      {newsLetter}
+                      {children}
+                      {popularProducts}
+                      {latestDeals}
+                      {shopByCategory}
+                      {shopBy}
+                      {newsLetter}
+                    </div>
                   </div>
-                </div>
-              </main>
-              <Toaster />
-              <Footer />
+                </main>
+                <Toaster />
+                <Footer />
+              </ThemeProvider>
             </TanstackProvider>
           </NextIntlClientProvider>
         </AuthProvider>

@@ -15,7 +15,7 @@ export default async function ProductCard({
   const t = await getTranslations();
   const locale = await getLocale();
   return (
-    <li className="border-2 border-[#ECECEC] w-[250px] h-[401px] rounded-2xl overflow-hidden relative min-w-[20rem]">
+    <li className="border-2 border-[#ECECEC] xl:w-[240px] lg:w-[250px] h-[401px] rounded-2xl overflow-hidden relative lg:min-w-[20rem] xl:min-w-[19rem]">
       <Link
         href={`/products/${medicine?._id}`}
         className="h-full flex flex-col gap-1"

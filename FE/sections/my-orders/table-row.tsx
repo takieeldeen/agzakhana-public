@@ -31,7 +31,8 @@ export default function MyOrdersTableRow({ order }: { order: Partial<Order> }) {
         <TableCell className="text-center">
           <span
             className={cn(
-              (ORDERS_VARIANTS_STYLES as any)?.[order?.status ?? ""]
+              (ORDERS_VARIANTS_STYLES as any)?.[order?.status ?? ""],
+              "select-none"
             )}
           >
             {order.status ? t(`MY_ORDERS.${order.status}`) : "غير معروف"}

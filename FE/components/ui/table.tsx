@@ -4,6 +4,8 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { useLocale } from "next-intl";
+import TableHeadCustom, { TableHeadColumn } from "../table-head-custom";
+import { Skeleton } from "./skeleton";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
@@ -136,3 +138,28 @@ export {
   TableCell,
   TableCaption,
 };
+
+export function TableSkeleton({ columns }: { columns: TableHeadColumn[] }) {
+  return (
+    <Table>
+      <TableHeadCustom columns={columns} />
+      <TableBody>
+        {Array.from({ length: 9 }, (_, i) => i).map((el) => (
+          <TableRow key={el}>
+            <TableCell colSpan={12}>
+              <div className="flex flex-row items-center gap-12 rtl:flex-row-reverse justify-between">
+                <Skeleton className="h-12 w-12 rounded-full" />
+                <Skeleton className="h-4 w-32 rounded-full" />
+                <Skeleton className="h-4 w-46 rounded-full" />
+                <Skeleton className="h-4 w-24 rounded-full" />
+                <Skeleton className="h-4 w-22 rounded-full" />
+                <Skeleton className="h-4 w-36 rounded-full" />
+                <Skeleton className="h-8 w-18 rounded-md" />
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}

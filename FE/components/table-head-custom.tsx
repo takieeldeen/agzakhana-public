@@ -16,7 +16,10 @@ export type TableHeadProps = {
 export default function TableHeadCustom({ columns, ...other }: TableHeadProps) {
   return (
     <TableHeader>
-      <TableRow {...other} className={cn("h-12 bg-gray-200", other.className)}>
+      <TableRow
+        {...other}
+        className={cn("h-12 bg-gray-200 hover:bg-gray-200", other.className)}
+      >
         {columns?.map((column) => (
           <TableHead
             {...column?.props}

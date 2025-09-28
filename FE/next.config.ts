@@ -15,7 +15,18 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig: NextConfig = {
   //   /* config options here */
   images: {
-    remotePatterns: [new URL("https://ukbahlwracfvnetnxlba.supabase.co/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ukbahlwracfvnetnxlba.supabase.co",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

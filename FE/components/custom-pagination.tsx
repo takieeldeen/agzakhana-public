@@ -3,20 +3,26 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "./ui/button";
 import { Pagination, PaginationContent, PaginationItem } from "./ui/pagination";
 import { cn } from "@/lib/utils";
-import { useCallback, useEffect } from "react";
+import { ComponentProps, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-interface TablePaginationProps {
+export type TablePaginationProps = {
   totalNoOfRows: number;
   rowsPerPage: number;
   currentPage: number;
   onPageChange?: (newPage: number) => void;
-}
+  navButtonProps?: ComponentProps<"button">;
+  pageItemProps?: ComponentProps<"button">;
+  navContainerProps?: ComponentProps<"ul">;
+} & ComponentProps<"div">;
 export default function CustomPagination({
   totalNoOfRows,
   rowsPerPage,
   currentPage,
   onPageChange,
+  navButtonProps,
+  pageItemProps,
+  ...containerProps
 }: TablePaginationProps) {
   // Helper Constants ////////////////////////////////////
   const totalNoOfPages = Math.ceil(totalNoOfRows / rowsPerPage);
@@ -63,11 +69,18 @@ export default function CustomPagination({
   if (totalNoOfRows === 0 && totalNoOfRows > (rowsPerPage ? rowsPerPage : 20))
     return null;
   return (
-    <Pagination className="gap-3">
+    <Pagination
+      {...containerProps}
+      className={cn("gap-3", containerProps?.className)}
+    >
       <Button
+        {...navButtonProps}
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={isFirstPage}
-        className=" text-white hover:bg-card-dark-bg transition-all transition-300 aspect-square cursor-pointer  bg-text-primary"
+        className={cn(
+          " text-white hover:bg-card-dark-bg transition-all transition-300 aspect-square cursor-pointer  bg-text-primary",
+          navButtonProps?.className
+        )}
       >
         <Icon icon="mi:chevron-left" className="rtl:rotate-180" />
       </Button>
@@ -75,6 +88,7 @@ export default function CustomPagination({
         {pageArray.map((pageNumber, i) => (
           <PaginationItem key={i}>
             <Button
+              {...pageItemProps}
               onClick={() =>
                 pageNumber !== "..." && handlePageChange(+pageNumber)
               }
@@ -83,7 +97,8 @@ export default function CustomPagination({
                 pageNumber === `${currentPage}` &&
                   "bg-agzakhana-primary dark:bg-neon text-white !dark:text-modal-dark-background font-bold hover:brightness-85 dark:hover:bg-neon",
                 pageNumber === "..." &&
-                  "hover:bg-transparent hover:dark:text-modal-dark cursor-default"
+                  "hover:bg-transparent hover:dark:text-modal-dark cursor-default",
+                pageItemProps?.className
               )}
             >
               {pageNumber}
@@ -92,9 +107,13 @@ export default function CustomPagination({
         ))}
       </PaginationContent>
       <Button
+        {...navButtonProps}
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={isLastPage}
-        className=" text-white hover:bg-card-dark-bg transition-all transition-300 aspect-square cursor-pointer bg-text-primary"
+        className={cn(
+          "text-white hover:bg-card-dark-bg transition-all transition-300 aspect-square cursor-pointer bg-text-primary",
+          navButtonProps?.className
+        )}
       >
         <Icon icon="mi:chevron-left" className="ltr:rotate-180" />
       </Button>

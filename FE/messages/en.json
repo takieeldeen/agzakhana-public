@@ -27,7 +27,8 @@
     "EGP": "{price} EGP",
     "EGP_CURRENCY": "EGP",
     "BACK_TO_HOME": "Back to Home",
-    "GENERIC_ERROR": "Something went wrong from our side, please try again later."
+    "GENERIC_ERROR": "Something went wrong from our side, please try again later.",
+    "UNKOWN": "Unkown"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
