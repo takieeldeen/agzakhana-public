@@ -242,6 +242,10 @@
     "ID": "Id",
     "STATUS": "Status",
     "ITEMS": "Products",
-    "TOTAL": "Total"
+    "TOTAL": "Total",
+    "PURCHASING_DATE": "Purchasing Date",
+    "paid": "Paid",
+    "pending": "Pending",
+    "failed": "Failed"
   }
 }

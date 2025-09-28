@@ -10,7 +10,7 @@ export default async function ProfilePage() {
   const user = USER_MOCK_DATA;
   const t = await getTranslations();
   return (
-    <div className="grid grid-cols-[1.5fr_6fr] py-8">
+    <div className="grid grid-cols-[2fr_6fr] py-8">
       <aside className="py-2 flex flex-col items-center gap-4">
         {!user?.imageUrl && (
           <div className="bg-gray-200 h-64 w-64 rounded-full shrink-0 aspect-square flex items-center justify-center">

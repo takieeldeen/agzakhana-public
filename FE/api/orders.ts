@@ -1,5 +1,9 @@
 import { Order } from "@/types/orders";
 import axios, { endpoints } from "./axios";
+import { useQuery } from "@tanstack/react-query";
+import { APIResponse, getDummyFetcher } from "./api";
+import { useMemo } from "react";
+import { ORDERS_MOCK_DATA } from "@/_mock/_orders";
 
 export async function getOrderDetails(orderId: string | undefined) {
   try {
@@ -12,4 +16,23 @@ export async function getOrderDetails(orderId: string | undefined) {
     console.log(err);
     return { order: null, status: "fail", error: err };
   }
+}
+
+export function useGetMyOrders() {
+  const URL = endpoints.orders.myOrders;
+  const { data, isLoading, error, isFetching, refetch } = useQuery({
+    queryKey: ["orders"],
+    queryFn: getDummyFetcher<APIResponse<Partial<Order>[]>>(ORDERS_MOCK_DATA),
+  });
+  const memoizedValues = useMemo(
+    () => ({
+      orders: data?.content ?? [],
+      ordersLoading: isLoading,
+      ordersError: error,
+      ordersValidating: isFetching,
+      mutate: refetch,
+    }),
+    [data?.content, error, isFetching, isLoading, refetch]
+  );
+  return memoizedValues;
 }

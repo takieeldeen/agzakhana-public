@@ -50,6 +50,7 @@ export const endpoints = {
   },
   orders: {
     details: (orderId: string) => `/v1/orders/${orderId}`,
+    myOrders: "/v1/orders/my-orders",
   },
 };
 

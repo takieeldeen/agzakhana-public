@@ -1,4 +1,6 @@
+type OrderStatus = "pending" | "paid" | "failed";
 export type Order = {
+  _id: string;
   userId: string;
   items: {
     productId: string | null;
@@ -11,7 +13,7 @@ export type Order = {
   }[];
   total: number;
   currency: string;
-  status: "pending" | "paid" | "failed";
+  status: OrderStatus;
   stripeSessionId: string;
   shippingDetails?: {
     city: string;
@@ -21,6 +23,6 @@ export type Order = {
     state: string;
     postalCode: string;
   };
-  createdAt?: Date;
+  createdAt?: Date | string;
   updatedAt?: Date;
 };
