@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import RHFForm from "@/components/rhf-form";
 import { useCallback } from "react";
@@ -35,19 +34,19 @@ export default function ForgotPasswordForm() {
         name="email"
         label={t("LOGIN.EMAIL")}
         placeholder={t("LOGIN.EMAIL")}
-        inputProps={{ className: "h-10 font-semibold text-lg", type: "email" }}
-        labelProps={{ className: "text-base font-semibold mb-2" }}
+        inputProps={{ className: "h-12 font-semibold text-lg", type: "email" }}
+        labelProps={{ className: "text-base font-semibold" }}
       />
 
       <Button className="bg-agzakhana-primary text-white text-base font-semibold py-6">
         {t("FORGOT_PASSWORD.RESET_PASSWORD")}
       </Button>
 
-      <p className="flex flex-row gap-2 self-center text-gray-800">
+      <p className="flex flex-row gap-2 self-center text-gray-800 dark:text-gray-400">
         {t("LOGIN.DON'T_HAVE_AN_ACCOUNT")}
         <Link
           href="/sign-up"
-          className="font-bold text-text-primary hover:underline"
+          className="font-bold text-text-primary hover:underline dark:text-gray-200"
         >
           {t("LOGIN.SIGN_UP_FOR_FREE")}
         </Link>

@@ -13,7 +13,7 @@ export default function GoogleAuthButton() {
     <Button
       type="button"
       onClick={handleLoginWithGoogle}
-      className="border-2 bg-transparent flex flex-row gap-2 text-text-primary text-base font-semibold py-6 border-gray-300"
+      className="border-2 bg-transparent flex flex-row gap-2 text-text-primary text-base font-semibold py-6 border-gray-300 dark:text-gray-200"
     >
       <Icon icon="flat-color-icons:google" className="h-8! w-8!" />
       {t("LOGIN.SIGN_IN_WITH_GOOGLE")}

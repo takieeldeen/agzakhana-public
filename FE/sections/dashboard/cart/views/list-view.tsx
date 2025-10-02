@@ -35,8 +35,10 @@ export default function CartListView() {
     <div className="flex flex-row gap-16 py-8">
       <div className="flex flex-col gap-2  w-4/6">
         <div className="flex-row flex gap-2 items-end mb-4">
-          <h4 className="text-2xl font-bold ">{t("HEADER.CART")}</h4>
-          <p className="text-gray-500">
+          <h4 className="text-2xl font-bold dark:text-gray-200">
+            {t("HEADER.CART")}
+          </h4>
+          <p className="text-gray-500 dark:text-gray-400">
             (
             {t("CART.PRODUCT", {
               count: cart?.length ?? 0,
@@ -53,14 +55,16 @@ export default function CartListView() {
         </ul>
       </div>
       <aside className="w-2/6 flex flex-col gap-3 sticky self-start top-8">
-        <h4 className="font-bold text-2xl">{t("CART.PAYMENT_SUMMARY")}</h4>
+        <h4 className="text-2xl font-bold dark:text-gray-200">
+          {t("CART.PAYMENT_SUMMARY")}
+        </h4>
         <Separator />
         <ul>
-          <li className="flex flex-row justify-between py-4 border-[1px] border-transparent border-b-gray-300">
-            <p className="text-base text-gray-600 font-semibold">
+          <li className="flex flex-row justify-between py-4 border-[1px] border-transparent border-b-gray-600">
+            <p className="text-base text-gray-600 font-semibold dark:text-gray-300">
               {t("CART.SUB_TOTAL")}
             </p>
-            <strong className="font-normal">
+            <strong className="font-normal dark:text-gray-200">
               {t("COMMON.EGP", {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
@@ -69,11 +73,11 @@ export default function CartListView() {
               })}
             </strong>
           </li>
-          <li className="flex flex-row justify-between py-4 border-[1px] border-transparent border-b-gray-300">
-            <p className="text-base text-gray-600 font-semibold">
+          <li className="flex flex-row justify-between py-4 border-[1px] border-transparent border-b-gray-600">
+            <p className="text-base text-gray-600 font-semibold dark:text-gray-300">
               {t("CART.DELIVERY")}
             </p>
-            <strong className="font-normal">
+            <strong className="font-normal dark:text-gray-200">
               {t("COMMON.EGP", {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
@@ -83,11 +87,11 @@ export default function CartListView() {
             </strong>
           </li>
 
-          <li className="flex flex-row justify-between py-4 border-[2px] border-transparent border-b-gray-900">
-            <p className="text-base text-gray-600 font-semibold">
+          <li className="flex flex-row justify-between py-4 border-[2px] border-transparent border-b-gray-900 dark:border-b-gray-300">
+            <p className="text-base text-gray-600 font-semibold dark:text-gray-300">
               {t("CART.VAT")}
             </p>
-            <strong className="font-normal">
+            <strong className="font-normal dark:text-gray-200">
               {t("COMMON.EGP", {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
@@ -96,11 +100,11 @@ export default function CartListView() {
               })}
             </strong>
           </li>
-          <li className="flex flex-row justify-between py-4 border-[1px] border-transparent border-b-gray-300">
-            <strong className="text-xl text-gray-600 font-bold">
+          <li className="flex flex-row justify-between py-4 border-[1px] border-transparent ">
+            <strong className="text-xl text-gray-600 font-bold dark:text-gray-200">
               {t("CART.TOTAL")}
             </strong>
-            <strong className="text-lg font-bold">
+            <strong className="text-lg font-bold dark:text-gray-200">
               {t("COMMON.EGP", {
                 price: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
@@ -113,12 +117,12 @@ export default function CartListView() {
         <div className="flex flex-col gap-2">
           <LoadingButton
             loading={checkoutLoading}
-            className="py-6 bg-agzakhana-primary text-lg"
+            className="py-6 bg-agzakhana-primary text-lg dark:text-white"
             onClick={handleCheckout}
           >
             {t("CART.PROCEED_TO_CHECKOUT")}
           </LoadingButton>
-          <Button className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none">
+          <Button className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none dark:text-gray-300">
             <Icon icon="humbleicons:chevron-left" className="rtl:rotate-180" />
             {t("CART.CONTINUE_SHOPPING")}
           </Button>
@@ -144,7 +148,7 @@ function CartItem({ cartItem }: CartItemProps) {
       exit={{ opacity: 0, scale: 0.8 }}
       transition={{ type: "spring" }}
       className={cn(
-        "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-4 drop-shadow-sm border-b-[1px] border-gray-200 justify-between h-44 w-full relative",
+        "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-4 drop-shadow-sm border-b-[1px] border-gray-200 dark:border-gray-800 justify-between h-44 w-full relative dark:bg-card-background-dark",
         IS_LOADING && "brightness-90 pointer-events-none blur-xs"
       )}
     >
@@ -163,18 +167,18 @@ function CartItem({ cartItem }: CartItemProps) {
         </div>
 
         <div className="flex flex-col">
-          <p className="font-semibold text-base">
+          <p className="font-semibold text-base dark:text-gray-200">
             {locale === "ar"
               ? cartItemData?.nameAr ?? "--"
               : cartItemData?.nameEn ?? "--"}
           </p>
-          <p className="font-semibold text-base text-gray-500 line-clamp-2 mb-2">
+          <p className="font-semibold text-base text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
             {locale === "ar"
               ? cartItemData?.descriptionAr ?? "--"
               : cartItemData?.descriptionEn ?? "--"}
           </p>
           <Button
-            className="flex flex-row gap-2 items-center w-fit drop-shadow-none shadow-none"
+            className="flex flex-row gap-2 items-center w-fit drop-shadow-none shadow-none dark:border-[1px] dark:border-agzakhana-primary dark:bg-transparent dark:text-agzakhana-primary"
             variant="outline"
             onClick={() => {
               removeFromCart.mutate(cartItem?._id ?? "");
@@ -186,7 +190,7 @@ function CartItem({ cartItem }: CartItemProps) {
         </div>
       </div>
       <div className="flex flex-col items-end">
-        <strong className="text-xl whitespace-nowrap">
+        <strong className="text-xl whitespace-nowrap dark:text-white">
           {t("COMMON.EGP", {
             price: cartItemData?.price ?? 0,
           })}
@@ -224,7 +228,7 @@ function CartItem({ cartItem }: CartItemProps) {
           >
             <Icon icon="ic:round-minus" />
           </MotionButton>
-          <span>{cartItem?.qty}</span>
+          <span className="dark:text-white">{cartItem?.qty}</span>
           <MotionButton
             disabled={cartItem?.qty === cartItemData?.maxQty}
             whileTap={{ scale: 2 }}

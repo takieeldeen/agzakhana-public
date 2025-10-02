@@ -44,7 +44,7 @@ export function OfferTimer({ expiresIn }: { expiresIn: string }) {
       ].map(({ label, value }) => (
         <li
           key={label}
-          className="flex flex-col bg-gray-100 rounded-md items-center p-2 shadow-md w-1/4 min-w-16 select-none text-sm font-bold dark:bg-card-background-dark dark:text-gray-300 brightness-90"
+          className="flex flex-col bg-gray-100 rounded-md items-center p-2 shadow-md w-1/4 min-w-16 select-none text-sm font-bold dark:bg-card-background-dark dark:text-gray-300 dark:brightness-90"
         >
           <span className="text-agzakhana-primary text-2xl font-medium">
             {value}

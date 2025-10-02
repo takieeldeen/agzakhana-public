@@ -10,7 +10,9 @@
     "ACCOUNT": "الحساب",
     "SEARCH_FOR_PRODUCTS": "البحث عن منتجات",
     "SIGN_OUT": "تسجيل الخروج",
-    "SIGN_IN": "تسجيل الدخول"
+    "SIGN_IN": "تسجيل الدخول",
+    "SWITCH_TO_DARK_MODE": "تفعيل الوضع المظلم",
+    "SWITCH_TO_LIGHT_MODE": "تعطيل الوضع المظلم"
   },
   "NAV_BAR": {
     "BROWSE_ALL_CATEGORIES": "تصفح جميع الفئات",

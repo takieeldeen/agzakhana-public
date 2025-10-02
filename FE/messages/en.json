@@ -10,7 +10,9 @@
     "ACCOUNT": "Account",
     "SEARCH_FOR_PRODUCTS": "Search For Products",
     "SIGN_OUT": "Sign Out",
-    "SIGN_IN": "Sign In"
+    "SIGN_IN": "Sign In",
+    "SWITCH_TO_DARK_MODE": "Activate Dark Mode",
+    "SWITCH_TO_LIGHT_MODE": "Deactivate Dark Mode"
   },
   "NAV_BAR": {
     "BROWSE_ALL_CATEGORIES": "Browse All Categories",

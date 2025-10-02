@@ -100,9 +100,9 @@ export default function ReviewsSection() {
                   icon="material-symbols-light:comments-disabled-outline"
                   width={200}
                   height={200}
-                  className="text-gray-600"
+                  className="text-gray-600 dark:text-gray-400"
                 />
-                <p className="text-xl font-semibold text-gray-600 dark:text-gray-200">
+                <p className="text-xl font-semibold text-gray-600 dark:text-gray-400">
                   {t("PRODUCTS_LISTING_PAGE.NO_REVIEWS")}
                 </p>
                 <Authenticate>

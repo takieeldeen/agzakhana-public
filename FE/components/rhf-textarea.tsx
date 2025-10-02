@@ -8,6 +8,7 @@ import {
 } from "./ui/form";
 import { ComponentProps } from "react";
 import { Textarea } from "./ui/textarea";
+import { cn } from "@/lib/utils";
 
 type Props = {
   name: string;
@@ -37,7 +38,13 @@ export default function RHFTextarea({
       render={({ field }) => (
         <FormItem {...other}>
           {!!label && (
-            <FormLabel {...labelProps}>
+            <FormLabel
+              {...labelProps}
+              className={cn(
+                "dark:text-gray-300 dark:bg-card-background-dark",
+                labelProps?.className
+              )}
+            >
               {label}
               {mandatoryField && (
                 <span className="font-bold text-red-700">*</span>
@@ -45,7 +52,15 @@ export default function RHFTextarea({
             </FormLabel>
           )}
           <FormControl>
-            <Textarea placeholder={placeholder} {...field} {...inputProps} />
+            <Textarea
+              placeholder={placeholder}
+              {...field}
+              {...inputProps}
+              className={cn(
+                "dark:text-gray-300 dark:bg-card-background-dark",
+                inputProps?.className
+              )}
+            />
           </FormControl>
           <FormMessage {...helperTextProps} />
         </FormItem>

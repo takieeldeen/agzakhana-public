@@ -8,6 +8,7 @@ import {
 } from "./ui/form";
 import { Input, InputProps } from "./ui/input";
 import { ComponentProps } from "react";
+import { cn } from "@/lib/utils";
 
 type Props = {
   name: string;
@@ -37,7 +38,13 @@ export default function RHFTextfield({
       render={({ field }) => (
         <FormItem {...other}>
           {!!label && (
-            <FormLabel {...labelProps}>
+            <FormLabel
+              {...labelProps}
+              className={cn(
+                "dark:text-gray-300 dark:bg-transparent",
+                labelProps?.className
+              )}
+            >
               {label}
               {mandatoryField && (
                 <span className="font-bold text-red-700">*</span>
@@ -45,7 +52,15 @@ export default function RHFTextfield({
             </FormLabel>
           )}
           <FormControl>
-            <Input placeholder={placeholder} {...field} {...inputProps} />
+            <Input
+              placeholder={placeholder}
+              {...field}
+              {...inputProps}
+              className={cn(
+                "dark:text-gray-300 dark:bg-transparent",
+                inputProps?.className
+              )}
+            />
           </FormControl>
           <div className="min-h-4">
             <FormMessage {...helperTextProps} />

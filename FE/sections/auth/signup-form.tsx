@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import RHFForm from "@/components/rhf-form";
 import { useCallback, useState } from "react";
@@ -83,7 +82,7 @@ export default function SignupForm() {
         name="email"
         label={t("LOGIN.EMAIL")}
         placeholder={t("LOGIN.EMAIL")}
-        inputProps={{ className: "h-10 font-semibold text-lg", type: "email" }}
+        inputProps={{ className: "h-12 font-semibold text-lg", type: "email" }}
         labelProps={{ className: "text-base font-semibold" }}
       />
       <RHFTextfield
@@ -91,7 +90,7 @@ export default function SignupForm() {
         label={t("LOGIN.PASSWORD")}
         placeholder={t("LOGIN.PASSWORD")}
         inputProps={{
-          className: "h-10 font-semibold text-lg",
+          className: "h-12 font-semibold text-lg",
           type: showPassword ? "text" : "password",
           endAdornment: (
             <Button
@@ -116,7 +115,7 @@ export default function SignupForm() {
         label={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         placeholder={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         inputProps={{
-          className: "h-10 font-semibold text-lg",
+          className: "h-12 font-semibold text-lg",
           type: showConfirmPassword ? "text" : "password",
           endAdornment: (
             <Button
@@ -135,7 +134,7 @@ export default function SignupForm() {
             </Button>
           ),
         }}
-        labelProps={{ className: "text-base font-semibold" }}
+        labelProps={{ className: " text-base font-semibold" }}
         className="gap-1"
       />
       <div className="flex flex-row gap-2 h-2">
@@ -146,26 +145,26 @@ export default function SignupForm() {
             PASSWORD_MEDIUM && "bg-orange-400",
             PASSWORD_STRONG && "bg-agzakhana-primary",
             values?.password?.length > 12 && "bg-agzakhana-primary",
-            !IS_DIRTY_PASSWORD && "bg-gray-300"
+            !IS_DIRTY_PASSWORD && "bg-gray-300 dark:bg-gray-700"
           )}
         ></span>
         <span
           className={cn(
             "w-1/3 bg-agzakhana-primary",
-            PASSWORD_SHORT && "bg-gray-300",
+            PASSWORD_SHORT && "bg-gray-300 dark:bg-gray-700",
             PASSWORD_MEDIUM && "bg-orange-400",
             PASSWORD_STRONG && "bg-agzakhana-primary",
             values?.password?.length > 12 && "bg-agzakhana-primary",
-            !IS_DIRTY_PASSWORD && "bg-gray-300"
+            !IS_DIRTY_PASSWORD && "bg-gray-300 dark:bg-gray-700"
           )}
         ></span>
         <span
           className={cn(
             "w-1/3 bg-agzakhana-primary rounded-r-full rtl:rounded-r-none rtl:rounded-l-full",
-            PASSWORD_SHORT && "bg-gray-300",
+            PASSWORD_SHORT && "bg-gray-300 dark:bg-gray-700",
             PASSWORD_MEDIUM && "bg-gray-300",
             PASSWORD_STRONG && "bg-agzakhana-primary",
-            !IS_DIRTY_PASSWORD && "bg-gray-300"
+            !IS_DIRTY_PASSWORD && "bg-gray-300 dark:bg-gray-700"
           )}
         ></span>
       </div>
@@ -178,15 +177,15 @@ export default function SignupForm() {
               width={22}
               height={22}
               className={cn(
-                "transition-all duration-300",
+                "transition-all duration-300 ",
                 PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
                 !IS_DIRTY_PASSWORD && "text-gray-500"
               )}
@@ -202,13 +201,13 @@ export default function SignupForm() {
               className={cn(
                 "transition-all duration-300",
                 PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
                 !IS_DIRTY_PASSWORD && "text-gray-500"
               )}
@@ -225,13 +224,13 @@ export default function SignupForm() {
               className={cn(
                 "transition-all duration-300",
                 PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
                 !IS_DIRTY_PASSWORD && "text-gray-500"
               )}
@@ -246,7 +245,7 @@ export default function SignupForm() {
               height={22}
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
                 !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500"
               )}
@@ -254,7 +253,7 @@ export default function SignupForm() {
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
                 !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500"
               )}
@@ -272,11 +271,11 @@ export default function SignupForm() {
         {t("SIGNUP.CREATE_ACCOUNT")}
       </LoadingButton>
 
-      <p className="flex flex-row gap-2 self-center text-gray-800">
+      <p className="flex flex-row gap-2 self-center text-gray-800 dark:text-gray-400">
         {t("SIGNUP.ALREADY_HAVE_AN_ACCOUNT")}
         <Link
           href="/login"
-          className="font-bold text-text-primary hover:underline"
+          className="font-bold text-text-primary hover:underline dark:text-gray-200"
         >
           {t("SIGNUP.SIGN_IN")}
         </Link>

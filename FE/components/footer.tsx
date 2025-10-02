@@ -1,8 +1,7 @@
 // import { Logo, LogoImage, LogoText } from "@/components/shadcnblocks/logo";
 
 import { getTranslations } from "next-intl/server";
-import Image from "next/image";
-import Link from "next/link";
+import Logo from "./logo";
 
 export default async function Footer() {
   const t = await getTranslations();
@@ -39,15 +38,7 @@ export default async function Footer() {
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">
-              <Link href="/">
-                <Image
-                  src="https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(1).png"
-                  height={140}
-                  width={280}
-                  alt="Agzakhana"
-                  priority
-                />
-              </Link>
+              <Logo />
             </div>
             {footerData.map((section, sectionIdx) => (
               <div key={sectionIdx}>

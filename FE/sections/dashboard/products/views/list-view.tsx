@@ -38,7 +38,7 @@ export default async function ProductsListingView({
               </div>
             )}
             {results !== 0 && (
-              <p className="text-lg font-semibold">
+              <p className="text-lg font-semibold dark:text-gray-200">
                 {t("PRODUCTS_LISTING_PAGE.WE_HAVE_FOUND")}
                 <span className="text-agzakhana-primary font-bold">
                   {` ${results} `}

@@ -28,12 +28,15 @@ export function CustomerReview({ review }: { review: Review }) {
     <li className="border-gray-300 border-[1px] rounded-md py-6 px-4 relative dark:border-gray-700">
       {review.editable && (
         <Popover open={showOptions} onOpenChange={setShowOptions}>
-          <PopoverTrigger className=" text-black text-xl aspect-square p-2 absolute top-2 rtl:left-2 ltr:right-2 cursor-pointer bg-transparent hover:bg-gray-300 transition-all duration-300 rounded-md">
-            <Icon icon="charm:menu-kebab" className="w-4! h-4!" />
+          <PopoverTrigger className=" text-black text-xl aspect-square p-2 absolute top-2 rtl:left-2 ltr:right-2 cursor-pointer bg-transparent hover:bg-gray-300 dark:hover:bg-gray-800 transition-all duration-300 rounded-md">
+            <Icon
+              icon="charm:menu-kebab"
+              className="w-4! h-4! dark:text-gray-100"
+            />
           </PopoverTrigger>
-          <PopoverContent className="p-0! min-w-fit w-fit text-gray-600">
+          <PopoverContent className="p-0! min-w-fit w-fit text-gray-600 bg-card-background-dark">
             <ul>
-              <li className="">
+              <li className="text-white">
                 <Dialog
                   open={showCreationModal}
                   onOpenChange={(newVal) => {
@@ -42,7 +45,7 @@ export function CustomerReview({ review }: { review: Review }) {
                     setShowCreationModal(newVal);
                   }}
                 >
-                  <DialogTrigger className="flex flex-row gap-2 items-center cursor-pointer hover:bg-gray-100 px-4 py-4 transition-all duration-300">
+                  <DialogTrigger className="flex flex-row gap-2 items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-4 py-4 transition-all duration-300">
                     <Icon
                       // icon="material-symbols:delete-outline"
                       icon="fluent:edit-20-regular"
@@ -68,7 +71,7 @@ export function CustomerReview({ review }: { review: Review }) {
                   });
                   setShowOptions(false);
                 }}
-                className="flex flex-row gap-2 items-center cursor-pointer hover:bg-gray-100 px-4 py-4 transition-all duration-300"
+                className="flex flex-row gap-2 items-center cursor-pointer hover:bg-gray-100 px-4 py-4 transition-all duration-300 dark:text-white dark:hover:bg-gray-800"
               >
                 <Icon
                   icon="material-symbols:delete-outline"
