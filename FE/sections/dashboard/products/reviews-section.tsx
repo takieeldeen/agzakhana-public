@@ -40,11 +40,11 @@ export default function ReviewsSection() {
         {reviewCount !== 0 && (
           <div className="flex flex-col gap-2">
             <div className="flex flex-row items-center gap-4 mb-4">
-              <strong className=" font-bold text-7xl leading-none">
+              <strong className=" font-bold text-7xl leading-none dark:text-gray-200">
                 {overAllRating?.toString()?.replace(".", ",")}
               </strong>
               <div className="flex flex-col">
-                <span className="font-semibold text-gray-600 text-lg">
+                <span className="font-semibold text-gray-600 text-lg dark:text-gray-300">
                   {t("PRODUCTS_LISTING_PAGE.BASED_ON_REVIEWS", {
                     count: reviewCount,
                   })}
@@ -59,7 +59,7 @@ export default function ReviewsSection() {
                     key={rating}
                     className="flex flex-row items-center gap-4"
                   >
-                    <p className="font-bold text-xl text-center w-6">
+                    <p className="font-bold text-xl text-center w-6 dark:text-gray-400">
                       {rating}
                     </p>
                     <Progress
@@ -67,17 +67,17 @@ export default function ReviewsSection() {
                       value={reviewsFrequency?.[rating]}
                       progressProps={{ className: "bg-agzakhana-primary" }}
                     />
-                    <p className="font-bold text-[16px]">{`${reviewsFrequency?.[rating]}%`}</p>
+                    <p className="font-bold text-[16px] dark:text-gray-400">{`${reviewsFrequency?.[rating]}%`}</p>
                   </div>
                 ))}
               </div>
               {canReview && (
                 <Authenticate>
                   <div className="flex flex-col gap-3">
-                    <p className="text-2xl font-semibold">
+                    <p className="text-2xl font-semibold dark:text-gray-200">
                       {t("PRODUCTS_LISTING_PAGE.WRITE_YOUR_REVIEWS")}
                     </p>
-                    <p className="text-base  font-semibold">
+                    <p className="text-base  font-semibold dark:text-gray-400">
                       {t("PRODUCTS_LISTING_PAGE.SHARE_YOUR_REVIEW")}
                     </p>
 
@@ -102,7 +102,7 @@ export default function ReviewsSection() {
                   height={200}
                   className="text-gray-600"
                 />
-                <p className="text-xl font-semibold text-gray-600">
+                <p className="text-xl font-semibold text-gray-600 dark:text-gray-200">
                   {t("PRODUCTS_LISTING_PAGE.NO_REVIEWS")}
                 </p>
                 <Authenticate>
@@ -119,7 +119,7 @@ export default function ReviewsSection() {
           )}
           {reviewCount > 0 && (
             <>
-              <h5 className="text-2xl font-bold">
+              <h5 className="text-2xl font-bold dark:text-gray-100">
                 {t("PRODUCTS_LISTING_PAGE.CUSTOMER_FEEDBACK")}
               </h5>
               <ul className="flex flex-col gap-6">
@@ -141,7 +141,7 @@ export default function ReviewsSection() {
                       ))}
                     </AccordionContent>
                     {reviewCount > 2 && (
-                      <AccordionTrigger className="justify-center font-bold text-xl items-center hover:no-underline cursor-pointer">
+                      <AccordionTrigger className="justify-center font-bold text-xl items-center hover:no-underline cursor-pointer dark:text-gray-200">
                         {commentsSize !== "expanded"
                           ? t("PRODUCTS_LISTING_PAGE.SHOW_MORE_COMMENTS")
                           : t("PRODUCTS_LISTING_PAGE.SHOW_LESS_COMMENTS")}

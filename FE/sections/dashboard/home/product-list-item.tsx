@@ -16,18 +16,18 @@ export default async function ProductListItem({
   const locale = await getLocale();
   return (
     <li className="flex flex-row items-start gap-2 w-full ">
-      <div className="h-24 w-24 aspect-square bg-gray-200 rounded-md flex items-center justify-center">
+      <div className="h-24 w-24 aspect-square bg-gray-200 rounded-md flex items-center justify-center dark:bg-card-background-dark relative p-2">
         <FallbackImage
           src={product?.imageUrl}
-          height={100}
-          width={50}
           alt={product?.nameAr}
+          fill
+          className="absolute object-contain"
         />
       </div>
       <div className="w-full">
         <Link
           href={`/products/${product?._id}`}
-          className="font-bold w-full text-ellipsis overflow-hidden whitespace-nowrap"
+          className="font-bold w-full text-ellipsis overflow-hidden whitespace-nowrap dark:text-gray-200"
         >
           {product?.[locale === "ar" ? "nameAr" : "nameEn"]}
         </Link>
@@ -40,7 +40,7 @@ export default async function ProductListItem({
             {product?.rating}
           </span>
         </div>
-        <div className="flex flex-row gap-0.5  text-sm">
+        <div className="flex flex-row gap-0.5  text-sm dark:text-gray-400">
           {t("HOME_PAGE.BY")}
           <Link href="/" className="text-agzakhana-primary font-semibold">
             {product?.manufacturer}

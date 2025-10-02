@@ -29,23 +29,12 @@ export default function CustomBreadCrump({ ...props }: Props) {
       <BreadcrumbList>
         {paths.map((path, i) => (
           <>
-            <BreadcrumbItem className="text-gray-500 text-[15px] capitalize font-semibold">
+            <BreadcrumbItem className="text-gray-500 text-[15px] capitalize font-semibold dark:text-gray-300">
               <BreadcrumbLink href={path?.href}>{path?.label}</BreadcrumbLink>
             </BreadcrumbItem>
             {i < paths.length - 1 && <BreadcrumbSeparator />}
           </>
         ))}
-        {/* <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Cases & Covers</BreadcrumbPage>
-        </BreadcrumbItem> */}
       </BreadcrumbList>
     </Breadcrumb>
   );

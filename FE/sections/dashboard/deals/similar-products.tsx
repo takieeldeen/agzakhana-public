@@ -17,18 +17,18 @@ export async function SimilarProductsSection() {
     <section className="flex flex-col gap-3">
       <Carousel className="w-full" dir="ltr">
         <div className="flex justify-between flex-row rtl:flex-row-reverse">
-          <p className="font-bold text-3xl">
+          <p className="font-bold text-3xl dark:text-white">
             {t("PRODUCTS_LISTING_PAGE.SIMILAR_PRODUCTS")}
           </p>
           <div className="flex flex-row gap-4">
-            <CarouselPrevious className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto" />
-            <CarouselNext className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto" />
+            <CarouselPrevious className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto dark:text-agzakhana-primary dark:border-agzakhana-primary dark:border-2" />
+            <CarouselNext className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto dark:text-agzakhana-primary dark:border-agzakhana-primary dark:border-2" />
           </div>
         </div>
         <Separator className="mb-4" />
         <CarouselContent className="gap-8 px-8">
           {PRODUCT_LISTING_PAGE?.content?.map((product) => (
-            <ProductCard key={product?.id} medicine={product} />
+            <ProductCard key={product?._id} medicine={product} />
           ))}
         </CarouselContent>
       </Carousel>

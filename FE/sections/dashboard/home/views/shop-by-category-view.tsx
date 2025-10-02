@@ -26,17 +26,17 @@ export default async function ShopByCategoryView({
       <Carousel className="w-full">
         <div className="flex justify-between flex-row ">
           <div className="flex items-center gap-2 flex-row ">
-            <h5 className="text-3xl font-bold mb-3">
+            <h5 className="text-3xl font-bold mb-3 dark:text-gray-100">
               {t("HOME_PAGE.SHOP_BY_CATEGORY")}
             </h5>
             <div className="flex flex-row  gap-4">
-              <CarouselPrevious className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180" />
-              <CarouselNext className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180" />
+              <CarouselPrevious className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180 dark:text-agzakhana-primary dark:border-agzakhana-primary dark:border-2" />
+              <CarouselNext className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180 dark:text-agzakhana-primary dark:border-agzakhana-primary dark:border-2" />
             </div>
           </div>
           <Link
             href="/deals"
-            className="flex flex-row gap-0.5 items-center  font-semibold hover:gap-2 transition-all duration-300 rtl:flex-row"
+            className="flex flex-row gap-0.5 items-center  font-semibold hover:gap-2 transition-all duration-300 rtl:flex-row dark:text-gray-200"
           >
             {t("HOME_PAGE.ALL_CATEGORIES")}
             <Icon

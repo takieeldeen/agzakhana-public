@@ -17,7 +17,7 @@ export default async function NewsLetterView() {
           type="email"
           placeholder={t("HOME_PAGE.EMAIL_PLACEHOLDER")}
         />
-        <Button className="absolute h-full rounded-full right-0 bg-agzakhana-primary text-lg rtl:left-0 rtl:right-auto">
+        <Button className="absolute h-full rounded-full right-0 bg-agzakhana-primary text-lg rtl:left-0 rtl:right-auto dark:text-white">
           {t("HOME_PAGE.SUBSCRIBE")}
         </Button>
       </form>

@@ -62,7 +62,7 @@ export default function Navbar() {
   return (
     <NavigationMenu
       viewport={false}
-      className="py-3 border-b-2 border-gray-200 w-full  max-w-full justify-start [&>div]:w-full px-8"
+      className="py-3 border-b-2 border-gray-200 dark:border-gray-600 w-full  max-w-full justify-start [&>div]:w-full px-8"
     >
       <NavigationMenuList className=" max-w-full w-full rtl:flex-row-reverse">
         <Link
@@ -79,7 +79,7 @@ export default function Navbar() {
           >
             <Link
               href="/deals"
-              className="inline-flex flex-row gap-2 items-center text-[16px]"
+              className="inline-flex flex-row gap-2 items-center text-[16px] dark:text-gray-200"
             >
               <Icon
                 icon="solar:fire-broken"
@@ -93,14 +93,14 @@ export default function Navbar() {
           <NavigationMenuLink asChild className="font-semibold">
             <Link
               href="/"
-              className="inline-flex flex-row gap-2 items-center text-[16px]"
+              className="inline-flex flex-row gap-2 items-center text-[16px] dark:text-gray-200"
             >
               {t("NAV_BAR.HOME")}
             </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="rtl:flex-row-reverse">
+          <NavigationMenuTrigger className="rtl:flex-row-reverse dark:text-gray-200">
             {t("NAV_BAR.CATEGORIES")}
           </NavigationMenuTrigger>
           <NavigationMenuContent className="z-20">
@@ -152,7 +152,7 @@ export default function Navbar() {
           <NavigationMenuLink asChild className="font-semibold">
             <Link
               href="/contact-us "
-              className="inline-flex flex-row gap-2 items-center text-[16px]"
+              className="inline-flex flex-row gap-2 items-center text-[16px] dark:text-gray-200"
             >
               {t("NAV_BAR.CONTACT_US")}
             </Link>

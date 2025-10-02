@@ -19,6 +19,7 @@ export default async function DetailsView({
 }) {
   const locale = await getLocale();
   const t = await getTranslations();
+  console.log(product);
   return (
     <div className="flex flex-col gap-3 px-4">
       <CustomBreadCrump className="p-3" />
@@ -38,7 +39,10 @@ export default async function DetailsView({
             className="relative text-lg rounded-md "
           />
           <div className="flex flex-row gap-2">
-            <h2 style={{ fontSize: "40px" }} className="font-semibold">
+            <h2
+              style={{ fontSize: "40px" }}
+              className="font-semibold dark:text-gray-200"
+            >
               {locale === "en" ? product?.nameEn : product?.nameAr}
             </h2>
           </div>
@@ -48,9 +52,9 @@ export default async function DetailsView({
               icon="material-symbols:star-rounded"
               className="text-orange-400 text-4xl"
             />
-            <span className="font-semibold leading-0">
+            <span className="font-semibold leading-0 dark:text-gray-200">
               {t("PRODUCTS_LISTING_PAGE.REVIEW", {
-                count: 25,
+                count: product?.reviewers,
               })}
             </span>
           </div>
@@ -71,12 +75,12 @@ export default async function DetailsView({
                 %`,
                 })}
               </span>
-              <span className="font-semibold leading-none text-2xl line-through text-text-secondary">
+              <span className="font-semibold leading-none text-2xl line-through text-text-secondary dark:text-gray-400">
                 {t("COMMON.EGP", { price: product?.beforeDiscount })}
               </span>
             </div>
           </div>
-          <p className="text-xl mb-8">
+          <p className="text-xl mb-8 dark:text-gray-100">
             {locale === "ar" ? product?.descriptionAr : product?.descriptionEn}
           </p>
 
@@ -85,34 +89,34 @@ export default async function DetailsView({
       </div>
       <ul className="flex flex-col gap-8">
         <li className="flex flex-col gap-2">
-          <p className="font-bold text-3xl">
+          <p className="font-bold text-3xl dark:text-gray-200">
             {t("PRODUCTS_LISTING_PAGE.INDICATIONS_FOR_USE")}
           </p>
           <Separator />
-          <p className="text-gray-500 font-semibold">
+          <p className="text-gray-500 font-semibold dark:text-gray-300">
             {locale === "ar" ? product?.indicationsAr : product?.indicationsEn}
           </p>
         </li>
         <li className="flex flex-col gap-2">
-          <p className="font-bold text-3xl">
+          <p className="font-bold text-3xl dark:text-gray-200">
             {t("PRODUCTS_LISTING_PAGE.DOSAGE")}
           </p>
           <Separator />
-          <p className="text-gray-500 font-semibold">
+          <p className="text-gray-500 font-semibold dark:text-gray-300">
             {locale === "ar" ? product?.dosageAr : product?.dosageEn}
           </p>
         </li>
         <li className="flex flex-col gap-2">
-          <p className="font-bold text-3xl">
+          <p className="font-bold text-3xl dark:text-gray-200">
             {t("PRODUCTS_LISTING_PAGE.WARNING")}
           </p>
           <Separator />
-          <p className="text-gray-500 font-semibold">
+          <p className="text-gray-500 font-semibold dark:text-gray-300">
             {t("PRODUCTS_LISTING_PAGE.MEDICINE_WARNING")}
           </p>
         </li>
         <li className="flex flex-col gap-2">
-          <p className="font-bold text-3xl">
+          <p className="font-bold text-3xl dark:text-gray-200">
             {t("PRODUCTS_LISTING_PAGE.REVIEWS_AND_RATING")}
           </p>
           <Separator />

@@ -9,7 +9,7 @@ export default async function CategoryCard({
 }) {
   const locale = await getLocale();
   return (
-    <li className="h-32 w-32 aspect-square bg-gray-200 rounded-md flex flex-col items-center justify-center transition-all hover:translate-y-2 duration-300 cursor-pointer font-thin gap-2">
+    <li className="h-32 w-32 aspect-square bg-gray-200 rounded-md flex flex-col items-center justify-center transition-all hover:translate-y-2 duration-300 cursor-pointer font-thin gap-2 dark:bg-card-background-dark dark:text-gray-300">
       <Icon
         icon={category?.icon}
         width={64}

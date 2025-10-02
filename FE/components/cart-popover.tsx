@@ -36,7 +36,10 @@ export function CartPopover() {
       <PopoverTrigger asChild>
         <Button className="bg-transparent shadow-none flex flex-row gap-4 p-0    items-end">
           <div className="relative">
-            <Icon icon="mynaui:cart" className="text-text-primary h-7! w-7!" />
+            <Icon
+              icon="mynaui:cart"
+              className="text-text-primary h-7! w-7! dark:text-white"
+            />
             <AnimatePresence>
               {!cartEmpty && (
                 <motion.span
@@ -50,20 +53,20 @@ export function CartPopover() {
               )}
             </AnimatePresence>
           </div>
-          <span className="font-semibold text-text-primary text-[16px]">
+          <span className="font-semibold text-text-primary dark:text-white text-[16px]">
             {t("HEADER.CART")}
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-fit">
+      <PopoverContent className="w-fit dark:bg-card-background-dark">
         <div className="grid gap-4">
           <div className="w-full flex justify-between items-center">
-            <h4 className="leading-none font-bold text-text-primary text-lg">
+            <h4 className="leading-none font-bold text-text-primary dark:text-white text-lg">
               {t("CART.MY_SHOPPING_CART")}
             </h4>
             {!cartEmpty && (
               <Button
-                className="bg-transparent shadow-none text-gray-700 font-semibold  drop-shadow-none rounded-none py-0.5 h-auto px-0 flex items-center "
+                className="bg-transparent shadow-none text-gray-700 dark:text-gray-200 font-semibold  drop-shadow-none rounded-none py-0.5 h-auto px-0 flex items-center "
                 disabled={isLoading}
                 onClick={handleClearCart}
               >
@@ -75,7 +78,7 @@ export function CartPopover() {
               </Button>
             )}
           </div>
-          <Separator />
+          <Separator className="dark:bg-gray-500" />
           <div
             className={cn(
               "space-y-2 max-h-96 overflow-y-auto overflow-x-hidden px-2 min-w-96",
@@ -103,7 +106,7 @@ export function CartPopover() {
           </div>
           {!cartEmpty && (
             <Link href="/cart" className="justify-center items-center flex">
-              <PopoverClose className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none text-center justify-center items-center">
+              <PopoverClose className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none text-center justify-center items-center dark:text-white">
                 {t("CART.SHOW_ALL")}
                 <Icon
                   icon="humbleicons:chevron-left"
@@ -134,7 +137,7 @@ function ProductItem({ cartItem }: { cartItem: any; i: number }) {
       key={cartItem?._id}
       className={cn(
         "flex flex-row gap-2 items-center py-2 relative ",
-        "border-b-[1px] border-gray-200"
+        "border-b-[1px] border-gray-200 dark:border-gray-500"
       )}
     >
       <div className="flex flex-row gap-2 items-center mr-auto rtl:mr-0 rtl:ml-auto">
@@ -202,7 +205,7 @@ function DealItem({ cartItem }: { cartItem: any; i: number }) {
       key={cartItem?._id}
       className={cn(
         "flex flex-row gap-2 items-center py-2 relative ",
-        "border-b-[1px] border-gray-200"
+        "border-b-[1px] border-gray-200 dark:border-gray-500"
       )}
     >
       <div className="flex flex-row gap-2 items-center mr-auto rtl:mr-0 rtl:ml-auto">

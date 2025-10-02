@@ -64,9 +64,9 @@ export default function AddToCartButton({
       {...other}
       onClick={handleClick}
       className={cn(
-        "bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200 ",
+        "bg-green-100 text-green-800 font-bold flex flex-row items-center gap-2 hover:bg-green-200  dark:bg-transparent dark:text-agzakhana-primary dark:border-agzakhana-primary dark:border-1",
         ALREADY_IN_CART &&
-          "bg-agzakhana-primary hover:bg-agzakhana-primary text-green-100",
+          "bg-agzakhana-primary hover:bg-agzakhana-primary text-green-100  dark:bg-agzakhana-primary dark:text-white",
 
         other?.className
       )}

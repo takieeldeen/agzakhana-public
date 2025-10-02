@@ -55,6 +55,8 @@ input[type="number"]::-webkit-outer-spin-button {
   --color-text-primary: #253d4e;
   --color-text-secondary: #adadad;
   --color-agzakhana-background-dark: #191a1f;
+  --color-card-background-dark: #1e212a;
+  --color-test: white;
 }
 
 :root {
@@ -124,6 +126,7 @@ input[type="number"]::-webkit-outer-spin-button {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --color-test: black;
 }
 
 @layer base {
@@ -143,6 +146,9 @@ input[type="number"]::-webkit-outer-spin-button {
   ::-webkit-scrollbar-track {
     background: oklch(96.7% 0.003 264.542);
     border-radius: 99999px;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: #1e212a;
   }
 
   /* Handle */

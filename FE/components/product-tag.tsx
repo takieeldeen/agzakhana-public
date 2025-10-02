@@ -8,7 +8,7 @@ export default async function ProductTag({ tag, className, ...other }: Props) {
   type SpanClassName = React.HTMLAttributes<HTMLSpanElement>["className"];
 
   const tagStyles: Record<string, SpanClassName> = {
-    HOT: "bg-[#F74B81] text-white px-2 py-1 ",
+    HOT: "bg-[#F74B81] dark:brightness-95 text-white px-2 py-1 ",
     SALE: "bg-[#67BCEE] text-white px-2 py-1 ",
     NEW: "bg-[#3BB77E] text-white px-2 py-1 ",
   };

@@ -25,7 +25,7 @@ export function CustomerReview({ review }: { review: Review }) {
   const { deleteReview } = useMutateProductReviews();
   const t = useTranslations();
   return (
-    <li className="border-gray-300 border-[1px] rounded-md py-6 px-4 relative">
+    <li className="border-gray-300 border-[1px] rounded-md py-6 px-4 relative dark:border-gray-700">
       {review.editable && (
         <Popover open={showOptions} onOpenChange={setShowOptions}>
           <PopoverTrigger className=" text-black text-xl aspect-square p-2 absolute top-2 rtl:left-2 ltr:right-2 cursor-pointer bg-transparent hover:bg-gray-300 transition-all duration-300 rounded-md">
@@ -96,10 +96,10 @@ export function CustomerReview({ review }: { review: Review }) {
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col justify-center gap-1">
-              <p className="font-bold text-lg leading-none">
+              <p className="font-bold text-lg leading-none dark:text-gray-200">
                 {review?.user?.name ?? review?.user?.email}
               </p>
-              <p className="font-semibold leading-none text-gray-500 ">
+              <p className="font-semibold leading-none text-gray-500 dark:text-gray-400">
                 {new Date(review?.createdAt)?.toLocaleDateString(
                   locale === "ar" ? "ar-EG" : "en-US",
                   {
@@ -114,7 +114,9 @@ export function CustomerReview({ review }: { review: Review }) {
           <StarRating rating={review?.rate} disabled />
         </div>
 
-        <p className="font-semibold text-lg">{review?.comment}</p>
+        <p className="font-semibold text-lg dark:text-gray-300">
+          {review?.comment}
+        </p>
       </div>
     </li>
   );
