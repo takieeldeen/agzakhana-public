@@ -18,6 +18,25 @@ import { paymentRouter } from "./routers/paymentRouter";
 import { stripeWebhookHandler } from "./controllers/paymentController";
 import ordersRouter from "./routers/orderRouter";
 
+export let clientLocale = "ar";
+const app = express();
+app.use(morgan("dev"));
+app.use(cookieParser());
+app.use((req: any, res, next) => {
+  const locale = req?.cookies?.NEXT_LOCALE;
+  if (locale) {
+    req.headers["Accept-Language"] = locale;
+    if (locale === "ar") {
+      req.headers["accept-language"] = "ar-EG,ar;q=0.9";
+      clientLocale = "ar";
+    } else {
+      req.headers["accept-language"] = "en-US,en;q=0.9";
+      clientLocale = "en";
+    }
+  }
+  next();
+});
+
 i18next
   .use(Backend) // optional, if loading translation files from disk
   .use(middleware.LanguageDetector) // 👈 enable language detection
@@ -35,8 +54,6 @@ i18next
     },
   })
   .then(() => console.log("initiated i18n"));
-const app = express();
-app.use(morgan("dev"));
 
 // This endpoints required raw body for signature checking
 app.post(
@@ -46,7 +63,7 @@ app.post(
 );
 
 app.use(express.json());
-app.use(cookieParser());
+
 app.use(
   cors({
     origin: "http://localhost:3000", // your frontend origin
