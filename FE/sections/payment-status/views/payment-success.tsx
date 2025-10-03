@@ -31,12 +31,14 @@ export default async function PaymentSuccess({ order }: { order: Order }) {
               {t("PAYMENT_STATUS.TRANSACTION_DATE")}
             </p>
             <p className="font-semibold text-black">
-              {new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-US", {
-                weekday: "long",
-                day: "2-digit",
-                month: "long",
-                year: "numeric",
-              }).format(new Date(order?.createdAt ?? ""))}
+              {order?.createdAt
+                ? new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-US", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  }).format(new Date(order?.createdAt ?? ""))
+                : "--"}
             </p>
           </div>
           {/* <div className="flex justify-between flex-row">

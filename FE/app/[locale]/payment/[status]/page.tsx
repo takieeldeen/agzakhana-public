@@ -14,6 +14,7 @@ export default async function PaymentConfirmation({
   const { status } = await params;
   const SUCCESSFUL = status === "success";
   const FAILED = status === "fail";
+  console.log(error);
   if (SUCCESSFUL)
     return (
       <ErrorHandler error={error}>

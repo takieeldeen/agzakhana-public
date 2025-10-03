@@ -18,13 +18,16 @@ export default function TableHeadCustom({ columns, ...other }: TableHeadProps) {
     <TableHeader>
       <TableRow
         {...other}
-        className={cn("h-12 bg-gray-200 hover:bg-gray-200", other.className)}
+        className={cn(
+          "h-12 bg-gray-200 hover:bg-gray-200 dark:bg-agzakhana-primary",
+          other.className
+        )}
       >
         {columns?.map((column) => (
           <TableHead
             {...column?.props}
             className={cn(
-              "w-[100px] rtl:text-right font-bold text-gray-600 ",
+              "w-[100px] rtl:text-right font-bold text-gray-600 dark:text-gray-800 ",
               column?.props?.className
             )}
             key={column?.id}

@@ -15,7 +15,7 @@ export default function MyOrdersTableRow({ order }: { order: Partial<Order> }) {
   const t = useTranslations();
   return (
     <>
-      <TableRow>
+      <TableRow className="dark:text-gray-200">
         <TableCell className="font-medium">{order?._id}</TableCell>
         <TableCell className="text-center">{order.items?.length}</TableCell>
         <TableCell className="text-center">
@@ -50,7 +50,7 @@ export default function MyOrdersTableRow({ order }: { order: Partial<Order> }) {
         </TableCell>
         <TableCell className="text-center font-semibold">
           <Button
-            className="bg-gray-200 w-8 h-8 rounded-full"
+            className="bg-gray-200 w-8 h-8 rounded-full dark:bg-card-background-dark"
             onClick={() => setCollapsed((prev) => !prev)}
           >
             <Icon
@@ -65,36 +65,43 @@ export default function MyOrdersTableRow({ order }: { order: Partial<Order> }) {
       </TableRow>
       <TableRow className="border-0">
         <TableCell className="font-medium relative p-0" colSpan={6}>
-          <Collapse collapsed={collapsed} className="p-2 bg-gray-200">
-            <ul className="bg-gray-100 rounded-md p-2">
-              {order?.items?.map((order) => (
+          <Collapse
+            collapsed={collapsed}
+            className="p-2 bg-gray-200 dark:bg-card-background-dark"
+          >
+            <ul className="bg-gray-100 rounded-md p-2 dark:bg-agzakhana-background-dark dark:text-gray-200">
+              {order?.items?.map((ord, i) => (
                 <li
-                  key={order?.productId ?? order?.dealId}
-                  className="flex flex-row rtl:flex-row-reverse gap-2 p-2 border-b-[1] border-b-gray-200 items-center"
+                  key={ord?.productId ?? ord?.dealId}
+                  className={cn(
+                    "flex flex-row rtl:flex-row-reverse gap-2 p-2 border-b-[1px]  items-center",
+                    (order?.items?.length ?? 0) - 1 > i &&
+                      "border-b-gray-200 dark:border-b-gray-700"
+                  )}
                 >
                   <div className="h-16 w-16 relative">
                     <Image
-                      src={order?.imageUrl}
+                      src={ord?.imageUrl}
                       fill
-                      alt={locale === "ar" ? order?.nameAr : order?.nameEn}
+                      alt={locale === "ar" ? ord?.nameAr : ord?.nameEn}
                       className="object-contain"
                     />
                   </div>
                   <div className="flex flex-col justify-between h-full w-full self-start">
                     <p className="text-base">
-                      {locale === "ar" ? order?.nameAr : order?.nameEn}
+                      {locale === "ar" ? ord?.nameAr : ord?.nameEn}
                     </p>
                     <p className="text-gray-500 text-xs">
-                      {order?.productId ?? order?.dealId}
+                      {ord?.productId ?? ord?.dealId}
                     </p>
                   </div>
-                  <p className="min-w-24 text-center">x{order?.qty}</p>
+                  <p className="min-w-24 text-center">x{ord?.qty}</p>
                   <p className="min-w-24 text-start w-fit font-semibold text-base">
                     {t("COMMON.EGP", {
                       price: new Intl.NumberFormat(
                         locale === "ar" ? "ar-EG" : "en-US",
                         { minimumFractionDigits: 2, maximumFractionDigits: 2 }
-                      ).format(order?.price ?? 0),
+                      ).format(ord?.price ?? 0),
                     })}
                   </p>
                 </li>

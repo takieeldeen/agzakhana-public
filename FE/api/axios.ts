@@ -4,7 +4,6 @@ const axiosModule = IS_SERVER
   : await import("./axios-client");
 
 const axios = axiosModule.default;
-console.log(axios, axiosModule);
 export const endpoints = {
   auth: {
     login: "/v1/auth/login",

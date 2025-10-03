@@ -14,8 +14,12 @@ axiosServer.interceptors.response.use(
 
 axiosServer.interceptors.request.use(async (req: any) => {
   const userCookies = await cookies();
+  const locale = userCookies.get("NEXT_LOCALE")?.value;
   const token = userCookies.get("token")?.value;
   req.headers.Cookie = `token=${token}`;
+  if (locale) {
+    req.headers["Accept-Language"] = locale;
+  }
   return req;
 });
 

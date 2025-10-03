@@ -10,7 +10,7 @@ export default function PersonalInfoSection() {
   const { user } = useAuth();
   return (
     <aside className="py-2 px-4 flex flex-col items-center gap-4 ">
-      <h4 className="text-2xl font-bold text-right self-start">
+      <h4 className="text-2xl font-bold text-right self-start dark:text-gray-200">
         {t("PROFILE.PERSONAL_INFO")}
       </h4>
       <Separator className="" />
@@ -35,30 +35,30 @@ export default function PersonalInfoSection() {
       <div className="w-full p-2">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col items-center">
-            <strong className="text-base font-semibold text-gray-600">
+            <strong className="text-base font-semibold text-gray-600 dark:text-gray-200">
               {t("PROFILE.USERNAME")}
             </strong>
-            <strong className="text-lg font-semibold">
+            <strong className="text-lg font-semibold dark:text-gray-400">
               {user?.name ?? t("COMMON.UNKOWN")}
             </strong>
           </div>
           <Separator className="" />
 
           <div className="flex flex-col items-center">
-            <strong className="text-base font-semibold text-gray-600">
+            <strong className="text-base font-semibold text-gray-600 dark:text-gray-200">
               {t("PROFILE.EMAIL")}
             </strong>
-            <strong className="text-lg font-semibold">
+            <strong className="text-lg font-semibold dark:text-gray-400">
               {user?.email ?? t("COMMON.UNKOWN")}
             </strong>
           </div>
           <Separator className="" />
 
           <div className="flex flex-col items-center">
-            <strong className="text-base font-semibold text-gray-600">
+            <strong className="text-base font-semibold text-gray-600 dark:text-gray-200">
               {t("PROFILE.PHONE")}
             </strong>
-            <strong className="text-lg font-semibold">
+            <strong className="text-lg font-semibold dark:text-gray-400">
               {user?.phoneNumber ?? t("COMMON.UNKOWN")}
             </strong>
           </div>
