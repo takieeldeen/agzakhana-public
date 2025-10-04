@@ -11,12 +11,15 @@ import { useTranslations } from "next-intl";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
 
 export default function ResetPasswordForm() {
   // State Management ////////////////////////////////
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const t = useTranslations();
+  const searchParams = useSearchParams();
+  console.log(searchParams.get("token"));
   const loginFormSchema = z.object({
     password: z
       .string()
@@ -66,7 +69,7 @@ export default function ResetPasswordForm() {
         label={t("LOGIN.PASSWORD")}
         placeholder={t("LOGIN.PASSWORD")}
         inputProps={{
-          className: "h-10 font-semibold text-lg",
+          className: "h-[48px] font-semibold text-lg",
           type: showPassword ? "text" : "password",
           endAdornment: (
             <Button
@@ -91,7 +94,7 @@ export default function ResetPasswordForm() {
         label={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         placeholder={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         inputProps={{
-          className: "h-10 font-semibold text-lg",
+          className: "h-[48px] font-semibold text-lg",
           type: showConfirmPassword ? "text" : "password",
           endAdornment: (
             <Button
@@ -120,7 +123,7 @@ export default function ResetPasswordForm() {
               values?.password?.length <= 12 &&
               "bg-orange-400",
             values?.password?.length > 12 && "bg-agzakhana-primary",
-            !IS_DIRTY_PASSWORD && "bg-gray-300"
+            !IS_DIRTY_PASSWORD && "bg-gray-300 dark:bg-gray-700"
           )}
         ></span>
         <span
@@ -131,7 +134,7 @@ export default function ResetPasswordForm() {
               values?.password?.length <= 12 &&
               "bg-orange-400",
             values?.password?.length > 12 && "bg-agzakhana-primary",
-            !IS_DIRTY_PASSWORD && "bg-gray-300"
+            !IS_DIRTY_PASSWORD && "bg-gray-300 dark:bg-gray-700"
           )}
         ></span>
         <span
@@ -142,7 +145,7 @@ export default function ResetPasswordForm() {
               values?.password?.length <= 12 &&
               "bg-orange-400",
             values?.password?.length > 12 && "bg-agzakhana-primary",
-            !IS_DIRTY_PASSWORD && "bg-gray-300"
+            !IS_DIRTY_PASSWORD && "bg-gray-300 dark:bg-gray-700"
           )}
         ></span>
       </div>
@@ -157,15 +160,15 @@ export default function ResetPasswordForm() {
               className={cn(
                 "transition-all duration-300",
                 PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.MIN_8_CHARACTERS")}
@@ -179,15 +182,15 @@ export default function ResetPasswordForm() {
               className={cn(
                 "transition-all duration-300",
                 PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.PASSWORD_CASE")}
@@ -202,15 +205,15 @@ export default function ResetPasswordForm() {
               className={cn(
                 "transition-all duration-300",
                 PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.SPECIAL_CHAR")}
@@ -223,17 +226,17 @@ export default function ResetPasswordForm() {
               height={22}
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500"
+                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500",
+                "font-semibold text-gray-500 dark:text-gray-300",
                 PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500"
+                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.PASSWORD_MATCH")}

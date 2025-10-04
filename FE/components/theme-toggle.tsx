@@ -26,7 +26,8 @@ export function ModeToggle() {
   if (!mounted) return null;
   return (
     <div className="flex flex-row items-center gap-2">
-      <Icon icon="circum:dark" className="dark:text-white h-6 w-6" />
+      <Icon icon="circum:light" className="dark:text-white h-6 w-6" />
+
       <Tooltip>
         <TooltipTrigger asChild>
           <Switch
@@ -43,7 +44,7 @@ export function ModeToggle() {
           </p>
         </TooltipContent>
       </Tooltip>
-      <Icon icon="circum:light" className="dark:text-white h-6 w-6" />
+      <Icon icon="circum:dark" className="dark:text-white h-6 w-6" />
     </div>
     // <div className="flex items-center -space-x-2">
 

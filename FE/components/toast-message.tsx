@@ -33,7 +33,7 @@ export default function ToastMessage({
   if (!!title) finalTitle = title;
   if (!title) finalTitle = variantProps[variant].title;
   return (
-    <div className="bg-white rounded-md min-w-96 w-fit  border-2 flex flex-row gap-2 items-stretch overflow-hidden pr-2 rtl:pr-0 rtl:pl-2 rtl:font-cairo">
+    <div className="bg-white rounded-md min-w-96 w-fit  border-l-2 flex flex-row gap-2 items-stretch overflow-hidden pr-2 rtl:pr-0 rtl:pl-2 rtl:font-cairo dark:bg-card-background-dark ">
       <div
         className={cn(
           "bg-agzakhana-primary w-1",
@@ -50,14 +50,18 @@ export default function ToastMessage({
           <Icon icon={variantProps?.[variant]?.icon} />
         </div>
         <div className="flex flex-col justify-center ">
-          <span className="font-semibold leading-6">{finalTitle}</span>
+          <span className="font-semibold leading-6 dark:text-gray-200">
+            {finalTitle}
+          </span>
           {!!subtitle && (
-            <span className="text-sm text-gray-500 ">{subtitle}</span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {subtitle}
+            </span>
           )}
         </div>
       </div>
       <Button
-        className="bg-gray-100 h-8 w-8 items-center justify-center flex rounded-full my-auto aspect-square justify-self-end text-gray-500"
+        className="bg-gray-100 dark:bg-gray-800 h-8 w-8 items-center justify-center flex rounded-full my-auto aspect-square justify-self-end text-gray-500 dark:text-gray-200"
         onClick={() => toast.dismiss(t)}
       >
         <Icon icon="material-symbols:close-rounded" />

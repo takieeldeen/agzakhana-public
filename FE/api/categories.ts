@@ -34,7 +34,7 @@ export async function getAllCategories() {
       content: [],
       results: 0,
       status: "fail",
-      error: err?.response?.data,
+      error: err,
     };
   }
 }

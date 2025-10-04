@@ -34,7 +34,7 @@ export async function getAllDeals(
       content: [],
       results: 0,
       status: "fail",
-      error: err?.response?.data,
+      error: err,
     };
   }
 }
@@ -116,7 +116,7 @@ export async function getLatestDeals() {
       content: [],
       results: 0,
       status: "fail",
-      error: err?.response?.data,
+      error: err,
     };
   }
 }

@@ -3,9 +3,10 @@ const axios = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
+
 axios.interceptors.response.use(
   (res: any) => res,
-  (error: any) => Promise.reject(error)
+  (error: any) => Promise.reject(error?.response?.data ?? error)
 );
 
 axios.interceptors.request.use(async (req: any) => req);

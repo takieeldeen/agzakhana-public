@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
 import axios, { endpoints } from "./axios";
 import { UserType } from "@/types/users";
 import { AxiosResponse } from "axios";
@@ -31,4 +30,22 @@ export async function checkAuth() {
 export async function register(payload: any) {
   const URL = endpoints.auth.register;
   await axios.post(URL, payload);
+}
+
+export async function forgetPassword(payload: any) {
+  const URL = endpoints.auth.forgetPassword;
+  return await axios.post(URL, payload);
+}
+
+export async function checkResetToken(payload: any) {
+  try {
+    if (!payload?.token) return { content: null, status: "fail", error: null };
+    const URL = endpoints.auth.checkResetToken;
+    console.log(URL);
+    const res = await axios.post(URL, payload);
+    const { content, status } = res?.data;
+    return { content: content as UserType, status, error: null };
+  } catch (err) {
+    return { content: null, status: "fail", error: err };
+  }
 }

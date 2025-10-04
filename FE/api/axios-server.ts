@@ -1,7 +1,7 @@
 "use server";
 import Axios from "axios";
 import { cookies } from "next/headers";
-
+console.log(process.env.NEXT_PUBLIC_API_URL);
 const axiosServer = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
@@ -9,7 +9,7 @@ const axiosServer = Axios.create({
 
 axiosServer.interceptors.response.use(
   (res: any) => res,
-  (error: any) => Promise.reject(error)
+  (error: any) => Promise.reject(error?.response?.data ?? error)
 );
 
 axiosServer.interceptors.request.use(async (req: any) => {

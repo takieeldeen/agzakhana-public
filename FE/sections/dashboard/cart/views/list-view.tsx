@@ -24,7 +24,7 @@ export default function CartListView() {
       await checkout();
     } catch (err: any) {
       console.log(err);
-      pushMessage({ variant: "fail", subtitle: err?.response?.data?.message });
+      pushMessage({ variant: "fail", subtitle: err?.message });
     } finally {
       setCheckoutLoading(false);
     }

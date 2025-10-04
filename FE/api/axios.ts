@@ -11,6 +11,8 @@ export const endpoints = {
     checkAuth: "/v1/auth/checkAuth",
     register: "/v1/auth/register",
     logout: "/v1/auth/logout",
+    forgetPassword: "/v1/auth/forget-password",
+    checkResetToken: "/v1/auth/check-reset-token",
   },
   products: {
     list: "/v1/products",
