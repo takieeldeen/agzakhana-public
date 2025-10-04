@@ -13,7 +13,7 @@ export default async function LoginView({ token }: { token: string }) {
       <ErrorView
         title={t("FORGOT_PASSWORD.TOKEN_ERROR_TITLE")}
         subtitle={t("FORGOT_PASSWORD.TOKEN_ERROR_SUBTITLE")}
-        actionLink="/forget-password"
+        actionLink="/forgot-password"
         actionTitle={t("FORGOT_PASSWORD.BACK_TO_FORGET_PASSWORD")}
       />
     );

@@ -41,11 +41,19 @@ export async function checkResetToken(payload: any) {
   try {
     if (!payload?.token) return { content: null, status: "fail", error: null };
     const URL = endpoints.auth.checkResetToken;
-    console.log(URL);
     const res = await axios.post(URL, payload);
     const { content, status } = res?.data;
     return { content: content as UserType, status, error: null };
   } catch (err) {
     return { content: null, status: "fail", error: err };
   }
+}
+
+export async function resetPasword(payload: {
+  token: string;
+  password: string;
+  passwordConfirmation: string;
+}) {
+  const URL = endpoints.auth.resetPassword;
+  return await axios.post(URL, payload);
 }

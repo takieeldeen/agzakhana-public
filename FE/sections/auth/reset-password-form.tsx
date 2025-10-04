@@ -6,12 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
 import RHFTextfield from "@/components/rhf-textfield";
-import { Button } from "@/components/ui/button";
+import { Button, LoadingButton } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { resetPasword } from "@/api/auth";
+import { pushMessage } from "@/components/toast-message";
 
 export default function ResetPasswordForm() {
   // State Management ////////////////////////////////
@@ -19,7 +21,8 @@ export default function ResetPasswordForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const t = useTranslations();
   const searchParams = useSearchParams();
-  console.log(searchParams.get("token"));
+  const token = searchParams.get("token");
+  const router = useRouter();
   const loginFormSchema = z.object({
     password: z
       .string()
@@ -28,7 +31,7 @@ export default function ResetPasswordForm() {
         t("FORM_VALIDATIONS.REQUIRED_FIELD", { field: t("LOGIN.PASSWORD") })
       )
       .min(8, t("VALIDATIONS.PASSWORD_MIN_LENGTH")),
-    confirmPassword: z
+    passwordConfirmation: z
       .string()
       .min(
         1,
@@ -39,7 +42,7 @@ export default function ResetPasswordForm() {
   });
   const defaultValues = {
     password: "",
-    confirmPassword: "",
+    passwordConfirmation: "",
   };
   const methods = useForm({
     resolver: zodResolver(loginFormSchema),
@@ -47,21 +50,48 @@ export default function ResetPasswordForm() {
   });
   const {
     watch,
-    formState: { dirtyFields },
+    setError,
+    formState: { dirtyFields, isSubmitting },
+    reset,
   } = methods;
   const values = watch();
   const IS_DIRTY_PASSWORD = dirtyFields.password;
-  const IS_DIRTY_CONFIRM_PASSWORD = dirtyFields.confirmPassword;
   // Password validation checks ///////////////////////
   const PASSWORD_LONG_ENOUGH = values.password.length >= 8;
   const PASSWORD_HAS_UPPERCASE = /[A-Z]/.test(values.password);
   const PASSWORD_HAS_SPECIAL_CHAR = /[!@#$%^&*(),.?":{}|<>]/.test(
     values.password
   );
-  const PASSWORDS_MATCH = values.password === values.confirmPassword;
-  const onSubmit = useCallback((data: any) => {
-    console.log(data);
-  }, []);
+  const PASSWORDS_MATCH = values.password === values.passwordConfirmation;
+  const onSubmit = useCallback(
+    async (data: any) => {
+      try {
+        data.token = token;
+        await resetPasword(data);
+        pushMessage({
+          variant: "success",
+          subtitle: t("RESET_PASSWORD.RESET_SUCCESS"),
+        });
+        reset();
+        router.push("/");
+      } catch (err: any) {
+        if (err?.isFormError) {
+          // for(const [key,value] )
+          for (const [key, value] of Object.entries(
+            err?.error?.errorObject ?? {}
+          )) {
+            setError(key as any, { type: "custom", message: value as any });
+          }
+        }
+        pushMessage({
+          variant: "fail",
+          subtitle: t("RESET_PASSWORD.RESET_FAILED"),
+        });
+        console.log(err);
+      }
+    },
+    [reset, router, setError, t, token]
+  );
   return (
     <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
       <RHFTextfield
@@ -90,7 +120,7 @@ export default function ResetPasswordForm() {
         className="gap-1"
       />
       <RHFTextfield
-        name="confirmPassword"
+        name="passwordConfirmation"
         label={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         placeholder={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         inputProps={{
@@ -154,12 +184,14 @@ export default function ResetPasswordForm() {
         <li className="flex flex-col gap-2">
           <div className="flex flex-row gap-2 items-center">
             <Icon
-              icon="charm:cross"
+              icon={PASSWORD_LONG_ENOUGH ? "stash:check-solid" : "charm:cross"}
               width={22}
               height={22}
               className={cn(
                 "transition-all duration-300",
-                PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
+                PASSWORD_LONG_ENOUGH
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
@@ -167,7 +199,9 @@ export default function ResetPasswordForm() {
               className={cn(
                 "transition-all duration-300",
                 "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
+                PASSWORD_LONG_ENOUGH
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
@@ -176,12 +210,16 @@ export default function ResetPasswordForm() {
           </div>
           <div className="flex flex-row gap-2 items-center">
             <Icon
-              icon="charm:cross"
+              icon={
+                PASSWORD_HAS_UPPERCASE ? "stash:check-solid" : "charm:cross"
+              }
               width={22}
               height={22}
               className={cn(
                 "transition-all duration-300",
-                PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
+                PASSWORD_HAS_UPPERCASE
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
@@ -189,7 +227,9 @@ export default function ResetPasswordForm() {
               className={cn(
                 "transition-all duration-300",
                 "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
+                PASSWORD_HAS_UPPERCASE
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
@@ -199,12 +239,16 @@ export default function ResetPasswordForm() {
 
           <div className="flex flex-row gap-2 items-center">
             <Icon
-              icon="charm:cross"
+              icon={
+                PASSWORD_HAS_SPECIAL_CHAR ? "stash:check-solid" : "charm:cross"
+              }
               width={22}
               height={22}
               className={cn(
                 "transition-all duration-300",
-                PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
+                PASSWORD_HAS_SPECIAL_CHAR
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
@@ -212,7 +256,9 @@ export default function ResetPasswordForm() {
               className={cn(
                 "transition-all duration-300",
                 "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
+                PASSWORD_HAS_SPECIAL_CHAR
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
@@ -221,22 +267,25 @@ export default function ResetPasswordForm() {
           </div>
           <div className="flex flex-row gap-2 items-center">
             <Icon
-              icon="charm:cross"
+              icon={PASSWORDS_MATCH ? "stash:check-solid" : "charm:cross"}
               width={22}
               height={22}
               className={cn(
                 "transition-all duration-300",
                 "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500 dark:text-gray-300"
+                PASSWORDS_MATCH
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
                 "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500 dark:text-gray-300"
+                PASSWORDS_MATCH
+                  ? "text-green-700 dark:text-green-400/80"
+                  : "text-red-700 dark:text-red-400"
+                // !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.PASSWORD_MATCH")}
@@ -245,9 +294,12 @@ export default function ResetPasswordForm() {
         </li>
       </ul>
 
-      <Button className="bg-agzakhana-primary text-white text-base font-semibold py-6">
+      <LoadingButton
+        loading={isSubmitting}
+        className="bg-agzakhana-primary text-white text-base font-semibold py-6"
+      >
         {t("RESET_PASSWORD.RESET_PASSWORD")}
-      </Button>
+      </LoadingButton>
     </RHFForm>
   );
 }

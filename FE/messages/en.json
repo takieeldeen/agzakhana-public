@@ -150,7 +150,9 @@
     "MAX_20_CHARACTERS": "Password must not exceed 20 characters",
     "SPECIAL_CHAR": "Password must contain at least one special character",
     "PASSWORD_CASE": "Password must contain at least one uppercase letter",
-    "PASSWORD_MATCH": "Password and confirm password must match"
+    "PASSWORD_MATCH": "Password and confirm password must match",
+    "RESET_SUCCESS": "Password has been changed successfully.",
+    "RESET_FAILED": "Something went wrong while resetting password."
   },
   "SIGNUP": {
     "PAGE_TITLE": "Create a new account",
