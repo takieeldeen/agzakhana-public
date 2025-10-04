@@ -186,7 +186,7 @@ export const forgetPassword = catchAsync(
           actionSubtitle: req.t("MAILS.ACTION_SUBTITLE.RESET_PASSWORD", {
             lng: clientLocale,
           }),
-          actionLink: `${process.env.CLIENT_URL}/reset  -password?token=${plainToken}`,
+          actionLink: `${process.env.CLIENT_URL}/reset-password?token=${plainToken}`,
         }),
       });
     }
@@ -240,7 +240,7 @@ export const resetPassword = catchAsync(
     await user.save();
     // 2.Invalidate the token
     await ResetToken.findByIdAndUpdate(tokenData?._id, { used: true });
-
+    generateToken(res, user);
     res.status(200).json({
       status: "success",
       content: tokenData?.userId,

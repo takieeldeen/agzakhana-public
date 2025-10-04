@@ -29,7 +29,8 @@
     "DATE_INVALID": "The {{field}} must be a valid date",
     "FUTURE_DATE": "The {{field}} must be in the future",
     "PAST_DATE": "The {{field}} must be in the past",
-    "POSITVE_NUMBER": "The {{field}} must be a positive number"
+    "POSITVE_NUMBER": "The {{field}} must be a positive number",
+    "PASSWORD_MISMATCH": "Password and password confirmation must match."
   },
   "FIELDS": {
     "FIRST_NAME": "First Name",

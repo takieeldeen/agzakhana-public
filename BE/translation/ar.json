@@ -29,7 +29,8 @@
     "DATE_INVALID": "يجب أن يكون {{field}} تاريخ صالح",
     "FUTURE_DATE": "يجب أن يكون {{field}} في المستقبل",
     "PAST_DATE": "يجب أن يكون {{field}} في الماضي",
-    "POSITVE_NUMBER": "يجب أن يكون {{field}} رقم موجب"
+    "POSITVE_NUMBER": "يجب أن يكون {{field}} رقم موجب",
+    "PASSWORD_MISMATCH": "كلمة المرور وتأكيدها يجب ان يكونو متطابقين"
   },
   "FIELDS": {
     "FIRST_NAME": "الاسم الأول",

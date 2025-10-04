@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { UserType } from "../types/users";
 import validator from "validator";
 import { hash } from "bcrypt";
+import { tr } from "../utils/string";
 
 const userSchema = new Schema<UserType>({
   name: {
@@ -41,12 +42,13 @@ const userSchema = new Schema<UserType>({
         },
       },
       {
-        message: "Password and Confirmation doesn't match",
+        message: tr("VALIDATIONS.PASSWORD_MISMATCH"),
         validator: function test(val) {
           const password = this.password ?? this.get("password");
           const provider = this.provider ?? this.get("provider") ?? "LOCAL";
-          const identical = password === val;
-          return provider === "LOCAL" ? identical : true;
+          const isIdentical = password === val;
+          const shoudValidate = provider === "LOCAL" || (!!password && !!val);
+          return shoudValidate ? isIdentical : true;
         },
       },
     ],
