@@ -45,23 +45,32 @@
     "QTY": "Quantity",
     "ITEMS": "Items",
     "CITY": "City",
-    "ADDRESS": "Address"
+    "ADDRESS": "Address",
+    "RESET_TOKEN": "Password reset token"
+  },
+  "MESSAGES": {
+    "FORGET_PASSWORD_SUCCESSFUL": "Please check your email to reset your password.",
+    "TOKEN_NOT_FOUND": "Invalid Link Please resend a forget password request."
   },
   "MAILS": {
     "TITLE": {
-      "CONTACT_US": "We would like to thank you for contacting agzakhana team."
+      "CONTACT_US": "Thank you for contacting the Agzakhana team",
+      "RESET_PASSWORD": "Reset Password"
     },
     "CONTENT": {
-      "CONTACT_US": "Thank you for contacting us. We've received your message and our team will review it shortly. One of our support representatives will get back to you within 24–48 hours."
+      "CONTACT_US": "Thank you for reaching out to us. We’ve received your message, and our team will review it shortly. One of our representatives will contact you within the next 24–48 hours.",
+      "RESET_PASSWORD": "We’ve received your request to reset your password. You can create a new one by clicking the button below. If you didn’t request a password reset, you can safely ignore this email."
     },
     "ACTION_TITLE": {
-      "CONTACT_US": "Go to Agzakhana"
+      "CONTACT_US": "Go to Agzakhana",
+      "RESET_PASSWORD": "Reset Password"
     },
     "ACTION_SUBTITLE": {
-      "CONTACT_US": "We appreciate you taking the time to reach out, and we look forward to assisting you."
+      "CONTACT_US": "We appreciate your time and trust, and we look forward to assisting you soon.",
+      "RESET_PASSWORD": "Click the button above to securely set a new password for your account."
     },
     "COMMON": {
-      "IGNORE_TEXT": "In case you don't know the source of this email please ignore it."
+      "IGNORE_TEXT": "If you’re not sure why you received this email, you can safely ignore it."
     }
   }
 }

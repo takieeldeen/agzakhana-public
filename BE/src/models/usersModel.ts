@@ -103,7 +103,9 @@ const userSchema = new Schema<UserType>({
 // });
 
 userSchema.pre("save", async function (next) {
-  if (!!this.password) this.password = await hash(this.password, 8);
+  console.log("hashing middleware triggered");
+  if (!!this.password && this.isModified("password"))
+    this.password = await hash(this.password, 8);
   this.passwordConfirmation = "";
   next();
 });
