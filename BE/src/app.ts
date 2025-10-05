@@ -17,6 +17,7 @@ import messageRouter from "./routers/messageRouter";
 import { paymentRouter } from "./routers/paymentRouter";
 import { stripeWebhookHandler } from "./controllers/paymentController";
 import ordersRouter from "./routers/orderRouter";
+import axios from "axios";
 
 export let clientLocale = "ar";
 const app = express();
@@ -72,7 +73,10 @@ app.use(
 );
 
 app.use(middleware.handle(i18next));
-
+app.get("/", async (req, res) => {
+  const { data } = await axios.get("https://api.ipify.org?format=json");
+  res.send(data);
+});
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/products", productsRouter);
 app.use("/api/v1/data", dataRouter);
