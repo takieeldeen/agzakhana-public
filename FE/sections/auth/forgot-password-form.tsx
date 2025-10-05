@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import RHFForm from "@/components/rhf-form";
 import { useCallback } from "react";
@@ -7,9 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
 import RHFTextfield from "@/components/rhf-textfield";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/button";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { forgetPassword } from "@/api/auth";
+import { pushMessage } from "@/components/toast-message";
 
 export default function ForgotPasswordForm() {
   const t = useTranslations();
@@ -26,28 +27,49 @@ export default function ForgotPasswordForm() {
     resolver: zodResolver(loginFormSchema),
     defaultValues,
   });
-  const onSubmit = useCallback((data: any) => {
-    console.log(data);
-  }, []);
+  const {
+    formState: { isSubmitting },
+  } = methods;
+  const onSubmit = useCallback(
+    async (data: any) => {
+      try {
+        const res = await forgetPassword({ email: data?.email });
+        pushMessage({
+          variant: "success",
+          subtitle: res?.data?.message,
+        });
+        console.log(res);
+      } catch {
+        pushMessage({
+          variant: "fail",
+          subtitle: t("VALIDATIONS.RESET_PASSWORD_FAIL"),
+        });
+      }
+    },
+    [t]
+  );
   return (
     <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
       <RHFTextfield
         name="email"
         label={t("LOGIN.EMAIL")}
         placeholder={t("LOGIN.EMAIL")}
-        inputProps={{ className: "h-10 font-semibold text-lg", type: "email" }}
-        labelProps={{ className: "text-base font-semibold mb-2" }}
+        inputProps={{ className: "h-12 font-semibold text-lg", type: "email" }}
+        labelProps={{ className: "text-base font-semibold" }}
       />
 
-      <Button className="bg-agzakhana-primary text-white text-base font-semibold py-6">
+      <LoadingButton
+        loading={isSubmitting}
+        className="bg-agzakhana-primary text-white text-base font-semibold py-6"
+      >
         {t("FORGOT_PASSWORD.RESET_PASSWORD")}
-      </Button>
+      </LoadingButton>
 
-      <p className="flex flex-row gap-2 self-center text-gray-800">
+      <p className="flex flex-row gap-2 self-center text-gray-800 dark:text-gray-400">
         {t("LOGIN.DON'T_HAVE_AN_ACCOUNT")}
         <Link
           href="/sign-up"
-          className="font-bold text-text-primary hover:underline"
+          className="font-bold text-text-primary hover:underline dark:text-gray-200"
         >
           {t("LOGIN.SIGN_UP_FOR_FREE")}
         </Link>

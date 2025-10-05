@@ -57,7 +57,8 @@ export const handleCastErrors = (error: mongoose.Error.CastError) => {
 export const generateDevelopmentError = (
   req: Request,
   res: Response,
-  error: AppError | FormError
+  error: AppError | FormError,
+  originalError: any
 ) => {
   res.status(error?.statusCode ?? 500).json({
     status: error?.status ?? "error",
@@ -66,6 +67,7 @@ export const generateDevelopmentError = (
     isFormError: error?.isFormError ?? false,
     stack: error?.stack,
     error,
+    originalError,
   });
 };
 

@@ -24,7 +24,7 @@ const errorController = (
       break;
   }
   if (process.env.NODE_ENV === "development")
-    generateDevelopmentError(req, res, finalError);
+    generateDevelopmentError(req, res, finalError, error);
   if (process.env.NODE_ENV === "production")
     generateProductionError(req, res, finalError);
   console.log(error);

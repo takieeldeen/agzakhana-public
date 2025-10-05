@@ -20,7 +20,7 @@ export default function ImageMagnifier({
     <div
       {...containerProps}
       className={cn(
-        "relative h-96 w-full border border-gray-300 rounded-md overflow-hidden cursor-zoom-in",
+        "relative h-96 w-full border border-gray-300 rounded-md overflow-hidden cursor-zoom-in dark:border-gray-800",
         containerProps?.className
       )}
       onMouseEnter={() => setShowMagnifier(true)}

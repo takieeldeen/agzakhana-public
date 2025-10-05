@@ -31,7 +31,7 @@ export async function getAllProducts(
       content: [],
       results: 0,
       status: "fail",
-      error: err?.response?.data,
+      error: err,
     };
   }
 }
@@ -90,7 +90,7 @@ export async function getPopularProducts() {
       content: [],
       results: 0,
       status: "fail",
-      error: err?.response?.data,
+      error: err,
     };
   }
 }
@@ -106,7 +106,7 @@ export async function getProductHighlights() {
       content: [],
       results: 0,
       status: "fail",
-      error: err?.response?.data,
+      error: err,
     };
   }
 }

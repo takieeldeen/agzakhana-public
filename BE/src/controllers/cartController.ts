@@ -3,9 +3,8 @@ import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
 import Cart from "../models/cartModel";
 import mongoose from "mongoose";
 import { DealType } from "../types/deals";
-import { checkout } from "../services/paymentServices";
 // Helper Constants ///////////////////////////////////////
-const PRODUCT_VISIBLE_FIELDS =
+export const PRODUCT_VISIBLE_FIELDS =
   "_id nameAr nameEn concentration price beforeDiscount qty total availableQty imageUrl descriptionAr descriptionEn maxQty";
 // Delete /////////////////////////////////////////////////
 export const removeFromCart = catchAsync(
@@ -188,20 +187,7 @@ export const getCartDetails = catchAsync(
       vat,
       total,
     };
-    await checkout(500000, [
-      {
-        name: "Wireless Mouse",
-        amount_cents: 150000,
-        description: "Ergonomic wireless mouse",
-        quantity: 1,
-      },
-      {
-        name: "Mechanical Keyboard",
-        amount_cents: 350000,
-        description: "RGB mechanical keyboard with blue switches",
-        quantity: 1,
-      },
-    ]);
+
     res.status(200).json({
       status: "success",
       results: cart?.cart?.length,

@@ -1,15 +1,9 @@
-import axiosConstructor from "axios";
+const IS_SERVER = typeof window === "undefined";
+const axiosModule = IS_SERVER
+  ? await import("./axios-server")
+  : await import("./axios-client");
 
-const axios = axiosConstructor.create({
-  // baseURL: "http://localhost:8080/api",
-  baseURL: "http://localhost:8080/api",
-  // "https://agzakhana-responsible-bilby-wa.cfapps.us10-001.hana.ondemand.com/api",
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
+const axios = axiosModule.default;
 export const endpoints = {
   auth: {
     login: "/v1/auth/login",
@@ -17,6 +11,9 @@ export const endpoints = {
     checkAuth: "/v1/auth/checkAuth",
     register: "/v1/auth/register",
     logout: "/v1/auth/logout",
+    forgetPassword: "/v1/auth/forget-password",
+    checkResetToken: "/v1/auth/check-reset-token",
+    resetPassword: "/v1/auth/reset-password",
   },
   products: {
     list: "/v1/products",
@@ -40,6 +37,7 @@ export const endpoints = {
     list: "/v1/cart",
     single: (cartItem: string) => `/v1/cart/${cartItem}`,
     details: "/v1/cart/cart-details",
+    checkout: "/v1/payments/create-checkout-session",
   },
   reviews: {
     dealsList: (dealId: string) => `/v1/deals/${dealId}/reviews`,
@@ -51,6 +49,10 @@ export const endpoints = {
   },
   messages: {
     send: "/v1/messages/contact-us",
+  },
+  orders: {
+    details: (orderId: string) => `/v1/orders/${orderId}`,
+    myOrders: "/v1/orders/my-orders",
   },
 };
 

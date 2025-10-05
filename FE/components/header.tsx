@@ -1,21 +1,12 @@
-import Image from "next/image";
 import AccountOptions from "./account-options";
-import Link from "next/link";
-import SearchBox from "./search-box";
+// import SearchBox from "./search-box";
+import Logo from "./logo";
 
 export default async function Header() {
   return (
-    <header className="py-2 flex flex-row justify-between items-center border-b-2 border-gray-200 px-8">
-      <Link href="/">
-        <Image
-          src="https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(1).png"
-          height={140}
-          width={280}
-          alt="Agzakhana"
-          priority
-        />
-      </Link>
-      <SearchBox />
+    <header className="py-2 flex flex-row justify-between items-center border-b-2 border-gray-200 dark:border-gray-600 px-8">
+      <Logo />
+      {/* <SearchBox /> */}
       <AccountOptions />
     </header>
   );

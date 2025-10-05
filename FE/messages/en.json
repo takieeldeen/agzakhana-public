@@ -10,7 +10,9 @@
     "ACCOUNT": "Account",
     "SEARCH_FOR_PRODUCTS": "Search For Products",
     "SIGN_OUT": "Sign Out",
-    "SIGN_IN": "Sign In"
+    "SIGN_IN": "Sign In",
+    "SWITCH_TO_DARK_MODE": "Activate Dark Mode",
+    "SWITCH_TO_LIGHT_MODE": "Deactivate Dark Mode"
   },
   "NAV_BAR": {
     "BROWSE_ALL_CATEGORIES": "Browse All Categories",
@@ -25,7 +27,10 @@
   },
   "COMMON": {
     "EGP": "{price} EGP",
-    "EGP_CURRENCY": "EGP"
+    "EGP_CURRENCY": "EGP",
+    "BACK_TO_HOME": "Back to Home",
+    "GENERIC_ERROR": "Something went wrong from our side, please try again later.",
+    "UNKOWN": "Unkown"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -128,7 +133,11 @@
     "PAGE_SUBTITLE": "Please enter your email and we will send you a link to reset your password.",
     "EMAIL": "Email",
     "RESET_PASSWORD": "Reset Password",
-    "BACK_TO_LOGIN": "Back to Login"
+    "BACK_TO_LOGIN": "Back to Login",
+    "TOKEN_ERROR_TITLE": "Invalid resetting url",
+    "TOKEN_ERROR_SUBTITLE": "It seems like something went wrong while trying to reset your password. This could happen if the link has expired, has already been used, or was entered incorrectly. Please try requesting a new password reset link, or contact our support team if the problem persists.",
+    "OOPS": "OOPS!",
+    "BACK_TO_FORGET_PASSWORD": "Go to Forget Password"
   },
   "RESET_PASSWORD": {
     "PAGE_TITLE": "Reset Password",
@@ -141,7 +150,9 @@
     "MAX_20_CHARACTERS": "Password must not exceed 20 characters",
     "SPECIAL_CHAR": "Password must contain at least one special character",
     "PASSWORD_CASE": "Password must contain at least one uppercase letter",
-    "PASSWORD_MATCH": "Password and confirm password must match"
+    "PASSWORD_MATCH": "Password and confirm password must match",
+    "RESET_SUCCESS": "Password has been changed successfully.",
+    "RESET_FAILED": "Something went wrong while resetting password."
   },
   "SIGNUP": {
     "PAGE_TITLE": "Create a new account",
@@ -167,7 +178,8 @@
     "PASSWORD_MISMATCH": "Password and confirm password do not match",
     "PASSWORD_CASE": "Password must contain at least one uppercase and one lowercase letter",
     "PASSWORD_SPECIAL_CHAR": "Password must contain at least one special character",
-    "MAX_VAL": "{field} can't be greater than {max}."
+    "MAX_VAL": "{field} can't be greater than {max}.",
+    "RESET_PASSWORD_FAIL": "Something went wrong while resetting your password."
   },
   "FOOTER": {
     "ALL_RIGHT_RESERVED": "All rights reserved for Agzakhana group.",
@@ -211,5 +223,39 @@
     "UNSUCCESSFUL_PROCESS": "Unsuccessful Process",
     "MESSAGE_SENT": "Your message has been sent successfully",
     "ERROR_SENDING_MESSAGE": "An error occurred while sending your message. Please try again later."
+  },
+  "PAYMENT_STATUS": {
+    "PAYMENT_SUCCESS": "Successful Payment",
+    "PAYMENT_SUCCESS_SUBTITLE": "Your order has been confirmed and will be delivered within three business days. Order details have been sent to your email.",
+    "PAYMENT_FAILED": "Failed Payment",
+    "PAYMENT_FAILED_SUBTITLE": "An error occurred while processing your payment. Please try again or contact customer support for assistance.",
+    "BACK_TO_HOME": "Back to Home",
+    "TRANSACTION_DATE": " Transaction Date",
+    "PAYMENT_METHOD": " Payment Method",
+    "DELIVERY_TIME": " Delivery Time",
+    "DEILVERY_ADDRESS": "Delivery Address",
+    "DELIVERY_DURATION": "{START_DATE} - {END_DATE} Working days.",
+    "CARD_ENDING_WITH": "Card ending with {LAST_DIGITS}",
+
+    "TOTAL_PAID": " Total Paid"
+  },
+  "PROFILE": {
+    "PERSONAL_INFO": "Personal Information",
+    "PRODUCT_INFO": "Shopping Information",
+    "USERNAME": "Username",
+    "EMAIL": "Email Address",
+    "PHONE": "Phone Number",
+    "ORDERS": "Orders",
+    "CART": "Cart"
+  },
+  "MY_ORDERS": {
+    "ID": "Id",
+    "STATUS": "Status",
+    "ITEMS": "Products",
+    "TOTAL": "Total",
+    "PURCHASING_DATE": "Purchasing Date",
+    "paid": "Paid",
+    "pending": "Pending",
+    "failed": "Failed"
   }
 }

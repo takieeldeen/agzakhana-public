@@ -11,9 +11,9 @@ export default async function OffersCard({ offer }: { offer: Offer }) {
   const locale = await getLocale();
   const t = await getTranslations();
   return (
-    <li className="  rounded-2xl overflow-hidden flex flex-col gap-1 w-[calc(20%-0.5rem)] items-center shrink-0 min-w-[20rem]">
-      <Link href={`/deals/${offer?._id}`} className="w-full">
-        <div className="h-[300px]! w-full rounded-xl flex items-start justify-center bg-gray-200 relative py-8 ">
+    <li className="  rounded-2xl overflow-hidden flex flex-col gap-1 lg:w-[calc(20%-0.5rem)] xl:w-[calc(20%-1rem)] items-center shrink-0 lg:min-w-[20rem] xl:min-w-[18rem]">
+      <Link href={`/deals/${offer?._id}`} className="w-full ">
+        <div className="h-[300px]! w-full rounded-xl flex items-start justify-center bg-gray-200 dark:bg-card-background-dark relative py-8 ">
           <Image
             src={offer?.imageUrl}
             height={250}
@@ -25,11 +25,11 @@ export default async function OffersCard({ offer }: { offer: Offer }) {
           </div>
         </div>
       </Link>
-      <div className="shadow-md w-[90%] rounded-2xl -translate-y-9 z-10 relative bg-gray-100 p-2">
+      <div className="shadow-md w-[90%] rounded-2xl -translate-y-9 z-10 relative bg-gray-100 p-2 dark:bg-card-background-dark dark:brightness-90">
         <div className="p-2 mb-auto">
           <Link
             href={`/deals/${offer?._id}`}
-            className="text-text-primary  font-bold leading-none mb-2"
+            className="text-text-primary  font-bold leading-none mb-2 dark:text-white"
           >
             {offer?.[locale === "ar" ? "nameAr" : "nameEn"]}
           </Link>
@@ -42,7 +42,7 @@ export default async function OffersCard({ offer }: { offer: Offer }) {
               {offer?.rating}
             </span>
           </div>
-          <div className="flex flex-row gap-0.5 text-sm">
+          <div className="flex flex-row gap-0.5 text-sm dark:text-gray-200">
             {t("HOME_PAGE.BY")}
             <Link href="/" className="text-agzakhana-primary font-semibold">
               {offer?.manufacturer}

@@ -1,5 +1,10 @@
+import { GuestGuard } from "@/components/auth-guard";
 import { ForgetPasswordView } from "@/sections/auth/views";
 
 export default function ForgotPasswordPage() {
-  return <ForgetPasswordView />;
+  return (
+    <GuestGuard>
+      <ForgetPasswordView />
+    </GuestGuard>
+  );
 }

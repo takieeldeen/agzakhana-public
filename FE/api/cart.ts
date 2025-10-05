@@ -118,9 +118,17 @@ export function useGetCartDetails() {
       cartLoading: isLoading,
       cartValidating: isFetching,
       cartError: error,
+      cartEmpty: data?.content?.cart?.length === 0,
       mutate: refetch,
     }),
     [data, error, isFetching, isLoading, refetch]
   );
   return memoizedValue;
+}
+
+export async function checkout() {
+  const URL = endpoints.cart.checkout;
+  const res = await axios.post(URL);
+  window.location.href = res?.data?.url;
+  console.log(res);
 }

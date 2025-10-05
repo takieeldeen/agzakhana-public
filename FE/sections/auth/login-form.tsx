@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import RHFForm from "@/components/rhf-form";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -9,14 +8,15 @@ import { z } from "zod";
 import RHFTextfield from "@/components/rhf-textfield";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
-import { login, loginWithGoogle } from "@/api/auth";
+import { login } from "@/api/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import GoogleAuthButton from "@/components/google-auth-button";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function LoginForm() {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const t = useTranslations();
   const router = useRouter();
   const { login: loginLocally } = useAuth();
@@ -61,7 +61,7 @@ export default function LoginForm() {
         name="email"
         label={t("LOGIN.EMAIL")}
         placeholder={t("LOGIN.EMAIL")}
-        inputProps={{ className: "h-10 font-semibold text-lg", type: "email" }}
+        inputProps={{ className: "h-12 font-semibold text-lg", type: "email" }}
         labelProps={{ className: "text-base font-semibold" }}
       />
       <RHFTextfield
@@ -69,15 +69,29 @@ export default function LoginForm() {
         label={t("LOGIN.PASSWORD")}
         placeholder={t("LOGIN.PASSWORD")}
         inputProps={{
-          className: "h-10 font-semibold text-lg",
-          type: "password",
+          className: "h-12 font-semibold text-lg",
+          type: showPassword ? "text" : "password",
+          endAdornment: (
+            <Button
+              className="bg-transparent text-text-primary"
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              <Icon
+                icon={
+                  showPassword ? "majesticons:eye-off-line" : "mdi:eye-outline"
+                }
+                className=" w-5! h-5! text-gray-600"
+              />
+            </Button>
+          ),
         }}
         labelProps={{ className: "text-base font-semibold" }}
         className="gap-1"
       />
       <Link
         href="/forgot-password"
-        className="font-bold hover:underline transition-all duration-300"
+        className="font-bold hover:underline transition-all duration-300 dark:text-gray-300"
       >
         {t("LOGIN.FORGOT_PASSWORD")}
       </Link>
@@ -88,11 +102,11 @@ export default function LoginForm() {
         {t("LOGIN.LOGIN")}
       </Button>
       <GoogleAuthButton />
-      <p className="flex flex-row gap-2 self-center text-gray-800">
+      <p className="flex flex-row gap-2 self-center text-gray-800 dark:text-gray-400">
         {t("LOGIN.DON'T_HAVE_AN_ACCOUNT")}
         <Link
           href="/sign-up"
-          className="font-bold text-text-primary hover:underline"
+          className="font-bold text-text-primary hover:underline dark:text-gray-200"
         >
           {t("LOGIN.SIGN_UP_FOR_FREE")}
         </Link>

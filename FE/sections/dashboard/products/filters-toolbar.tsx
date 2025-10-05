@@ -39,14 +39,14 @@ export default function FiltersToolbar() {
   const { manufacturers } = useGetAllManufacturers();
   return (
     <aside className="w-1/5 flex flex-col gap-3">
-      <div className="shadow-lg w-full rounded-2xl px-4 py-6 border-gray-100 border-[1px]">
-        <h5 className="text-2xl font-bold border-b-2 border-gray-200 pb-2">
+      <div className="shadow-lg w-full rounded-2xl px-4 py-6 border-gray-100 border-[1px] dark:border-gray-600">
+        <h5 className="text-2xl font-bold border-b-2 border-gray-200 pb-2 dark:text-gray-200 dark:border-gray-500">
           {t("PRODUCTS_LISTING_PAGE.FILTERS_MANUFACTURERS")}
         </h5>
-        <div className="w-36 h-1 -translate-y-[3px] rounded-md bg-[#BCE3C9] mb-2" />
+        <div className="w-36 h-[2px] -translate-y-[2px] rounded-md bg-[#BCE3C9] mb-2 dark:bg-agzakhana-primary" />
         <div className="flex flex-col gap-5">
           <div>
-            <p className="text-gray-500 text-lg font-bold mb-1">
+            <p className="text-gray-500 text-lg font-bold mb-1 dark:text-gray-300">
               {t("PRODUCTS_LISTING_PAGE.MANUFACTURER")}
             </p>
             <div className="px-2">
@@ -64,7 +64,10 @@ export default function FiltersToolbar() {
                       handleManufacturerChange(e, manufacturer?.name)
                     }
                   />
-                  <label htmlFor={manufacturer?.name} className="">
+                  <label
+                    htmlFor={manufacturer?.name}
+                    className="dark:text-gray-300"
+                  >
                     {`${manufacturer?.name} (${manufacturer?.count})`}
                   </label>
                 </div>
@@ -77,32 +80,32 @@ export default function FiltersToolbar() {
           </div> */}
         </div>
       </div>
-      <div className="shadow-lg w-full min-h-72 rounded-2xl px-4 py-6 border-gray-100 border-[1px]">
-        <h5 className="text-2xl font-bold border-b-2 border-gray-200 pb-2">
+      <div className="shadow-lg w-full min-h-72 rounded-2xl px-4 py-6 border-gray-100 border-[1px] dark:border-gray-600">
+        <h5 className="text-2xl font-bold border-b-2 border-gray-200 pb-2 dark:text-gray-200 dark:border-gray-500">
           {t("PRODUCTS_LISTING_PAGE.CATEGORIES")}
         </h5>
-        <div className="w-36 h-1 -translate-y-[3px] rounded-md bg-[#BCE3C9]" />
+        <div className="w-36 h-[2px] -translate-y-[2px] rounded-md bg-[#BCE3C9] mb-2 dark:bg-agzakhana-primary" />
         <ul className="py-2 flex flex-col gap-2">
           {categories?.map((category) => (
             <li
               onClick={() => handleFilterChange("category", category?._id)}
               key={category?._id}
               className={cn(
-                "h-12 border-2 border-gray-200 rounded-md flex flex-row items-center px-2 gap-2 cursor-pointer hover:border-gray-400 transition-all duration-300 whitespace-nowrap",
+                "h-12 border-2 border-gray-200 rounded-md flex flex-row items-center px-2 gap-2 cursor-pointer hover:border-gray-400 transition-all duration-300 whitespace-nowrap dark:border-gray-500 dark:hover:border-agzakhana-primary",
                 currentCategory?.includes(category?._id) &&
-                  " border-gray-400 translate-x-2"
+                  " border-gray-400 translate-x-2 dark:border-agzakhana-primary"
               )}
             >
               <Icon
                 icon={category?.icon}
                 width={36}
                 height={36}
-                className="text-gray-600"
+                className="text-gray-600 dark:text-gray-400"
               />
-              <p className="text-sm font-semibold mr-auto rtl:ml-auto rtl:mr-0 text-text-primary">
+              <p className="text-sm font-semibold mr-auto rtl:ml-auto rtl:mr-0 text-text-primary dark:text-gray-300">
                 {category?.[locale === "ar" ? "nameAr" : "nameEn"]}
               </p>
-              <span className="font-semibold bg-[#BCE3C9] w-8 h-8 aspect-square flex items-center justify-center rounded-full text-sm">
+              <span className="font-semibold bg-[#BCE3C9] w-8 h-8 aspect-square flex items-center justify-center rounded-full text-sm dark:bg-transparent dark:border-agzakhana-primary dark:border-1 dark:text-agzakhana-primary">
                 {category?.count}
               </span>
             </li>

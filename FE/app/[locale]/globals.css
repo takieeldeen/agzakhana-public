@@ -54,6 +54,9 @@ input[type="number"]::-webkit-outer-spin-button {
   --color-agzakhana-primary: #3bb77e;
   --color-text-primary: #253d4e;
   --color-text-secondary: #adadad;
+  --color-agzakhana-background-dark: #191a1f;
+  --color-card-background-dark: #1e212a;
+  --color-test: white;
 }
 
 :root {
@@ -123,6 +126,7 @@ input[type="number"]::-webkit-outer-spin-button {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --color-test: black;
 }
 
 @layer base {
@@ -131,5 +135,30 @@ input[type="number"]::-webkit-outer-spin-button {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: oklch(96.7% 0.003 264.542);
+    border-radius: 99999px;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: #1e212a;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #3bb77e;
+    border-radius: 999px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }
 }

@@ -1,14 +1,27 @@
 import { NextFunction, Request, Response } from "express";
 import catchAsync, { ProtectedRequest } from "./catchAsync";
-import { decode } from "jsonwebtoken";
+import { decode, verify } from "jsonwebtoken";
 import User from "../models/usersModel";
 
 export const authenticateUser = catchAsync(
-  async (req: ProtectedRequest, res: Response, next: NextFunction) => {
+  async (
+    req: ProtectedRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
     const { token } = req.cookies;
-    const userId = (decode(token) as any)?.id;
+    if (!token)
+      return res.status(401).json({
+        status: "fail",
+        message: "Please Log in to be able to use this endpoint",
+      });
+    const { id: userId } =
+      (verify(token!, process.env.JWT_SECRET!, (err: any, decoded: any) => {
+        if (err) return undefined;
+        return decoded;
+      }) as { id: string; iat: number; exp: number } | undefined) ?? {};
     if (!userId) {
-      res.status(401).json({
+      return res.status(401).json({
         status: "fail",
         message: "Please Log in to be able to use this endpoint",
       });

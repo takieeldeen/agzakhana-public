@@ -15,7 +15,7 @@ export default async function ProductCard({
   const t = await getTranslations();
   const locale = await getLocale();
   return (
-    <li className="border-2 border-[#ECECEC] w-[250px] h-[401px] rounded-2xl overflow-hidden relative min-w-[20rem]">
+    <li className="border-2 border-[#ECECEC] dark:border-transparent xl:w-[240px] lg:w-[250px] h-[401px] rounded-2xl overflow-hidden relative lg:min-w-[20rem] xl:min-w-[19rem] dark:bg-card-background-dark dark:shadow-md dark:shadow-gray-700/30">
       <Link
         href={`/products/${medicine?._id}`}
         className="h-full flex flex-col gap-1"
@@ -31,7 +31,7 @@ export default async function ProductCard({
           />
         </div>
         <div className="p-2 mb-auto">
-          <span className="text-text-secondary">
+          <span className="text-text-secondary dark:text-gray-300">
             {medicine?.category?.[locale === "ar" ? "nameAr" : "nameEn"]}
           </span>
           <div className="flex flex-row gap-1  items-center mb-2">
@@ -41,10 +41,10 @@ export default async function ProductCard({
             />
             <span className="text-text-secondary leading-0">4.5</span>
           </div>
-          <p className="text-text-primary text-lg font-bold leading-none mb-2">
+          <p className="text-text-primary text-lg font-bold leading-none mb-2 dark:text-white">
             {medicine?.[locale === "ar" ? "nameAr" : "nameEn"]}
           </p>
-          <div className="flex flex-row   gap-0.5">
+          <div className="flex flex-row   gap-0.5 dark:text-gray-300">
             {t("HOME_PAGE.BY")}
             <span className="text-agzakhana-primary font-semibold bg-transparent p-0">
               {medicine?.manufacturer}

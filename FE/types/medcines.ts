@@ -22,6 +22,7 @@ export type Medicine = {
   dosageEn: string;
   qty: number;
   maxQty: number;
+  reviewers: number;
 };
 
 export type ManufacturerListItem = {

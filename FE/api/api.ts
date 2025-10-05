@@ -18,6 +18,12 @@ export function getFetcher<T = unknown>(
     return response.data as T; // usually we want only `data`
   };
 }
+export function getDummyFetcher<T = unknown>(data: T) {
+  return async () => {
+    await dummyPromise();
+    return data as T; // usually we want only `data`
+  };
+}
 
 export type APIResponse<T> = {
   content: T;

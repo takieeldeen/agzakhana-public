@@ -24,7 +24,7 @@ export default async function ProductsListingView({
         <FiltersToolbar />
         <div className="w-4/5">
           <div className="flex flex-col gap-2">
-            <p className="text-lg font-semibold">
+            <p className="text-lg font-semibold dark:text-gray-200">
               {t("PRODUCTS_LISTING_PAGE.WE_HAVE_FOUND")}
               <span className="text-agzakhana-primary font-bold">
                 {results ? ` ${results} ` : " -- "}

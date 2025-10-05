@@ -115,7 +115,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
     <RHFForm methods={methods} onSubmit={onSubmit} className="">
       <div>
         <div className="flex flex-col mb-2">
-          <p className="font-bold text-lg mb-3">
+          <p className="font-bold text-lg mb-3 dark:text-gray-300">
             {t("PRODUCTS_LISTING_PAGE.CONCENTRATION")}
           </p>
           {product.hasOwnProperty("concentration") && (
@@ -126,7 +126,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
                     handleToggleVariant(el);
                   }}
                   className={cn(
-                    "border-2 p-2 px-4 rounded-md select-none cursor-pointer hover:border-gray-500 transition-all duration-300",
+                    "border-2 p-2 px-4 rounded-md select-none cursor-pointer hover:border-gray-500 transition-all duration-300 dark:border-gray-300/15 dark:text-gray-300",
                     values.concentration === el &&
                       "border-2 border-gray-500 text-gray-700 font-bold"
                   )}
@@ -145,7 +145,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
           )}
         >
           <Fade condition={!ALREADY_IN_CART && !IS_LOADING}>
-            <Button className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-100">
+            <Button className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-100 dark:text-white">
               {t("PRODUCTS_LISTING_PAGE.ADD_TO_CART")}
             </Button>
           </Fade>
@@ -154,7 +154,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
               <Button
                 type="button"
                 onClick={handleDecrements}
-                className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-80"
+                className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-80 dark:text-white"
               >
                 <Icon
                   icon={values?.qty === 1 ? "iconamoon:trash" : "tabler:minus"}
@@ -166,7 +166,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
                 disabled={values?.qty === product?.maxQty}
                 type="button"
                 onClick={handleIncrements}
-                className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-80"
+                className="font-bold min-h-auto h-auto bg-transparent drop-shadow-none shadow-none hover:brightness-80 dark:text-white"
               >
                 <Icon icon="tabler:plus" className="w-6! h-6!" />
               </Button>
@@ -175,7 +175,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
           {IS_LOADING && <CircularProgress className="border-white w-6 h-6" />}
         </div>
         <RHFError name="qty" />
-        <span className="text-lg text-gray-500 font-semibold">
+        <span className="text-lg text-gray-500 font-semibold dark:text-gray-300">
           {t("PRODUCTS_LISTING_PAGE.AVAILABLE_QTY", { count: 9 })}
         </span>
       </div>
