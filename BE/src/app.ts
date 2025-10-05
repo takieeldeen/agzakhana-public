@@ -75,6 +75,7 @@ app.use(
 app.use(middleware.handle(i18next));
 app.get("/", async (req, res) => {
   const { data } = await axios.get("https://api.ipify.org?format=json");
+  console.log("this is your ip");
   res.send(data);
 });
 app.use("/api/v1/auth", authRouter);
