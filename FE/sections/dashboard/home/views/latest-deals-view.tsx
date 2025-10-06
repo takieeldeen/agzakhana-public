@@ -29,7 +29,7 @@ export default async function LatestDealsView({
             <h5 className="text-3xl font-bold mb-3 dark:text-gray-100">
               {t("HOME_PAGE.DEALS_OF_THE_DAY")}
             </h5>
-            <div className="flex flex-row  gap-4">
+            <div className="md:flex hidden flex-row  gap-4">
               <CarouselPrevious className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180 dark:text-agzakhana-primary dark:border-agzakhana-primary dark:border-2" />
               <CarouselNext className="relative m-0 translate-x-0 translate-y-0 left-auto top-auto right-auto rtl:rotate-180 dark:text-agzakhana-primary dark:border-agzakhana-primary dark:border-2" />
             </div>

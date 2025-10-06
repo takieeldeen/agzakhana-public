@@ -38,7 +38,7 @@ export default function FiltersToolbar() {
   const { categories } = useGetCategories();
   const { manufacturers } = useGetAllManufacturers();
   return (
-    <aside className="w-1/5 flex flex-col gap-3">
+    <aside className="w-full md:w-1/5 flex flex-col gap-3">
       <div className="shadow-lg w-full rounded-2xl px-4 py-6 border-gray-100 border-[1px] dark:border-gray-600">
         <h5 className="text-2xl font-bold border-b-2 border-gray-200 pb-2 dark:text-gray-200 dark:border-gray-500">
           {t("PRODUCTS_LISTING_PAGE.FILTERS_MANUFACTURERS")}

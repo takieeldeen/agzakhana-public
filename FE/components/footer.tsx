@@ -36,8 +36,8 @@ export default async function Footer() {
     <footer className="py-16 px-16">
       <div className=" w-full">
         <footer>
-          <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
-            <div className="col-span-2 mb-8 lg:mb-0">
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-8 lg:grid-cols-6">
+            <div className="col-span-2 mb-8 lg:mb-0 md:block flex items-center justify-center">
               <Logo />
             </div>
             {footerData.map((section, sectionIdx) => (

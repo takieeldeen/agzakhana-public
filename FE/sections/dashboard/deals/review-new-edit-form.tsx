@@ -98,8 +98,8 @@ export default function ReviewNewEditForm({
     };
   }, [defaultValues, reset]);
   return (
-    <DialogContent>
-      <h3 className="text-2xl font-bold">
+    <DialogContent className="bg-agzakhana-background-dark">
+      <h3 className="text-2xl font-bold dark:text-gray-200">
         {t("PRODUCTS_LISTING_PAGE.RATE_AND_REVIEW")}
       </h3>
       <Separator />
@@ -109,7 +109,7 @@ export default function ReviewNewEditForm({
         className="flex flex-col gap-5"
       >
         <div className="flex flex-col gap-2">
-          <p className="font-semibold text-gray-600">
+          <p className="font-semibold text-gray-600 dark:text-gray-300">
             {t("PRODUCTS_LISTING_PAGE.RATING")}
           </p>
           <div className="flex items-start justify-start flex-col">
@@ -123,7 +123,7 @@ export default function ReviewNewEditForm({
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          <p className="font-semibold text-gray-600">
+          <p className="font-semibold text-gray-600 dark:text-gray-300">
             {t("PRODUCTS_LISTING_PAGE.REVIEW_FIELD")}
           </p>
 
@@ -141,7 +141,7 @@ export default function ReviewNewEditForm({
           </DialogClose>
           <LoadingButton
             loading={isSubmitting}
-            className="w-[calc(50%-0.25rem)] py-5 text-lg bg-agzakhana-primary border-2 border-agzakhana-primary"
+            className="w-[calc(50%-0.25rem)] py-5 text-lg bg-agzakhana-primary border-2 border-agzakhana-primary dark:text-gray-100"
           >
             {!!review
               ? t("PRODUCTS_LISTING_PAGE.EDIT_REVIEW")

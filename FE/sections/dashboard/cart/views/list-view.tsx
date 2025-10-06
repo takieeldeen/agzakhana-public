@@ -34,8 +34,8 @@ export default function CartListView() {
   if (cartEmpty) return <CartEmpty />;
   if (cartLoading) return <CartSkeleton />;
   return (
-    <div className="flex flex-row gap-16 py-8">
-      <div className="flex flex-col gap-2  w-4/6">
+    <div className="flex flex-col md:flex-row gap-16 py-8">
+      <div className="flex flex-col gap-2 w-full  md:w-4/6">
         <div className="flex-row flex gap-2 items-end mb-4">
           <h4 className="text-2xl font-bold dark:text-gray-200">
             {t("HEADER.CART")}
@@ -60,7 +60,7 @@ export default function CartListView() {
           </AnimatePresence>
         </ul>
       </div>
-      <aside className="w-2/6 flex flex-col gap-3 sticky self-start top-8">
+      <aside className="w-full md:w-2/6 flex flex-col gap-3 sticky self-start top-8">
         <h4 className="text-2xl font-bold dark:text-gray-200">
           {t("CART.PAYMENT_SUMMARY")}
         </h4>

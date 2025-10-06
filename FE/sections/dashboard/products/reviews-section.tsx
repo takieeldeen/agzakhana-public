@@ -32,7 +32,7 @@ export default function ReviewsSection() {
     setShowCreationModal(false);
   }, []);
   return (
-    <div className="flex flex-row gap-6">
+    <div className="flex md:flex-row flex-col gap-6">
       <Dialog
         open={showCreationModal}
         onOpenChange={(newVal) => setShowCreationModal(newVal)}
@@ -81,7 +81,7 @@ export default function ReviewsSection() {
                       {t("PRODUCTS_LISTING_PAGE.SHARE_YOUR_REVIEW")}
                     </p>
 
-                    <DialogTrigger className="bg-agzakhana-primary hover:bg-agzakhana-primary py-2 px-4 w-fit font-semibold text-lg rounded-md flex items-center justify-center gap-2 text-white cursor-pointer hover:brightness-90 transition-all duration-300">
+                    <DialogTrigger className="bg-agzakhana-primary hover:bg-agzakhana-primary py-2 px-4 w-full md:w-fit font-semibold text-lg rounded-md flex items-center justify-center gap-2 text-white cursor-pointer hover:brightness-90 transition-all duration-300">
                       <Icon icon="solar:pen-linear" />
                       {t("PRODUCTS_LISTING_PAGE.SUBMIT_REVIEWS")}
                     </DialogTrigger>

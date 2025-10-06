@@ -1,17 +1,28 @@
 import AddToCartButton from "@/components/add-to-cart";
 import { OfferTimer } from "@/components/discount-counter";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import { Offer } from "@/types/offers";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
+import { ComponentProps } from "react";
 
-export default async function OffersCard({ offer }: { offer: Offer }) {
+export default async function OffersCard({
+  offer,
+  ...other
+}: { offer: Offer } & ComponentProps<"li">) {
   const locale = await getLocale();
   const t = await getTranslations();
   return (
-    <li className="  rounded-2xl overflow-hidden flex flex-col gap-1 lg:w-[calc(20%-0.5rem)] xl:w-[calc(20%-1rem)] items-center shrink-0 lg:min-w-[20rem] xl:min-w-[18rem]">
+    <li
+      {...other}
+      className={cn(
+        "  rounded-2xl overflow-hidden flex flex-col gap-1 lg:w-[calc(20%-0.5rem)] xl:w-[calc(20%-1rem)] items-center shrink-0 lg:min-w-[20rem] xl:min-w-[18rem] w-80",
+        other?.className
+      )}
+    >
       <Link href={`/deals/${offer?._id}`} className="w-full ">
         <div className="h-[300px]! w-full rounded-xl flex items-start justify-center bg-gray-200 dark:bg-card-background-dark relative py-8 ">
           <Image

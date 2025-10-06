@@ -18,7 +18,7 @@ export async function SimilarProductsSection({
 }) {
   const t = await getTranslations();
   return (
-    <section className="flex flex-col gap-3 p-8 px-4">
+    <section className="flex flex-col gap-3 p-8 px-0">
       <Carousel className="w-full">
         <div className="flex justify-between flex-row ">
           <div className="flex items-center gap-2 flex-row ">
@@ -33,7 +33,7 @@ export async function SimilarProductsSection({
         </div>
         <Separator className="mb-4" />
         <ul className="list-none">
-          <CarouselContent className="gap-8">
+          <CarouselContent className="gap-8 px-4">
             {similarProducts?.map((product) => (
               <ProductCard key={product?._id} medicine={product} />
             ))}

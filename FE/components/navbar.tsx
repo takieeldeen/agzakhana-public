@@ -62,9 +62,9 @@ export default function Navbar() {
   return (
     <NavigationMenu
       viewport={false}
-      className="py-3 border-b-2 border-gray-200 dark:border-gray-600 w-full  max-w-full justify-start [&>div]:w-full px-8"
+      className="py-3 border-b-2 border-gray-200 dark:border-gray-600 w-full  max-w-full justify-start [&>div]:w-full px-8 "
     >
-      <NavigationMenuList className=" max-w-full w-full rtl:flex-row-reverse">
+      <NavigationMenuList className=" max-w-full w-full md:flex-row md:rtl:flex-row-reverse flex-col">
         <Link
           href="/products"
           className="bg-[#3BB77E] text-white text-base mr-5 flex flex-row rtl:flex-row-reverse rounded-lg items-center gap-2 py-2 px-4 transition duration-300 hover:bg-[#35A571]"
@@ -148,7 +148,7 @@ export default function Navbar() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        <NavigationMenuItem className="ml-auto rtl:mr-auto rtl:ml-0">
+        <NavigationMenuItem className="md:ml-auto md:rtl:mr-auto rtl:ml-0">
           <NavigationMenuLink asChild className="font-semibold">
             <Link
               href="/contact-us "

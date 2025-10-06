@@ -93,13 +93,13 @@ export default function ResetPasswordForm() {
     [reset, router, setError, t, token]
   );
   return (
-    <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
+    <RHFForm methods={methods} onSubmit={onSubmit} className="w-full md:w-128">
       <RHFTextfield
         name="password"
         label={t("LOGIN.PASSWORD")}
         placeholder={t("LOGIN.PASSWORD")}
         inputProps={{
-          className: "h-[48px] font-semibold text-lg",
+          className: "h-[48px] font-semibold text-base md:text-lg",
           type: showPassword ? "text" : "password",
           endAdornment: (
             <Button
@@ -124,7 +124,7 @@ export default function ResetPasswordForm() {
         label={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         placeholder={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         inputProps={{
-          className: "h-[48px] font-semibold text-lg",
+          className: "h-[48px] font-semibold text-base md:text-lg",
           type: showConfirmPassword ? "text" : "password",
           endAdornment: (
             <Button

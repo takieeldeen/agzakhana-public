@@ -76,13 +76,16 @@ export default function SignupForm() {
   );
   const PASSWORDS_MATCH = values.password === values.passwordConfirmation;
   return (
-    <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
+    <RHFForm methods={methods} onSubmit={onSubmit} className="w-full md:w-128">
       <GoogleAuthButton />
       <RHFTextfield
         name="email"
         label={t("LOGIN.EMAIL")}
         placeholder={t("LOGIN.EMAIL")}
-        inputProps={{ className: "h-12 font-semibold text-lg", type: "email" }}
+        inputProps={{
+          className: "h-12 font-semibold text-base md:text-lg",
+          type: "email",
+        }}
         labelProps={{ className: "text-base font-semibold" }}
       />
       <RHFTextfield
@@ -90,7 +93,7 @@ export default function SignupForm() {
         label={t("LOGIN.PASSWORD")}
         placeholder={t("LOGIN.PASSWORD")}
         inputProps={{
-          className: "h-12 font-semibold text-lg",
+          className: "h-12 font-semibold text-base md:text-lg",
           type: showPassword ? "text" : "password",
           endAdornment: (
             <Button
@@ -115,7 +118,7 @@ export default function SignupForm() {
         label={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         placeholder={t("RESET_PASSWORD.CONFIRM_PASSWORD")}
         inputProps={{
-          className: "h-12 font-semibold text-lg",
+          className: "h-12 font-semibold text-base md:text-lg",
           type: showConfirmPassword ? "text" : "password",
           endAdornment: (
             <Button

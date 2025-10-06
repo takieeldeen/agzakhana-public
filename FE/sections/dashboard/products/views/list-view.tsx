@@ -20,9 +20,9 @@ export default async function ProductsListingView({
   const t = await getTranslations();
   return (
     <div>
-      <div className=" flex flex-row w-full gap-6 py-8">
+      <div className=" flex flex-col md:flex-row w-full gap-6 py-8">
         <FiltersToolbar />
-        <div className="w-4/5">
+        <div className="w-full md:w-4/5">
           <div className="flex flex-col gap-2">
             {results === 0 && (
               <div className="flex items-center justify-center h-128 flex-col gap-4">
@@ -47,9 +47,13 @@ export default async function ProductsListingView({
               </p>
             )}
 
-            <ul className="w-full flex flex-row flex-wrap gap-4 justify-start">
+            <ul className="w-full flex flex-row flex-wrap  gap-4 justify-start ">
               {products?.map((medicineData) => (
-                <ProductCard key={medicineData?._id} medicine={medicineData} />
+                <ProductCard
+                  key={medicineData?._id}
+                  medicine={medicineData}
+                  className="w-full"
+                />
               ))}
             </ul>
           </div>

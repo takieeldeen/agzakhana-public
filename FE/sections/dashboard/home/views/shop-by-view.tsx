@@ -15,8 +15,8 @@ export default async function ShopByView({ products, results }: Props) {
   const t = await getTranslations();
   if (!results) return null;
   return (
-    <div className="flex flex-row p-8 px-4 gap-4 ">
-      <div className="w-[calc(25%-1rem)]">
+    <div className="flex md:flex-row flex-col p-8 px-4 gap-4 ">
+      <div className="md:w-[calc(25%-1rem)] w-full">
         <h6 className="text-xl font-bold text-text-primary w-full border-b-2 border-gray-300 dark:border-gray-600 pb-2 dark:text-gray-100">
           {t("HOME_PAGE.TOP_SELLING_TITLE")}
         </h6>
@@ -27,7 +27,7 @@ export default async function ShopByView({ products, results }: Props) {
           ))}
         </ul>
       </div>
-      <div className="w-[calc(25%-1rem)]">
+      <div className="md:w-[calc(25%-1rem)] w-full">
         <h6 className="text-xl font-bold text-text-primary w-full border-b-2 border-gray-300 dark:border-gray-600 pb-2 dark:text-gray-100">
           {t("HOME_PAGE.TRENDING_TITLE")}
         </h6>
@@ -38,7 +38,7 @@ export default async function ShopByView({ products, results }: Props) {
           ))}
         </ul>
       </div>
-      <div className="w-[calc(25%-1rem)]">
+      <div className="md:w-[calc(25%-1rem)] w-full">
         <h6 className="text-xl font-bold text-text-primary w-full border-b-2 border-gray-300 dark:border-gray-600 pb-2 dark:text-gray-100">
           {t("HOME_PAGE.RECENTLY_ADDED_TITLE")}
         </h6>
@@ -49,7 +49,7 @@ export default async function ShopByView({ products, results }: Props) {
           ))}
         </ul>
       </div>
-      <div className="w-[calc(25%-1rem)]">
+      <div className="md:w-[calc(25%-1rem)] w-full">
         <h6 className="text-xl font-bold text-text-primary w-full border-b-2 border-gray-300 dark:border-gray-600 pb-2 dark:text-gray-100">
           {t("HOME_PAGE.TOP_RATED_TITLE")}
         </h6>

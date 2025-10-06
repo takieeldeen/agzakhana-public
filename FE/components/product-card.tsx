@@ -6,16 +6,25 @@ import Link from "next/link";
 import FallbackImage from "./image";
 import { Skeleton } from "./ui/skeleton";
 import AddToCartButton from "./add-to-cart";
+import { ComponentProps } from "react";
+import { cn } from "@/lib/utils";
 
 export default async function ProductCard({
   medicine,
+  ...other
 }: {
   medicine: Medicine;
-}) {
+} & ComponentProps<"li">) {
   const t = await getTranslations();
   const locale = await getLocale();
   return (
-    <li className="border-2 border-[#ECECEC] dark:border-transparent xl:w-[240px] lg:w-[250px] h-[401px] rounded-2xl overflow-hidden relative lg:min-w-[20rem] xl:min-w-[19rem] dark:bg-card-background-dark dark:shadow-md dark:shadow-gray-700/30">
+    <li
+      {...other}
+      className={cn(
+        "border-2 border-[#ECECEC] dark:border-transparent xl:w-[240px] lg:w-[250px] h-[401px] rounded-2xl overflow-hidden relative lg:min-w-[20rem] xl:min-w-[19rem] dark:bg-card-background-dark dark:shadow-md dark:shadow-gray-700/30 min-w-80",
+        other?.className
+      )}
+    >
       <Link
         href={`/products/${medicine?._id}`}
         className="h-full flex flex-col gap-1"

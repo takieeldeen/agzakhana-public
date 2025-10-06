@@ -82,11 +82,11 @@ export default function ContactUsPage() {
     [reset, t]
   );
   return (
-    <section className="grid grid-cols-2 py-16">
+    <section className="grid grid-cols-1 md:grid-cols-2 py-16 gap-8 md:gap-0">
       {/* Left Section */}
       <div className="flex items-center justify-center ">
         {/* Form Card */}
-        <div className="w-4/5 bg-gray-200 rounded-md p-4 flex flex-col gap-4 py-8 dark:bg-card-background-dark">
+        <div className="w-full md:w-4/5 bg-gray-200 rounded-md p-4 flex flex-col gap-4 py-8 dark:bg-card-background-dark">
           <div className="flex flex-col gap-2">
             <h3 className="text-4xl font-bold dark:text-gray-200">
               {t("CONTACT_US.CONTACT_US_TITLE")}
@@ -147,9 +147,9 @@ export default function ContactUsPage() {
           </RHFForm>
         </div>
       </div>
-      <div className="">
+      <div className="md:order-first">
         <ul className="flex flex-col gap-3 h-full">
-          <li className="bg-gray-200 rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
+          <li className="bg-gray-200 min-h-36 md:min-h-auto rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
             <Icon icon="tdesign:location" className="text-6xl" />
             <div className="w-full flex flex-col gap-0.5">
               <p className="font-semibold">{t("CONTACT_US.ADDRESS")}</p>
@@ -157,7 +157,7 @@ export default function ContactUsPage() {
               <p>{t("CONTACT_US.ADDRESS_VAL_2")}</p>
             </div>
           </li>
-          <li className="bg-gray-200 rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
+          <li className="bg-gray-200 min-h-36 md:min-h-auto rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
             <Icon icon="mingcute:phone-line" className="text-6xl" />
             <div className="w-full flex flex-col gap-0.5">
               <p className="font-semibold">{t("CONTACT_US.CONTACT")}</p>
@@ -165,7 +165,7 @@ export default function ContactUsPage() {
               <p>{t("CONTACT_US.CONTACT_VAL_2")}</p>
             </div>
           </li>
-          <li className="bg-gray-200 rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
+          <li className="bg-gray-200 min-h-36 md:min-h-auto rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
             <Icon icon="mage:email" className="text-6xl" />
             <div className="w-full flex flex-col gap-0.5">
               <p className="font-semibold">{t("CONTACT_US.EMAIL")}</p>
@@ -173,7 +173,7 @@ export default function ContactUsPage() {
               <p>{t("CONTACT_US.EMAIL_VAL_2")}</p>
             </div>
           </li>
-          <li className="bg-gray-200 rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
+          <li className="bg-gray-200 min-h-36 md:min-h-auto rounded-md h-full flex flex-row items-center justify-around gap-8 px-12 hover:bg-agzakhana-primary dark:hover:bg-agzakhana-primary dark:hover:text-card-background-dark transition-all duration-300 hover:text-white dark:bg-card-background-dark dark:text-gray-300">
             <Icon icon="material-symbols:alarm-outline" className="text-6xl" />
             <div className="w-full flex flex-col gap-0.5">
               <p className="font-semibold">{t("CONTACT_US.WORKING_HOURS")}</p>

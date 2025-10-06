@@ -87,7 +87,7 @@ export default async function RootLayout({
               >
                 <Header />
                 <Navbar />
-                <main className="px-8">
+                <main className="md:px-8 px-1">
                   <div className="flex flex-row p-2">
                     {/* <FiltersToolbar /> */}
                     <div className="flex flex-col w-full">

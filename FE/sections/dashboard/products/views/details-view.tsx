@@ -23,7 +23,7 @@ export default async function DetailsView({
   return (
     <div className="flex flex-col gap-3 px-4">
       <CustomBreadCrump className="p-3" />
-      <div className="p-3 flex flex-row gap-12">
+      <div className="p-3 flex md:flex-row flex-col gap-12">
         <ImageMagnifier
           src={product?.imageUrl}
           alt={locale === "ar" ? product?.nameAr : product?.nameEn}
@@ -39,10 +39,7 @@ export default async function DetailsView({
             className="relative text-lg rounded-md "
           />
           <div className="flex flex-row gap-2">
-            <h2
-              style={{ fontSize: "40px" }}
-              className="font-semibold dark:text-gray-200"
-            >
+            <h2 className="font-semibold text-[32px] md:text-[40px] dark:text-gray-200">
               {locale === "en" ? product?.nameEn : product?.nameAr}
             </h2>
           </div>
@@ -58,7 +55,7 @@ export default async function DetailsView({
               })}
             </span>
           </div>
-          <div className="flex flex-row gap-1  items-center mb-6">
+          <div className="flex flex-col md:flex-row gap-1 items-start md:items-center mb-6">
             <strong className="text-5xl font-black text-agzakhana-primary">
               {product?.price}
               <span className="text-base font-medium">
@@ -80,7 +77,7 @@ export default async function DetailsView({
               </span>
             </div>
           </div>
-          <p className="text-xl mb-8 dark:text-gray-100">
+          <p className="md:text-xl text-lg mb-8 dark:text-gray-100">
             {locale === "ar" ? product?.descriptionAr : product?.descriptionEn}
           </p>
 

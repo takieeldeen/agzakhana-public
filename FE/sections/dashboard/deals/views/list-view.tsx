@@ -20,9 +20,9 @@ export default async function ProductsListingView({
 
   return (
     <div>
-      <div className=" flex flex-row w-full gap-6 py-8">
+      <div className=" flex flex-col md:flex-row w-full gap-6 py-8">
         <FiltersToolbar />
-        <div className="w-4/5">
+        <div className="w-full md:w-4/5">
           <div className="flex flex-col gap-2">
             <p className="text-lg font-semibold dark:text-gray-200">
               {t("PRODUCTS_LISTING_PAGE.WE_HAVE_FOUND")}
@@ -33,7 +33,11 @@ export default async function ProductsListingView({
             </p>
             <ul className="w-full flex flex-row flex-wrap gap-4 justify-start">
               {list?.map((offerData) => (
-                <OffersCard key={offerData?._id} offer={offerData} />
+                <OffersCard
+                  key={offerData?._id}
+                  offer={offerData}
+                  className="w-full"
+                />
               ))}
             </ul>
           </div>

@@ -16,7 +16,7 @@ export default async function DetailsView({ deal }: { deal: Offer }) {
   return (
     <div className="flex flex-col gap-3 px-4">
       <CustomBreadCrump className="p-3" />
-      <div className="p-3 flex flex-row gap-12">
+      <div className="p-3 flex flex-col md:flex-row gap-12">
         <ImageMagnifier
           src={deal?.imageUrl}
           alt={locale === "ar" ? deal?.nameAr : deal?.nameEn}
@@ -32,10 +32,7 @@ export default async function DetailsView({ deal }: { deal: Offer }) {
             className="relative text-lg rounded-md "
           />
           <div className="flex flex-row gap-2">
-            <h2
-              style={{ fontSize: "40px" }}
-              className="font-semibold dark:text-gray-200"
-            >
+            <h2 className="md:text-[40px] text-[32px] font-semibold dark:text-gray-200">
               {locale === "en" ? deal?.nameEn : deal?.nameAr}
             </h2>
           </div>
@@ -51,7 +48,7 @@ export default async function DetailsView({ deal }: { deal: Offer }) {
               })}
             </span>
           </div>
-          <div className="flex flex-row gap-1  items-center mb-6">
+          <div className="flex  flex-col md:flex-row gap-1 items-start md:items-center mb-6">
             <strong className="text-5xl font-black text-agzakhana-primary">
               {deal?.price}
               <span className="text-base font-medium">
@@ -72,7 +69,7 @@ export default async function DetailsView({ deal }: { deal: Offer }) {
               </span>
             </div>
           </div>
-          <p className="text-xl mb-8 dark:text-gray-100">
+          <p className="text-lg md:text-xl mb-8 dark:text-gray-100">
             {locale === "ar" ? deal?.descriptionAr : deal?.descriptionEn}
           </p>
 

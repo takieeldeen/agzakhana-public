@@ -49,12 +49,15 @@ export default function ForgotPasswordForm() {
     [t]
   );
   return (
-    <RHFForm methods={methods} onSubmit={onSubmit} className="w-128">
+    <RHFForm methods={methods} onSubmit={onSubmit} className="w-full md:w-128">
       <RHFTextfield
         name="email"
         label={t("LOGIN.EMAIL")}
         placeholder={t("LOGIN.EMAIL")}
-        inputProps={{ className: "h-12 font-semibold text-lg", type: "email" }}
+        inputProps={{
+          className: "h-12 font-semibold text-base md:text-lg",
+          type: "email",
+        }}
         labelProps={{ className: "text-base font-semibold" }}
       />
 
@@ -69,7 +72,7 @@ export default function ForgotPasswordForm() {
         {t("LOGIN.DON'T_HAVE_AN_ACCOUNT")}
         <Link
           href="/sign-up"
-          className="font-bold text-text-primary hover:underline dark:text-gray-200"
+          className="font-semibold md:font-bold text-text-primary hover:underline dark:text-gray-200"
         >
           {t("LOGIN.SIGN_UP_FOR_FREE")}
         </Link>

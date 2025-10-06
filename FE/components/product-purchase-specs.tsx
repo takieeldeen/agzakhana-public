@@ -140,7 +140,7 @@ export default function ProductPurchaseSpecs({ product }: Props) {
         </div>
         <div
           className={cn(
-            "flex flex-row gap-2 items-center bg-agzakhana-primary rounded-md px-2 py-2 text-white w-fit min-w-64 justify-center transition-all min-h-13 mb-2",
+            "flex flex-row gap-2 items-center bg-agzakhana-primary rounded-md px-2 py-2 text-white md:w-fit w-full min-w-64 justify-center transition-all min-h-13 mb-2",
             !ALREADY_IN_CART && "hover:brightness-90 cursor-pointer "
           )}
         >
