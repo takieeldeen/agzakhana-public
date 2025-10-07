@@ -1,10 +1,14 @@
 "use client";
 import { useTheme } from "next-themes";
-import Image from "next/image";
+import Image, { ImageProps } from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Logo() {
+type Props = {
+  imageProps?: ImageProps;
+};
+
+export default function Logo({ imageProps }: Props) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -23,6 +27,7 @@ export default function Logo() {
           width={280}
           alt="Agzakhana"
           priority
+          {...imageProps}
         />
       ) : (
         <Image
@@ -33,6 +38,7 @@ export default function Logo() {
           width={280}
           alt="Agzakhana"
           priority
+          {...imageProps}
         />
       )}
     </Link>

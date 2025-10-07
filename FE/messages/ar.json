@@ -236,6 +236,7 @@
     "CARD_ENDING_WITH": "بطاقة منتهية بـ {LAST_DIGITS}"
   },
   "PROFILE": {
+    "NAVBAR_TITLE": "الملف الشخصي",
     "PERSONAL_INFO": "المعلومات الشخصية",
     "PRODUCT_INFO": "معلومات التسوق",
     "USERNAME": "اسم المستخدم",

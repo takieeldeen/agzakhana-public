@@ -10,6 +10,8 @@ import { AuthProvider } from "@/providers/auth-provider";
 import TanstackProvider from "@/providers/tanstack-provider";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/providers/theme-provider";
+import AppSidebarProvider from "@/components/app-sidebar/sidebar-provider";
+import { AppSidebar } from "@/components/app-sidebar/app-sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -85,24 +87,27 @@ export default async function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                <Header />
-                <Navbar />
-                <main className="md:px-8 px-1">
-                  <div className="flex flex-row p-2">
-                    {/* <FiltersToolbar /> */}
-                    <div className="flex flex-col w-full">
-                      {newsLetter}
-                      {children}
-                      {popularProducts}
-                      {latestDeals}
-                      {shopByCategory}
-                      {shopBy}
-                      {newsLetter}
+                <AppSidebarProvider>
+                  <AppSidebar />
+                  <Header />
+                  <Navbar />
+                  <main className="md:px-8 px-1">
+                    <div className="flex flex-row p-2">
+                      {/* <FiltersToolbar /> */}
+                      <div className="flex flex-col w-full">
+                        {newsLetter}
+                        {children}
+                        {popularProducts}
+                        {latestDeals}
+                        {shopByCategory}
+                        {shopBy}
+                        {newsLetter}
+                      </div>
                     </div>
-                  </div>
-                </main>
-                <Toaster />
-                <Footer />
+                  </main>
+                  <Toaster />
+                  <Footer />
+                </AppSidebarProvider>
               </ThemeProvider>
             </TanstackProvider>
           </NextIntlClientProvider>

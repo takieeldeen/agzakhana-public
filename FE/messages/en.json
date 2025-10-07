@@ -240,6 +240,7 @@
     "TOTAL_PAID": " Total Paid"
   },
   "PROFILE": {
+    "NAVBAR_TITLE": "Profile",
     "PERSONAL_INFO": "Personal Information",
     "PRODUCT_INFO": "Shopping Information",
     "USERNAME": "Username",
