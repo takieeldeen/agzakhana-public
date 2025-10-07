@@ -12,7 +12,6 @@ export function MyOrdersListView() {
   const t = useTranslations();
   const locale = useLocale();
   const { orders, ordersLoading, ordersResults } = useGetMyOrders();
-  console.log(orders);
   const TABLE_HEAD: TableHeadColumn[] = [
     { id: "id", label: t("MY_ORDERS.ID") },
     {

@@ -6,7 +6,7 @@ import UserOptions from "./user-options";
 
 export default function AccountOptions() {
   return (
-    <ul className="flex flex-row gap-6 ">
+    <ul className="md:flex flex-row gap-6 hidden">
       {/* <li className="flex flex-row gap-3 items-end">
         <WhishlistPopover />
       </li> */}

@@ -38,7 +38,6 @@ export default function ForgotPasswordForm() {
           variant: "success",
           subtitle: res?.data?.message,
         });
-        console.log(res);
       } catch {
         pushMessage({
           variant: "fail",

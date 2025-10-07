@@ -13,7 +13,6 @@ export async function getOrderDetails(orderId: string | undefined) {
     const { content, status } = res?.data;
     return { order: content as Order, status, error: null };
   } catch (err) {
-    console.log(err);
     return { order: null, status: "fail", error: err };
   }
 }

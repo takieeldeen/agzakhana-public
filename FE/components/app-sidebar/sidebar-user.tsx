@@ -21,7 +21,6 @@ import {
 // import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "../ui/button";
-import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
@@ -56,7 +55,7 @@ export function NavUser() {
           size="lg"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         > */}
-        <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200">
+        <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200 dark:bg-card-background-dark">
           <Avatar className="h-11 w-11" onClick={() => router.push("/profile")}>
             <AvatarImage
               key={user?.imageUrl} // 🔑 ensures reload when URL changes
@@ -72,7 +71,7 @@ export function NavUser() {
                 ?.join(" ")}
             </AvatarFallback>
           </Avatar>
-          <div className="grid flex-1 text-left text-sm leading-tight text-gray-700 rtl:text-right">
+          <div className="grid flex-1 text-left text-sm leading-tight text-gray-700 dark:text-gray-200 rtl:text-right">
             <span className="truncate font-medium">{user.name}</span>
             <span className="text-muted-foreground truncate text-xs">
               {user.email}
@@ -83,12 +82,12 @@ export function NavUser() {
         {/* </SidebarMenuButton> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg bg-card-background-dark"
         // side={isMobile ? "bottom" : "right"}
         align="end"
         sideOffset={4}
       >
-        <DropdownMenuLabel className="p-0 font-normal">
+        <DropdownMenuLabel className="p-0 font-normal ">
           <div className="flex items-center rtl:flex-row-reverse gap-2 px-1 py-1.5 text-left text-sm">
             <Avatar className="h-8 w-8 rounded-lg">
               <AvatarImage src={user.imageUrl} alt={user.name} />
@@ -105,41 +104,44 @@ export function NavUser() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <DrawerClose className="w-full">
-              <Link
-                href="/profile"
-                className="flex flex-row items-center gap-2 rtl:flex-row-reverse text-right  w-full h-full"
-              >
-                <Icon icon="solar:user-outline" />
-                {t("PROFILE.NAVBAR_TITLE")}
-              </Link>
+            <DrawerClose
+              className="flex flex-row items-center gap-2 rtl:flex-row-reverse text-right  w-full h-full"
+              onClick={() => router.push("/profile")}
+            >
+              <Icon icon="solar:user-outline" />
+              {t("PROFILE.NAVBAR_TITLE")}
             </DrawerClose>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="rtl:flex-row-reverse"
-            onClick={() => router.push("/cart")}
-          >
-            <Icon icon="vaadin:cart-o" />
-            {t("HEADER.CART")}
+          <DropdownMenuItem>
+            <DrawerClose
+              className="flex flex-row items-center gap-2 rtl:flex-row-reverse text-right  w-full h-full"
+              onClick={() => router.push("/cart")}
+            >
+              <Icon icon="vaadin:cart-o" />
+              {t("HEADER.CART")}
+            </DrawerClose>
           </DropdownMenuItem>
-          <DropdownMenuItem
-            className="rtl:flex-row-reverse"
-            onClick={handleToggleTheme}
-          >
-            <Icon icon={isDark ? "circum:light" : "circum:dark"} />
-            {isDark
-              ? t("HEADER.SWITCH_TO_LIGHT_MODE")
-              : t("HEADER.SWITCH_TO_DARK_MODE")}
+          <DropdownMenuItem>
+            <DrawerClose
+              className="flex flex-row items-center gap-2 rtl:flex-row-reverse text-right  w-full h-full"
+              onClick={handleToggleTheme}
+            >
+              <Icon icon={isDark ? "circum:light" : "circum:dark"} />
+              {isDark
+                ? t("HEADER.SWITCH_TO_LIGHT_MODE")
+                : t("HEADER.SWITCH_TO_DARK_MODE")}
+            </DrawerClose>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="rtl:flex-row-reverse"
-          onClick={handleLogout}
-        >
-          <Icon icon="si:sign-out-duotone" />
-          {/* <IconLogout /> */}
-          {t("HEADER.SIGN_OUT")}
+        <DropdownMenuItem>
+          <DrawerClose
+            className="flex flex-row items-center gap-2 rtl:flex-row-reverse text-right  w-full h-full"
+            onClick={handleLogout}
+          >
+            <Icon icon="si:sign-out-duotone" />
+            {t("HEADER.SIGN_OUT")}
+          </DrawerClose>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

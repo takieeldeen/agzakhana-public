@@ -1,7 +1,6 @@
 "use server";
 import Axios from "axios";
 import { cookies } from "next/headers";
-console.log(process.env.NEXT_PUBLIC_API_URL);
 const axiosServer = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,

@@ -25,7 +25,6 @@ export default function CartListView() {
       setCheckoutLoading(true);
       await checkout();
     } catch (err: any) {
-      console.log(err);
       pushMessage({ variant: "fail", subtitle: err?.message });
     } finally {
       setCheckoutLoading(false);

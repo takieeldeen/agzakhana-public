@@ -42,7 +42,6 @@ export function AuthProvider({ children }: Props) {
         setUser(authData.user);
         setIsAuthenticated(authData.isAuthenticated);
       } catch (err) {
-        console.log(err);
         setUser(undefined);
         setIsAuthenticated(false);
       } finally {

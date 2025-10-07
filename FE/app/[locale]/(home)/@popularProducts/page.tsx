@@ -3,6 +3,5 @@ import PopularProductsView from "@/sections/dashboard/home/views/popular-product
 
 export default async function PopularProductsSection() {
   const { content: products, results } = await getPopularProducts();
-  console.log(products);
   return <PopularProductsView products={products} results={results} />;
 }

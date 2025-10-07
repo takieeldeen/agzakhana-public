@@ -160,13 +160,11 @@ export function useMutateDealsReviews() {
       reviewId: string;
       dealId: string;
     }) => {
-      console.log("triggered");
       const URL = endpoints.reviews.dealsSingle(dealId, reviewId);
       return await axios.delete(URL);
     },
     onSuccess: (res, { dealId }) => {
       queryClient.setQueryData(["reviews", dealId], res.data);
-      console.log(dealId);
       queryClient.invalidateQueries({
         queryKey: ["reviews", dealId],
       });

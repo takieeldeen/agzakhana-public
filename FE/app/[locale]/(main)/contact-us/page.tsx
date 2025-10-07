@@ -72,7 +72,6 @@ export default function ContactUsPage() {
         });
         reset();
       } catch (err) {
-        console.log(err);
         pushMessage({
           variant: "fail",
           subtitle: t("TOAST.ERROR_SENDING_MESSAGE"),

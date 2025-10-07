@@ -13,7 +13,6 @@ type Props = {
 export default async function ProductDetaillsPage({ params }: Props) {
   const { dealId } = await params;
   const { deal } = await getDealDetails(dealId);
-  console.log(deal);
   if (!deal) notFound();
   return <DetailsView deal={deal} />;
 }

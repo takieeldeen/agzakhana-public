@@ -19,7 +19,6 @@ export default async function DetailsView({
 }) {
   const locale = await getLocale();
   const t = await getTranslations();
-  console.log(product);
   return (
     <div className="flex flex-col gap-3 px-4">
       <CustomBreadCrump className="p-3" />

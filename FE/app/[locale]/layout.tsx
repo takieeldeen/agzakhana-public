@@ -49,19 +49,9 @@ export async function generateMetadata({
 export default async function RootLayout({
   children,
   params,
-  newsLetter,
-  popularProducts,
-  shopByCategory,
-  latestDeals,
-  shopBy,
 }: Readonly<{
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
-  popularProducts: React.ReactNode;
-  newsLetter: React.ReactNode;
-  latestDeals: React.ReactNode;
-  shopByCategory: React.ReactNode;
-  shopBy: React.ReactNode;
 }>) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
@@ -94,15 +84,7 @@ export default async function RootLayout({
                   <main className="md:px-8 px-1">
                     <div className="flex flex-row p-2">
                       {/* <FiltersToolbar /> */}
-                      <div className="flex flex-col w-full">
-                        {newsLetter}
-                        {children}
-                        {popularProducts}
-                        {latestDeals}
-                        {shopByCategory}
-                        {shopBy}
-                        {newsLetter}
-                      </div>
+                      <div className="flex flex-col w-full">{children}</div>
                     </div>
                   </main>
                   <Toaster />

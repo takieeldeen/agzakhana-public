@@ -16,7 +16,6 @@ import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { SidebarTrigger } from "./ui/sidebar";
 
 export default function Navbar() {
   const t = useTranslations("");
@@ -63,7 +62,7 @@ export default function Navbar() {
   return (
     <NavigationMenu
       viewport={false}
-      className="py-3 border-b-2 border-gray-200 dark:border-gray-600 w-full  max-w-full justify-start [&>div]:w-full px-8 "
+      className="py-3 border-b-2 border-gray-200 dark:border-gray-600 w-full  max-w-full justify-start [&>div]:w-full px-8 hidden md:flex"
     >
       <NavigationMenuList className=" max-w-full w-full md:flex-row md:rtl:flex-row-reverse flex-col">
         {/* <SidebarTrigger />2 */}

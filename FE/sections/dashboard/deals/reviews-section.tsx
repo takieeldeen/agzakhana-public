@@ -28,7 +28,6 @@ export default function ReviewsSection() {
   const { dealId }: { dealId: string } = useParams();
   const { reviews, overAllRating, reviewsFrequency, reviewCount, canReview } =
     useGetReviews(dealId, "DEAL");
-  console.log(dealId);
   const handleCloseModal = useCallback(() => {
     setShowCreationModal(false);
   }, []);

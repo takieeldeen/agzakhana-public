@@ -87,7 +87,6 @@ export default function ResetPasswordForm() {
           variant: "fail",
           subtitle: t("RESET_PASSWORD.RESET_FAILED"),
         });
-        console.log(err);
       }
     },
     [reset, router, setError, t, token]

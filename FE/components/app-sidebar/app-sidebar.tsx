@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -31,21 +30,18 @@ import { NavUser } from "./sidebar-user";
 
 export function AppSidebar() {
   const navData = useGetNavData();
-  const { isAuthenticated, user } = useAuth();
-  const { cart, totalItems, cartEmpty } = useGetCartItems(isAuthenticated);
+  const { isAuthenticated } = useAuth();
+  const { totalItems } = useGetCartItems(isAuthenticated);
   const t = useTranslations();
   return (
     <>
-      <DrawerTrigger asChild>
-        <Button variant="outline">Open Drawer</Button>
-      </DrawerTrigger>
-      <DrawerContent className="">
+      <DrawerContent className="dark:bg-agzakhana-background-dark">
         <DrawerHeader>
           <DrawerTitle className="flex flex-col items-center justify-center ">
             <Logo />
           </DrawerTitle>
           <Separator />
-          <DrawerDescription>Menu</DrawerDescription>
+          {/* <DrawerDescription>Menu</DrawerDescription> */}
         </DrawerHeader>
         <ul className="flex flex-col gap-2">
           {navData?.map((path) => (
@@ -58,7 +54,7 @@ export function AppSidebar() {
               <DrawerClose asChild>
                 <Link
                   href="/cart"
-                  className=" text-base  flex flex-row  rounded-lg items-center gap-2 py-2 px-4 transition duration-300 font-semibold hover:bg-gray-200 w-full"
+                  className=" text-base  flex flex-row  rounded-lg items-center gap-2 py-2 px-4 transition duration-300 font-semibold hover:bg-gray-200 dark:hover:bg-card-background-dark w-full dark:text-gray-200"
                 >
                   <Icon
                     icon="vaadin:cart-o"
@@ -68,7 +64,7 @@ export function AppSidebar() {
                   />
                   {t("HEADER.CART")}
                   {totalItems && (
-                    <span className="ml-auto bg-rose-600 min-w-6 min-h-6 p-1 aspect-square rounded-full text-white flex items-center justify-center text-sm font-base">
+                    <span className="ml-auto rtl:ml-0 rtl:mr-auto bg-rose-600 min-w-6 min-h-6 p-1 aspect-square rounded-full text-white flex items-center justify-center text-sm font-base">
                       {totalItems}
                     </span>
                   )}
@@ -100,7 +96,7 @@ function NavItem({ navItemPath }: NavItemProps) {
         // onValueChange={(newVal) => setCommentsSize(newVal as any)}
       >
         <AccordionItem value="expanded">
-          <AccordionTrigger className="rounded-lg font-semibold text-base items-center  hover:no-underline cursor-pointer hover:bg-gray-200 gap-2 py-2 px-4 h-12">
+          <AccordionTrigger className="rounded-lg font-semibold text-base items-center  hover:no-underline cursor-pointer hover:bg-gray-200 dark:hover:bg-card-background-dark gap-2 py-2 px-4 h-12 dark:text-gray-200">
             <div className="flex flex-row items-center gap-2">
               <Icon icon={navItemPath?.icon} height={20} width={20} />
               {navItemPath?.label}
@@ -117,7 +113,7 @@ function NavItem({ navItemPath }: NavItemProps) {
                   <DrawerClose asChild>
                     <Link
                       href={child?.path}
-                      className=" text-base mr-5 flex flex-row  rounded-lg items-center gap-2 py-2 px-4 transition duration-300 font-semibold hover:bg-gray-200 w-full text-gray-700"
+                      className=" text-base mr-5 flex flex-row  rounded-lg items-center gap-2 py-2 px-4 transition duration-300 font-semibold hover:bg-gray-200 dark:hover:bg-card-background-dark w-full text-gray-700 dark:text-gray-200"
                     >
                       <Icon icon={child?.icon} height={20} width={20} />
                       {child?.label}
@@ -136,7 +132,7 @@ function NavItem({ navItemPath }: NavItemProps) {
       <DrawerClose asChild>
         <Link
           href={navItemPath?.path}
-          className=" text-base  flex flex-row  rounded-lg items-center gap-2 py-2 px-4 transition duration-300 font-semibold hover:bg-gray-200 w-full"
+          className=" text-base  flex flex-row  rounded-lg items-center gap-2 py-2 px-4 transition duration-300 font-semibold hover:bg-gray-200 w-full dark:text-gray-200 dark:hover:bg-card-background-dark"
         >
           <Icon icon={navItemPath?.icon} height={20} width={20} />
           {navItemPath?.label}

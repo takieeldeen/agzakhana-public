@@ -19,27 +19,31 @@ export default function Logo({ imageProps }: Props) {
   return (
     <Link href="/">
       {isDark ? (
-        <Image
-          src={
-            "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(2).png"
-          }
-          height={140}
-          width={280}
-          alt="Agzakhana"
-          priority
-          {...imageProps}
-        />
+        <div className="relative h-[38.5px] md:h-[110px] w-[98px] md:w-[280px]">
+          <Image
+            src={
+              "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(2).png"
+            }
+            alt="Agzakhana"
+            className="object-fill"
+            fill
+            priority
+            {...imageProps}
+          />
+        </div>
       ) : (
-        <Image
-          src={
-            "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(1).png"
-          }
-          height={140}
-          width={280}
-          alt="Agzakhana"
-          priority
-          {...imageProps}
-        />
+        <div className="relative h-[38.5px] md:h-[110px] w-[98px] md:w-[280px]">
+          <Image
+            src={
+              "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(1).png"
+            }
+            alt="Agzakhana"
+            className="object-fill"
+            fill
+            priority
+            {...imageProps}
+          />
+        </div>
       )}
     </Link>
   );
