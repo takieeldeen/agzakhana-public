@@ -7,12 +7,9 @@ const CONNECTION_STRING = process.env.DB_STRING?.replace(
   "<<USERNAME>>",
   process?.env?.DB_USERNAME ?? ""
 )?.replace("<<PASSWORD>>", process?.env?.DB_PASSWORD ?? "");
-
+console.log(CONNECTION_STRING);
 mongoose
-  .connect(CONNECTION_STRING!, {
-    ssl: true,
-    tlsAllowInvalidCertificates: process.env.NODE_ENV === "development",
-  })
+  .connect(CONNECTION_STRING!)
   .then(() => {
     console.log("✅ Connected to the database");
   })

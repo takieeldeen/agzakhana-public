@@ -121,16 +121,10 @@ export const checkAuth = catchAsync(
       }
     ) as any;
     const user = await User.findById(decoded?.id!);
-    if (!user) {
-      res.status(200).json({
-        status: req.t("COMMON.SUCCESS"),
-        isAuthenticated: false,
-        user: null,
-      });
-    }
+
     res.status(200).json({
       status: req.t("COMMON.SUCCESS"),
-      isAuthenticated: true,
+      isAuthenticated: !!user,
       user,
     });
   }
