@@ -25,6 +25,10 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/hooks/useAuth";
+import { useCallback } from "react";
+import { logout } from "@/api/auth";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,

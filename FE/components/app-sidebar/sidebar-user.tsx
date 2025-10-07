@@ -26,12 +26,28 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { DrawerClose } from "../ui/drawer";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
+import { logout } from "@/api/auth";
 
 export function NavUser() {
+  // Custom Hooks //////////////////////////////////
   const { user } = useAuth();
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const { resolvedTheme, setTheme } = useTheme();
   const t = useTranslations();
+  // Helper Constants //////////////////////////////////
+  const isDark = resolvedTheme === "dark";
+  const { logout: logoutLocally } = useAuth();
+  const router = useRouter();
+  // Callback Fns //////////////////////////////////
+  const handleLogout = useCallback(async () => {
+    await logout();
+    logoutLocally();
+    router.refresh();
+  }, [logoutLocally, router]);
+  const handleToggleTheme = useCallback(async () => {
+    setTheme(resolvedTheme === "light" ? "dark" : "light");
+  }, [resolvedTheme, setTheme]);
   if (!user) return null;
   return (
     <DropdownMenu>
@@ -41,23 +57,21 @@ export function NavUser() {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         > */}
         <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200">
-          <Link href="/profile">
-            <Avatar className="h-11 w-11">
-              <AvatarImage
-                key={user?.imageUrl} // 🔑 ensures reload when URL changes
-                src={user?.imageUrl}
-                alt="@shadcn"
-                referrerPolicy="no-referrer"
-              />
-              <AvatarFallback className="bg-gray-300 font-semibold text-xl ">
-                {user?.name
-                  ?.split(" ")
-                  ?.slice(0, 2)
-                  ?.map((el) => el[0])
-                  ?.join(" ")}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
+          <Avatar className="h-11 w-11" onClick={() => router.push("/profile")}>
+            <AvatarImage
+              key={user?.imageUrl} // 🔑 ensures reload when URL changes
+              src={user?.imageUrl}
+              alt="@shadcn"
+              referrerPolicy="no-referrer"
+            />
+            <AvatarFallback className="bg-gray-300 font-semibold text-xl ">
+              {user?.name
+                ?.split(" ")
+                ?.slice(0, 2)
+                ?.map((el) => el[0])
+                ?.join(" ")}
+            </AvatarFallback>
+          </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight text-gray-700 rtl:text-right">
             <span className="truncate font-medium">{user.name}</span>
             <span className="text-muted-foreground truncate text-xs">
@@ -91,7 +105,7 @@ export function NavUser() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <DrawerClose>
+            <DrawerClose className="w-full">
               <Link
                 href="/profile"
                 className="flex flex-row items-center gap-2 rtl:flex-row-reverse text-right  w-full h-full"
@@ -101,11 +115,17 @@ export function NavUser() {
               </Link>
             </DrawerClose>
           </DropdownMenuItem>
-          <DropdownMenuItem className="rtl:flex-row-reverse">
+          <DropdownMenuItem
+            className="rtl:flex-row-reverse"
+            onClick={() => router.push("/cart")}
+          >
             <Icon icon="vaadin:cart-o" />
             {t("HEADER.CART")}
           </DropdownMenuItem>
-          <DropdownMenuItem className="rtl:flex-row-reverse">
+          <DropdownMenuItem
+            className="rtl:flex-row-reverse"
+            onClick={handleToggleTheme}
+          >
             <Icon icon={isDark ? "circum:light" : "circum:dark"} />
             {isDark
               ? t("HEADER.SWITCH_TO_LIGHT_MODE")
@@ -113,7 +133,10 @@ export function NavUser() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="rtl:flex-row-reverse">
+        <DropdownMenuItem
+          className="rtl:flex-row-reverse"
+          onClick={handleLogout}
+        >
           <Icon icon="si:sign-out-duotone" />
           {/* <IconLogout /> */}
           {t("HEADER.SIGN_OUT")}
