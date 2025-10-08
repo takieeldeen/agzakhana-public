@@ -60,7 +60,7 @@ export const generateDevelopmentError = (
   error: AppError | FormError,
   originalError: any
 ) => {
-  res.status(error?.statusCode ?? 500).json({
+  return res.status(error?.statusCode ?? 500).json({
     status: error?.status ?? "error",
     message: error?.message ?? "Something Went wrong",
     isOperationalError: error?.isOperationalError ?? false,
@@ -76,7 +76,7 @@ export const generateProductionError = (
   res: Response,
   error: AppError | FormError
 ) => {
-  res.status(error.statusCode ?? 500).json({
+  return res.status(error.statusCode ?? 500).json({
     status: error?.isOperationalError ? error.status : "error",
     isOperationalError: error?.isOperationalError,
     isFormError: error?.isFormError,

@@ -79,7 +79,11 @@ const userSchema = new Schema<UserType>({
   },
   isActive: {
     type: Boolean,
-    default: true,
+    default: false,
+  },
+  activationToken: {
+    type: String,
+    select: false,
   },
 });
 // Pre validations

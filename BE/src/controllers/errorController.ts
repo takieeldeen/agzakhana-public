@@ -12,6 +12,9 @@ const errorController = (
   res: Response,
   next: NextFunction
 ) => {
+  if (res.headersSent) {
+    return next(error);
+  }
   let finalError = Object.create(Object.getPrototypeOf(error));
   Object.assign(finalError, error);
   finalError.message = error.message;
@@ -24,11 +27,9 @@ const errorController = (
       break;
   }
   if (process.env.NODE_ENV === "development")
-    generateDevelopmentError(req, res, finalError, error);
+    return generateDevelopmentError(req, res, finalError, error);
   if (process.env.NODE_ENV === "production")
-    generateProductionError(req, res, finalError);
-  console.log(error);
-  next();
+    return generateProductionError(req, res, finalError);
 };
 
 export default errorController;

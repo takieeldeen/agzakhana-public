@@ -10,6 +10,9 @@ authRouter.route("/reset-password").post(authController.resetPassword);
 authRouter.route("/check-reset-token").post(authController.checkResetToken);
 authRouter.route("/login").post(authController.login);
 authRouter.route("/checkAuth").post(authController.checkAuth);
+authRouter
+  .route("/check-email-activation")
+  .post(authController.checkEmailValidity);
 authRouter.route("/logout").post(authController.logout);
 authRouter.route("/login-with-google").get(authController.loginWithGoogle);
 authRouter.route("/google/callback").get(authController.googleLoginCallback);

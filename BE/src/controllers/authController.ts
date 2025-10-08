@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/usersModel";
-import { compare, hash } from "bcrypt";
+import { compare } from "bcrypt";
 import catchAsync from "../utils/catchAsync";
 import { AppError } from "../utils/errors";
-import { sign, verify } from "jsonwebtoken";
+import { verify } from "jsonwebtoken";
 import axios from "axios";
 import { generateToken } from "../utils/tokens";
 import { sendMail } from "../services/emailServices";
@@ -11,17 +11,61 @@ import { generateMailTemplate } from "../templates/mails";
 import { clientLocale } from "../app";
 import { createHash, randomBytes } from "crypto";
 import ResetToken from "../models/resetTokenModel";
+import { UserType } from "../types/users";
 
 export const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const newUser = {
+    const newUser: Partial<UserType> = {
       email: req?.body?.email,
       password: req?.body?.password,
       passwordConfirmation: req?.body?.passwordConfirmation,
+      isActive: false,
     };
+    const plainToken = randomBytes(32).toString("hex");
+    const hashedToken = createHash("sha256").update(plainToken).digest("hex");
+    newUser.activationToken = hashedToken;
+
     await User.create(newUser);
+    await sendMail({
+      to: [newUser.email!],
+      subject: "Agzakhana | Welcome To Agzakhana",
+      html: generateMailTemplate({
+        title: req.t("MAILS.TITLE.SIGN_UP", { lng: clientLocale }),
+        content: req.t("MAILS.CONTENT.SIGN_UP", { lng: clientLocale }),
+        user: newUser?.email!,
+        actionTitle: req.t("MAILS.ACTION_TITLE.SIGN_UP", {
+          lng: clientLocale,
+        }),
+        actionSubtitle: req.t("MAILS.ACTION_SUBTITLE.SIGN_UP", {
+          lng: clientLocale,
+        }),
+        actionLink: `${process.env.CLIENT_URL}/sign-up?token=${plainToken}`,
+      }),
+    });
     res.status(201).json({
       status: "success",
+    });
+  }
+);
+
+export const checkEmailValidity = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.body;
+    const hashedToken = createHash("sha256").update(token).digest("hex");
+    const user = await User.findOneAndUpdate(
+      {
+        activationToken: hashedToken,
+      },
+      { $set: { activationToken: null } },
+      { new: true }
+    );
+    if (!user)
+      return next(new AppError(400, req.t("MESSAGES.TOKEN_NOT_FOUND")));
+    generateToken(res, user);
+
+    res.status(200).json({
+      status: "success",
+      content: user,
     });
   }
 );
@@ -32,14 +76,17 @@ export const login = catchAsync(
     if (!email || !password)
       return next(new AppError(400, req.t("LOGIN.MISSING_CREDENTIALS")));
 
-    const user = await User.findOne({ email, provider: "LOCAL" }).select(
-      "+password"
-    );
+    const user = await User.findOne({
+      email,
+      provider: "LOCAL",
+    }).select("+password");
     if (!user?.password)
       return next(new AppError(400, req.t("LOGIN.WRONG_CREDENTIALS")));
     const valid = await compare(password, user.password);
     if (!valid)
       return next(new AppError(400, req.t("LOGIN.WRONG_CREDENTIALS")));
+    if (!user?.isActive)
+      return next(new AppError(400, req.t("LOGIN.INACTIVE_ACCOUNT")));
     generateToken(res, user);
     res.status(200).json({
       status: req.t("COMMON.SUCCESS"),
@@ -85,6 +132,7 @@ export const googleLoginCallback = catchAsync(
         email,
         imageUrl: picture,
         provider: "GOOGLE",
+        isActive: true,
       };
       user = await User.create(newUser);
     }
@@ -94,41 +142,37 @@ export const googleLoginCallback = catchAsync(
     res.status(200).json({ status: "success" });
   }
 );
+export const checkAuth = catchAsync(async (req, res, next) => {
+  const { token } = req.cookies;
 
-export const checkAuth = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { token } = req.cookies;
-    if (!token) {
-      res.status(200).json({
-        status: req.t("COMMON.SUCCESS"),
-        isAuthenticated: false,
-        user: null,
-      });
-    }
-    const decoded = verify(
-      token,
-      process?.env?.JWT_SECRET!,
-      function (err: any, decoded: any) {
-        if (err) {
-          res.status(200).json({
-            status: req.t("COMMON.SUCCESS"),
-            isAuthenticated: false,
-            user: null,
-          });
-        } else {
-          return decoded;
-        }
-      }
-    ) as any;
-    const user = await User.findById(decoded?.id!);
+  if (!token) {
+    res.status(200).json({
+      status: req.t("COMMON.SUCCESS"),
+      isAuthenticated: false,
+      user: null,
+    });
+    return;
+  }
+
+  try {
+    const decoded = verify(token, process.env.JWT_SECRET!) as {
+      id: string;
+    };
+    const user = await User.findById(decoded.id);
 
     res.status(200).json({
       status: req.t("COMMON.SUCCESS"),
       isAuthenticated: !!user,
       user,
     });
+  } catch (err) {
+    res.status(200).json({
+      status: req.t("COMMON.SUCCESS"),
+      isAuthenticated: false,
+      user: null,
+    });
   }
-);
+});
 
 export const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -213,6 +257,7 @@ export const checkResetToken = catchAsync(
     });
   }
 );
+
 export const resetPassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { token, password, passwordConfirmation } = req.body;

@@ -7,7 +7,8 @@
   },
   "LOGIN": {
     "MISSING_CREDENTIALS": "Please enter the username and password",
-    "WRONG_CREDENTIALS": "Wrong Username or password"
+    "WRONG_CREDENTIALS": "Wrong Username or password",
+    "INACTIVE_ACCOUNT": "Please activate your account using your email address."
   },
   "REVIEWS": {
     "COMMENT": "Comment",
@@ -55,18 +56,22 @@
   },
   "MAILS": {
     "TITLE": {
+      "SIGN_UP": "Activate Your Agzakhana Account",
       "CONTACT_US": "Thank you for contacting the Agzakhana team",
       "RESET_PASSWORD": "Reset Password"
     },
     "CONTENT": {
+      "SIGN_UP": "Thank you for signing up with Agzakhana! To complete your registration and activate your account, please click the button below. Once activated, you’ll be able to sign in and start exploring our products and services.",
       "CONTACT_US": "Thank you for reaching out to us. We’ve received your message, and our team will review it shortly. One of our representatives will contact you within the next 24–48 hours.",
       "RESET_PASSWORD": "We’ve received your request to reset your password. You can create a new one by clicking the button below. If you didn’t request a password reset, you can safely ignore this email."
     },
     "ACTION_TITLE": {
+      "SIGN_UP": "Activate Account",
       "CONTACT_US": "Go to Agzakhana",
       "RESET_PASSWORD": "Reset Password"
     },
     "ACTION_SUBTITLE": {
+      "SIGN_UP": "Click the button above to verify your email and activate your account securely.",
       "CONTACT_US": "We appreciate your time and trust, and we look forward to assisting you soon.",
       "RESET_PASSWORD": "Click the button above to securely set a new password for your account."
     },
