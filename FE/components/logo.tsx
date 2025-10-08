@@ -1,14 +1,15 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import Image, { ImageProps } from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 
 type Props = {
   imageProps?: ImageProps;
-};
+} & ComponentProps<"div">;
 
-export default function Logo({ imageProps }: Props) {
+export default function Logo({ imageProps, ...other }: Props) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -19,7 +20,13 @@ export default function Logo({ imageProps }: Props) {
   return (
     <Link href="/">
       {isDark ? (
-        <div className="relative h-[38.5px] md:h-[110px] w-[98px] md:w-[280px]">
+        <div
+          {...other}
+          className={cn(
+            "relative h-[38.5px] md:h-[110px] w-[98px] md:w-[280px]",
+            other?.className
+          )}
+        >
           <Image
             src={
               "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(2).png"
@@ -32,7 +39,13 @@ export default function Logo({ imageProps }: Props) {
           />
         </div>
       ) : (
-        <div className="relative h-[38.5px] md:h-[110px] w-[98px] md:w-[280px]">
+        <div
+          {...other}
+          className={cn(
+            "relative h-[38.5px] md:h-[110px] w-[98px] md:w-[280px]",
+            other?.className
+          )}
+        >
           <Image
             src={
               "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakahan-public-portal/New%20Project%20(1).png"

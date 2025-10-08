@@ -32,7 +32,7 @@ export default function ReviewsSection() {
     setShowCreationModal(false);
   }, []);
   return (
-    <div className="flex flex-row gap-6">
+    <div className="flex md:flex-row flex-col gap-6">
       <Dialog
         open={showCreationModal}
         onOpenChange={(newVal) => setShowCreationModal(newVal)}

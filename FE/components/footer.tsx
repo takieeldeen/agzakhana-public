@@ -41,11 +41,14 @@ export default async function Footer() {
               <Logo />
             </div>
             {footerData.map((section, sectionIdx) => (
-              <div key={sectionIdx}>
+              <div
+                key={sectionIdx}
+                className="col-span-2 md:col-span-1 text-center md:text-left md:rtl:text-right"
+              >
                 <h3 className="mb-4 font-bold dark:text-gray-300">
                   {section.title}
                 </h3>
-                <ul className="text-muted-foreground space-y-4">
+                <ul className="text-muted-foreground space-y-4 flex flex-col items-center md:items-start">
                   {section.links.map((link, linkIdx) => (
                     <li
                       key={linkIdx}

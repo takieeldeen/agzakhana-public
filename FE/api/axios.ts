@@ -13,6 +13,7 @@ export const endpoints = {
     logout: "/v1/auth/logout",
     forgetPassword: "/v1/auth/forget-password",
     checkResetToken: "/v1/auth/check-reset-token",
+    checkEmailValidity: "/v1/auth/check-email-activation",
     resetPassword: "/v1/auth/reset-password",
   },
   products: {

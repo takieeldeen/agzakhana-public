@@ -12,7 +12,10 @@
     "SIGN_OUT": "Sign Out",
     "SIGN_IN": "Sign In",
     "SWITCH_TO_DARK_MODE": "Activate Dark Mode",
-    "SWITCH_TO_LIGHT_MODE": "Deactivate Dark Mode"
+    "SWITCH_TO_LIGHT_MODE": "Deactivate Dark Mode",
+    "ARABIC": "Arabic",
+    "ENGLISH": "English",
+    "DISPLAY_LANGUAGE": "Display Language"
   },
   "NAV_BAR": {
     "BROWSE_ALL_CATEGORIES": "Browse All Categories",
@@ -222,7 +225,11 @@
     "SUCCESSFUL_PROCESS": "Successful Process",
     "UNSUCCESSFUL_PROCESS": "Unsuccessful Process",
     "MESSAGE_SENT": "Your message has been sent successfully",
-    "ERROR_SENDING_MESSAGE": "An error occurred while sending your message. Please try again later."
+    "ERROR_SENDING_MESSAGE": "An error occurred while sending your message. Please try again later.",
+    "ADDED_TO_CART_SUCCESS": "The Product was added to your cart successfully.",
+    "ADDED_TO_CART_FAIL": "Something went wrong while adding the product to your car.",
+    "SIGNUP_FAIL": "Something went wrong during signup process.",
+    "SIGNUP_SUCCESS": "An Email was sent to your account please check the mail to activate your account."
   },
   "PAYMENT_STATUS": {
     "PAYMENT_SUCCESS": "Successful Payment",

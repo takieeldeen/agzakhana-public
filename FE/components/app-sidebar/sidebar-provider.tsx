@@ -33,7 +33,12 @@ export default function AppSidebarProvider({ children }: SidebarProviderProps) {
   };
   return (
     <SideBarContext.Provider value={value}>
-      <Drawer direction={locale === "ar" ? "right" : "left"}>{children}</Drawer>
+      <Drawer
+        direction={locale === "ar" ? "right" : "left"}
+        container={document?.body}
+      >
+        {children}
+      </Drawer>
     </SideBarContext.Provider>
   );
 }

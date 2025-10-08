@@ -2,14 +2,12 @@
 
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   DrawerClose,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import Logo from "../logo";
 import { Separator } from "../ui/separator";

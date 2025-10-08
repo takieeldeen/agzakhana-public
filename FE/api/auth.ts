@@ -1,5 +1,6 @@
 import axios, { endpoints } from "./axios";
 import { UserType } from "@/types/users";
+import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
 export async function login(payload: any) {
@@ -56,4 +57,30 @@ export async function resetPasword(payload: {
 }) {
   const URL = endpoints.auth.resetPassword;
   return await axios.post(URL, payload);
+}
+
+export async function checkEmailValidity(payload: any) {
+  try {
+    if (!payload?.token) return { content: null, status: "fail", error: null };
+    const URL = endpoints.auth.checkEmailValidity;
+    const res = await axios.post(URL, payload);
+    const { content, status } = res?.data;
+    return { content: content as UserType, status, error: null };
+  } catch (err) {
+    return { content: null, status: "fail", error: err };
+  }
+}
+
+export function useCheckEmailValidity({ token }: { token: string }) {
+  return useQuery<{
+    content: UserType | null;
+    status: string;
+    error: any;
+  }>({
+    queryKey: ["checkEmailValidity", token],
+    queryFn: () => checkEmailValidity({ token }),
+    enabled: !!token, // only runs if token exists
+    staleTime: 0, // re-runs on each mount
+    retry: false, // optional: don’t retry if invalid token
+  });
 }

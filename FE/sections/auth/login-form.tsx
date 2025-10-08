@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import GoogleAuthButton from "@/components/google-auth-button";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { pushMessage } from "@/components/toast-message";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -49,7 +50,8 @@ export default function LoginForm() {
         const res = await login(data);
         loginLocally(res?.data?.user);
         router.push("/");
-      } catch (err) {
+      } catch (err: any) {
+        pushMessage({ variant: "fail", subtitle: err?.message });
         console.log(err);
       }
     },

@@ -1,6 +1,6 @@
 "use client";
 import RHFForm from "@/components/rhf-form";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -12,13 +12,19 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { register } from "@/api/auth";
+import { register, useCheckEmailValidity } from "@/api/auth";
 import GoogleAuthButton from "@/components/google-auth-button";
+import { pushMessage } from "@/components/toast-message";
+import { useRouter, useSearchParams } from "next/navigation";
+import CircularProgress from "@/components/circular-progress";
 
 export default function SignupForm() {
   // State Management ////////////////////////////////
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  const { data, isLoading } = useCheckEmailValidity({ token: token! });
   const t = useTranslations();
   const loginFormSchema = z.object({
     email: z.email(
@@ -45,6 +51,7 @@ export default function SignupForm() {
     password: "",
     passwordConfirmation: "",
   };
+  const router = useRouter();
   const methods = useForm({
     resolver: zodResolver(loginFormSchema),
     defaultValues,
@@ -52,15 +59,26 @@ export default function SignupForm() {
   const {
     watch,
     formState: { dirtyFields, isSubmitting },
+    reset,
   } = methods;
   const values = watch();
-  const onSubmit = useCallback(async (data: any) => {
-    try {
-      await register(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (data: any) => {
+      try {
+        await register(data);
+        pushMessage({
+          variant: "success",
+          subtitle: t("TOAST.SIGNUP_SUCCESS"),
+        });
+        router.push("/");
+        reset();
+      } catch (err) {
+        pushMessage({ variant: "fail", subtitle: t("TOAST.SIGNUP_FAIL") });
+        console.log(err);
+      }
+    },
+    [reset, router, t]
+  );
   const IS_DIRTY_PASSWORD = dirtyFields.password;
   const IS_DIRTY_CONFIRM_PASSWORD = dirtyFields.passwordConfirmation;
   // Password validation checks ///////////////////////
@@ -71,10 +89,22 @@ export default function SignupForm() {
   const PASSWORD_STRONG = values.password.length > 12;
   const PASSWORD_LONG_ENOUGH = values.password.length >= 8;
   const PASSWORD_HAS_UPPERCASE = /[A-Z]/.test(values.password);
-  const PASSWORD_HAS_SPECIAL_CHAR = /[!@#$%^&*(),.?":{}|<>]/.test(
+  const PASSWORD_HAS_SPECIAL_CHAR = /[!@#$%_^&*(),.?":{}|<>]/.test(
     values.password
   );
   const PASSWORDS_MATCH = values.password === values.passwordConfirmation;
+  useEffect(() => {
+    if (data?.content) {
+      router.push("/");
+      window.location.href = "/";
+    }
+  }, [data?.content, router]);
+  if (isLoading)
+    return (
+      <div className="h-96 flex items-center justify-center">
+        <CircularProgress className="h-36 w-36" />
+      </div>
+    );
   return (
     <RHFForm methods={methods} onSubmit={onSubmit} className="w-full md:w-128">
       <GoogleAuthButton />
@@ -181,16 +211,20 @@ export default function SignupForm() {
               height={22}
               className={cn(
                 "transition-all duration-300 ",
-                PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
+                PASSWORD_LONG_ENOUGH
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORD_LONG_ENOUGH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                "font-semibold ",
+                PASSWORD_LONG_ENOUGH
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.MIN_8_CHARACTERS")}
@@ -203,16 +237,20 @@ export default function SignupForm() {
               height={22}
               className={cn(
                 "transition-all duration-300",
-                PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
+                PASSWORD_HAS_UPPERCASE
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORD_HAS_UPPERCASE ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                "font-semibold ",
+                PASSWORD_HAS_UPPERCASE
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.PASSWORD_CASE")}
@@ -226,16 +264,20 @@ export default function SignupForm() {
               height={22}
               className={cn(
                 "transition-all duration-300",
-                PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
+                PASSWORD_HAS_SPECIAL_CHAR
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
                 !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORD_HAS_SPECIAL_CHAR ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_PASSWORD && "text-gray-500"
+                "font-semibold ",
+                PASSWORD_HAS_SPECIAL_CHAR
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
+                !IS_DIRTY_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.SPECIAL_CHAR")}
@@ -248,17 +290,21 @@ export default function SignupForm() {
               height={22}
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500"
+                "font-semibold",
+                PASSWORDS_MATCH
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
+                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             />
             <span
               className={cn(
                 "transition-all duration-300",
-                "font-semibold text-gray-500 dark:text-gray-300",
-                PASSWORDS_MATCH ? "text-green-700" : "text-red-700",
-                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500"
+                "font-semibold ",
+                PASSWORDS_MATCH
+                  ? "text-green-700 dark:text-green-400"
+                  : "text-red-700 dark:text-red-400",
+                !IS_DIRTY_CONFIRM_PASSWORD && "text-gray-500 dark:text-gray-300"
               )}
             >
               {t("RESET_PASSWORD.PASSWORD_MATCH")}
@@ -269,6 +315,12 @@ export default function SignupForm() {
 
       <LoadingButton
         loading={isSubmitting}
+        disabled={
+          !PASSWORD_LONG_ENOUGH ||
+          !PASSWORD_HAS_UPPERCASE ||
+          !PASSWORD_HAS_SPECIAL_CHAR ||
+          !PASSWORDS_MATCH
+        }
         className="bg-agzakhana-primary text-white text-base font-semibold py-6"
       >
         {t("SIGNUP.CREATE_ACCOUNT")}

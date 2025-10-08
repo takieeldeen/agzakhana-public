@@ -1,14 +1,14 @@
 import Axios from "axios";
-const axios = Axios.create({
+const axiosClient = Axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
-axios.interceptors.response.use(
+axiosClient.interceptors.response.use(
   (res: any) => res,
   (error: any) => Promise.reject(error?.response?.data ?? error)
 );
 
-axios.interceptors.request.use(async (req: any) => req);
+axiosClient.interceptors.request.use(async (req: any) => req);
 
-export default axios;
+export default axiosClient;

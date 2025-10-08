@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import CircularProgress from "./circular-progress";
 import { useAuth } from "@/hooks/useAuth";
 import { Offer } from "@/types/offers";
+import { pushMessage } from "./toast-message";
 
 type Props = {
   product: Medicine | Offer;
@@ -36,17 +37,28 @@ export default function AddToCartButton({
   const IS_LOADING = isAdding || isRemoving;
   // Callbacks  ////////////////////////////////////////
   const handleClick = useCallback(
-    (e: any) => {
+    async (e: any) => {
       e.stopPropagation();
       e.preventDefault();
       if (ALREADY_IN_CART) {
         removeFromCart.mutate(CART_ITEM?._id);
       } else {
-        addToCart.mutate({
-          productId: isProduct ? product?._id : undefined,
-          offerId: isProduct ? undefined : product?._id,
-          qty: 1,
-        });
+        try {
+          await addToCart.mutateAsync({
+            productId: isProduct ? product?._id : undefined,
+            offerId: isProduct ? undefined : product?._id,
+            qty: 1,
+          });
+          pushMessage({
+            variant: "success",
+            subtitle: t("TOAST.ADDED_TO_CART_SUCCESS"),
+          });
+        } catch {
+          pushMessage({
+            variant: "fail",
+            subtitle: t("TOAST.ADDED_TO_CART_FAIL"),
+          });
+        }
       }
     },
     [
@@ -56,6 +68,7 @@ export default function AddToCartButton({
       isProduct,
       product?._id,
       removeFromCart,
+      t,
     ]
   );
   if (!isAuthenticated) return null;
