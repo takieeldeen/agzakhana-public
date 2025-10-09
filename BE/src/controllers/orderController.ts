@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
 import Order from "../models/orderModel";
 
@@ -16,6 +16,17 @@ export const getOrderDetails = catchAsync(
     res.status(200).json({
       status: "success",
       content: order,
+    });
+  }
+);
+export const getMyOrders = catchAsync(
+  async (req: ProtectedRequest, res: Response, next: NextFunction) => {
+    const userId = req?.user?._id;
+    const orders = await Order.find({ userId });
+
+    res.status(200).json({
+      status: "success",
+      content: orders,
     });
   }
 );

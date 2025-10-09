@@ -13,5 +13,8 @@ export type UserType = {
   passwordConfirmation: string;
   provider: "GOOGLE" | "LOCAL";
   isActive: boolean;
+  address: string;
+  gender: "MALE" | "FEMALE";
+  birthDate: Date;
   activationToken: string;
 };

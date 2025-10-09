@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/usersModel";
 import { compare } from "bcrypt";
-import catchAsync from "../utils/catchAsync";
+import catchAsync, { ProtectedRequest } from "../utils/catchAsync";
 import { AppError } from "../utils/errors";
 import { verify } from "jsonwebtoken";
 import axios from "axios";
@@ -12,6 +12,12 @@ import { clientLocale } from "../app";
 import { createHash, randomBytes } from "crypto";
 import ResetToken from "../models/resetTokenModel";
 import { UserType } from "../types/users";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -283,6 +289,46 @@ export const resetPassword = catchAsync(
     res.status(200).json({
       status: "success",
       content: tokenData?.userId,
+    });
+  }
+);
+
+export const updateProfile = catchAsync(
+  async (req: ProtectedRequest, res: Response, next: NextFunction) => {
+    const { name, phoneNumber, address, gender, imageUrl, birthDate } =
+      req.body;
+    const { file } = req;
+    const userData = {
+      name,
+      phoneNumber,
+      address,
+      gender,
+      imageUrl,
+      birthDate,
+    };
+    if (file && typeof file !== "string") {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+      const imageName = `${req?.user?.email?.split("@")?.[0]}`;
+      await supabase.storage
+        .from("agzakhana-profilepic")
+        .upload(imageName, file.buffer, {
+          upsert: true,
+          contentType: file?.mimetype,
+        });
+      const { data } = supabase.storage
+        .from("agzakhana-profilepic")
+        .getPublicUrl(imageName);
+      userData.imageUrl = data?.publicUrl;
+    }
+    const user = await User.findByIdAndUpdate(req?.user?._id, userData, {
+      new: true,
+    });
+    res.status(201).json({
+      status: "success",
+      user,
     });
   }
 );

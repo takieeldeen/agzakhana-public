@@ -85,6 +85,12 @@ const userSchema = new Schema<UserType>({
     type: String,
     select: false,
   },
+  address: String,
+  birthDate: Date,
+  gender: {
+    type: String,
+    enum: ["MALE", "FEMALE"],
+  },
 });
 // Pre validations
 // userSchema.pre("validate", function (next) {
