@@ -1,18 +1,33 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/useAuth";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { lazy, Suspense, useState } from "react";
 
+const MemoizedUpdateProfileForm = lazy(() => import("../profile-update-form"));
 export default function PersonalInfoSection() {
+  const [showEditPersonalInfoModal, setShowEditPersonalInfoModal] =
+    useState<boolean>(false);
   const t = useTranslations();
   const { user } = useAuth();
+
   return (
     <aside className="py-2 px-4 flex flex-col items-center gap-4 ">
-      <h4 className="text-2xl font-bold text-right self-start dark:text-gray-200">
-        {t("PROFILE.PERSONAL_INFO")}
-      </h4>
+      <div className="flex flex-row items-center justify-between  w-full  ">
+        <h4 className="text-2xl font-bold text-right self-start dark:text-gray-200">
+          {t("PROFILE.PERSONAL_INFO")}
+        </h4>
+        <Button
+          className="flex flex-row items-center gap-2 bg-gray-200 text-gray-700 font-semibold"
+          onClick={() => setShowEditPersonalInfoModal(true)}
+        >
+          <Icon icon="material-symbols-light:edit-outline" />
+          <span>Edit</span>
+        </Button>
+      </div>
       <Separator className="" />
       {!user?.imageUrl && (
         <div className="bg-gray-200 h-64 w-64 rounded-full shrink-0 aspect-square flex items-center justify-center">
@@ -64,6 +79,15 @@ export default function PersonalInfoSection() {
           </div>
         </div>
       </div>
+      <Suspense>
+        {showEditPersonalInfoModal && (
+          <MemoizedUpdateProfileForm
+            open={showEditPersonalInfoModal}
+            onOpenChange={(open) => setShowEditPersonalInfoModal(open)}
+            currentUser={user}
+          />
+        )}
+      </Suspense>
     </aside>
   );
 }

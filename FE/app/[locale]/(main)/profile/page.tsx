@@ -2,7 +2,7 @@ import { AuthGuard } from "@/components/auth-guard";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MyOrdersListView } from "@/sections/my-orders/views/list-view";
-import PersonalInfoSection from "@/sections/profile/personal-info-section";
+import PersonalInfoSection from "@/sections/profile/views/personal-info-section";
 import { getTranslations } from "next-intl/server";
 
 export function generateMetadata() {}
