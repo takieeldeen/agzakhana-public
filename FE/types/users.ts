@@ -7,4 +7,7 @@ export type UserType = {
   createdAt: Date;
   updatedAt: Date;
   phoneNumber: string;
+  address: string;
+  gender: "MALE" | "FEMALE";
+  birthDate: Date;
 };

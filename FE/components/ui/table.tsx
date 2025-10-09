@@ -3,9 +3,10 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import TableHeadCustom, { TableHeadColumn } from "../table-head-custom";
 import { Skeleton } from "./skeleton";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
@@ -39,6 +40,26 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
       className={cn("[&_tr:last-child]:border-0", className)}
       {...props}
     />
+  );
+}
+
+function TableNoData() {
+  const t = useTranslations();
+  return (
+    <TableCell
+      colSpan={12}
+      className="font-medium max-w-64 h-128 bg-filter-background truncate text-center"
+    >
+      <div className="h-full w-full flex items-center justify-center flex-col gap-2">
+        <Icon
+          icon="hugeicons:folder-02"
+          className="h-32 w-32 text-gray-600/40"
+        />
+        <p className="text-2xl font-semibold text-gray-300">
+          {t("COMMON.NO_DATA")}
+        </p>
+      </div>
+    </TableCell>
   );
 }
 
@@ -137,6 +158,7 @@ export {
   TableRow,
   TableCell,
   TableCaption,
+  TableNoData,
 };
 
 export function TableSkeleton({ columns }: { columns: TableHeadColumn[] }) {

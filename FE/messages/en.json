@@ -33,7 +33,9 @@
     "EGP_CURRENCY": "EGP",
     "BACK_TO_HOME": "Back to Home",
     "GENERIC_ERROR": "Something went wrong from our side, please try again later.",
-    "UNKOWN": "Unkown"
+    "UNKOWN": "Unkown",
+    "NO_DATA": "No Data Found",
+    "SETTINGS": "Settings"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -173,7 +175,9 @@
     "INVALID_FORMAT": "Please enter a valid {field}",
     "REQUIRED_FIELD": "Please enter {field}",
     "MIN_VAL": "{field} must be at least {min}",
-    "MAX_VAL": "{field} can't be greater than {max}"
+    "MAX_VAL": "{field} can't be greater than {max}",
+    "PAST_DATE": "{field} must be before today.",
+    "FUTURE_DATE": "{field} must be after today."
   },
   "VALIDATIONS": {
     "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters long",
@@ -254,7 +258,18 @@
     "EMAIL": "Email Address",
     "PHONE": "Phone Number",
     "ORDERS": "Orders",
-    "CART": "Cart"
+    "CART": "Cart",
+    "BIRTH_DATE": "Birth Date",
+    "UPDATE_FORM_TITLE": "Update personal information",
+    "ADDRESS": "Address",
+    "GENDER": "Gender",
+    "MALE": "Male",
+    "FEMALE": "Female",
+    "UPDATE": "Update",
+    "CANCEL": "Cancel",
+    "UPDATE_SUCCESS": "Personal Information has been updated successfully.",
+    "UPDATE_FAIL": "Something went wrong while updating personal information.",
+    "PROFILE_PICTURE": "Profile Picture"
   },
   "MY_ORDERS": {
     "ID": "Id",
@@ -264,6 +279,7 @@
     "PURCHASING_DATE": "Purchasing Date",
     "paid": "Paid",
     "pending": "Pending",
-    "failed": "Failed"
+    "failed": "Failed",
+    "success": "Successful order"
   }
 }

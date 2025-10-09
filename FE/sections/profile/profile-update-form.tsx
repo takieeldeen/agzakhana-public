@@ -2,11 +2,12 @@ import * as zod from "zod";
 import RHFForm from "@/components/rhf-form";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
 } from "@/components/ui/drawer";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +17,9 @@ import RHFImagePicker from "@/components/rhf-imagePicker";
 import { RHFDatePicker } from "@/components/rhf-datePicker";
 import RHFRadioGroup from "@/components/rhf-radiogroup";
 import { Button, LoadingButton } from "@/components/ui/button";
+import { updateProfile } from "@/api/auth";
+import { pushMessage } from "@/components/toast-message";
+import { useAuth } from "@/hooks/useAuth";
 
 type ProfileUpdateFormProps = {
   onOpenChange: (open: boolean) => void;
@@ -27,49 +31,123 @@ export default function ProfileUpdateForm({
   open,
   currentUser,
 }: ProfileUpdateFormProps) {
+  const locale = useLocale();
+  const { login: loginLocally } = useAuth();
   const t = useTranslations();
   const formSchema = zod.object({
     email: zod.email("Please Enter a valid email"),
     name: zod.string(),
-    birthDate: zod.date(),
-    phoneNumber: zod.string(),
+    birthDate: zod
+      .date()
+      .max(
+        new Date(),
+        t("FORM_VALIDATIONS.PAST_DATE", {
+          field: t("PROFILE.BIRTH_DATE"),
+        })
+      )
+      .nullable(),
+    phoneNumber: zod.string().refine(
+      (value) => {
+        return value === "" || /^(01[0125]\d{8})$/.test(value);
+      },
+      {
+        message: t("FORM_VALIDATIONS.INVALID_FORMAT", {
+          field: t("PROFILE.PHONE"),
+        }),
+      }
+    ),
     address: zod.string(),
     gender: zod.enum(["MALE", "FEMALE"]),
+    imageUrl: zod.union([
+      zod.string(), // existing URL
+      zod
+        .any()
+        .refine(
+          (value) => {
+            if (!value) return true; // allow empty
+            const file = value?.[0];
+            return file instanceof File;
+          },
+          { message: "Invalid image file" }
+        )
+        .refine(
+          (value) => {
+            const file = value?.[0];
+            if (!file) return true;
+            return file.size <= 5 * 1024 * 1024; // ≤ 5MB
+          },
+          { message: "Image must be smaller than 5MB" }
+        )
+        .refine(
+          (value) => {
+            const file = value?.[0];
+            if (!file) return true;
+            return file.type?.startsWith("image/");
+          },
+          { message: "Only image files are allowed" }
+        ),
+    ]),
   });
   const defaultValues = {
     email: currentUser?.email ?? "",
     name: currentUser?.name ?? "",
-    birthDate: new Date(),
+    birthDate: currentUser?.birthDate ? new Date(currentUser?.birthDate) : null,
     phoneNumber: currentUser?.phoneNumber ?? "",
-    address: "",
-    gender: "MALE" as const,
+    address: currentUser?.address ?? "",
+    gender: currentUser?.gender ?? "MALE",
+    imageUrl: currentUser?.imageUrl ?? null,
   };
 
   const methods = useForm({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues,
   });
   const {
-    watch,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting, isDirty },
+    reset,
   } = methods;
-  const values = watch();
-  console.log(errors, values);
-  const onSubmit = useCallback((data: any) => {
-    console.log(data);
-  }, []);
+  const onSubmit = useCallback(
+    async (data: any) => {
+      try {
+        const res = await updateProfile(data);
+        loginLocally(res?.data?.user);
+        reset(res?.data?.user);
+        onOpenChange(false);
+        pushMessage({
+          variant: "success",
+          subtitle: t("PROFILE.UPDATE_SUCCESS"),
+        });
+      } catch (err: any) {
+        console.log(err);
+        pushMessage({ variant: "fail", subtitle: t("PROFILE.UPDATE_FAIL") });
+      }
+    },
+    [loginLocally, onOpenChange, reset, t]
+  );
   return (
-    <Drawer direction="left" onOpenChange={onOpenChange} open={open}>
-      <DrawerContent className="dark:bg-card-background-dark">
-        <DrawerHeader>
-          <h3 className="text-left text-2xl font-bold rtl:text-right dark:text-gray-200">
-            Edit Personal Information
-          </h3>
-        </DrawerHeader>
+    <Drawer
+      direction={locale === "ar" ? "right" : "left"}
+      onOpenChange={onOpenChange}
+      open={open}
+    >
+      <DrawerContent className="dark:bg-card-background-dark ">
+        <RHFForm
+          onSubmit={onSubmit}
+          methods={methods}
+          className="flex flex-col h-full"
+        >
+          <DrawerHeader>
+            <h3 className="text-left text-2xl font-bold rtl:text-right dark:text-gray-200">
+              {t("PROFILE.UPDATE_FORM_TITLE")}
+            </h3>
+          </DrawerHeader>
 
-        <RHFForm onSubmit={onSubmit} methods={methods}>
-          <div className="px-4">
-            <RHFImagePicker name="imageUrl" label="Profile Image" />
+          <div className="px-4 h-full ">
+            <RHFImagePicker
+              name="imageUrl"
+              label={t("PROFILE.PROFILE_PICTURE")}
+            />
             <RHFTextfield
               name="email"
               label={t("LOGIN.EMAIL")}
@@ -85,8 +163,8 @@ export default function ProfileUpdateForm({
             />
             <RHFTextfield
               name="name"
-              label="Name"
-              placeholder="Name"
+              label={t("PROFILE.USERNAME")}
+              placeholder={t("PROFILE.USERNAME")}
               inputProps={{
                 className: "h-12 font-semibold text-base ",
               }}
@@ -96,13 +174,14 @@ export default function ProfileUpdateForm({
             />
             <RHFDatePicker
               name="birthDate"
-              label="Birth Date"
-              placeholder="Birth Date"
+              label={t("PROFILE.BIRTH_DATE")}
+              placeholder={t("PROFILE.BIRTH_DATE")}
+              clearable
             />
             <RHFTextfield
               name="phoneNumber"
-              label="Phone Number"
-              placeholder="Phone Number"
+              label={t("PROFILE.PHONE")}
+              placeholder={t("PROFILE.PHONE")}
               inputProps={{
                 className: "h-12 font-semibold text-base ",
               }}
@@ -112,8 +191,8 @@ export default function ProfileUpdateForm({
             />
             <RHFTextfield
               name="address"
-              label="Address"
-              placeholder="Address"
+              label={t("PROFILE.ADDRESS")}
+              placeholder={t("PROFILE.ADDRESS")}
               inputProps={{
                 className: "h-12 font-semibold text-base ",
               }}
@@ -122,28 +201,31 @@ export default function ProfileUpdateForm({
               }}
             />
             <RHFRadioGroup
-              label="Gender"
+              label={t("PROFILE.GENDER")}
               name="gender"
               options={[
-                { label: "Male", value: "MALE" },
-                { label: "Female", value: "FEMALE" },
+                { label: t("PROFILE.MALE"), value: "MALE" },
+                { label: t("PROFILE.FEMALE"), value: "FEMALE" },
               ]}
             />
           </div>
           <DrawerFooter className="">
             <div className="flex flex-row items-center justify-between">
-              <Button
-                className="w-[49%] h-12 border-agzakhana-primary border-2"
-                variant={"outline"}
-              >
-                Cancel
-              </Button>
+              <DrawerClose asChild>
+                <Button
+                  className="w-[49%] h-12 border-agzakhana-primary border-2 dark:text-gray-200"
+                  variant={"outline"}
+                >
+                  {t("PROFILE.CANCEL")}
+                </Button>
+              </DrawerClose>
               <LoadingButton
                 type="submit"
+                disabled={!isDirty || isSubmitting}
                 loading={isSubmitting}
                 className="w-[49%] h-12 bg-agzakhana-primary text-white"
               >
-                Update
+                {t("PROFILE.UPDATE")}
               </LoadingButton>
             </div>
           </DrawerFooter>

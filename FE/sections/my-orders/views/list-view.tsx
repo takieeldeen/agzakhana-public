@@ -2,7 +2,12 @@
 import TableHeadCustom, {
   TableHeadColumn,
 } from "@/components/table-head-custom";
-import { Table, TableBody, TableSkeleton } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableNoData,
+  TableSkeleton,
+} from "@/components/ui/table";
 import { useLocale, useTranslations } from "next-intl";
 import MyOrdersTableRow from "../table-row";
 import { useGetMyOrders } from "@/api/orders";
@@ -42,7 +47,7 @@ export function MyOrdersListView() {
       props: { className: "text-center!" },
     },
   ];
-
+  const isEmpty = ordersResults === 0;
   return (
     <div className="">
       {!ordersLoading && (
@@ -50,12 +55,13 @@ export function MyOrdersListView() {
           <Table>
             <TableHeadCustom columns={TABLE_HEAD} />
             <TableBody>
+              {!ordersLoading && isEmpty && <TableNoData />}
               {orders?.map((order) => (
                 <MyOrdersTableRow order={order} key={order?._id} />
               ))}
             </TableBody>
           </Table>
-          <div
+          {/* <div
             className="py-4 flex items-start mx-0 flex-row-reverse"
             dir={locale === "ar" ? "rtl" : "ltr"}
           >
@@ -66,7 +72,7 @@ export function MyOrdersListView() {
               // currentPage={page ? parseInt(page) : 1}
               currentPage={1}
             />
-          </div>
+          </div> */}
         </>
       )}
       {ordersLoading && <TableSkeleton columns={TABLE_HEAD} />}

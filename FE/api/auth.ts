@@ -84,3 +84,31 @@ export function useCheckEmailValidity({ token }: { token: string }) {
     retry: false, // optional: don’t retry if invalid token
   });
 }
+
+export async function updateProfile(payload: any) {
+  const URL = endpoints.auth.updateProfile;
+
+  const formData = new FormData();
+
+  Object.entries(payload).forEach(([key, value]) => {
+    if (key === "imageUrl") {
+      // Handle file upload correctly
+      const file =
+        value instanceof FileList
+          ? value[0]
+          : Array.isArray(value)
+          ? value[0]
+          : value;
+
+      if (file) formData.append("imageUrl", file);
+      return;
+    }
+
+    if (value !== null && value !== undefined)
+      formData.append(key, value as any);
+  });
+
+  return await axios.patch(URL, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+}

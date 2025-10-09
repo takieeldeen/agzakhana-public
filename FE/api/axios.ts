@@ -15,6 +15,7 @@ export const endpoints = {
     checkResetToken: "/v1/auth/check-reset-token",
     checkEmailValidity: "/v1/auth/check-email-activation",
     resetPassword: "/v1/auth/reset-password",
+    updateProfile: "/v1/auth/update-profile",
   },
   products: {
     list: "/v1/products",

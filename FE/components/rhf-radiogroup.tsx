@@ -32,27 +32,29 @@ export default function RHFRadioGroup({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="space-y-3">
-          {!!label && <FormLabel>{label}</FormLabel>}
+        <FormItem className="space-y-1">
+          {!!label && (
+            <FormLabel className="dark:text-gray-200">{label}</FormLabel>
+          )}
           <FormControl>
             <RadioGroup
               onValueChange={field.onChange}
               defaultValue={field.value}
-              className="flex flex-row items-center"
+              className="flex flex-row rtl:flex-row-reverse items-center"
             >
               {options?.map((option) => (
                 <FormItem
                   key={`${option?.value}`}
                   className={cn(
-                    "flex items-center gap-3 w-full border-2 h-12 rounded-md px-2 hover:border-gray-300 transition-all cursor-pointer",
+                    "flex flex-row rtl:flex-row-reverse items-center gap-3 w-full border-2 h-12 rounded-md px-2 hover:border-gray-300 transition-all cursor-pointer",
                     field.value === option.value &&
                       "border-agzakhana-primary text-agzakhana-primary border-2"
                   )}
                 >
                   <FormControl>
-                    <RadioGroupItem value={option?.value as any} />
+                    <RadioGroupItem value={option?.value as any} className="" />
                   </FormControl>
-                  <FormLabel className="font-semibold cursor-pointer">
+                  <FormLabel className="font-semibold cursor-pointer dark:text-gray-200">
                     {option?.label}
                   </FormLabel>
                 </FormItem>

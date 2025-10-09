@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useFormContext } from "react-hook-form";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   FormControl,
   FormField,
@@ -13,6 +11,7 @@ import { ChangeEvent, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Image from "next/image";
 
 function getImageData(event: ChangeEvent<HTMLInputElement>) {
   // FileList is immutable, so we need to create a new one
@@ -33,63 +32,91 @@ type ImagePickerProps = {
   label?: string;
 };
 export default function RHFImagePicker({ name, label }: ImagePickerProps) {
-  const [preview, setPreview] = useState("");
-
   const form = useFormContext();
-  const hasImage = preview !== "";
-
+  const {
+    formState: { defaultValues },
+  } = form;
+  const defaultValue = defaultValues?.[name];
+  const [preview, setPreview] = useState(defaultValue);
+  const hasImage = !!preview && preview !== "";
+  // useEffect(() => {
+  //   console.log(value);
+  //   setPreview(value);
+  // }, [value]);
   return (
     <div className="flex flex-col items-center relative gap-2 w-fit mx-auto">
       <FormField
         control={form.control}
         name={name}
-        render={({ field: { onChange, value, ...rest } }) => (
-          <>
-            <FormItem>
-              <FormLabel className="cursor-pointer">
-                <Avatar className="w-48 h-48 ">
-                  <AvatarImage src={preview} />
+        render={({ field: { onChange, value, ...rest } }) => {
+          console.log(value, preview);
+          return (
+            <>
+              <FormItem>
+                <FormLabel className="cursor-pointer">
+                  {hasImage && (
+                    <div className="w-48 h-48 rounded-full relative overflow-hidden">
+                      <Image
+                        src={preview}
+                        alt={preview}
+                        fill
+                        className="object-fill"
+                      />
+                    </div>
+                  )}
+                  {!hasImage && (
+                    <div className="w-48 h-48 rounded-full flex items-center justify-center bg-gray-200">
+                      <Icon
+                        icon="solar:user-outline"
+                        className="h-36 w-36 text-gray-400"
+                      />
+                    </div>
+                  )}
+                  {/* <Avatar className="w-48 h-48 ">
+                    <AvatarImage src={preview} />
 
-                  <AvatarFallback>
-                    <Icon
-                      icon="solar:user-outline"
-                      className="h-36 w-36 text-gray-400"
-                    />
-                  </AvatarFallback>
-                </Avatar>
-              </FormLabel>
-              <Button
-                className={cn(
-                  "absolute top-3 right-3 w-8! h-8! rounded-full aspect-square p-0! bg-indigo-600 text-white hidden items-center justify-center cursor-pointer border-2 hover:brightness-90 transition-all duration-300 border-white",
-                  hasImage && "flex"
-                )}
-                onClick={() => {
-                  onChange(null);
-                  setPreview("");
-                }}
-              >
-                <Icon icon={"mynaui:trash"} className={cn("h-6! w-6!")} />
-              </Button>
-              <FormLabel className="text-center flex items-center justify-center">
-                {label}
-              </FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  {...rest}
-                  onChange={(event) => {
-                    const { files, displayUrl } = getImageData(event);
-                    setPreview(displayUrl);
-                    onChange(files);
+                    <AvatarFallback>
+                      <Icon
+                        icon="solar:user-outline"
+                        className="h-36 w-36 text-gray-400"
+                      />
+                    </AvatarFallback>
+                  </Avatar> */}
+                </FormLabel>
+                <Button
+                  type="button"
+                  className={cn(
+                    "absolute top-3 right-3 w-8! h-8! rounded-full aspect-square p-0! bg-indigo-600 text-white hidden items-center justify-center cursor-pointer border-3 hover:brightness-90 transition-all duration-300 border-white dark:border-card-background-dark",
+                    hasImage && "flex"
+                  )}
+                  onClick={() => {
+                    onChange(null);
+                    setPreview("");
                   }}
-                  className={cn("hidden")}
-                />
-              </FormControl>
+                >
+                  <Icon icon={"mynaui:trash"} className={cn("h-6! w-6!")} />
+                </Button>
+                <FormLabel className="text-center flex items-center justify-center dark:text-gray-200">
+                  {label}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    {...rest}
+                    onChange={(event) => {
+                      const { files, displayUrl } = getImageData(event);
+                      setPreview(displayUrl);
+                      onChange(files);
+                    }}
+                    className={cn("hidden")}
+                  />
+                </FormControl>
 
-              <FormMessage />
-            </FormItem>
-          </>
-        )}
+                <FormMessage />
+              </FormItem>
+            </>
+          );
+        }}
       />
     </div>
   );
