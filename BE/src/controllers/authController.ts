@@ -143,7 +143,7 @@ export const googleLoginCallback = catchAsync(
       user = await User.create(newUser);
     }
     generateToken(res, user);
-    res.redirect("http://localhost:3000");
+    res.redirect(process?.env?.CLIENT_URL ?? "");
 
     res.status(200).json({ status: "success" });
   }

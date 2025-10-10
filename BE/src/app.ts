@@ -69,6 +69,8 @@ app.use(
   cors({
     origin: process?.env?.CLIENT_URL, // your frontend origin
     credentials: true, // allow cookies/authorization headers
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
