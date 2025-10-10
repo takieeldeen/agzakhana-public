@@ -1,4 +1,4 @@
-import { getOrderDetails } from "@/api/orders";
+import { getOrderDetails } from "@/client-api/orders";
 import ErrorHandler from "@/components/error-handler";
 import PaymentSuccess from "@/sections/payment-status/views/payment-success";
 

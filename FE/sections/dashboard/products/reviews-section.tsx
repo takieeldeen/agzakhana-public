@@ -16,7 +16,7 @@ import { useCallback, useState } from "react";
 import ReviewNewEditForm from "./review-new-edit-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useParams } from "next/navigation";
-import { useGetReviews } from "@/api/reviews";
+import { useGetReviews } from "@/client-api/reviews";
 import Authenticate from "@/components/authenticate-component";
 
 export default function ReviewsSection() {

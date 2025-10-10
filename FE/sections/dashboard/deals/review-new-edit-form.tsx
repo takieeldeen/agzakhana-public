@@ -1,5 +1,5 @@
 "use client";
-import { useMutateDealsReviews } from "@/api/reviews";
+import { useMutateDealsReviews } from "@/client-api/reviews";
 import RHFError from "@/components/rhf-error";
 import RHFForm from "@/components/rhf-form";
 import RHFTextarea from "@/components/rhf-textarea";

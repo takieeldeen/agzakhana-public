@@ -1,6 +1,6 @@
 "use client";
-import { useGetCategories } from "@/api/categories";
-import { useGetAllManufacturers } from "@/api/products";
+import { useGetCategories } from "@/client-api/categories";
+import { useGetAllManufacturers } from "@/client-api/products";
 import { Checkbox } from "@/components/ui/checkbox";
 import useListing from "@/hooks/useListing";
 import { cn } from "@/lib/utils";

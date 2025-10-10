@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import StarRating from "./star-rating";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useMutateProductReviews } from "@/api/reviews";
+import { useMutateProductReviews } from "@/client-api/reviews";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useTranslations } from "next-intl";
 import { Separator } from "./ui/separator";

@@ -22,7 +22,7 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { useAuth } from "@/hooks/useAuth";
-import { useGetCartItems } from "@/api/cart";
+import { useGetCartItems } from "@/client-api/cart";
 import Authenticate from "../authenticate-component";
 import { NavUser } from "./sidebar-user";
 

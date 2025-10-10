@@ -27,7 +27,7 @@ import { useTheme } from "next-themes";
 import { DrawerClose } from "../ui/drawer";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import { logout } from "@/api/auth";
+import { logout } from "@/client-api/auth";
 import Authenticate from "../authenticate-component";
 
 export function NavUser() {

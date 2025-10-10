@@ -1,5 +1,5 @@
 "use client";
-import { sendMessage } from "@/api/messages";
+import { sendMessage } from "@/client-api/messages";
 import RHFForm from "@/components/rhf-form";
 import RHFTextarea from "@/components/rhf-textarea";
 import RHFTextfield from "@/components/rhf-textfield";

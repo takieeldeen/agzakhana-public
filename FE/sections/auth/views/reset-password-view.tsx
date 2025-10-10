@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import ResetPasswordForm from "../reset-password-form";
-import { checkResetToken } from "@/api/auth";
+import { checkResetToken } from "@/client-api/auth";
 import Link from "next/link";
 import ErrorView from "@/components/error-view";
 

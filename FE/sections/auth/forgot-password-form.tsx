@@ -9,7 +9,7 @@ import RHFTextfield from "@/components/rhf-textfield";
 import { LoadingButton } from "@/components/ui/button";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { forgetPassword } from "@/api/auth";
+import { forgetPassword } from "@/client-api/auth";
 import { pushMessage } from "@/components/toast-message";
 
 export default function ForgotPasswordForm() {

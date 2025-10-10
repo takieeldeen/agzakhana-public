@@ -1,5 +1,5 @@
 "use client";
-import { useGetCartItems } from "@/api/cart";
+import { useGetCartItems } from "@/client-api/cart";
 import { IncartTag } from "@/components/tags";
 import { Medicine } from "@/types/medcines";
 import { AnimatePresence } from "framer-motion";

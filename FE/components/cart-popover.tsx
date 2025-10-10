@@ -12,7 +12,7 @@ import FallbackImage from "./image";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useGetCartItems, useMutateCart } from "@/api/cart";
+import { useGetCartItems, useMutateCart } from "@/client-api/cart";
 import { useCallback } from "react";
 import CircularProgress from "./circular-progress";
 import { AnimatePresence, motion } from "framer-motion";

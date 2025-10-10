@@ -1,4 +1,4 @@
-import { getLatestDeals } from "@/api/deals";
+import { getLatestDeals } from "@/client-api/deals";
 import LatestDealsView from "@/sections/dashboard/home/views/latest-deals-view";
 
 export default async function LatestDeals() {

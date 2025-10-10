@@ -1,4 +1,4 @@
-import { getAllCategories } from "@/api/categories";
+import { getAllCategories } from "@/client-api/categories";
 import ShopByCategoryView from "@/sections/dashboard/home/views/shop-by-category-view";
 
 export default async function ShopByCategory() {

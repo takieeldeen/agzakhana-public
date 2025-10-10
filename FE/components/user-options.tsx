@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useCallback } from "react";
-import { logout } from "@/api/auth";
+import { logout } from "@/client-api/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { Skeleton } from "./ui/skeleton";

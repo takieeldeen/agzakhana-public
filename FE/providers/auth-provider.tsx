@@ -1,5 +1,5 @@
 "use client";
-import { checkAuth } from "@/api/auth";
+import { checkAuth } from "@/client-api/auth";
 import { UserType } from "@/types/users";
 import {
   createContext,

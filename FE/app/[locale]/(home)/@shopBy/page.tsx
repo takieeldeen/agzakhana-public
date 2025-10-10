@@ -1,4 +1,4 @@
-import { getProductHighlights } from "@/api/products";
+import { getProductHighlights } from "@/client-api/products";
 import { ShopBy } from "@/sections/dashboard/home/views";
 
 export default async function ShopByPage() {

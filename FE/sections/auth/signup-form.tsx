@@ -12,7 +12,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { register, useCheckEmailValidity } from "@/api/auth";
+import { register, useCheckEmailValidity } from "@/client-api/auth";
 import GoogleAuthButton from "@/components/google-auth-button";
 import { pushMessage } from "@/components/toast-message";
 import { useRouter, useSearchParams } from "next/navigation";

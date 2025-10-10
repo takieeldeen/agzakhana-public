@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { useLocale, useTranslations } from "next-intl";
 import MyOrdersTableRow from "../table-row";
-import { useGetMyOrders } from "@/api/orders";
+import { useGetMyOrders } from "@/client-api/orders";
 import { TablePagination } from "@/components/ui/tabs";
 
 export function MyOrdersListView() {

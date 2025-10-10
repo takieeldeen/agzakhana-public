@@ -1,4 +1,4 @@
-import { getAllProducts } from "@/api/products";
+import { getAllProducts } from "@/client-api/products";
 import ListingProvider from "@/providers/listing-provider";
 import { ListView } from "@/sections/dashboard/products/views";
 import { Metadata } from "next";

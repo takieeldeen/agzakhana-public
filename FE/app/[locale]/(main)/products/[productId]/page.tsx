@@ -1,4 +1,4 @@
-import { getProductDetails, getSimilarProducts } from "@/api/products";
+import { getProductDetails, getSimilarProducts } from "@/client-api/products";
 import { DetailsView } from "@/sections/dashboard/products/views";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";

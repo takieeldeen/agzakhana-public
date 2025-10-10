@@ -10,7 +10,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import RHFForm from "./rhf-form";
-import { useGetCartItems, useMutateCart } from "@/api/cart";
+import { useGetCartItems, useMutateCart } from "@/client-api/cart";
 import CircularProgress from "./circular-progress";
 import RHFError from "./rhf-error";
 import Fade from "./Fade";

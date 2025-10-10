@@ -17,7 +17,7 @@ import RHFImagePicker from "@/components/rhf-imagePicker";
 import { RHFDatePicker } from "@/components/rhf-datePicker";
 import RHFRadioGroup from "@/components/rhf-radiogroup";
 import { Button, LoadingButton } from "@/components/ui/button";
-import { updateProfile } from "@/api/auth";
+import { updateProfile } from "@/client-api/auth";
 import { pushMessage } from "@/components/toast-message";
 import { useAuth } from "@/hooks/useAuth";
 

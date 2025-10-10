@@ -1,4 +1,4 @@
-import { getDealDetails } from "@/api/deals";
+import { getDealDetails } from "@/client-api/deals";
 import { DetailsView } from "@/sections/dashboard/deals/views";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";

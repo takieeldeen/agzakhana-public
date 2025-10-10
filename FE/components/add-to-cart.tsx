@@ -4,7 +4,7 @@ import { Medicine } from "@/types/medcines";
 import { Button } from "./ui/button";
 import { useTranslations } from "next-intl";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useGetCartItems, useMutateCart } from "@/api/cart";
+import { useGetCartItems, useMutateCart } from "@/client-api/cart";
 import { ComponentProps, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import CircularProgress from "./circular-progress";

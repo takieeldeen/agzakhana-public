@@ -1,4 +1,4 @@
-import { getPopularProducts } from "@/api/products";
+import { getPopularProducts } from "@/client-api/products";
 import PopularProductsView from "@/sections/dashboard/home/views/popular-products-view";
 
 export default async function PopularProductsSection() {

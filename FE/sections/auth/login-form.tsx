@@ -9,7 +9,7 @@ import RHFTextfield from "@/components/rhf-textfield";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { login } from "@/api/auth";
+import { login } from "@/client-api/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import GoogleAuthButton from "@/components/google-auth-button";

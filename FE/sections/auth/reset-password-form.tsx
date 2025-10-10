@@ -12,7 +12,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
-import { resetPasword } from "@/api/auth";
+import { resetPasword } from "@/client-api/auth";
 import { pushMessage } from "@/components/toast-message";
 
 export default function ResetPasswordForm() {

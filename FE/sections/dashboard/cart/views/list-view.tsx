@@ -1,5 +1,5 @@
 "use client";
-import { checkout, useGetCartDetails, useMutateCart } from "@/api/cart";
+import { checkout, useGetCartDetails, useMutateCart } from "@/client-api/cart";
 import FallbackImage from "@/components/image";
 import { Button, LoadingButton, MotionButton } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
