@@ -1,6 +1,5 @@
 "use client";
 import { CartPopover } from "./cart-popover";
-import { ModeToggle } from "./theme-toggle";
 // import { WhishlistPopover } from "./whishlist-popover";
 import UserOptions from "./user-options";
 

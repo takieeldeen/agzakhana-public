@@ -1,4 +1,3 @@
-import { OFFERS_LIST } from "@/_mock/_offers";
 import { ProductCardSkeleton } from "@/components/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { OffersCardSkeleton } from "@/sections/dashboard/home/offers-card";
@@ -30,8 +29,8 @@ export default function ProductsListSkeleton() {
                 <Skeleton className="w-24 h-4" />
               </div>
               <ul className="w-full flex flex-row flex-wrap gap-2 justify-between">
-                {OFFERS_LIST?.content?.map((offerData) => (
-                  <OffersCardSkeleton key={offerData?.id} />
+                {Array.from({ length: 9 }, (_, i) => i)?.map((i) => (
+                  <OffersCardSkeleton key={i} />
                 ))}
               </ul>
             </div>

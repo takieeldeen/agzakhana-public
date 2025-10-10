@@ -13,11 +13,10 @@ export default async function PaymentConfirmation({
   const { order, error } = await getOrderDetails(session);
   const { status } = await params;
   const SUCCESSFUL = status === "success";
-  const FAILED = status === "fail";
   if (SUCCESSFUL)
     return (
       <ErrorHandler error={error}>
-        <PaymentSuccess order={order} />
+        <PaymentSuccess order={order as any} />
       </ErrorHandler>
     );
   return null;

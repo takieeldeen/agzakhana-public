@@ -2,7 +2,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "./ui/button";
 import FallbackImage from "./image";
-import { POPULAR_ITEM_LIST } from "@/_mock/_popular_items";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -11,7 +10,7 @@ import { useState } from "react";
 
 export default function SearchBox() {
   const [query, setQuery] = useState<string>("");
-  const results = POPULAR_ITEM_LIST?.content;
+  const results: any[] = [];
   const resultsLoading = false;
   const t = useTranslations();
   return (

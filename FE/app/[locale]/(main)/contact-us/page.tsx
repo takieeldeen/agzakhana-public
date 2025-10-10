@@ -71,7 +71,7 @@ export default function ContactUsPage() {
           subtitle: t("TOAST.MESSAGE_SENT"),
         });
         reset();
-      } catch (err) {
+      } catch {
         pushMessage({
           variant: "fail",
           subtitle: t("TOAST.ERROR_SENDING_MESSAGE"),

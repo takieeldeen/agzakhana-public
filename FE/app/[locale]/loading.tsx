@@ -1,4 +1,3 @@
-import { OFFERS_LIST } from "@/_mock/_offers";
 import { ProductCardSkeleton } from "@/components/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { OffersCardSkeleton } from "@/sections/dashboard/home/offers-card";
