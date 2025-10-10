@@ -26,8 +26,10 @@ const errorController = (
       finalError = handleCastErrors(error);
       break;
   }
-  if (process.env.NODE_ENV === "development")
+  if (process.env.NODE_ENV === "development") {
+    console.log("ERROR :", error);
     return generateDevelopmentError(req, res, finalError, error);
+  }
   if (process.env.NODE_ENV === "production")
     return generateProductionError(req, res, finalError);
 };
