@@ -6,8 +6,7 @@ import { useCallback } from "react";
 export default function GoogleAuthButton() {
   const t = useTranslations();
   const handleLoginWithGoogle = useCallback(async () => {
-    window.location.href =
-      "http://localhost:8080/api/v1/auth/login-with-google";
+    window.location.href = `http://${process?.env?.NEXT_PUBLIC_API_URL}/api/v1/auth/login-with-google`;
   }, []);
   return (
     <Button
