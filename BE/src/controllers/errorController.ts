@@ -30,8 +30,10 @@ const errorController = (
     console.log("ERROR :", error);
     return generateDevelopmentError(req, res, finalError, error);
   }
-  if (process.env.NODE_ENV === "production")
+  if (process.env.NODE_ENV === "production") {
+    console.log("ERROR:", error);
     return generateProductionError(req, res, finalError);
+  }
 };
 
 export default errorController;
