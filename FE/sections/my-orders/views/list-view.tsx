@@ -8,15 +8,13 @@ import {
   TableNoData,
   TableSkeleton,
 } from "@/components/ui/table";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import MyOrdersTableRow from "../table-row";
 import { useGetMyOrders } from "@/client-api/orders";
-import { TablePagination } from "@/components/ui/tabs";
 
 export function MyOrdersListView() {
   const t = useTranslations();
-  const locale = useLocale();
-  const { orders, ordersLoading, ordersResults } = useGetMyOrders();
+  const { orders, ordersLoading } = useGetMyOrders();
   const TABLE_HEAD: TableHeadColumn[] = [
     { id: "id", label: t("MY_ORDERS.ID") },
     {
@@ -47,7 +45,7 @@ export function MyOrdersListView() {
       props: { className: "text-center!" },
     },
   ];
-  const isEmpty = ordersResults === 0;
+  const isEmpty = orders?.length === 0;
   return (
     <div className="">
       {!ordersLoading && (
@@ -56,9 +54,11 @@ export function MyOrdersListView() {
             <TableHeadCustom columns={TABLE_HEAD} />
             <TableBody>
               {!ordersLoading && isEmpty && <TableNoData />}
-              {orders?.map((order) => (
-                <MyOrdersTableRow order={order} key={order?._id} />
-              ))}
+              {!ordersLoading &&
+                !isEmpty &&
+                orders?.map((order) => (
+                  <MyOrdersTableRow order={order} key={order?._id} />
+                ))}
             </TableBody>
           </Table>
           {/* <div

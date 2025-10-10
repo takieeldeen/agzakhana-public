@@ -48,7 +48,7 @@ function TableNoData() {
   return (
     <TableCell
       colSpan={12}
-      className="font-medium max-w-64 h-128 bg-filter-background truncate text-center"
+      className="font-medium max-w-64 h-128 bg-filter-background truncate text-center dark:bg-card-background-dark"
     >
       <div className="h-full w-full flex items-center justify-center flex-col gap-2">
         <Icon

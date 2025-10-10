@@ -53,8 +53,8 @@ export function NavUser() {
   return (
     <DropdownMenu>
       {!!user && (
-        <DropdownMenuTrigger asChild>
-          <Authenticate>
+        <Authenticate>
+          <DropdownMenuTrigger asChild>
             <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200 dark:bg-card-background-dark">
               {
                 <>
@@ -85,12 +85,12 @@ export function NavUser() {
                 </>
               }
             </Button>
-          </Authenticate>
-        </DropdownMenuTrigger>
+          </DropdownMenuTrigger>
+        </Authenticate>
       )}
       {!user && (
         <DropdownMenuTrigger asChild>
-          <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200 dark:bg-card-background-dark dark:text-gray-200 flex flex-row items-center gap-2">
+          <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200 dark:bg-card-background-dark dark:text-gray-200 flex flex-row items-center justify-start gap-2">
             <Icon
               icon="material-symbols-light:settings-outline"
               className="h-6! w-6!"

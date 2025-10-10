@@ -11,7 +11,7 @@ export default async function ProfilePage() {
   const t = await getTranslations();
   return (
     <AuthGuard>
-      <div className="grid grid-cols-1 md:grid-cols-[2fr_6fr] py-8">
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_6fr] py-8 gap-18 md:gap-0">
         <PersonalInfoSection />
         <section className="py-2 flex flex-col gap-6">
           <div>
