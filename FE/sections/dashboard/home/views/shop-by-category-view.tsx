@@ -26,7 +26,7 @@ export default async function ShopByCategoryView({
       <Carousel className="w-full">
         <div className="flex justify-between flex-row ">
           <div className="flex items-center gap-2 flex-row ">
-            <h5 className="text-3xl font-bold mb-3 dark:text-gray-100">
+            <h5 className="text-xl md:text-3xl font-bold mb-3 dark:text-gray-100">
               {t("HOME_PAGE.SHOP_BY_CATEGORY")}
             </h5>
             <div className="md:flex hidden flex-row  gap-4">
