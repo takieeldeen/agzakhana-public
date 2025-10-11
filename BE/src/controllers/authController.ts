@@ -182,7 +182,13 @@ export const checkAuth = catchAsync(async (req, res, next) => {
 
 export const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    res.cookie("token", "");
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
+      expires: new Date(0),
+    });
     res.status(200).json({
       status: req.t("COMMON.SUCCESS"),
     });
