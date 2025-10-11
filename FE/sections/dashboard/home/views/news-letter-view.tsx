@@ -11,9 +11,9 @@ export default async function NewsLetterView() {
       <span className="md:text-3xl text-lg font-semibold text-gray-600 mb-4">
         {t("HOME_PAGE.SUB_TITLE")}
       </span>
-      <form action="#" className="relative">
+      <form action="#" className="relative w-full md:w-auto">
         <input
-          className="bg-white outline-none  py-3 rounded-[9999] w-96 px-4"
+          className="bg-white outline-none  py-3 rounded-[9999] w-full md:w-96 px-4"
           type="email"
           placeholder={t("HOME_PAGE.EMAIL_PLACEHOLDER")}
         />

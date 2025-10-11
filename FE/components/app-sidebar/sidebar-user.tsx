@@ -43,13 +43,12 @@ export function NavUser() {
   const handleLogout = useCallback(async () => {
     await logout();
     logoutLocally();
-    router.refresh();
-  }, [logoutLocally, router]);
+    // window.location.href = "/";
+  }, [logoutLocally]);
   const handleToggleTheme = useCallback(async () => {
     setTheme(resolvedTheme === "light" ? "dark" : "light");
   }, [resolvedTheme, setTheme]);
   // if (!user) return null;
-  console.log(user);
   return (
     <DropdownMenu>
       {!!user && (
@@ -90,7 +89,7 @@ export function NavUser() {
       )}
       {!user && (
         <DropdownMenuTrigger asChild>
-          <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200 dark:bg-card-background-dark dark:text-gray-200 flex flex-row items-center justify-start gap-2">
+          <Button className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 bg-gray-200 dark:bg-card-background-dark text-card-background-dark dark:text-gray-200 flex flex-row items-center justify-start gap-2">
             <Icon
               icon="material-symbols-light:settings-outline"
               className="h-6! w-6!"
@@ -100,7 +99,7 @@ export function NavUser() {
         </DropdownMenuTrigger>
       )}
       <DropdownMenuContent
-        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg bg-card-background-dark"
+        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg dark:bg-card-background-dark"
         // side={isMobile ? "bottom" : "right"}
         align="end"
         sideOffset={4}

@@ -262,10 +262,12 @@ function CartItem({ cartItem, onMutate }: CartItemProps) {
 function CartSkeleton() {
   const t = useTranslations();
   return (
-    <div className="flex flex-row gap-16 py-8">
-      <div className="flex flex-col gap-2  w-4/6">
+    <div className="flex flex-col md:flex-row gap-16 py-8">
+      <div className="flex flex-col gap-2 w-full md:w-4/6">
         <div className="flex-row flex gap-2 items-end mb-4">
-          <h4 className="text-2xl font-bold ">{t("HEADER.CART")}</h4>
+          <h4 className="text-2xl font-bold dark:text-white ">
+            {t("HEADER.CART")}
+          </h4>
           <Skeleton className="h-4 w-24" />
         </div>
         <ul className="flex flex-col gap-4 relative">
@@ -273,7 +275,7 @@ function CartSkeleton() {
             <li
               key={cartItem}
               className={cn(
-                "flex flex-row gap-2 items-center py-5 bg-gray-50 rounded-md px-4 drop-shadow-sm border-b-[1px] border-gray-200 justify-between h-44 w-full relative"
+                "flex flex-row gap-2 items-center py-5 bg-gray-50 dark:bg-zinc-900   rounded-md px-4 drop-shadow-sm border-b-[1px] border-transparent md:border-gray-200 justify-between h-44 w-full relative"
               )}
             >
               {/* LEFT SECTION */}
@@ -308,8 +310,10 @@ function CartSkeleton() {
           ))}
         </ul>
       </div>
-      <aside className="w-2/6 flex flex-col gap-3 sticky self-start top-8">
-        <h4 className="font-bold text-2xl">{t("CART.PAYMENT_SUMMARY")}</h4>
+      <aside className="w-full md:w-2/6 flex flex-col gap-3 sticky self-start top-8">
+        <h4 className="font-bold text-2xl dark:text-white">
+          {t("CART.PAYMENT_SUMMARY")}
+        </h4>
         <Separator />
         <ul>
           <li className="flex flex-row justify-between py-4 border-[1px] border-transparent border-b-gray-300">
@@ -334,10 +338,6 @@ function CartSkeleton() {
         </ul>
         <div className="flex flex-col gap-2">
           <Skeleton className="w-full h-12" />
-          <Button className="bg-transparent text-text-primary font-bold flex flex-row gap-2 hover:gap-4 transition-all duration-300 py-4 shadow-none">
-            <Icon icon="humbleicons:chevron-left" className="rtl:rotate-180" />
-            {t("CART.CONTINUE_SHOPPING")}
-          </Button>
         </div>
       </aside>
     </div>

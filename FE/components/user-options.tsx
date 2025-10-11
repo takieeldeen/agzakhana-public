@@ -13,13 +13,12 @@ import { Skeleton } from "./ui/skeleton";
 export default function UserOptions() {
   const { user, userLoading } = useAuth();
   const t = useTranslations();
-  const router = useRouter();
   const { logout: logoutLocally } = useAuth();
   const handleLogout = useCallback(async () => {
     await logout();
     logoutLocally();
-    router.refresh();
-  }, [logoutLocally, router]);
+    window.location.href = "/";
+  }, [logoutLocally]);
   if (userLoading)
     return (
       <div className="flex flex-row items-center gap-2">

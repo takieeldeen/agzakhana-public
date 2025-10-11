@@ -77,15 +77,15 @@ export default async function OffersCard({
 
 export async function OffersCardSkeleton() {
   return (
-    <li className="  rounded-2xl overflow-hidden flex flex-col gap-1 w-[calc(20%-0.5rem)] items-center shrink-0 min-w-[22rem]">
-      <div className="h-[300px]! w-full rounded-xl flex items-start justify-center border-2 relative py-8">
+    <li className="  rounded-2xl overflow-hidden flex flex-col gap-1 w-full md:w-[calc(20%-0.5rem)] items-center shrink-0 min-w-[22rem]">
+      <div className="h-[300px]! w-full rounded-xl flex items-start justify-center border-2 dark:border-card-background-dark relative py-8">
         <Skeleton className="w-48 h-48" />
         <div className="absolute bottom-10">
           <ul className="flex flex-row gap-2 items-center">
             {Array.from({ length: 4 }, (_, i) => i).map((i) => (
               <li
                 key={i}
-                className="flex flex-col justify-center gap-2 bg-gray-100 rounded-md items-center p-2 shadow-md w-1/4 min-w-16 select-none text-sm font-bold h-20"
+                className="flex flex-col justify-center gap-2 bg-gray-100 dark:bg-gray-600 rounded-md items-center p-2 shadow-md w-1/4 min-w-16 select-none text-sm font-bold h-20"
               >
                 <Skeleton className="w-8 h-8" />
                 <Skeleton className="w-12 h-2" />
@@ -94,7 +94,7 @@ export async function OffersCardSkeleton() {
           </ul>
         </div>
       </div>
-      <div className="shadow-md w-[90%] rounded-2xl -translate-y-9 z-10 relative bg-gray-100 p-2 ">
+      <div className="shadow-md w-[90%] rounded-2xl -translate-y-9 z-10 relative bg-gray-100 dark:bg-gray-800/30 p-2 ">
         <div className="p-2 mb-auto flex flex-col gap-1.5">
           <Skeleton className="w-24 h-3" />
           <div className="flex flex-row gap-1  items-center mb-2">

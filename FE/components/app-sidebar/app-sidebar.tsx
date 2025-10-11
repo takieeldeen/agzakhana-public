@@ -62,7 +62,7 @@ export function AppSidebar() {
                   />
                   {t("HEADER.CART")}
                   {totalItems && (
-                    <span className="ml-auto rtl:ml-0 rtl:mr-auto bg-rose-600 min-w-6 min-h-6 p-1 aspect-square rounded-full text-white flex items-center justify-center text-sm font-base">
+                    <span className="ml-auto rtl:ml-0 rtl:mr-auto bg-rose-600 min-w-6 min-h-6 p-1 aspect-square rounded-full text-white  flex items-center justify-center text-sm font-base">
                       {totalItems}
                     </span>
                   )}

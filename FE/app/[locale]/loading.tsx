@@ -50,7 +50,7 @@ export default function ProductsListSkeleton() {
         </div>
       </div>
       {/* Categorized listing item */}
-      <div className="flex flex-row p-8 px-4 gap-4 ">
+      <div className="flex flex-col md:flex-row p-8 px-4 gap-4 ">
         <div className="w-[calc(25%-1rem)]">
           <Skeleton className="w-36 h-5 mb-2" />
           <ul className="flex flex-col gap-3 py-4">

@@ -1,6 +1,5 @@
 import AddToCartButton from "@/components/add-to-cart";
 import FallbackImage from "@/components/image";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Medicine } from "@/types/medcines";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -63,7 +62,7 @@ export default async function ProductListItem({
 export function ProductListItemSkeleton() {
   return (
     <li className="flex flex-row items-start gap-2 w-full ">
-      <div className="h-24 w-24 aspect-square bg-gray-200 rounded-md flex items-center justify-center">
+      <div className="h-24 w-24 aspect-square bg-gray-200 dark:bg-gray-700/80 rounded-md flex items-center justify-center">
         <Skeleton className="h-12 w-12" />
       </div>
       <div className="p-2 mb-auto flex flex-col gap-1.5">

@@ -44,17 +44,20 @@ export function RHFDatePicker({
         render={({ field }) => (
           <FormItem className="flex flex-col">
             {!!label && (
-              <FormLabel className="dark:text-gray-200">{label}</FormLabel>
+              <FormLabel className="dark:text-gray-200 rtl:justify-end">
+                {label}
+              </FormLabel>
             )}
-            <div className="relative w-full">
+            <div className="relative w-full ">
               <Popover modal>
                 <PopoverTrigger asChild>
-                  <FormControl>
+                  <FormControl className="">
                     <Button
                       variant="outline"
                       className={cn(
-                        "w-full h-12 pl-3 pr-10 text-left font-normal dark:text-gray-200",
-                        !field.value && "text-muted-foreground"
+                        "w-full h-12 pl-3 pr-10 text-left rtl:text-right rtl:flex-row-reverse  font-normal dark:text-gray-200 ",
+                        !field.value && "text-muted-foreground",
+                        "bg-transparent!"
                       )}
                     >
                       {field.value ? (
@@ -64,7 +67,7 @@ export function RHFDatePicker({
                       ) : (
                         <span>{placeholder}</span>
                       )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="ml-auto rtl:ml-0 rtl:mr-auto  h-4 w-4 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -85,7 +88,7 @@ export function RHFDatePicker({
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-8 rtl:left-8 rtl:right-auto top-1/2 -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
+                  className="absolute right-8 rtl:left-8 rtl:right-auto top-1/2 -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground hover:text-destructive "
                   onClick={() => field.onChange(null)}
                 >
                   <XIcon className="h-4 w-4" />

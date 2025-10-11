@@ -9,6 +9,7 @@ import {
 import { Input, InputProps } from "./ui/input";
 import { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
+import { useLocale } from "next-intl";
 
 type Props = {
   name: string;
@@ -31,17 +32,22 @@ export default function RHFTextfield({
   ...other
 }: Props) {
   const methods = useFormContext();
+  const locale = useLocale();
   return (
     <FormField
       control={methods.control}
       name={name}
       render={({ field }) => (
-        <FormItem {...other}>
+        <FormItem
+          {...other}
+          className={cn(other?.className)}
+          dir={locale === "ar" ? "rtl" : "ltr"}
+        >
           {!!label && (
             <FormLabel
               {...labelProps}
               className={cn(
-                "dark:text-gray-300 dark:bg-transparent",
+                "dark:text-gray-300 dark:bg-transparent ",
                 labelProps?.className
               )}
             >
@@ -57,13 +63,16 @@ export default function RHFTextfield({
               {...field}
               {...inputProps}
               className={cn(
-                "dark:text-gray-300 dark:bg-transparent",
+                "dark:text-gray-300 dark:bg-transparent rtl:text-right",
                 inputProps?.className
               )}
             />
           </FormControl>
-          <div className="min-h-4">
-            <FormMessage {...helperTextProps} />
+          <div className="min-h-4 ">
+            <FormMessage
+              {...helperTextProps}
+              className={cn("text-right", helperTextProps?.className)}
+            />
           </div>
         </FormItem>
       )}

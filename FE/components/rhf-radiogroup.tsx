@@ -34,7 +34,9 @@ export default function RHFRadioGroup({
       render={({ field }) => (
         <FormItem className="space-y-1">
           {!!label && (
-            <FormLabel className="dark:text-gray-200">{label}</FormLabel>
+            <FormLabel className="dark:text-gray-200 rtl:justify-end">
+              {label}
+            </FormLabel>
           )}
           <FormControl>
             <RadioGroup
@@ -62,7 +64,7 @@ export default function RHFRadioGroup({
             </RadioGroup>
           </FormControl>
           <div className="min-h-4">
-            <FormMessage />
+            <FormMessage className="rtl:text-right" />
           </div>
         </FormItem>
       )}

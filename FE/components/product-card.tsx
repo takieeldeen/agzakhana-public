@@ -80,7 +80,7 @@ export default async function ProductCard({
 
 export function ProductCardSkeleton() {
   return (
-    <li className="border-2 border-[#ECECEC] w-[250px] h-[401px] rounded-2xl overflow-hidden relative min-w-[20rem]">
+    <li className="border-2 border-[#ECECEC] dark:border-card-background-dark w-full md:w-[250px] h-[401px] rounded-2xl overflow-hidden relative min-w-[20rem]">
       <div className="h-full flex flex-col gap-1">
         {/* <ProductTag tag={medicine?.tag} /> */}
         <Skeleton className="w-16 h-8 absolute rounded-none rounded-br-2xl rtl:left-0" />
