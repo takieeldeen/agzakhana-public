@@ -277,5 +277,10 @@
     "pending": "قيد الانتظار",
     "failed": "فشل",
     "success": "عملية ناجحة"
+  },
+  "DASHBOARD_NAV_BAR": {
+    "USER_MANAGEMENT": "إدارة المستخدمين",
+    "ROLES_MANAGEMENT": "إدارة الأدوار",
+    "PERMISSIONS_MANAGEMENT": "إدارة الصلاحيات"
   }
 }

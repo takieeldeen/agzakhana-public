@@ -281,5 +281,10 @@
     "pending": "Pending",
     "failed": "Failed",
     "success": "Successful order"
+  },
+  "DASHBOARD_NAV_BAR": {
+    "USER_MANAGEMENT": "Users Management",
+    "ROLES_MANAGEMENT": "Roles Management",
+    "PERMISSIONS_MANAGEMENT": "Permissions Management"
   }
 }
