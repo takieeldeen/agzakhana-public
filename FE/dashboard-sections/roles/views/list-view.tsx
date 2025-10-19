@@ -1,13 +1,13 @@
 "use client";
-import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import ListTableRow from "../list-table-row";
+import { useTranslations } from "next-intl";
+import TableToolbar from "../table-toolbar";
 const roles = [
   {
     id: 1,
@@ -81,29 +81,69 @@ const roles = [
     permissionsCount: 12,
     usersCount: 3,
   },
+  {
+    id: 7,
+    nameEn: "Sales Representative",
+    nameAr: "مندوب المبيعات",
+    descriptionEn:
+      "Handles customer interactions, promotes products, assists in processing orders, and maintains strong client relationships to drive sales growth.",
+    descriptionAr:
+      "يتعامل مع العملاء، ويعرض المنتجات، ويساعد في معالجة الطلبات، ويعمل على تعزيز العلاقات مع العملاء لزيادة المبيعات.",
+    status: "ACTIVE",
+    permissionsCount: 18,
+    usersCount: 10,
+  },
+  {
+    id: 8,
+    nameEn: "Accounting Supervisor",
+    nameAr: "مشرف المحاسبة",
+    descriptionEn:
+      "Supervises daily accounting operations, ensures compliance with financial policies, prepares reports, and monitors adherence to budgets.",
+    descriptionAr:
+      "يشرف على العمليات اليومية للمحاسبة، ويتأكد من الالتزام بسياسات المالية، ويعد التقارير، ويراقب الالتزام بالميزانية.",
+    status: "ACTIVE",
+    permissionsCount: 25,
+    usersCount: 6,
+  },
+  {
+    id: 9,
+    nameEn: "Quality Assurance Specialist",
+    nameAr: "أخصائي ضمان الجودة",
+    descriptionEn:
+      "Ensures all operations comply with regulatory and internal quality standards through audits, evaluations, and continuous improvement efforts.",
+    descriptionAr:
+      "يضمن أن جميع العمليات تتوافق مع المعايير التنظيمية والجودة الداخلية من خلال عمليات المراجعة والتحسين المستمر.",
+    status: "INACTIVE",
+    permissionsCount: 12,
+    usersCount: 3,
+  },
 ];
 
 export default function ListView() {
   const [viewMode, setViewMode] = useState<"LIST" | "GRID">("LIST");
-
+  const t = useTranslations();
   return (
     <div className="flex flex-col gap-3">
       {/* Title Bar */}
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between sticky top-0 bg-slate-50 py-2">
         <div className="flex flex-col">
-          <h3 className="text-3xl font-bold">Roles Management</h3>
-          <p>Manage all users roles in the system,</p>
+          <h3 className="text-3xl font-bold">
+            {t("ROLES_MANAGEMENT.LIST_TITLE")}
+          </h3>
+          <p>{t("ROLES_MANAGEMENT.LIST_SUBTITLE")}</p>
         </div>
         <Button className="bg-emerald-600 h-12 text-sm">
           <Icon icon="gg:add" className="w-6! h-6!" />
-          Add New Role
+          {t("COMMON.ADD_ENTITY", {
+            ENTITY_NAME: t("ROLES_MANAGEMENT.INDIFINITE_ENTITY_NAME"),
+          })}
         </Button>
       </div>
       {/* View Bar */}
       <div className="flex flex-row justify-between items-end">
         <Badge className="bg-emerald-600">
           <Spinner />
-          Syncing Data
+          {t("COMMON.SYNCING")}
         </Badge>
         <div className="h-12 bg-gray-200 rounded-md ">
           <Button
@@ -139,14 +179,15 @@ export default function ListView() {
         </div>
       </div>
       {/* List View */}
-      <div>
+      <div className="flex flex-row gap-3 relative">
         {/* List  */}
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col gap-3 w-full">
           {roles?.map((role) => (
             <ListTableRow key={role?.id} role={role} />
           ))}
         </ul>
         {/* Toolbar */}
+        <TableToolbar />
       </div>
     </div>
   );

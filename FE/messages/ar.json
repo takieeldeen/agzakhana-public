@@ -35,7 +35,22 @@
     "GENERIC_ERROR": "حدث خطأ ما من جانبنا برجاء المحاولة مرة أخرى في وقت لاحق.",
     "UNKOWN": "غير معروف",
     "NO_DATA": "لا يوجد نتائج",
-    "SETTINGS": "الإعدادات"
+    "SETTINGS": "الإعدادات",
+    "ADD_ENTITY": "إضافة {ENTITY_NAME} جديد",
+    "SYNCING": "جار مزامنة البيانات",
+    "ACTIVE": "نشط",
+    "INACTIVE": "غير نشط",
+    "DETAILS_TITLE": "تفاصيل {ENTITY_NAME}",
+    "DETAILS_SUBTITLE": "معرفة جميع المعلومات الخاصة ب{ENTITY_NAME}",
+    "ACTIVATE_TITLE": "تفعيل {ENTITY_NAME}",
+    "ACTIVATE_SUBTITLE": "تغيير حالة {ENTITY_NAME} إلى نشط",
+    "DEACTIVATE_TITLE": "تعطيل {ENTITY_NAME}",
+    "DEACTIVATE_SUBTITLE": "تغيير حالة {ENTITY_NAME} إلى غير نشط",
+    "EDIT_TITLE": "تعديل {ENTITY_NAME}",
+    "EDIT_SUBTITLE": "تعديل بعض البيانات الخاصة ب{ENTITY_NAME}",
+    "SEARCH_BY_NAME": "البحث بواسطة الاسم",
+    "STATUS": "الحالة",
+    "ORDER_BY": "ترتيب بواسطة"
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
@@ -282,5 +297,13 @@
     "USER_MANAGEMENT": "إدارة المستخدمين",
     "ROLES_MANAGEMENT": "إدارة الأدوار",
     "PERMISSIONS_MANAGEMENT": "إدارة الصلاحيات"
+  },
+  "ROLES_MANAGEMENT": {
+    "LIST_TITLE": "إدارة الأدوار",
+    "LIST_SUBTITLE": "إدارة جميع الأدوار المتاحة في النظام",
+    "INDIFINITE_ENTITY_NAME": "دور",
+    "DEFINITE_ENTITY_NAME": "الدور",
+    "USERS_COUNT": "عدد الحاصلين على هذا الدور",
+    "PERMISSIONS_COUNT": "عدد الصلاحيات لهذا الدور"
   }
 }

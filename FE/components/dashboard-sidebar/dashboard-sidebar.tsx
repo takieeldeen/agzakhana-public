@@ -20,7 +20,7 @@ export default function DashbaordSidebar() {
       animate={{ width: collapsed ? 96 : 304 }} // 24rem -> 304px, 6rem -> 96px
       transition={{ type: "spring", stiffness: 200, damping: 24 }}
       className={cn(
-        "border-r-2 rtl:border-r-0 rtl:border-l-2 h-full p-3 flex flex-col items-center relative dark:bg-dark-card",
+        "border-r-2 rtl:border-r-0 rtl:border-l-2 h-full p-3 flex flex-col items-center sticky top-0 dark:bg-dark-card ",
         collapsed && "px-1"
       )}
     >
@@ -82,7 +82,7 @@ function NavItem({ tab }: { tab: Tab }) {
             className={cn(
               "flex flex-row items-center rounded-md gap-3 h-12 hover:bg-gray-200 dark:hover:bg-dark-800 transition-all font-semibold text-muted-foreground cursor-pointer p-3 w-full text-base relative",
               collapsed &&
-                "flex flex-col gap-2 h-19 w-full overflow-hidden py-2",
+                "flex flex-col gap-0 justify-between h-19 w-full overflow-hidden py-2",
               IS_ACTIVE &&
                 "bg-[#5BE49B]/15 text-emerald-600 dark:text-emerald-400 hover:bg-[#5BE49B]/25",
               MENU_OPENED && "bg-gray-200",

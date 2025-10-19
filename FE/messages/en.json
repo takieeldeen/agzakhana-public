@@ -35,7 +35,22 @@
     "GENERIC_ERROR": "Something went wrong from our side, please try again later.",
     "UNKOWN": "Unkown",
     "NO_DATA": "No Data Found",
-    "SETTINGS": "Settings"
+    "SETTINGS": "Settings",
+    "ADD_ENTITY": "Add New {ENTITY_NAME}",
+    "SYNCING": "Syncing data",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "DETAILS_TITLE": "Details of {ENTITY_NAME}",
+    "DETAILS_SUBTITLE": "View all information related to {ENTITY_NAME}",
+    "ACTIVATE_TITLE": "Activate {ENTITY_NAME}",
+    "ACTIVATE_SUBTITLE": "Change the status of {ENTITY_NAME} to Active",
+    "DEACTIVATE_TITLE": "Deactivate {ENTITY_NAME}",
+    "DEACTIVATE_SUBTITLE": "Change the status of {ENTITY_NAME} to Inactive",
+    "EDIT_TITLE": "Edit {ENTITY_NAME}",
+    "EDIT_SUBTITLE": "Modify some details related to {ENTITY_NAME}",
+    "SEARCH_BY_NAME": "Search by Name",
+    "STATUS": "Status",
+    "ORDER_BY": "Order By"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -286,5 +301,13 @@
     "USER_MANAGEMENT": "Users Management",
     "ROLES_MANAGEMENT": "Roles Management",
     "PERMISSIONS_MANAGEMENT": "Permissions Management"
+  },
+  "ROLES_MANAGEMENT": {
+    "LIST_TITLE": "Roles Management",
+    "LIST_SUBTITLE": "Manage all the roles available in the system",
+    "INDIFINITE_ENTITY_NAME": "role",
+    "DEFINITE_ENTITY_NAME": "role",
+    "USERS_COUNT": "Users with this role",
+    "PERMISSIONS_COUNT": "Number of Permissions"
   }
 }

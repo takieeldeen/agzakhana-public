@@ -75,7 +75,7 @@ export default async function RootLayout({
                   enableSystem
                   disableTransitionOnChange
                 >
-                  <main className="flex flex-row h-full w-full">
+                  <main className="flex flex-row h-full w-full overflow-x-hidden">
                     <DashbaordSidebar />
                     <div className="p-5 w-full">{children}</div>
                   </main>
