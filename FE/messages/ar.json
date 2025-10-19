@@ -50,7 +50,9 @@
     "EDIT_SUBTITLE": "تعديل بعض البيانات الخاصة ب{ENTITY_NAME}",
     "SEARCH_BY_NAME": "البحث بواسطة الاسم",
     "STATUS": "الحالة",
-    "ORDER_BY": "ترتيب بواسطة"
+    "ORDER_BY": "ترتيب بواسطة",
+    "NO_OPTIONS": "لا توجد خيارات متاحة",
+    "CANCEL_FILTERS": "إلغاء التصفية"
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
@@ -304,6 +306,9 @@
     "INDIFINITE_ENTITY_NAME": "دور",
     "DEFINITE_ENTITY_NAME": "الدور",
     "USERS_COUNT": "عدد الحاصلين على هذا الدور",
-    "PERMISSIONS_COUNT": "عدد الصلاحيات لهذا الدور"
+    "PERMISSIONS_COUNT": "عدد الصلاحيات لهذا الدور",
+    "PERMISSIONS": "الصلاحيات",
+    "NAME": "اسم الدور",
+    "ROLE_DESCRIPTION": "وصف الدور"
   }
 }

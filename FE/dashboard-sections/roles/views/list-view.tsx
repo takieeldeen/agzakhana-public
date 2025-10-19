@@ -8,6 +8,9 @@ import { useState } from "react";
 import ListTableRow from "../list-table-row";
 import { useTranslations } from "next-intl";
 import TableToolbar from "../table-toolbar";
+import { motion } from "framer-motion";
+import GridTableRow from "../grid-table-row";
+import DashboardPagination from "@/components/dashboard-pagination";
 const roles = [
   {
     id: 1,
@@ -122,10 +125,13 @@ const roles = [
 export default function ListView() {
   const [viewMode, setViewMode] = useState<"LIST" | "GRID">("LIST");
   const t = useTranslations();
+  const GRID_MODE = viewMode === "GRID";
+  const LIST_MODE = viewMode === "LIST";
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 h-fit">
       {/* Title Bar */}
-      <div className="flex flex-row justify-between sticky top-0 bg-slate-50 py-2">
+      <div className="flex flex-row justify-between sticky top-0 bg-slate-50 py-2 z-20">
         <div className="flex flex-col">
           <h3 className="text-3xl font-bold">
             {t("ROLES_MANAGEMENT.LIST_TITLE")}
@@ -179,15 +185,39 @@ export default function ListView() {
         </div>
       </div>
       {/* List View */}
-      <div className="flex flex-row gap-3 relative">
+      <div className="flex flex-row gap-3 relative items-stretch h-full">
         {/* List  */}
-        <ul className="flex flex-col gap-3 w-full">
-          {roles?.map((role) => (
-            <ListTableRow key={role?.id} role={role} />
-          ))}
-        </ul>
+        <div className="w-full">
+          {LIST_MODE && (
+            <motion.ul
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 100, opacity: 0 }}
+              className="flex flex-col gap-3 w-full"
+            >
+              {roles?.map((role) => (
+                <ListTableRow key={role?.id} role={role} />
+              ))}
+            </motion.ul>
+          )}
+          {GRID_MODE && (
+            <motion.ul
+              initial={{ x: -100, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 100, opacity: 0 }}
+              className="flex flex-row gap-3 w-full flex-wrap"
+            >
+              {roles?.map((role) => (
+                <GridTableRow key={role?.id} role={role} />
+              ))}
+            </motion.ul>
+          )}
+        </div>
         {/* Toolbar */}
         <TableToolbar />
+      </div>
+      <div className="flex flex-row mr-auto">
+        <DashboardPagination />
       </div>
     </div>
   );

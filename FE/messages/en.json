@@ -50,7 +50,9 @@
     "EDIT_SUBTITLE": "Modify some details related to {ENTITY_NAME}",
     "SEARCH_BY_NAME": "Search by Name",
     "STATUS": "Status",
-    "ORDER_BY": "Order By"
+    "ORDER_BY": "Order By",
+    "NO_OPTIONS": "No options available",
+    "CANCEL_FILTERS": "Cancel Filters"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -308,6 +310,9 @@
     "INDIFINITE_ENTITY_NAME": "role",
     "DEFINITE_ENTITY_NAME": "role",
     "USERS_COUNT": "Users with this role",
-    "PERMISSIONS_COUNT": "Number of Permissions"
+    "PERMISSIONS_COUNT": "Number of Permissions",
+    "PERMISSIONS": "Permissions",
+    "NAME": "Role Name",
+    "ROLE_DESCRIPTION": "Role Description"
   }
 }
