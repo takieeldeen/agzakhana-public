@@ -179,7 +179,13 @@ export const checkAuth = catchAsync(async (req, res, next) => {
     });
   }
 });
-
+/*
+  Function Name; 
+  Description
+  Author
+  Date
+  
+*/
 export const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     res.cookie("token", "", {
