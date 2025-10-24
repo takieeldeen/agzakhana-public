@@ -23,19 +23,33 @@ import { useFormContext } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { LabelProps } from "@radix-ui/react-label";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Spinner } from "./ui/spinner";
+import { CommandLoading } from "cmdk";
 
-type RHFComboboxProps = {
+const parseOption = (str: string) => {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return str;
+  }
+};
+
+type RHFComboboxProps<T> = {
   name: string;
   label?: string;
   placeholder?: string;
   clearable?: boolean;
   noOptionsText?: string;
-  options?: { label: string; value: string }[];
+  options?: T[];
   labelProps?: LabelProps;
-  getOptionLabel?: (option: any) => string;
+  getOptionLabel?: (option: T | undefined) => string;
+  optionValueComparator?: (option: T, value: T) => boolean;
+  getOptionValue?: (option: T) => string;
+  onChange?: (newVal: T, reason: "clear" | "change") => void;
+  isLoading?: boolean;
 };
 
-export function RHFComboxbox({
+export function RHFComboxbox<T>({
   name,
   label,
   placeholder,
@@ -44,23 +58,57 @@ export function RHFComboxbox({
   options = [],
   labelProps,
   getOptionLabel,
-}: RHFComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+  optionValueComparator,
+  getOptionValue,
+  onChange,
+  isLoading = false,
+}: RHFComboboxProps<T>) {
+  // RHF Hooks /////////////////////////////////////
   const form = useFormContext();
   const defaultValue = form?.formState?.defaultValues?.[name];
+  const formVal = form?.watch()?.[name];
+  // State Management /////////////////////////////////////
+  const [open, setOpen] = React.useState(false);
+  const [val, setval] = React.useState(defaultValue);
   const t = useTranslations();
-  const defaultGetOptionLabel = React.useCallback(
-    (option: any) => {
-      if (getOptionLabel) {
-        getOptionLabel(option);
-      } else {
-        return option.label;
-      }
-    },
-    [getOptionLabel]
+  // API Functions
+  // default API /////////////////////////////////////////////////
+  const defaultOptionValueComparator = React.useCallback(
+    (option: T, value: T) => option === value,
+    []
   );
+  const defaultGetOptionValue = React.useCallback(
+    (option: T) =>
+      typeof option === "string" ? option : JSON.stringify(option),
+    []
+  );
+  const defaultGetOptionLabel = React.useCallback((option: T | undefined) => {
+    if (!option) return "";
+    return typeof option === "string" ? option : JSON.stringify(option);
+  }, []);
+
+  const api = React.useMemo(
+    () => ({
+      optionValueComparator:
+        optionValueComparator ?? defaultOptionValueComparator,
+      getOptionValue: getOptionValue ?? defaultGetOptionValue,
+      getOptionLabel: getOptionLabel ?? defaultGetOptionLabel,
+    }),
+    [
+      defaultGetOptionLabel,
+      defaultGetOptionValue,
+      defaultOptionValueComparator,
+      getOptionLabel,
+      getOptionValue,
+      optionValueComparator,
+    ]
+  );
+  React.useEffect(() => {
+    setval(formVal);
+  }, [formVal]);
   return (
     <FormField
+      key={val}
       control={form.control}
       name={name}
       render={({ field }) => (
@@ -81,39 +129,45 @@ export function RHFComboxbox({
                   role="combobox"
                   aria-expanded={open}
                   className={cn(
-                    "w-full h-12 justify-between",
+                    "w-full h-12 justify-between dark:bg-dark-card dark:text-gray-200",
                     !field.value && "text-muted-foreground"
                   )}
                 >
-                  {field.value ? field.value.label : placeholder}
-                  <Icon icon="mi:chevron-down" />
-                  {clearable && field.value && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-8 rtl:left-8 rtl:right-auto top-1/2 -translate-y-1/2 h-6 w-6 p-0 text-muted-foreground"
-                      onClick={(e) => {
-                        field.onChange(defaultValue);
-                        setOpen(false);
-                        e.preventDefault();
-                      }}
-                    >
-                      <XIcon className="h-4 w-4" />
-                    </Button>
-                  )}
+                  {field.value ? api.getOptionLabel(field.value) : placeholder}
+                  <div className="absolute right-3 rtl:left-3 rtl:right-auto top-1/2 -translate-y-1/2 flex flex-row items-center gap-2">
+                    <Icon icon="mi:chevron-down" />
+                    {isLoading && <Spinner />}
+
+                    {clearable && field.value && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className=" h-6 w-6 p-0 text-muted-foreground "
+                        onClick={(e) => {
+                          field.onChange(defaultValue);
+                          setval(defaultValue);
+                          setOpen(false);
+                          onChange?.(defaultValue, "clear");
+                          e.preventDefault();
+                        }}
+                      >
+                        <XIcon className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-64 p-0">
                 <Command
-                  filter={(value, search) => {
-                    console.log(value, search);
-                    if (field?.value?.value === value) return 0;
+                  filter={(option, search) => {
+                    const parsedOption = parseOption(option) as T;
+                    if (api.optionValueComparator(parsedOption, val)) return 0;
                     if (
-                      !!value &&
-                      options
-                        ?.find((opt) => opt?.value === value)
-                        ?.label?.includes?.(search.toLowerCase())
+                      !!option &&
+                      api
+                        .getOptionLabel(parsedOption)
+                        ?.includes?.(search.toLowerCase())
                     )
                       return 1;
                     return 0;
@@ -121,30 +175,38 @@ export function RHFComboxbox({
                 >
                   <CommandInput
                     placeholder={placeholder}
-                    className={cn("h-9")}
+                    className={cn("h-9 ")}
                   />
                   <CommandList>
+                    {isLoading && (
+                      <CommandLoading className="text-sm py-2 px-2 text-muted-foreground">
+                        {t("COMMON.LOADING")}
+                      </CommandLoading>
+                    )}
                     <CommandEmpty>
                       {noOptionsText ?? t("COMMON.NO_OPTIONS")}
                     </CommandEmpty>
                     <CommandGroup>
                       {options
-                        ?.filter((opt) => opt?.value !== field?.value?.value)
+                        // ?.filter((opt) => opt?.value !== field?.value?.value)
+                        ?.filter((opt) => !api.optionValueComparator(opt, val))
                         .map((option) => (
                           <CommandItem
-                            key={option.value}
-                            value={option.value}
+                            key={api.getOptionValue(option)}
+                            value={api.getOptionValue(option)}
                             onSelect={() => {
-                              console.log(option, "Field Option");
+                              setval(option);
                               field.onChange(option);
+                              onChange?.(option, "change");
+
                               setOpen(false);
                             }}
                           >
-                            {defaultGetOptionLabel(option)}
+                            {api.getOptionLabel(option)}
                             <Check
                               className={cn(
                                 "ml-auto",
-                                field.value === option.value
+                                api.optionValueComparator(option, val)
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}

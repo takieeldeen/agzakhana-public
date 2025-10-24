@@ -52,7 +52,15 @@
     "STATUS": "الحالة",
     "ORDER_BY": "ترتيب بواسطة",
     "NO_OPTIONS": "لا توجد خيارات متاحة",
-    "CANCEL_FILTERS": "إلغاء التصفية"
+    "CANCEL_FILTERS": "إلغاء التصفية",
+    "EMPTY_TITLE": "عفوا لا يوجد {ENTITY_NAME} بعد.",
+    "EMPTY_SUBTITLE": "لم تقم بإنشاء أي {ENTITY_NAME} يمكنك البدء بإنشاء {ENTITY_NAME} اولا",
+    "CREATE": "إنشاء {ENTITY_NAME}",
+    "NO_RESULTS_TITLE": "لا يوجد نتائج",
+    "NO_RESULTS_SUBTITLE": "لم يتم العثور على نتائج مطابقة لمعايير التصفية المحددة. يمكنك إزالة بعض المعايير أو تعديلها لعرض المزيد من النتائج.",
+    "LOADING": "جار التحميل...",
+    "ORDER_DIR": "اتجاه الترتيب",
+    "ROWS_PER_LIST": "العدد المعروض"
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
@@ -298,7 +306,12 @@
   "DASHBOARD_NAV_BAR": {
     "USER_MANAGEMENT": "إدارة المستخدمين",
     "ROLES_MANAGEMENT": "إدارة الأدوار",
-    "PERMISSIONS_MANAGEMENT": "إدارة الصلاحيات"
+    "PERMISSIONS_MANAGEMENT": "إدارة الصلاحيات",
+    "MENU": "القائمة",
+    "CHAT": "المحادثات",
+    "NOTIFICATIONS": "الإشعارات",
+    "SEARCH": "بحث",
+    "PROFILE": "حسابي"
   },
   "ROLES_MANAGEMENT": {
     "LIST_TITLE": "إدارة الأدوار",
@@ -309,6 +322,7 @@
     "PERMISSIONS_COUNT": "عدد الصلاحيات لهذا الدور",
     "PERMISSIONS": "الصلاحيات",
     "NAME": "اسم الدور",
-    "ROLE_DESCRIPTION": "وصف الدور"
+    "ROLE_DESCRIPTION": "وصف الدور",
+    "ENTITY_NAME": "دور"
   }
 }

@@ -14,23 +14,25 @@ import { LabelProps } from "@radix-ui/react-label";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { motion, AnimatePresence } from "framer-motion";
 
-type RHFFilterTagProps = {
+type RHFFilterTagProps<T> = {
   name: string;
   label?: string;
   placeholder?: string;
   clearable?: boolean;
   labelProps?: LabelProps;
-  value: any;
+  value: T;
+  onChange?: (newVal: T, reason: "clear" | "change") => void;
 };
 
-export function RHFFilterTag({
+export function RHFFilterTag<T>({
   name,
   label,
   placeholder,
   clearable = false,
   labelProps,
   value,
-}: RHFFilterTagProps) {
+  onChange,
+}: RHFFilterTagProps<T>) {
   const form = useFormContext();
   const checked = form?.watch()?.[name] === value;
   const defaultValue = form?.formState?.defaultValues?.[name];
@@ -53,9 +55,11 @@ export function RHFFilterTag({
               <Button
                 onClick={() => {
                   if (checked && clearable) {
+                    onChange?.(defaultValue, "clear");
                     field.onChange(defaultValue);
                   } else {
                     field.onChange(value);
+                    onChange?.(value, "change");
                   }
                 }}
                 className={cn(

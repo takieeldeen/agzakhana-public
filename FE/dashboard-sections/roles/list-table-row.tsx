@@ -21,20 +21,20 @@ export default function ListTableRow({ role }: { role: any }) {
   return (
     <li
       key={role?.id}
-      className="bg-card w-full h-24 rounded-xl p-3 shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-row items-center gap-3 "
+      className="bg-card w-full h-24 rounded-xl p-3 shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-row items-center gap-3 dark:bg-dark-card"
     >
       <Icon
         icon="qlementine-icons:user-16"
         className="h-[4.5rem] w-[4.5rem] text-border"
       />
       <div className="flex flex-col gap-1 w-3/6">
-        <p className="font-semibold text-black">
+        <p className="font-semibold text-black dark:text-white">
           {role?.[isRtl ? "nameAr" : "nameEn"]}
         </p>
         <div className="flex flex-row gap-3">
           <Badge
             className={cn(
-              "bg-emerald-600 capitalize",
+              "bg-emerald-600 capitalize dark:text-white",
               role?.status === "INACTIVE" && "bg-rose-800"
             )}
           >
@@ -48,13 +48,13 @@ export default function ListTableRow({ role }: { role: any }) {
       <Separator orientation="vertical" />
       <div className="flex flex-row gap-8 ">
         <div>
-          <p className="font-semibold text-black text-sm">
+          <p className="font-semibold text-black dark:text-white text-sm">
             {t("ROLES_MANAGEMENT.USERS_COUNT")}
           </p>
           <p className="text-muted-foreground">{role?.usersCount}</p>
         </div>
         <div>
-          <p className="font-semibold text-black text-sm">
+          <p className="font-semibold text-black dark:text-white text-sm">
             {t("ROLES_MANAGEMENT.PERMISSIONS_COUNT")}
           </p>
           <p className="text-muted-foreground">{role?.permissionsCount}</p>
@@ -89,18 +89,18 @@ export default function ListTableRow({ role }: { role: any }) {
         </PopoverTrigger>
         <PopoverContent
           side={isRtl ? "right" : "left"}
-          className="rounded-xl p-0 overflow-hidden"
+          className="rounded-xl p-0 overflow-hidden dark:bg-dark-card"
         >
           <ul className="">
             <li className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300 ">
-              <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100  transition-all group-hover:bg-emerald-700 aspect-square">
+              <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
                 <Icon
                   icon="mdi:eye-outline"
-                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300"
+                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
                 />
               </div>
               <div>
-                <p className="text-sm text-black transition-all group-hover:text-white font-semibold">
+                <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
                   {t("COMMON.DETAILS_TITLE", {
                     ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
                   })}
@@ -114,14 +114,14 @@ export default function ListTableRow({ role }: { role: any }) {
             </li>
             <Separator />
             <li className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300">
-              <div className="h-12 w-12 rounded-lg aspect-square flex items-center justify-center bg-gray-100  transition-all group-hover:bg-emerald-700">
+              <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
                 <Icon
                   icon="material-symbols:check-rounded"
-                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300"
+                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
                 />
               </div>
               <div>
-                <p className="text-sm text-black transition-all group-hover:text-white font-semibold">
+                <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
                   {t("COMMON.ACTIVATE_TITLE", {
                     ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
                   })}
@@ -135,14 +135,14 @@ export default function ListTableRow({ role }: { role: any }) {
             </li>
             <Separator />
             <li className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300">
-              <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100  transition-all group-hover:bg-emerald-700 aspect-square">
+              <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
                 <Icon
                   icon="iconamoon:edit-thin"
-                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300"
+                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
                 />
               </div>
               <div>
-                <p className="text-sm text-black transition-all group-hover:text-white font-semibold">
+                <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
                   {t("COMMON.EDIT_TITLE", {
                     ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
                   })}

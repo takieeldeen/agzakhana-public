@@ -20,25 +20,25 @@ export default function GridTableRow({ role }: { role: any }) {
   return (
     <li
       key={role?.id}
-      className="bg-card min-w-76 max-w-[calc(33%_-_12px)] aspect-square overflow-hidden rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-col items-center gap-3 "
+      className="bg-card w-full md:w-auto md:min-w-76 md:max-w-[calc(33%_-_12px)] md:aspect-square overflow-hidden  rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-col items-center gap-3 dark:bg-dark-card "
     >
-      <div className="bg-teal-600 w-full max-h-24 min-h-[calc(31%)] flex flex-row gap-3 items-center px-3">
+      <div className="bg-teal-600 dark:bg-teal-800 w-full h-24 md:max-h-24 md:min-h-[calc(31%)] flex flex-row gap-3 items-center px-3">
         <Icon
           icon="qlementine-icons:user-16"
           className="min-h-3/4! h-auto! w-auto! max-h-[4.5rem]! aspect-square text-teal-700"
           // className="min-h-3/4 max-h-[4.5rem] aspect-square! text-teal-700"
         />
         <div>
-          <p className="text-primary-foreground xl:text-xl">
+          <p className="text-primary-foreground xl:text-xl dark:text-white">
             {role?.[isRtl ? "nameAr" : "nameEn"]}
           </p>
-          <Badge className={cn("bg-teal-700 capitalize")}>
+          <Badge className={cn("bg-teal-700 capitalize dark:text-white")}>
             {t(`COMMON.${role?.status}`)}
           </Badge>
         </div>
       </div>
       <div className="flex flex-col gap-1 px-3">
-        <p className="font-semibold text-black">
+        <p className="font-semibold text-black dark:text-white">
           {t("ROLES_MANAGEMENT.ROLE_DESCRIPTION")}
         </p>
         <EllipsisTypography className="text-muted-foreground" maxLines={3}>
@@ -48,13 +48,13 @@ export default function GridTableRow({ role }: { role: any }) {
       <Separator />
       <div className="flex flex-row w-full  mb-auto p-2">
         <div className="flex flex-col gap-1 p-2 w-full">
-          <p className="font-semibold text-black">
+          <p className="font-semibold text-black dark:text-white">
             {t("ROLES_MANAGEMENT.USERS_COUNT")}
           </p>
           <p className="text-muted-foreground">{role?.usersCount}</p>
         </div>
         <div className="flex flex-col gap-1 p-2 w-full">
-          <p className="font-semibold text-black">
+          <p className="font-semibold text-black dark:text-white">
             {t("ROLES_MANAGEMENT.PERMISSIONS_COUNT")}
           </p>
           <p className="text-muted-foreground">{role?.permissionsCount}</p>

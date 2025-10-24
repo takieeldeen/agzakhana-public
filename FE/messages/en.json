@@ -52,7 +52,15 @@
     "STATUS": "Status",
     "ORDER_BY": "Order By",
     "NO_OPTIONS": "No options available",
-    "CANCEL_FILTERS": "Cancel Filters"
+    "CANCEL_FILTERS": "Cancel Filters",
+    "EMPTY_TITLE": "No {ENTITY_NAME} Yet",
+    "EMPTY_SUBTITLE": "You haven't created any {ENTITY_NAME} yet. Get started by creating your first {ENTITY_NAME}.",
+    "CREATE": "Create {ENTITY_NAME}",
+    "NO_RESULTS_TITLE": "No Results",
+    "NO_RESULTS_SUBTITLE": "No results were found that match the selected filters. You can remove or adjust some filters to view more results.",
+    "LOADING": "Loading...",
+    "ROWS_PER_LIST": "Rows Visible",
+    "ORDER_DIR": "Order Direction"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -302,7 +310,12 @@
   "DASHBOARD_NAV_BAR": {
     "USER_MANAGEMENT": "Users Management",
     "ROLES_MANAGEMENT": "Roles Management",
-    "PERMISSIONS_MANAGEMENT": "Permissions Management"
+    "PERMISSIONS_MANAGEMENT": "Permissions Management",
+    "MENU": "Menu",
+    "CHAT": "Chat",
+    "NOTIFICATIONS": "Notifications",
+    "SEARCH": "Search",
+    "PROFILE": "Profile"
   },
   "ROLES_MANAGEMENT": {
     "LIST_TITLE": "Roles Management",
@@ -313,6 +326,7 @@
     "PERMISSIONS_COUNT": "Number of Permissions",
     "PERMISSIONS": "Permissions",
     "NAME": "Role Name",
-    "ROLE_DESCRIPTION": "Role Description"
+    "ROLE_DESCRIPTION": "Role Description",
+    "ENTITY_NAME": "Role"
   }
 }
