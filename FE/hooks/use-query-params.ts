@@ -1,29 +1,40 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
+import { UseFormSetValue } from "react-hook-form";
 
-export type UseQueryParamsProps = {
-  defaultParams?: { [prop: string]: string };
+// Generic mapped type for key-value mapping functions
+type ValueMappingOptions<T extends Record<string, string>> = {
+  [K in keyof T]?: (paramValue: string | undefined) => any;
 };
-export const useQueryParams = ({ defaultParams }: UseQueryParamsProps) => {
+
+export type UseQueryParamsProps<
+  T extends Record<string, string> = Record<string, string>
+> = {
+  defaultParams?: T;
+  setValue?: UseFormSetValue<any>;
+};
+
+export function useQueryParams<
+  T extends Record<string, string> = Record<string, string>
+>({ defaultParams, setValue }: UseQueryParamsProps<T>) {
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const [currentSearchParams, setCurrentSearchParams] = useState<string>(
-    `?${new URLSearchParams(searchParams?.toString())?.toString()}`
+    `?${new URLSearchParams(searchParams?.toString()).toString()}`
   );
 
-  const dirtyParams = useMemo(
-    () =>
-      defaultParams
-        ? Object.keys(defaultParams).filter(
-            (paramName) =>
-              searchParams.get(paramName) !== defaultParams?.[paramName]
-          )
-        : [],
-    [defaultParams, searchParams]
-  );
+  // detect dirty params
+  const dirtyParams = useMemo(() => {
+    if (!defaultParams) return [];
+    return Object.keys(defaultParams).filter(
+      (paramName) => searchParams.get(paramName) !== defaultParams[paramName]
+    );
+  }, [defaultParams, searchParams]);
 
   const isDirty = dirtyParams.length > 0;
 
+  // Navigation helper
   const navigate = useCallback(
     (path?: string) => {
       router.replace(path ?? currentSearchParams);
@@ -31,39 +42,42 @@ export const useQueryParams = ({ defaultParams }: UseQueryParamsProps) => {
     [currentSearchParams, router]
   );
 
+  // Update multiple params
   const setParams = useCallback(
-    (params: { [paramName: string]: string }) => {
+    (params: Record<string, string>) => {
       const url = new URLSearchParams(searchParams?.toString());
-      Object.keys(params).forEach((paramName) => {
-        url.set(paramName, params[paramName]);
+      Object.entries(params).forEach(([key, value]) => {
+        url.set(key, value);
       });
       setCurrentSearchParams(`?${url.toString()}`);
     },
     [searchParams]
   );
 
+  const getAllParams = useCallback(() => {
+    const params: Record<string, string> = {};
+    searchParams.forEach((value, key) => {
+      params[key] = value;
+    });
+    return params;
+  }, [searchParams]);
+
   const hasParam = useCallback(
-    (paramName: string) => {
-      return !!searchParams.get(paramName);
-    },
+    (paramName: string) => !!searchParams.get(paramName),
     [searchParams]
   );
+
   const hasParams = useCallback(
-    (paramName: string[]) => {
-      return paramName.every((param) => !!searchParams.get(param));
-    },
+    (paramNames: string[]) => paramNames.every((p) => !!searchParams.get(p)),
     [searchParams]
   );
 
   const resetParam = useCallback(
-    (paramName: keyof typeof defaultParams) => {
+    (paramName: keyof T) => {
+      if (!defaultParams) return;
       const url = new URLSearchParams(searchParams?.toString());
-      if (!!defaultParams) {
-        url.set(paramName, defaultParams[paramName]);
-        setCurrentSearchParams(`?${url.toString()}`);
-      } else {
-        return;
-      }
+      url.set(paramName as string, defaultParams[paramName]);
+      setCurrentSearchParams(`?${url.toString()}`);
     },
     [defaultParams, searchParams]
   );
@@ -71,13 +85,47 @@ export const useQueryParams = ({ defaultParams }: UseQueryParamsProps) => {
   const resetParams = useCallback(() => {
     const url = new URLSearchParams();
     if (defaultParams) {
-      Object.keys(defaultParams).forEach((paramName) => {
-        url.set(paramName, defaultParams[paramName]);
+      Object.entries(defaultParams).forEach(([key, value]) => {
+        url.set(key, value);
       });
     }
-    // router.replace(`?${url.toString()}`);
+    router.replace(`?${url.toString()}`);
     setCurrentSearchParams(`?${url.toString()}`);
+  }, [defaultParams, router]);
+
+  const initParams = useCallback(() => {
+    const url = new URLSearchParams();
+
+    if (!defaultParams) return;
+    Object.entries(defaultParams).forEach(([key, value]) => {
+      if (url.get(key) === undefined) url.set(key, value);
+    });
   }, [defaultParams]);
+
+  const syncParams = useCallback(
+    (valueMappingOptions?: ValueMappingOptions<any>) => {
+      if (!setValue || !defaultParams) return;
+      const allParams = getAllParams();
+      Object.keys(allParams).forEach((paramName) => {
+        const val = searchParams.get(paramName);
+        const mapper = valueMappingOptions?.[paramName as keyof T];
+        const mappedVal = mapper ? mapper(val ?? undefined) : val;
+        if (mappedVal) setValue(paramName, mappedVal, { shouldDirty: true });
+      });
+    },
+    [defaultParams, getAllParams, searchParams, setValue]
+  );
+  const syncParam = useCallback(
+    (paramName: string, mapper?: (value: string | undefined) => any) => {
+      if (!setValue) return;
+
+      const val = searchParams.get(paramName);
+      const mappedVal = mapper ? mapper(val ?? undefined) : val;
+      if (mappedVal) setValue(paramName, mappedVal, { shouldDirty: true });
+    },
+    [searchParams, setValue]
+  );
+
   const memoizedValue = useMemo(
     () => ({
       isDirty,
@@ -88,20 +136,28 @@ export const useQueryParams = ({ defaultParams }: UseQueryParamsProps) => {
       hasParams,
       resetParam,
       resetParams,
+      initParams,
       navigate,
+      getAllParams,
+      syncParams,
+      syncParam,
     }),
     [
-      currentSearchParams,
+      isDirty,
       dirtyParams,
+      currentSearchParams,
+      setParams,
       hasParam,
       hasParams,
-      isDirty,
-      navigate,
       resetParam,
       resetParams,
-      setParams,
+      initParams,
+      navigate,
+      getAllParams,
+      syncParams,
+      syncParam,
     ]
   );
 
   return memoizedValue;
-};
+}

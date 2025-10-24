@@ -7,21 +7,23 @@ import { useDebounceFn } from "@/hooks/use-debounce-call";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { LIST_COUNT, ORDER_BY_OPTIONS, ORDER_DIR_OPTIONS } from "./constants";
 import { useGetPermissionsHelper } from "@/app/dashboard-api/helpers";
+import { useQueryParams } from "@/hooks/use-query-params";
 
 export default function TableToolbar() {
   const t = useTranslations();
   const {
     formState: { dirtyFields },
+    setValue,
     reset,
   } = useFormContext();
   const searchParams = useSearchParams();
   const router = useRouter();
   const HAS_FILTERS = dirtyFields && Object.keys(dirtyFields).length > 0;
-
+  const { syncParam } = useQueryParams({ setValue });
   const { data: permissions, isLoading } = useGetPermissionsHelper();
   const handleChangeParam = useCallback(
     (paramName: string, value: string, deleteParam: boolean = false) => {
@@ -44,7 +46,14 @@ export default function TableToolbar() {
   const debouncedHandleChangeParam = useDebounceFn(handleChangeParam, 500);
 
   const locale = useLocale();
-
+  useEffect(() => {
+    const param = searchParams.get("permission");
+    if (permissions?.length > 0 && param) {
+      syncParam("permission", (val) =>
+        permissions.find((per) => per._id === val)
+      );
+    }
+  }, [permissions, searchParams, syncParam]);
   return (
     <>
       <div className="p-3 mb-auto">
@@ -154,7 +163,7 @@ export default function TableToolbar() {
           // getOptionValue
         />
         <RHFComboxbox
-          clearable
+          clearable={false}
           name="size"
           isLoading={isLoading}
           label={t("COMMON.ROWS_PER_LIST")}
@@ -165,6 +174,7 @@ export default function TableToolbar() {
           options={LIST_COUNT}
           getOptionLabel={(option) => option ?? ""}
           onChange={(newVal, reason) => {
+            console.log(newVal);
             handleChangeParam("size", newVal, reason === "clear");
           }}
           // getOptionValue

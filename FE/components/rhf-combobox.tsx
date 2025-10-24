@@ -130,7 +130,7 @@ export function RHFComboxbox<T>({
                   aria-expanded={open}
                   className={cn(
                     "w-full h-12 justify-between dark:bg-dark-card dark:text-gray-200",
-                    !field.value && "text-muted-foreground"
+                    !field.value && "text-muted-foreground dark:text-gray-500"
                   )}
                 >
                   {field.value ? api.getOptionLabel(field.value) : placeholder}

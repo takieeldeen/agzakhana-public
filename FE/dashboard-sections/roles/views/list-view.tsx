@@ -22,7 +22,12 @@ import RHFForm from "@/components/rhf-form";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useGetRoles } from "@/app/dashboard-api/roles";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DEFAULT_PAGE_SIZE, ORDER_BY_OPTIONS } from "../constants";
+import {
+  DEFAULT_PAGE_SIZE,
+  LIST_COUNT,
+  ORDER_BY_OPTIONS,
+  ORDER_DIR_OPTIONS,
+} from "../constants";
 import { useQueryParams } from "@/hooks/use-query-params";
 
 export default function ListView() {
@@ -37,12 +42,15 @@ export default function ListView() {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { resetParams, navigate, isDirty } = useQueryParams({
-    defaultParams: {
-      page: `${DEFAULT_PAGE_SIZE}`,
-      size: "128",
-    },
-  });
+  const defaultParams = useMemo(
+    () => ({
+      page: "1",
+      size: DEFAULT_PAGE_SIZE?.toString(),
+    }),
+    []
+  );
+  console.log("rerendered");
+
   // Filters /////////////////////////////////////////////
   const filtersSchema = Z.object({
     name: Z.string(),
@@ -58,6 +66,13 @@ export default function ListView() {
       nameAr: Z.string(),
       nameEn: Z.string(),
     }).nullable(),
+    dir: Z.object({
+      _id: Z.string(),
+      nameAr: Z.string(),
+      nameEn: Z.string(),
+      value: Z.string(),
+    }).nullable(),
+    size: Z.number(),
   });
   const defaultValues = useMemo(
     () => ({
@@ -65,6 +80,8 @@ export default function ListView() {
       status: null,
       sort: null,
       permission: null,
+      dir: null,
+      size: DEFAULT_PAGE_SIZE,
     }),
     []
   );
@@ -78,6 +95,10 @@ export default function ListView() {
     formState: { dirtyFields },
     setValue,
   } = methods;
+  const { initParams, syncParams } = useQueryParams({
+    defaultParams,
+    setValue,
+  });
   const filtervalues = watch();
   const debouncedSearch = useDebounce(filtervalues?.name, 1000);
   const filters = useMemo(
@@ -85,17 +106,17 @@ export default function ListView() {
       name: debouncedSearch,
       status: filtervalues?.status,
       sort: filtervalues?.sort?.value ?? null,
-      permissions: filtervalues?.permission?._id ?? null,
+      permissions: searchParams?.get("permission") ?? null,
     }),
     [
       debouncedSearch,
-      filtervalues?.permission?._id,
       filtervalues?.sort?.value,
       filtervalues?.status,
+      searchParams,
     ]
   );
+  console.log(filtervalues);
   // Helper Constants ////////////////////////////////////////
-  const LIST_LIMIT = 3;
   const GRID_MODE = viewMode === "GRID";
   const LIST_MODE = viewMode === "LIST";
   const page = +(searchParams.get("page") ?? 0);
@@ -104,7 +125,7 @@ export default function ListView() {
   }, []);
   // Data Fetching Hooks ////////////////////////////////////
   const { data, isLoading, isFetching, results } = useGetRoles(
-    LIST_LIMIT,
+    filtervalues.size,
     page,
     filters,
     { enabled: filtersSynced }
@@ -114,49 +135,20 @@ export default function ListView() {
   const isEmpty = !canReset && results === 0;
   // LifeCycle Hooks ////////////////////////////////////////
   useEffect(() => {
-    if (!isDirty) return;
-    resetParams();
-  }, [isDirty, navigate, resetParams]);
+    initParams();
+  }, [initParams]);
 
-  // useEffect(() => {
-  //   const currentPage = searchParams.get("page");
-  //   const currentSize = searchParams.get("size");
-  //   const pageCount = results ? Math.ceil(results / LIST_LIMIT) : Infinity;
-  //   const params = new URLSearchParams(searchParams.toString());
-  //   if (
-  //     !currentPage ||
-  //     (!!currentPage && results && +currentPage > pageCount)
-  //   ) {
-  //     if (!currentSize) {
-  //       params.set("page", "1");
-  //       params.set("size", `${DEFAULT_PAGE_SIZE}`);
-  //     } else {
-  //       params.set("page", "1");
-  //     }
-  //     router?.replace(`?${params.toString()}`);
-  //   } else if (!currentSize) {
-  //     params.set("size", `${DEFAULT_PAGE_SIZE}`);
-  //   }
-  // }, [results, router, searchParams]);
   useEffect(() => {
     if (filtersSynced) return;
-    const nameParam = searchParams.get("name");
-    const statusParam = searchParams.get("status");
-    const sortParam = searchParams.get("sort");
-    // const permissionParam = searchParams.get("permission");
-    if (nameParam) setValue("name", nameParam, { shouldDirty: true });
-    if (statusParam)
-      setValue("status", statusParam as any, { shouldDirty: true });
-    if (sortParam) {
-      const paramObject = ORDER_BY_OPTIONS?.find(
-        (opt) => opt?.value === sortParam
-      );
-      setValue("sort", paramObject ?? null, { shouldDirty: true });
-    }
-    // if (permissionParam)
-    //   setValue("permission", nameParam, { shouldDirty: true });
+    syncParams({
+      sort: (val: any) => ORDER_BY_OPTIONS?.find((opt) => opt?.value === val),
+      dir: (val: any) => ORDER_DIR_OPTIONS?.find((opt) => opt?.value === val),
+      size: (val: any) => LIST_COUNT?.find((opt) => opt === val) ?? "9",
+      permission: () => null,
+    });
+
     setFiltersSynced(true);
-  }, [filtersSynced, searchParams, setValue]);
+  }, [filtersSynced, searchParams, setValue, syncParams]);
   if (isLoading) return <ListSkeletonView />;
   if (isEmpty)
     return (
@@ -299,7 +291,7 @@ export default function ListView() {
           >
             <DashboardPagination
               totalRowsCount={results ?? 0}
-              rowsPerPage={LIST_LIMIT}
+              rowsPerPage={filtervalues.size}
               page={page}
               onChange={(newPage) => {
                 const params = new URLSearchParams(searchParams.toString());

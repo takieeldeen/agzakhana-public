@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { ThemeProvider } from "@/providers/theme-provider";
 import DashbaordSidebar from "@/components/dashboard-sidebar/dashboard-sidebar";
 import DashboardSidebarProvider from "@/components/dashboard-sidebar/dashboard-sidebar-provider";
+import PromptProvider from "@/components/prompt-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -65,26 +66,28 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable}  antialiased bg-slate-50 dark:bg-dark-background h-screen w-screen min-h-screen max-w-auto m-auto text-text-primary!`}
       >
-        <DashboardSidebarProvider>
-          <AuthProvider>
-            <NextIntlClientProvider>
-              <TanstackProvider>
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="light"
-                  enableSystem
-                  disableTransitionOnChange
-                >
-                  <main className="flex flex-row h-full w-full overflow-x-hidden relative">
-                    <DashbaordSidebar />
-                    <div className="p-5 w-full">{children}</div>
-                  </main>
-                  <Toaster />
-                </ThemeProvider>
-              </TanstackProvider>
-            </NextIntlClientProvider>
-          </AuthProvider>
-        </DashboardSidebarProvider>
+        <NextIntlClientProvider>
+          <PromptProvider>
+            <DashboardSidebarProvider>
+              <AuthProvider>
+                <TanstackProvider>
+                  <ThemeProvider
+                    attribute="class"
+                    defaultTheme="light"
+                    enableSystem
+                    disableTransitionOnChange
+                  >
+                    <main className="flex flex-row h-full w-full overflow-x-hidden relative">
+                      <DashbaordSidebar />
+                      <div className="p-5 w-full">{children}</div>
+                    </main>
+                    <Toaster />
+                  </ThemeProvider>
+                </TanstackProvider>
+              </AuthProvider>
+            </DashboardSidebarProvider>
+          </PromptProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
