@@ -56,7 +56,7 @@ export default function TableToolbar() {
   }, [permissions, searchParams, syncParam]);
   return (
     <>
-      <div className="p-3 mb-auto">
+      <div className="p-3 mb-auto md:h-[22rem] overflow-y-scroll">
         <RHFTextfield
           name="name"
           label={t("COMMON.SEARCH_BY_NAME")}

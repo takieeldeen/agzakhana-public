@@ -3,6 +3,7 @@ import {
   createContext,
   ReactNode,
   useCallback,
+  useContext,
   useMemo,
   useState,
 } from "react";
@@ -15,37 +16,65 @@ import { useTranslations } from "next-intl";
 
 type PromptVariant = "SUCCESS";
 type PromptContextProps = {
-  showPrompt: VoidFunction;
+  closePrompt: VoidFunction;
+  showPrompt: ({
+    dialogTitle,
+    title,
+    content,
+    icon,
+    variant,
+    actionTitle,
+  }: {
+    dialogTitle?: string;
+    title?: string;
+    content?: string;
+    icon?: string;
+    variant?: PromptVariant;
+    actionTitle?: string;
+  }) => void;
 };
 const PromptContext = createContext<PromptContextProps | undefined>(undefined);
 
 export default function PromptProvider({ children }: { children: ReactNode }) {
   const t = useTranslations();
-  const [promptVisibility, setPromptVisibility] = useState<boolean>(true);
-  const [dialogTitle, setDialogTitle] = useState<string>("تأكيد تفعيل الدور");
-  const [title, setTitle] = useState<string>(
-    "هل ترغب في تفعيل دور مساعد صيدلي ؟"
+  const variantProps = useMemo(
+    () => ({
+      SUCCESS: {
+        dialogTitle: {
+          styling: "bg-emerald-600",
+          text: t("COMMON.SUCCESS_DIALOG_TITLE"),
+        },
+        icon: {
+          styling: "text-emerald-600",
+          name: "mingcute:check-fill",
+        },
+        title: {
+          styling: "text-black",
+          text: "هل ترغب في تفعيل دور مساعد صيدلي ؟",
+        },
+        actionTitle: {
+          styling: "h-12 w-[calc(50%_-_12px)] bg-emerald-600",
+          text: t("COMMON.CONFIRM_ACTION"),
+        },
+      },
+    }),
+    [t]
   );
-  const [content, setContent] =
-    useState<string>(`في حالة تفعيل الدور سيتمكن كل الحاصلين على هذا الدور من ممارسة
-                  جميع الصلاحيات الخاصة به بدون استثنائات`);
+  const [promptVisibility, setPromptVisibility] = useState<boolean>(false);
+  const [dialogTitle, setDialogTitle] = useState<string>(
+    variantProps?.SUCCESS?.dialogTitle?.text
+  );
+  const [icon, setIcon] = useState<string>(variantProps?.SUCCESS?.icon.name);
+  const [title, setTitle] = useState<string>("");
+  const [actionTitle, setActionTitle] = useState<string>(
+    variantProps?.SUCCESS?.actionTitle.text
+  );
+  const [content, setContent] = useState<string>("");
   const [variant, setVariant] = useState<PromptVariant>("SUCCESS");
-  const variantProps = {
-    SUCCESS: {
-      dialogTitle: {
-        styling: "bg-emerald-600",
-        text: "عملية ناجحة",
-      },
-      icon: {
-        styling: "text-emerald-600",
-        name: "mingcute:check-fill",
-      },
-      title: {
-        styling: "text-black",
-        text: "هل ترغب في تفعيل دور مساعد صيدلي ؟",
-      },
-    },
-  };
+  const [onClose, setOnClose] = useState<VoidFunction>(() =>
+    setPromptVisibility(false)
+  );
+
   // const [content, setContent] = useState<string>("Prompt Title");
   const showPrompt = useCallback(
     ({
@@ -53,32 +82,44 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
       title,
       content,
       icon,
-      variant,
+      variant = "SUCCESS",
       actionTitle,
+      onClose,
     }: {
       dialogTitle?: string;
       title?: string;
       content?: string;
       icon?: string;
-      variant?: string;
+      variant?: PromptVariant;
       actionTitle?: string;
+      onClose?: VoidFunction;
     }) => {
       setPromptVisibility(true);
-      if (title) setDialogTitle(title);
+      if (onClose) setOnClose(onClose);
+      if (icon) setIcon(dialogTitle ?? variantProps?.[variant]?.icon.name);
+      setDialogTitle(dialogTitle ?? variantProps?.[variant]?.dialogTitle?.text);
+      setActionTitle(actionTitle ?? variantProps?.[variant]?.actionTitle?.text);
+      setVariant(variant ?? "SUCCESS");
+      setContent(content ?? "");
+      setTitle(title ?? "");
     },
-    []
+    [variantProps]
   );
+  const closePrompt = useCallback(() => {
+    onClose?.();
+    setPromptVisibility(false);
+  }, [onClose]);
   const api = useMemo(
     () => ({
       showPrompt,
+      closePrompt,
     }),
-    [showPrompt]
+    [closePrompt, showPrompt]
   );
 
   return (
     <PromptContext.Provider value={api}>
       {children}
-      {/* <div className="absolute top-0 left-0 h-full w-full backdrop-blur-sm bg-black/15 flex items-center justify-center z-30 "> */}
       <Dialog open={promptVisibility}>
         <DialogOverlay className="backdrop-blur-sm">
           <DialogContent
@@ -88,7 +129,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
             <DialogTitle
               className={cn(
                 "h-12 flex items-center px-4 text-white text-lg font-semibold",
-                variantProps["SUCCESS"].dialogTitle.styling
+                variantProps?.[variant].dialogTitle.styling
               )}
             >
               {dialogTitle}
@@ -97,10 +138,10 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
               <div
                 className={cn(
                   "h-32 w-32 rounded-full border-gray-300 border-2 flex items-center justify-center text-8xl",
-                  variantProps["SUCCESS"].icon.styling
+                  variantProps?.[variant].icon.styling
                 )}
               >
-                <Icon icon={variantProps["SUCCESS"].icon.name} className="" />
+                <Icon icon={icon} />
               </div>
               <div className="flex flex-col items-center gap-1 py-4">
                 <EllipsisTypography
@@ -112,22 +153,28 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
                   {content}
                 </EllipsisTypography>
               </div>
-              <div className="flex flex-row gap-2 w-full justify-center">
+              <div className="flex ltr:flex-row-reverse rtl:flex-row gap-2 w-full justify-center">
                 <Button
                   className="h-12 w-[calc(50%_-_12px)] border-border border-2 text-black"
                   variant="ghost"
+                  onClick={closePrompt}
                 >
-                  إلغاء
+                  {t("COMMON.CANCEL_ACTION")}
                 </Button>
                 <Button className="h-12 w-[calc(50%_-_12px)] bg-emerald-600">
-                  تأكيد
+                  {actionTitle}
                 </Button>
               </div>
             </div>
           </DialogContent>
         </DialogOverlay>
       </Dialog>
-      {/* </div> */}
     </PromptContext.Provider>
   );
+}
+
+export function usePrompt() {
+  const values = useContext(PromptContext);
+  if (!values) throw Error("usePrompt can only be used inside prompt provider");
+  return values;
 }

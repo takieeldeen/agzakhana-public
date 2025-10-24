@@ -60,7 +60,17 @@
     "NO_RESULTS_SUBTITLE": "No results were found that match the selected filters. You can remove or adjust some filters to view more results.",
     "LOADING": "Loading...",
     "ROWS_PER_LIST": "Rows Visible",
-    "ORDER_DIR": "Order Direction"
+    "ORDER_DIR": "Order Direction",
+    "SUCCESS_DIALOG_TITLE": "Successful Process",
+    "FAIL_DIALOG_TITLE": "Unsuccessful Process",
+    "CONSTRUCTIVE_PROMPT": "Action Confirmation",
+    "CONFIRM_ACTION": "Confirm",
+    "CANCEL_ACTION": "Cancel",
+    "ACTIVATION_TITLE": "Are you sure you want to activate {ENTITY_VALUE} {ENTITY_NAME} ?",
+    "ACTIVATION_DESC": "When {ENTITY_NAME} {ENTITY_VALUE} is activated, all its settings and features will take effect immediately.",
+    "CONFIRMATION_DIALOG_TITLE": "{{OPERATION_NAME}} Confirmation",
+    "ACTIVATION": "Activation",
+    "SEARCH_ANYTHING": "Search for anything...."
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
