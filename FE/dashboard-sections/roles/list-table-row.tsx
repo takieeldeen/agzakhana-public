@@ -1,5 +1,6 @@
 "use client";
 import EllipsisTypography from "@/components/ellipsis-typography";
+import { usePrompt } from "@/components/prompt-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,7 @@ import { useState } from "react";
 
 export default function ListTableRow({ role }: { role: any }) {
   const [showOptions, setShowOptions] = useState<boolean>(false);
+  const { showPrompt } = usePrompt();
   const locale = useLocale();
   const t = useTranslations();
   const isRtl = locale === "ar";
@@ -113,7 +115,24 @@ export default function ListTableRow({ role }: { role: any }) {
               </div>
             </li>
             <Separator />
-            <li className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300">
+            <li
+              onClick={() =>
+                showPrompt({
+                  dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
+                    OPERATION_NAME: t("COMMON.ACTIVATION"),
+                  }),
+                  title: t("COMMON.ACTIVATION_TITLE", {
+                    ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+                    ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+                  }),
+                  content: t("COMMON.ACTIVATION_DESC", {
+                    ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+                    ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+                  }),
+                })
+              }
+              className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300"
+            >
               <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
                 <Icon
                   icon="material-symbols:check-rounded"

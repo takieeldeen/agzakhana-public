@@ -63,7 +63,14 @@
     "ROWS_PER_LIST": "العدد المعروض",
     "SUCCESS_DIALOG_TITLE": "عملية ناجحة",
     "FAIL_DIALOG_TITLE": "عملية غير ناجحة",
-    "CONSTRUCTIVE_PROMPT": "تأكيد العملية"
+    "CONSTRUCTIVE_PROMPT": "تأكيد العملية",
+    "CONFIRM_ACTION": "تأكيد",
+    "CANCEL_ACTION": "إلغاء",
+    "ACTIVATION_TITLE": "هل ترغب في تفعيل {ENTITY_NAME} {ENTITY_VALUE} ؟",
+    "ACTIVATION_DESC": "عند تفعيل {ENTITY_NAME} {ENTITY_VALUE}، ستصبح جميع إعداداته وميزاته سارية المفعول فورًا.",
+    "CONFIRMATION_DIALOG_TITLE": "تأكيد {OPERATION_NAME}",
+    "ACTIVATION": "التفعيل",
+    "SEARCH_ANYTHING": "ابحث عن اي شئ ...."
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",

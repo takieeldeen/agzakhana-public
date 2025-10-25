@@ -171,7 +171,7 @@ export default function ListView() {
   return (
     <div className="flex flex-col gap-3 h-full">
       {/* Title Bar */}
-      <div className="flex md:flex-row flex-col md:gap-0 gap-2  justify-between md:sticky relative md:top-0 bg-slate-50 py-2 z-20 dark:bg-dark-background">
+      <div className="flex md:flex-row flex-col md:gap-0 gap-2  justify-between md:sticky relative md:top-0 bg-slate-50 pt-2 z-20 dark:bg-dark-background">
         <div className="flex flex-col">
           <h3 className="text-3xl font-bold dark:text-white">
             {t("ROLES_MANAGEMENT.LIST_TITLE")}
@@ -203,7 +203,7 @@ export default function ListView() {
             </motion.div>
           )}
         </AnimatePresence>
-        {mdUp && (
+        {/* {mdUp && (
           <div className="h-12 bg-gray-200 rounded-md dark:bg-dark-card ml-auto rtl:ml-0 rtl:mr-auto">
             <Button
               className={cn(
@@ -238,14 +238,14 @@ export default function ListView() {
               />
             </Button>
           </div>
-        )}
+        )} */}
       </div>
       {/* List View */}
       <div className="flex md:flex-row flex-col-reverse gap-3 relative items-stretch md:h-full">
         {/* List  */}
         {notFound && <NoResultsView />}
         {!notFound && (
-          <div className="w-full ">
+          <div className="w-full overflow-y-scroll px-2 h-full">
             {LIST_MODE && (
               <motion.ul
                 initial={{ x: -100, opacity: 0 }}
@@ -277,7 +277,7 @@ export default function ListView() {
         <RHFForm
           methods={methods}
           onSubmit={onSubmit}
-          className="min-w-76 bg-card rounded-xl  shadow-[0_2px_12px_rgba(0,0,0,0.05)] md:h-fit relative md:sticky md:top-[4.5rem] flex flex-col gap-0 self-stretch dark:bg-dark-card"
+          className="min-w-76 bg-card rounded-xl  shadow-[0_2px_12px_rgba(0,0,0,0.05)] md:h-[28rem]  relative md:sticky md:top-[4.5rem] flex flex-col gap-0 self-stretch dark:bg-dark-card"
         >
           <TableToolbar />
         </RHFForm>

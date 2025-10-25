@@ -34,7 +34,7 @@ export default function DashbaordSidebarDesktop({
       {!mobile && (
         <Button
           onClick={onToggleCollapse}
-          className="h-8 w-8 rounded-full p-0 absolute left-full rtl:right-full rtl:left-0 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 top-12 bg-slate-50 dark:bg-dark-card border-2 "
+          className="h-8 w-8 rounded-full p-0 z-[500] absolute left-full rtl:right-full rtl:left-0 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 top-12 bg-slate-50 dark:bg-dark-card border-2 "
         >
           <Icon
             icon={isRtl ? "charm:chevron-right" : "charm:chevron-left"}

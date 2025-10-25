@@ -3,7 +3,7 @@ import { Role } from "../dashboard-types/roles";
 
 export const ROLES_MOCK_DATA: APIListResponse<Role> = {
   status: "success",
-  results: 9,
+  results: 13,
   content: [
     {
       _id: "1",
@@ -112,6 +112,54 @@ export const ROLES_MOCK_DATA: APIListResponse<Role> = {
       status: "INACTIVE",
       permissionsCount: 12,
       usersCount: 3,
+    },
+    {
+      _id: "10",
+      nameEn: "Training Coordinator",
+      nameAr: "منسق التدريب",
+      descriptionEn:
+        "Plans and organizes training sessions to enhance employee skills and ensure compliance with company standards.",
+      descriptionAr:
+        "يخطط وينظم جلسات التدريب لتعزيز مهارات الموظفين وضمان الالتزام بمعايير الشركة.",
+      status: "ACTIVE",
+      permissionsCount: 8,
+      usersCount: 5,
+    },
+    {
+      _id: "11",
+      nameEn: "Operations Supervisor",
+      nameAr: "مشرف العمليات",
+      descriptionEn:
+        "Oversees daily operations, ensures workflow efficiency, and coordinates between departments to achieve organizational goals.",
+      descriptionAr:
+        "يشرف على العمليات اليومية، ويضمن كفاءة سير العمل، وينسق بين الأقسام لتحقيق أهداف المؤسسة.",
+      status: "ACTIVE",
+      permissionsCount: 15,
+      usersCount: 7,
+    },
+    {
+      _id: "12",
+      nameEn: "Procurement Officer",
+      nameAr: "مسؤول المشتريات",
+      descriptionEn:
+        "Manages the purchasing process, negotiates with suppliers, and ensures timely delivery of goods and services within budget.",
+      descriptionAr:
+        "يدير عملية الشراء، ويتفاوض مع الموردين، ويضمن تسليم السلع والخدمات في الوقت المحدد وضمن الميزانية.",
+      status: "INACTIVE",
+      permissionsCount: 10,
+      usersCount: 2,
+    },
+    {
+      _id: "13",
+      nameEn: "Customer Relations Manager",
+      nameAr: "مدير علاقات العملاء",
+      descriptionEn:
+        "Maintains strong relationships with clients, resolves escalated issues, and ensures high levels of customer satisfaction.",
+      descriptionAr:
+        "يحافظ على علاقات قوية مع العملاء، ويحل المشكلات المتصاعدة، ويضمن مستويات عالية من رضا العملاء.",
+      status: "ACTIVE",
+      permissionsCount: 18,
+      usersCount: 4,
     },
   ],
 };

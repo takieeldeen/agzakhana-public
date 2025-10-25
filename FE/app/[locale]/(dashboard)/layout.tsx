@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import DashbaordSidebar from "@/components/dashboard-sidebar/dashboard-sidebar";
 import DashboardSidebarProvider from "@/components/dashboard-sidebar/dashboard-sidebar-provider";
 import PromptProvider from "@/components/prompt-provider";
+import UserBar from "@/components/user-bar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -77,9 +78,14 @@ export default async function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                   >
-                    <main className="flex flex-row h-full w-full overflow-x-hidden relative">
+                    <main className="flex flex-row h-full w-full overflow-x-hidden relative overflow-y-hidden">
                       <DashbaordSidebar />
-                      <div className="p-5 w-full">{children}</div>
+                      <div className="pt-0 w-full">
+                        <UserBar />
+                        <div className="p-3 pt-0 overflow-y-scroll h-[90dvh]">
+                          {children}
+                        </div>
+                      </div>
                     </main>
                     <Toaster />
                   </ThemeProvider>
