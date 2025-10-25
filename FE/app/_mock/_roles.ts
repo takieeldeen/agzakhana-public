@@ -3,7 +3,7 @@ import { Role } from "../dashboard-types/roles";
 
 export const ROLES_MOCK_DATA: APIListResponse<Role> = {
   status: "success",
-  results: 13,
+  results: 19,
   content: [
     {
       _id: "1",
@@ -160,6 +160,78 @@ export const ROLES_MOCK_DATA: APIListResponse<Role> = {
       status: "ACTIVE",
       permissionsCount: 18,
       usersCount: 4,
+    },
+    {
+      _id: "14",
+      nameEn: "Procurement Officer",
+      nameAr: "مسؤول المشتريات",
+      descriptionEn:
+        "Oversees purchasing activities, negotiates with suppliers, and ensures timely delivery of goods and services within budget.",
+      descriptionAr:
+        "يشرف على أنشطة الشراء، ويتفاوض مع الموردين، ويضمن تسليم السلع والخدمات في الوقت المحدد وضمن الميزانية.",
+      status: "ACTIVE",
+      permissionsCount: 12,
+      usersCount: 3,
+    },
+    {
+      _id: "15",
+      nameEn: "Logistics Coordinator",
+      nameAr: "منسق اللوجستيات",
+      descriptionEn:
+        "Coordinates transportation, inventory, and warehouse operations to ensure efficient supply chain performance.",
+      descriptionAr:
+        "ينسق عمليات النقل والمخزون والمستودعات لضمان أداء فعال في سلسلة الإمداد.",
+      status: "INACTIVE",
+      permissionsCount: 9,
+      usersCount: 2,
+    },
+    {
+      _id: "16",
+      nameEn: "IT Systems Administrator",
+      nameAr: "مسؤول أنظمة تكنولوجيا المعلومات",
+      descriptionEn:
+        "Manages servers, networks, and system security while providing technical support to staff and maintaining uptime reliability.",
+      descriptionAr:
+        "يدير الخوادم والشبكات وأمن الأنظمة مع تقديم الدعم الفني للموظفين والحفاظ على استقرار الأنظمة.",
+      status: "ACTIVE",
+      permissionsCount: 22,
+      usersCount: 5,
+    },
+    {
+      _id: "17",
+      nameEn: "Finance Controller",
+      nameAr: "المراقب المالي",
+      descriptionEn:
+        "Monitors financial performance, prepares reports, and ensures compliance with accounting standards and company policies.",
+      descriptionAr:
+        "يراقب الأداء المالي، ويعد التقارير، ويضمن الالتزام بمعايير المحاسبة وسياسات الشركة.",
+      status: "ACTIVE",
+      permissionsCount: 15,
+      usersCount: 3,
+    },
+    {
+      _id: "18",
+      nameEn: "Marketing Strategist",
+      nameAr: "استراتيجي التسويق",
+      descriptionEn:
+        "Develops marketing strategies, analyzes market trends, and drives brand growth through targeted campaigns.",
+      descriptionAr:
+        "يضع استراتيجيات التسويق، ويحلل اتجاهات السوق، ويدفع نمو العلامة التجارية من خلال الحملات الموجهة.",
+      status: "INACTIVE",
+      permissionsCount: 17,
+      usersCount: 4,
+    },
+    {
+      _id: "19",
+      nameEn: "Human Resources Specialist",
+      nameAr: "أخصائي الموارد البشرية",
+      descriptionEn:
+        "Handles recruitment, employee relations, and training programs to support workforce development and retention.",
+      descriptionAr:
+        "يتولى مسؤولية التوظيف، وعلاقات الموظفين، وبرامج التدريب لدعم تطوير القوى العاملة والاحتفاظ بها.",
+      status: "ACTIVE",
+      permissionsCount: 14,
+      usersCount: 6,
     },
   ],
 };

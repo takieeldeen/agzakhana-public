@@ -9,7 +9,7 @@ import Logo from "./logo";
 export default function UserBar() {
   const t = useTranslations();
   return (
-    <div className="h-[10dvh]  bg-slate-50 border-b-2 flex flex-row items-center px-2 dark:bg-dark-background">
+    <div className="py-2 bg-slate-50 border-b-2 flex flex-row items-center px-2 dark:bg-dark-background">
       <Logo className="md:h-12 md:w-30" />
       <div className="mx-auto w-96 bg-white rounded-md">
         <div className="relative">

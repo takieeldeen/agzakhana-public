@@ -98,7 +98,7 @@ export function useQueryParams<
 
     if (!defaultParams) return;
     Object.entries(defaultParams).forEach(([key, value]) => {
-      if (url.get(key) === undefined) url.set(key, value);
+      if (url.get(key) === undefined && !!value) url.set(key, value);
     });
   }, [defaultParams]);
 

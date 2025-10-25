@@ -180,12 +180,50 @@ export default function ListView() {
             {t("ROLES_MANAGEMENT.LIST_SUBTITLE")}
           </p>
         </div>
-        <Button className="bg-emerald-600 h-12 text-sm dark:text-white">
-          <Icon icon="gg:add" className="w-6! h-6!" />
-          {t("COMMON.ADD_ENTITY", {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.INDIFINITE_ENTITY_NAME"),
-          })}
-        </Button>
+        <div className="flex flex-row gap-2">
+          {mdUp && (
+            <div className="h-12 bg-gray-200 rounded-md dark:bg-dark-card ml-auto rtl:ml-0 rtl:mr-auto">
+              <Button
+                className={cn(
+                  "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent  transition-all duration-300",
+                  viewMode === "GRID" && "border-emerald-600"
+                )}
+                onClick={() => setViewMode("GRID")}
+              >
+                <Icon
+                  icon="mingcute:grid-fill"
+                  className={cn(
+                    "text-black h-6! w-6! transition-all duration-300 dark:text-white",
+                    viewMode === "GRID" &&
+                      "text-emerald-600 dark:text-emerald-600"
+                  )}
+                />
+              </Button>
+              <Button
+                className={cn(
+                  "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent transition-all duration-300",
+                  viewMode === "LIST" && "border-emerald-600"
+                )}
+                onClick={() => setViewMode("LIST")}
+              >
+                <Icon
+                  icon="f7:menu"
+                  className={cn(
+                    "text-black h-6! w-6! transition-all duration-300 dark:text-white",
+                    viewMode === "LIST" &&
+                      "text-emerald-600 dark:text-emerald-600"
+                  )}
+                />
+              </Button>
+            </div>
+          )}
+          <Button className="bg-emerald-600 h-12 text-sm dark:text-white">
+            <Icon icon="gg:add" className="w-6! h-6!" />
+            {t("COMMON.ADD_ENTITY", {
+              ENTITY_NAME: t("ROLES_MANAGEMENT.INDIFINITE_ENTITY_NAME"),
+            })}
+          </Button>
+        </div>
       </div>
       {/* View Bar */}
       <div className="flex flex-row justify-between items-end">
@@ -203,81 +241,47 @@ export default function ListView() {
             </motion.div>
           )}
         </AnimatePresence>
-        {/* {mdUp && (
-          <div className="h-12 bg-gray-200 rounded-md dark:bg-dark-card ml-auto rtl:ml-0 rtl:mr-auto">
-            <Button
-              className={cn(
-                "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent  transition-all duration-300",
-                viewMode === "GRID" && "border-emerald-600"
-              )}
-              onClick={() => setViewMode("GRID")}
-            >
-              <Icon
-                icon="mingcute:grid-fill"
-                className={cn(
-                  "text-black h-6! w-6! transition-all duration-300 dark:text-white",
-                  viewMode === "GRID" &&
-                    "text-emerald-600 dark:text-emerald-600"
-                )}
-              />
-            </Button>
-            <Button
-              className={cn(
-                "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent transition-all duration-300",
-                viewMode === "LIST" && "border-emerald-600"
-              )}
-              onClick={() => setViewMode("LIST")}
-            >
-              <Icon
-                icon="f7:menu"
-                className={cn(
-                  "text-black h-6! w-6! transition-all duration-300 dark:text-white",
-                  viewMode === "LIST" &&
-                    "text-emerald-600 dark:text-emerald-600"
-                )}
-              />
-            </Button>
-          </div>
-        )} */}
       </div>
       {/* List View */}
       <div className="flex md:flex-row flex-col-reverse gap-3 relative items-stretch md:h-full">
         {/* List  */}
         {notFound && <NoResultsView />}
         {!notFound && (
-          <div className="w-full overflow-y-scroll px-2 h-full">
-            {LIST_MODE && (
-              <motion.ul
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 100, opacity: 0 }}
-                className="flex flex-col gap-3 w-full"
-              >
-                {!isLoading &&
-                  data?.map((role) => (
-                    <ListTableRow key={role?._id} role={role} />
+          <div className="h-full w-full relative">
+            <div className="w-full overflow-y-scroll px-2 h-full absolute">
+              {LIST_MODE && (
+                <motion.ul
+                  initial={{ x: -100, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: 100, opacity: 0 }}
+                  className="flex flex-col gap-3 w-full"
+                >
+                  {!isLoading &&
+                    data?.map((role) => (
+                      <ListTableRow key={role?._id} role={role} />
+                    ))}
+                </motion.ul>
+              )}
+              {GRID_MODE && (
+                <motion.ul
+                  initial={{ x: -100, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: 100, opacity: 0 }}
+                  className="flex flex-col md:flex-row gap-3 w-full md:flex-wrap"
+                >
+                  {data?.map((role) => (
+                    <GridTableRow key={role?._id} role={role} />
                   ))}
-              </motion.ul>
-            )}
-            {GRID_MODE && (
-              <motion.ul
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 100, opacity: 0 }}
-                className="flex flex-col md:flex-row gap-3 w-full md:flex-wrap"
-              >
-                {data?.map((role) => (
-                  <GridTableRow key={role?._id} role={role} />
-                ))}
-              </motion.ul>
-            )}
+                </motion.ul>
+              )}
+            </div>
           </div>
         )}
         {/* Toolbar */}
         <RHFForm
           methods={methods}
           onSubmit={onSubmit}
-          className="min-w-76 bg-card rounded-xl  shadow-[0_2px_12px_rgba(0,0,0,0.05)] md:h-[28rem]  relative md:sticky md:top-[4.5rem] flex flex-col gap-0 self-stretch dark:bg-dark-card"
+          className="min-w-76 bg-card rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] md:h-[28rem] lg:h-full  relative md:sticky md:top-[4.5rem] flex flex-col gap-0 self-stretch dark:bg-dark-card"
         >
           <TableToolbar />
         </RHFForm>
@@ -287,7 +291,7 @@ export default function ListView() {
           <motion.div
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex flex-row mr-auto rtl:mr-0 rtl:ml-auto py-6 pb-24"
+            className="flex flex-row mr-auto rtl:mr-0 rtl:ml-auto py-4"
           >
             <DashboardPagination
               totalRowsCount={results ?? 0}
