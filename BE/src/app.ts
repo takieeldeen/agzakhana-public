@@ -18,6 +18,7 @@ import { paymentRouter } from "./routers/paymentRouter";
 import { stripeWebhookHandler } from "./controllers/paymentController";
 import ordersRouter from "./routers/orderRouter";
 import axios from "axios";
+import permissionsRouter from "./routers/permissionsRouter";
 
 export let clientLocale = "ar";
 const app = express();
@@ -89,6 +90,7 @@ app.use("/api/v1/deals", dealsRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/payments", paymentRouter);
 app.use("/api/v1/orders", ordersRouter);
+app.use("/api/v1/permissions", permissionsRouter);
 
 app.use("/*splat", (req, res) => {
   res.status(404).json({

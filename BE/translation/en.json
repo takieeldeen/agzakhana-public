@@ -48,7 +48,8 @@
     "ITEMS": "Items",
     "CITY": "City",
     "ADDRESS": "Address",
-    "RESET_TOKEN": "Password reset token"
+    "RESET_TOKEN": "Password reset token",
+    "VALUE": "Value"
   },
   "MESSAGES": {
     "FORGET_PASSWORD_SUCCESSFUL": "Please check your email to reset your password.",
