@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale } from "next-intl";
@@ -142,13 +143,47 @@ const role = {
       ],
     },
   ],
+  users: [
+    {
+      _id: "usr_001",
+      nameAr: "تقي الدين أحمد علي",
+      nameEn: "Takie Eldeen Ahmed Ali",
+      email: "takie@agzakhana.com",
+      imageUrl:
+        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/Abd_Elhay",
+    },
+    {
+      _id: "usr_002",
+      nameAr: "عبد الرحمن محمد حسن",
+      nameEn: "Abdelrahman Mohamed Hassan",
+      email: "abdo@agzakhana.com",
+      imageUrl:
+        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/abdelwahed",
+    },
+    {
+      _id: "usr_003",
+      nameAr: "سارة محمود عبد الله",
+      nameEn: "Sara Mahmoud Abdallah",
+      email: "sara@agzakhana.com",
+      imageUrl:
+        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/ahmed",
+    },
+    {
+      _id: "usr_004",
+      nameAr: "يوسف إبراهيم علي",
+      nameEn: "Youssef Ibrahim Ali",
+      email: "youssef@agzakhana.com",
+      imageUrl:
+        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/alaa",
+    },
+  ],
   createdAt: "2025-10-26T19:42:11.532Z",
 };
 export default function DetailsView() {
   const locale = useLocale();
   const t = useTranslations();
   return (
-    <div className="h-full">
+    <div className="h-full dark:bg-dark-card">
       {/* Details Header */}
       <div className="bg-emerald-600 h-1/8 p-6 flex flex-row gap-3">
         <div className="h-full w-fit">
@@ -157,15 +192,15 @@ export default function DetailsView() {
             className="h-full w-full text-emerald-700"
           />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 ">
           <div>
             <h3 className="text-xl font-bold text-white flex flex-row items-center gap-3">
               {locale === "ar" ? role?.nameAr : role?.nameEn}
-              <span className="text-xs font-semibold text-white bg-emerald-800 px-2 py-1 rounded-full">
+              <span className="text-xs font-semibold text-white bg-emerald-800 px-2 py-1 rounded-full ">
                 {t(`COMMON.${role?.status}`)}
               </span>
             </h3>
-            <p className="text-input">{`${t(
+            <p className="text-input dark:text-gray-200">{`${t(
               "ROLES_MANAGEMENT.PERMISSIONS_CNT",
               { count: 9 }
             )} - ${t("ROLES_MANAGEMENT.USERS_WITH_PERMISSIONS", {
@@ -173,7 +208,7 @@ export default function DetailsView() {
             })}`}</p>
           </div>
         </div>
-        <div className="flex flex-row items-start gap-3">
+        <div className="flex flex-row items-start gap-3 ">
           <Button
             variant="ghost"
             className="border-2 border-white text-white h-12 min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200"
@@ -195,77 +230,117 @@ export default function DetailsView() {
         </div>
       </div>
       {/* Details Content */}
-      <div className="p-3 flex flex-col gap-6">
-        <div className="flex flex-row gap-3">
-          <ListItem
-            primaryLabel={t("COMMON.STATUS")}
-            secondaryLabel={t(`COMMON.${role?.status}`)}
-          />
-          <ListItem
-            primaryLabel={t("ROLES_MANAGEMENT.PERMISSIONS_COUNT")}
-            secondaryLabel={role?.permissionsCount}
-          />
-        </div>
-        <ListItem
-          primaryLabel={t("ROLES_MANAGEMENT.ROLE_DESCRIPTION")}
-          secondaryLabel={
-            locale === "ar" ? role?.descriptionAr : role?.descriptionEn
-          }
-        />
-        <div className="">
-          <ListItem
-            primaryLabel={t("ROLES_MANAGEMENT.ROLE_PERMISSIONS")}
-            className="mb-2"
-          />
-          <Accordion type="multiple" className="w-full">
-            <ul className="flex flex-col gap-3">
-              {role?.permissionGroups?.map((group) => (
-                <li key={group?._id}>
-                  <AccordionItem value={group?._id}>
-                    <AccordionTrigger className="bg-gray-200 rounded-t-2xl rounded-b-none px-2 hover:no-underline cursor-pointer text-lg text-black [&[data-state=closed]]:rounded-b-2xl">
-                      {locale === "ar" ? group?.nameAr : group?.nameEn}
-                    </AccordionTrigger>
-                    <AccordionContent className="bg-gray-100 rounded-b-2xl rounded-t-none p-2 py-6 flex flex-row gap-2 flex-wrap text-balance">
-                      {group?.permissions?.map((permission) => (
-                        <span
-                          key={permission?._id}
-                          className="bg-emerald-600 rounded-full w-fit px-4 py-0.5 text-white"
-                        >
-                          {locale === "ar"
-                            ? permission?.nameAr
-                            : permission?.nameEn}
-                        </span>
-                      ))}
-                    </AccordionContent>
-                  </AccordionItem>
-                </li>
-              ))}
-            </ul>
-          </Accordion>
-        </div>
-        <div className="flex flex-row gap-3">
-          <ListItem
-            primaryLabel={t("ROLES_MANAGEMENT.CREATED_BY")}
-            secondaryLabel={
-              locale === "ar"
-                ? role?.createdBy?.nameAr
-                : role?.createdBy?.nameEn
-            }
-          />
-          <ListItem
-            primaryLabel={t("ROLES_MANAGEMENT.CREATED_AT")}
-            secondaryLabel={new Intl.DateTimeFormat(
-              locale === "ar" ? "ar-EG" : "en-US",
-              {
-                day: "2-digit",
-                weekday: "long",
-                month: "long",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
+      <div className="relative h-full ">
+        <div className=" overflow-hidden bg-red-500 h-full absolute overflow-y-auto">
+          <div className="p-3 flex flex-col gap-6 dark:bg-dark-card ">
+            <div className="flex flex-row gap-3">
+              <ListItem
+                primaryLabel={t("COMMON.STATUS")}
+                secondaryLabel={t(`COMMON.${role?.status}`)}
+              />
+              <ListItem
+                primaryLabel={t("ROLES_MANAGEMENT.PERMISSIONS_COUNT")}
+                secondaryLabel={role?.permissionsCount}
+              />
+            </div>
+            <ListItem
+              primaryLabel={t("ROLES_MANAGEMENT.ROLE_DESCRIPTION")}
+              secondaryLabel={
+                locale === "ar" ? role?.descriptionAr : role?.descriptionEn
               }
-            ).format(new Date(role?.createdAt ?? ""))}
-          />
+            />
+            <div className="">
+              <ListItem
+                primaryLabel={t("ROLES_MANAGEMENT.ROLE_PERMISSIONS")}
+                className="mb-2"
+              />
+              <Accordion type="multiple" className="w-full">
+                <ul className="flex flex-col gap-3">
+                  {role?.permissionGroups?.map((group) => (
+                    <li key={group?._id}>
+                      <AccordionItem value={group?._id}>
+                        <AccordionTrigger className="bg-gray-200 dark:bg-dark-background dark:text-white rounded-t-2xl rounded-b-none px-2 hover:no-underline cursor-pointer text-lg text-black [&[data-state=closed]]:rounded-b-2xl">
+                          {locale === "ar" ? group?.nameAr : group?.nameEn}
+                        </AccordionTrigger>
+                        <AccordionContent className="bg-gray-100 rounded-b-2xl rounded-t-none p-2 py-6 flex flex-row gap-2 flex-wrap text-balance dark:bg-dark-900">
+                          {group?.permissions?.map((permission) => (
+                            <span
+                              key={permission?._id}
+                              className="bg-emerald-600 rounded-full w-fit px-4 py-0.5 text-white"
+                            >
+                              {locale === "ar"
+                                ? permission?.nameAr
+                                : permission?.nameEn}
+                            </span>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    </li>
+                  ))}
+                </ul>
+              </Accordion>
+            </div>
+            <div className="flex flex-row gap-3">
+              <ListItem
+                primaryLabel={t("ROLES_MANAGEMENT.CREATED_BY")}
+                secondaryLabel={
+                  locale === "ar"
+                    ? role?.createdBy?.nameAr
+                    : role?.createdBy?.nameEn
+                }
+              />
+              <ListItem
+                primaryLabel={t("ROLES_MANAGEMENT.CREATED_AT")}
+                secondaryLabel={new Intl.DateTimeFormat(
+                  locale === "ar" ? "ar-EG" : "en-US",
+                  {
+                    day: "2-digit",
+                    weekday: "long",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                ).format(new Date(role?.createdAt ?? ""))}
+              />
+            </div>
+            <div className="">
+              <ListItem
+                primaryLabel={t("ROLES_MANAGEMENT.USERS_INFO_WITH_PERMISSIONS")}
+                className="mb-4"
+              />
+              <div className="flex flex-row gap-3 flex-wrap">
+                {role?.users?.map((user) => (
+                  <div
+                    key={user?._id}
+                    className="flex w-[calc(50%_-_12px)] gap-3 flex-row shrink-0"
+                  >
+                    <Avatar className="h-14 w-14">
+                      <AvatarImage src={user?.imageUrl} alt="@shadcn" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-row flex-1 justify-between">
+                      <div className="flex flex-col">
+                        <p className="text-black text-lg font-semibold dark:text-white">
+                          {locale === "ar" ? user?.nameAr : user?.nameEn}
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                          {user?.email}
+                        </p>
+                      </div>
+                      <Button
+                        className="rounded-full h-12 w-32 text-rose-800 dark:text-rose-600 border-rose-800 dark:border-rose-600 border-2 hover:bg-rose-800 hover:dark:bg-rose-600 hover:dark:text-white hover:text-white"
+                        variant="ghost"
+                      >
+                        <Icon icon="mynaui:trash" className="h-6! w-6!" />
+                        {t("ROLES_MANAGEMENT.DELETE")}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

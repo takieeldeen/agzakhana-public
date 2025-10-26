@@ -23,14 +23,21 @@ export default function ListItem({
         <p
           {...primaryLabelProps}
           className={cn(
-            "font-bold text-black text-lg",
+            "font-bold text-black text-lg dark:text-white",
             primaryLabelProps?.className
           )}
         >
           {primaryLabel}
         </p>
       )}
-      {secondaryLabel && <p {...secondaryLabelProps}>{secondaryLabel}</p>}
+      {secondaryLabel && (
+        <p
+          {...secondaryLabelProps}
+          className={cn("dark:text-gray-400", secondaryLabelProps?.className)}
+        >
+          {secondaryLabel}
+        </p>
+      )}
     </div>
   );
 }

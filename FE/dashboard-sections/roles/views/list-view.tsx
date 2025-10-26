@@ -332,7 +332,7 @@ export default function ListView() {
         {notFound && <NoResultsView />}
         {!notFound && (
           <div className="h-full w-full relative">
-            <div className="w-full overflow-y-scroll px-2 h-full absolute">
+            <div className="w-full overflow-y-auto px-2 h-full absolute">
               {LIST_MODE && (
                 <motion.ul
                   initial={{ x: -100, opacity: 0 }}
