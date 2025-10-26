@@ -41,7 +41,7 @@ export default function RHFTextarea({
             <FormLabel
               {...labelProps}
               className={cn(
-                "dark:text-gray-300 dark:bg-card-background-dark",
+                "dark:text-gray-300 dark:bg-transparent",
                 labelProps?.className
               )}
             >
@@ -57,12 +57,14 @@ export default function RHFTextarea({
               {...field}
               {...inputProps}
               className={cn(
-                "dark:text-gray-300 dark:bg-card-background-dark",
+                "dark:text-gray-300 dark:bg-dark-background",
                 inputProps?.className
               )}
             />
           </FormControl>
-          <FormMessage {...helperTextProps} />
+          <div className="min-h-4 ">
+            <FormMessage {...helperTextProps} />
+          </div>
         </FormItem>
       )}
     />

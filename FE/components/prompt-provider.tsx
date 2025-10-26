@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import EllipsisTypography from "./ellipsis-typography";
 import { useTranslations } from "next-intl";
 
-type PromptVariant = "SUCCESS";
+type PromptVariant = "SUCCESS" | "ALERT";
 type PromptContextProps = {
   closePrompt: VoidFunction;
   showPrompt: ({
@@ -50,10 +50,28 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
         },
         title: {
           styling: "text-black",
-          text: "هل ترغب في تفعيل دور مساعد صيدلي ؟",
+          text: "Confirmation",
         },
         actionTitle: {
-          styling: "h-12 w-[calc(50%_-_12px)] bg-emerald-600",
+          styling: "bg-emerald-600",
+          text: t("COMMON.CONFIRM_ACTION"),
+        },
+      },
+      ALERT: {
+        dialogTitle: {
+          styling: "bg-rose-800",
+          text: t("COMMON.SUCCESS_DIALOG_TITLE"),
+        },
+        icon: {
+          styling: "text-rose-800",
+          name: "mingcute:check-fill",
+        },
+        title: {
+          styling: "text-black",
+          text: "Confirmation",
+        },
+        actionTitle: {
+          styling: "bg-rose-800",
           text: t("COMMON.CONFIRM_ACTION"),
         },
       },
@@ -124,7 +142,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
         <DialogOverlay className="backdrop-blur-sm">
           <DialogContent
             showCloseButton={false}
-            className="bg-white p-0 !outline-none !ring-0 !border-0 shadow-none overflow-hidden"
+            className="bg-white dark:bg-dark-card p-0 !outline-none !ring-0 !border-0 shadow-none overflow-hidden"
           >
             <DialogTitle
               className={cn(
@@ -137,7 +155,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
             <div className="flex flex-col items-center gap-2 py-2">
               <div
                 className={cn(
-                  "h-32 w-32 rounded-full border-gray-300 border-2 flex items-center justify-center text-8xl",
+                  "h-32 w-32 rounded-full border-gray-300 border-2 flex items-center justify-center text-8xl dark:border-dark-600",
                   variantProps?.[variant].icon.styling
                 )}
               >
@@ -145,23 +163,33 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
               </div>
               <div className="flex flex-col items-center gap-1 py-4">
                 <EllipsisTypography
-                  className={cn("font-semibold text-black text-center w-full")}
+                  className={cn(
+                    "font-semibold text-black text-center w-full dark:text-white"
+                  )}
                 >
                   {title}
                 </EllipsisTypography>
-                <EllipsisTypography maxLines={2} className="text-center ">
+                <EllipsisTypography
+                  maxLines={2}
+                  className="text-center dark:text-gray-400"
+                >
                   {content}
                 </EllipsisTypography>
               </div>
               <div className="flex ltr:flex-row-reverse rtl:flex-row gap-2 w-full justify-center">
                 <Button
-                  className="h-12 w-[calc(50%_-_12px)] border-border border-2 text-black"
+                  className="h-12 w-[calc(50%_-_12px)] border-border border-2 text-black dark:text-white"
                   variant="ghost"
                   onClick={closePrompt}
                 >
                   {t("COMMON.CANCEL_ACTION")}
                 </Button>
-                <Button className="h-12 w-[calc(50%_-_12px)] bg-emerald-600">
+                <Button
+                  className={cn(
+                    "h-12 w-[calc(50%_-_12px)] dark:text-white",
+                    variantProps?.[variant].actionTitle.styling
+                  )}
+                >
                   {actionTitle}
                 </Button>
               </div>

@@ -1,6 +1,6 @@
 "use client";
+import { Role } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
-import { usePrompt } from "@/components/prompt-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,17 +12,23 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale, useTranslations } from "next-intl";
+import Link from "next/link";
 import { useState } from "react";
 
-export default function ListTableRow({ role }: { role: any }) {
+export default function ListTableRow({
+  role,
+  onActivateRow,
+}: {
+  role: Role;
+  onActivateRow: (role: Role) => void;
+}) {
   const [showOptions, setShowOptions] = useState<boolean>(false);
-  const { showPrompt } = usePrompt();
   const locale = useLocale();
   const t = useTranslations();
   const isRtl = locale === "ar";
   return (
     <li
-      key={role?.id}
+      key={role?._id}
       className="bg-card w-full h-24 rounded-xl p-3 shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-row items-center gap-3 dark:bg-dark-card"
     >
       <Icon
@@ -94,61 +100,66 @@ export default function ListTableRow({ role }: { role: any }) {
           className="rounded-xl p-0 overflow-hidden dark:bg-dark-card"
         >
           <ul className="">
-            <li className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300 ">
-              <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
-                <Icon
-                  icon="mdi:eye-outline"
-                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
-                />
-              </div>
-              <div>
-                <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
-                  {t("COMMON.DETAILS_TITLE", {
-                    ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                  })}
-                </p>
-                <p className="text-sm text-muted-foreground transition-all group-hover:text-gray-200">
-                  {t("COMMON.DETAILS_SUBTITLE", {
-                    ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                  })}
-                </p>
-              </div>
+            <li>
+              <Link
+                className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300 "
+                href={` roles/${role?._id}`}
+              >
+                <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
+                  <Icon
+                    icon="mdi:eye-outline"
+                    className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
+                    {t("COMMON.DETAILS_TITLE", {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })}
+                  </p>
+                  <p className="text-sm text-muted-foreground transition-all group-hover:text-gray-200">
+                    {t("COMMON.DETAILS_SUBTITLE", {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })}
+                  </p>
+                </div>
+              </Link>
             </li>
             <Separator />
             <li
-              onClick={() =>
-                showPrompt({
-                  dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
-                    OPERATION_NAME: t("COMMON.ACTIVATION"),
-                  }),
-                  title: t("COMMON.ACTIVATION_TITLE", {
-                    ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-                    ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-                  }),
-                  content: t("COMMON.ACTIVATION_DESC", {
-                    ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-                    ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-                  }),
-                })
-              }
+              onClick={() => onActivateRow(role)}
               className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300"
             >
               <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
                 <Icon
-                  icon="material-symbols:check-rounded"
+                  icon={
+                    role?.status === "ACTIVE"
+                      ? "maki:cross"
+                      : "material-symbols:check-rounded"
+                  }
                   className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
                 />
               </div>
               <div>
                 <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
-                  {t("COMMON.ACTIVATE_TITLE", {
-                    ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                  })}
+                  {t(
+                    role?.status === "ACTIVE"
+                      ? "COMMON.DEACTIVATE_TITLE"
+                      : "COMMON.ACTIVATE_TITLE",
+                    {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    }
+                  )}
                 </p>
                 <p className="text-sm text-muted-foreground transition-all group-hover:text-gray-200">
-                  {t("COMMON.ACTIVATE_SUBTITLE", {
-                    ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                  })}
+                  {t(
+                    role?.status === "ACTIVE"
+                      ? "COMMON.DEACTIVATE_SUBTITLE"
+                      : "COMMON.ACTIVATE_SUBTITLE",
+                    {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    }
+                  )}
                 </p>
               </div>
             </li>

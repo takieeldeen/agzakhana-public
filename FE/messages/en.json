@@ -68,9 +68,24 @@
     "CANCEL_ACTION": "Cancel",
     "ACTIVATION_TITLE": "Are you sure you want to activate {ENTITY_VALUE} {ENTITY_NAME} ?",
     "ACTIVATION_DESC": "When {ENTITY_NAME} {ENTITY_VALUE} is activated, all its settings and features will take effect immediately.",
+    "DEACTIVATION_TITLE": "Do you want to deactivate {ENTITY_NAME} {ENTITY_VALUE}?",
+    "DEACTIVATION_DESC": "When you deactivate {ENTITY_NAME} {ENTITY_VALUE}, all its settings and features will be disabled immediately.",
+
     "CONFIRMATION_DIALOG_TITLE": "{{OPERATION_NAME}} Confirmation",
     "ACTIVATION": "Activation",
-    "SEARCH_ANYTHING": "Search for anything...."
+    "DEACTIVATION": "deactivation",
+    "SEARCH_ANYTHING": "Search for anything....",
+    "ACCOUNT_SETTINGS": "Account Settings",
+    "DARK_MODE": "Dark Mode",
+    "ARABIC_LANGUAGE": "Arabic Langauge",
+    "SIGN_OUT": "Log out",
+    "NAME_AR": "Arabic Name",
+    "NAME_EN": "English Name",
+    "DESC_AR": "Arabic Description",
+    "DESC_EN": "English Description",
+    "CREATION_TITLE": "{ENTITY_NAME} creation",
+    "CREATION_SUBTITLE": "Please enter the information required for the {ENTITY_NAME} creation",
+    "CANCEL": "Cancel"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
@@ -337,6 +352,18 @@
     "PERMISSIONS": "Permissions",
     "NAME": "Role Name",
     "ROLE_DESCRIPTION": "Role Description",
-    "ENTITY_NAME": "Role"
+    "ENTITY_NAME": "Role",
+    "NAME_AR": "Role name in Arabic",
+    "NAME_EN": "Role name in English",
+    "DESC_AR": "Role description in Arabic",
+    "DESC_EN": "Role description in English",
+    "ROLE_PERMISSIONS": "Role permissions",
+    "PERMISSIONS_CNT": "{count, plural, =0 {has no permissions} =1 {has one permission} =2 {has two permissions} other {has # permissions}}",
+    "USERS_WITH_PERMISSIONS": "{count, plural, =0 {no users have it} =1 {one user has it} =2 {two users have it} other {# users have it}}",
+    "USER_one": "one user",
+    "USER_two": "two users",
+    "USER_few": "{count} users",
+    "USER_many": "{count} users",
+    "USER_other": "{count} users"
   }
 }

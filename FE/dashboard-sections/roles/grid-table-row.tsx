@@ -1,4 +1,5 @@
 "use client";
+import { Role } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,19 @@ import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale, useTranslations } from "next-intl";
 
-export default function GridTableRow({ role }: { role: any }) {
+export default function GridTableRow({
+  role,
+  onActivateRow,
+}: {
+  role: Role;
+  onActivateRow: (role: Role) => void;
+}) {
   const locale = useLocale();
   const t = useTranslations();
   const isRtl = locale === "ar";
   return (
     <li
-      key={role?.id}
+      key={role?._id}
       className="bg-card w-full md:w-auto md:min-w-76 md:max-w-[calc(33%_-_12px)] md:aspect-square overflow-hidden  rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-col items-center gap-3 dark:bg-dark-card "
     >
       <div className="bg-teal-600 dark:bg-teal-800 w-full h-24 md:max-h-24 md:min-h-[calc(31%)] flex flex-row gap-3 items-center px-3">
@@ -78,17 +85,29 @@ export default function GridTableRow({ role }: { role: any }) {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white">
+            <Button
+              className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white"
+              onClick={() => onActivateRow(role)}
+            >
               <Icon
-                icon="material-symbols:check-rounded"
+                icon={
+                  role?.status === "ACTIVE"
+                    ? "maki:cross"
+                    : "material-symbols:check-rounded"
+                }
                 className="h-6! w-6! text-teal-700 group-hover:text-gray-100 transition-all duration-300"
               />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            {t("COMMON.ACTIVATE_TITLE", {
-              ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-            })}
+            {t(
+              role?.status === "ACTIVE"
+                ? "COMMON.DEACTIVATE_TITLE"
+                : "COMMON.ACTIVATE_TITLE",
+              {
+                ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+              }
+            )}
           </TooltipContent>
         </Tooltip>
         <Tooltip>

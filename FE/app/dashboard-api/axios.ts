@@ -6,7 +6,7 @@ const axiosModule = IS_SERVER
 const axios = axiosModule.default;
 export const endpoints = {
   helpers: {
-    permissions: "/v1/helpers/permissions",
+    permissions: "/v1/permissions",
   },
   roles: {
     list: "/v1/roles",

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { dummyFetcher } from "./api";
+import { dummyFetcher, getFetcher } from "./api";
 import { APIListResponse, LocalizedObject } from "@/types/common";
 import { PERMISSIONS_HELPER_MOCK_DATA } from "../_mock/_roles";
 import { useMemo } from "react";
@@ -13,10 +13,7 @@ export function useGetPermissionsHelper() {
     Error
   >({
     queryKey: ["permissions", "helper"],
-    queryFn: dummyFetcher<APIListResponse<LocalizedObject>>(
-      PERMISSIONS_HELPER_MOCK_DATA,
-      URL
-    ),
+    queryFn: getFetcher<APIListResponse<LocalizedObject>>(URL),
   });
   const memoizedValue = useMemo(
     () => ({

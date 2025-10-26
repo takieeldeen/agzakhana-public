@@ -68,9 +68,24 @@
     "CANCEL_ACTION": "إلغاء",
     "ACTIVATION_TITLE": "هل ترغب في تفعيل {ENTITY_NAME} {ENTITY_VALUE} ؟",
     "ACTIVATION_DESC": "عند تفعيل {ENTITY_NAME} {ENTITY_VALUE}، ستصبح جميع إعداداته وميزاته سارية المفعول فورًا.",
+    "DEACTIVATION_TITLE": "هل ترغب في إلغاء تفعيل {ENTITY_NAME} {ENTITY_VALUE}؟",
+    "DEACTIVATION_DESC": "عند إلغاء تفعيل {ENTITY_NAME} {ENTITY_VALUE}، ستتوقف جميع إعداداته وميزاته عن العمل فورًا.",
     "CONFIRMATION_DIALOG_TITLE": "تأكيد {OPERATION_NAME}",
     "ACTIVATION": "التفعيل",
-    "SEARCH_ANYTHING": "ابحث عن اي شئ ...."
+    "DEACTIVATION": "إلغاء التفعيل",
+    "SEARCH_ANYTHING": "ابحث عن اي شئ ....",
+    "ACCOUNT_SETTINGS": "إعدادات الحساب",
+    "DARK_MODE": "الوضع المظلم",
+    "ARABIC_LANGUAGE": "اللغة العربية",
+    "SIGN_OUT": "تسجيل الخروج",
+    "NAME_AR": "الاسم بالعربية",
+    "NAME_EN": "الاسم بالإنجليزية",
+    "DESC_AR": "الوصف بالعربية",
+    "DESC_EN": "الوصف بالإنجليزية",
+    "ROLE_PERMISSIONS": "صلاحيات الدور",
+    "CREATION_TITLE": "إنشاء {ENTITY_NAME}",
+    "CREATION_SUBTITLE": "من فضلك ادخل البيانات المطلوبة لإنشاء {ENTITY_NAME}",
+    "CANCEL": "إلغاء"
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
@@ -333,6 +348,21 @@
     "PERMISSIONS": "الصلاحيات",
     "NAME": "اسم الدور",
     "ROLE_DESCRIPTION": "وصف الدور",
-    "ENTITY_NAME": "دور"
+    "ENTITY_NAME": "دور",
+    "CREATION_TITLE": "",
+    "CREATION_SUBTITLE": "",
+    "NAME_AR": "اسم الدور باللغة العربية",
+    "NAME_EN": "اسم الدور باللغة الإنجليزية",
+    "DESC_AR": "وصف الدور باللغة العربية",
+    "DESC_EN": "وصف الدور باللغة الإنجليزية",
+    "ROLE_PERMISSIONS": "صلاحيات الدور",
+    "HAS_PERMISSIONS": "لديه {COUNT}",
+    "PERMISSIONS_CNT": "{count, plural, =0 {ليس لديه صلاحيات} =1 {لديه صلاحية واحدة} =2 {لديه صلاحيتان} few {لديه # صلاحيات} many {لديه # صلاحية} other {لديه # صلاحية}}",
+    "USERS_WITH_PERMISSIONS": "{count, plural, =0 {لا يوجد أي مستخدم حاصل عليه} =1 {مستخدم واحد حاصل عليه} =2 {مستخدمان حاصلان عليه} few {# مستخدمين حاصلين عليه} many {# مستخدم حاصل عليه} other {# مستخدم حاصل عليه}}",
+    "USER_one": "مستخدم واحد",
+    "USER_two": "مستخدمان",
+    "USER_few": "{count} مستخدمين",
+    "USER_many": "{count} مستخدم",
+    "USER_other": "{count} مستخدم"
   }
 }
