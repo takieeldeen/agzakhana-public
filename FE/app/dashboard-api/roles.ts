@@ -12,6 +12,9 @@ import { useMemo } from "react";
 import axios, { endpoints } from "./axios";
 import { AxiosRequestConfig } from "axios";
 
+let FIRST_LIST_KEY: [string, AxiosRequestConfig<any>] | null = null;
+let LAST_LIST_KEY: [string, AxiosRequestConfig<any>] | null = null;
+
 export function useGetRoles(
   limit: number,
   page: number,
@@ -24,19 +27,24 @@ export function useGetRoles(
       readonly unknown[]
     >,
     "queryKey" | "queryFn"
-  >
+  >,
+  useLastKey?: boolean
 ) {
-  const URL: [string, AxiosRequestConfig] = [
-    endpoints.roles.list,
-    {
-      params: {
-        page,
-        size: limit,
-        ...filters,
-      },
-    },
-  ];
-
+  const URL: [string, AxiosRequestConfig] =
+    useLastKey && LAST_LIST_KEY
+      ? LAST_LIST_KEY
+      : [
+          endpoints.roles.list,
+          {
+            params: {
+              page,
+              size: limit,
+              ...filters,
+            },
+          },
+        ];
+  if (!FIRST_LIST_KEY) FIRST_LIST_KEY = URL;
+  LAST_LIST_KEY = URL;
   const { data, isLoading, isFetching, refetch, error } = useQuery<
     APIListResponse<Role>,
     Error

@@ -364,6 +364,10 @@
     "USER_two": "two users",
     "USER_few": "{count} users",
     "USER_many": "{count} users",
-    "USER_other": "{count} users"
+    "USER_other": "{count} users",
+    "CREATED_BY": "Created By",
+    "CREATED_AT": "Last Update",
+    "USERS_INFO_WITH_PERMISSIONS": "Users with this permission",
+    "DELETE": "Remove"
   }
 }

@@ -82,7 +82,7 @@ export default async function RootLayout({
                       <DashbaordSidebar />
                       <div className="pt-0 w-full">
                         <UserBar />
-                        <div className="p-3 pt-0 overflow-y-scroll h-[90dvh]">
+                        <div className=" overflow-y-auto h-[90dvh]">
                           {children}
                         </div>
                       </div>

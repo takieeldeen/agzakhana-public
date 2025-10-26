@@ -18,7 +18,7 @@ import { useLocale, useTranslations } from "next-intl";
 import TableToolbar from "../table-toolbar";
 import GridTableRow from "../grid-table-row";
 import DashboardPagination from "@/components/dashboard-pagination";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import ListSkeletonView from "./skeleton-view";
 import EmptyView from "./empty-view";
@@ -42,6 +42,8 @@ import { Role } from "@/app/dashboard-types/roles";
 const NewEditForm = lazy(() => import("../new-edit-form"));
 export default function ListView() {
   const mdUp = useResponsive("up", "md");
+  const pathname = usePathname();
+  const IS_INTERCEPTED = pathname.includes("/roles/");
   // State Management ////////////////////////////////////
   const [showCreationModal, setShowCreationModal] = useState<
     "CREATE" | "EDIT" | "HIDDEN"
@@ -64,8 +66,6 @@ export default function ListView() {
     }),
     []
   );
-  console.log("rerendered");
-
   // Filters /////////////////////////////////////////////
   const filtersSchema = Z.object({
     name: Z.string(),
@@ -143,7 +143,8 @@ export default function ListView() {
     filtervalues.size,
     page,
     filters,
-    { enabled: filtersSynced }
+    { enabled: filtersSynced },
+    IS_INTERCEPTED
   );
   const canReset = Object.values(dirtyFields).length > 0;
   const notFound = canReset && results === 0;
@@ -249,7 +250,7 @@ export default function ListView() {
       />
     );
   return (
-    <div className="flex flex-col gap-3 h-full">
+    <div className="flex flex-col gap-3 h-full p-3 pt-0">
       {/* Title Bar */}
       <div className="flex md:flex-row flex-col md:gap-0 gap-2  justify-between md:sticky relative md:top-0 bg-slate-50 pt-2 z-20 dark:bg-dark-background">
         <div className="flex flex-col">

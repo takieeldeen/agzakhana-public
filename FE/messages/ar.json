@@ -363,6 +363,10 @@
     "USER_two": "مستخدمان",
     "USER_few": "{count} مستخدمين",
     "USER_many": "{count} مستخدم",
-    "USER_other": "{count} مستخدم"
+    "USER_other": "{count} مستخدم",
+    "CREATED_BY": "أنشئ بواسطة",
+    "CREATED_AT": "آخر تحديث",
+    "USERS_INFO_WITH_PERMISSIONS": "الحاصلين على الدور",
+    "DELETE": "إزالة"
   }
 }

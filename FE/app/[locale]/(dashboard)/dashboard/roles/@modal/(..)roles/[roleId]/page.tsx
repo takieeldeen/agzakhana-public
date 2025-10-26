@@ -1,4 +1,5 @@
-import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import InterceptingDrawer from "@/components/intercepting-drawer";
+import { DrawerContent } from "@/components/ui/drawer";
 import DetailsView from "@/dashboard-sections/roles/views/details-view";
 
 export async function generateMetadata({
@@ -16,11 +17,11 @@ export async function generateMetadata({
 
 export default function Page() {
   return (
-    <Drawer open direction="right">
+    <InterceptingDrawer>
       <DrawerContent className=" data-[vaul-drawer-direction=right]:sm:max-w-none border-l-0 border-r-0 ">
         <DetailsView />
       </DrawerContent>
-    </Drawer>
+    </InterceptingDrawer>
     // <DetailsView />
   );
 }
