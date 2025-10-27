@@ -5,12 +5,12 @@ import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { AuthProvider } from "@/providers/auth-provider";
 import TanstackProvider from "@/providers/tanstack-provider";
-import { Toaster } from "sonner";
 import { ThemeProvider } from "@/providers/theme-provider";
 import DashbaordSidebar from "@/components/dashboard-sidebar/dashboard-sidebar";
 import DashboardSidebarProvider from "@/components/dashboard-sidebar/dashboard-sidebar-provider";
 import PromptProvider from "@/components/prompt-provider";
 import UserBar from "@/components/user-bar";
+import DashboardToaster from "@/components/dashboard-toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -87,7 +87,7 @@ export default async function RootLayout({
                         </div>
                       </div>
                     </main>
-                    <Toaster />
+                    <DashboardToaster />
                   </ThemeProvider>
                 </TanstackProvider>
               </AuthProvider>

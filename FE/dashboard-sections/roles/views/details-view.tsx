@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { useGetRoleDetails } from "@/app/dashboard-api/roles";
 import { useParams } from "next/navigation";
 import { DetailsSkeletonView } from "./skeleton-view";
+import { pushDashboardMessage } from "@/components/dashboard-toast-message";
 
 const NewEditForm = lazy(() => import("../new-edit-form"));
 
@@ -32,7 +33,7 @@ export default function DetailsView() {
   return (
     <div className="h-full dark:bg-dark-card flex flex-col">
       {/* Details Header */}
-      <div className="bg-emerald-600 h-1/8 p-6 flex flex-row gap-3">
+      <div className="bg-emerald-600 h-1/8 min-h-48 p-6 flex flex-row gap-3">
         <div className="h-full w-fit">
           <Icon
             icon="qlementine-icons:user-16"

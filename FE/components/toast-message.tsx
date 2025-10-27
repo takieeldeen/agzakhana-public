@@ -32,6 +32,7 @@ export default function ToastMessage({
   let finalTitle = "";
   if (!!title) finalTitle = title;
   if (!title) finalTitle = variantProps[variant].title;
+
   return (
     <div className="bg-white rounded-md min-w-96 w-fit  border-l-2 flex flex-row gap-2 items-stretch overflow-hidden pr-2 rtl:pr-0 rtl:pl-2 rtl:font-cairo dark:bg-card-background-dark ">
       <div

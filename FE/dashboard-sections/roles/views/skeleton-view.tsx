@@ -147,7 +147,7 @@ export function DetailsSkeletonView() {
   return (
     <div className="h-full dark:bg-dark-card flex flex-col">
       {/* Details Header */}
-      <div className="bg-emerald-600 h-1/8 p-6 flex flex-row gap-3">
+      <div className="bg-emerald-600 h-1/8 min-h-48 p-6 flex flex-row gap-3">
         <Skeleton className="h-full aspect-square rounded-full bg-emerald-800" />
         <div className="flex-1 ">
           <div className="flex flex-col gap-2">

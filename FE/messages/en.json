@@ -86,7 +86,13 @@
     "CREATION_TITLE": "{ENTITY_NAME} creation",
     "EDIT_FORM_TITLE": "Edit {ENTITY_NAME}: {ENTITY_VAL}",
     "CREATION_SUBTITLE": "Please enter the information required for the {ENTITY_NAME} creation",
-    "CANCEL": "Cancel"
+    "CANCEL": "Cancel",
+    "CREATED_SUCCESSFULLY": "{ENTITY_NAME} has been created successfully",
+    "SAVED_SUCCESSFULLY": "{ENTITY_NAME} has been saved successfully",
+    "UPDATED_SUCCESSFULLY": "{ENTITY_NAME} has been updated successfully",
+    "ACTIVATED_SUCCESSFULLY": "{ENTITY_NAME} has been activated successfully",
+    "DEACTIVATED_SUCCESSFULLY": "{ENTITY_NAME} has been deactivated successfully",
+    "DELETED_SUCCESSFULLY": "{ENTITY_NAME} has been deleted successfully"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",

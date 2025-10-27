@@ -22,6 +22,7 @@ import { useMutateRole } from "@/app/dashboard-api/roles";
 import { Role } from "@/app/dashboard-types/roles";
 import { useGetPermissionsHelper } from "@/app/dashboard-api/helpers";
 import { cn } from "@/lib/utils";
+import { pushDashboardMessage } from "@/components/dashboard-toast-message";
 
 type NewEditFormProps = {
   open: boolean;
@@ -105,13 +106,21 @@ export default function NewEditForm({
     async (data: Z.output<typeof schema>) => {
       if (currentRole) {
         await editRole.mutateAsync(data);
+        onClose();
+        pushDashboardMessage({
+          title: t("COMMON.SUCCESS_DIALOG_TITLE"),
+          subtitle: t("COMMON.UPDATED_SUCCESSFULLY", {
+            ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+          }),
+          variant: "success",
+        });
       } else {
         await createRole.mutateAsync(data);
       }
       refetch();
       console.log(data);
     },
-    [createRole, currentRole, refetch, editRole]
+    [currentRole, refetch, editRole, onClose, t, createRole]
   );
   return (
     <Drawer
@@ -119,7 +128,7 @@ export default function NewEditForm({
       onClose={onClose}
       direction={locale === "ar" ? "right" : "left"}
     >
-      <DrawerContent className="border-r-0! p-0! border-l-0! bg-slate-50 dark:bg-dark-background">
+      <DrawerContent className="border-r-0! p-0! border-l-0! bg-slate-50 dark:bg-dark-background overflow-y-auto">
         <DrawerHeader
           className={cn(
             "bg-emerald-600 p-1 gap-0! py-4 px-2 rtl:items-start relative",

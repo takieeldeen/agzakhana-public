@@ -86,7 +86,13 @@
     "ROLE_PERMISSIONS": "صلاحيات الدور",
     "CREATION_TITLE": "إنشاء {ENTITY_NAME}",
     "CREATION_SUBTITLE": "من فضلك ادخل البيانات المطلوبة لإنشاء {ENTITY_NAME}",
-    "CANCEL": "إلغاء"
+    "CANCEL": "إلغاء",
+    "CREATED_SUCCESSFULLY": "تم إنشاء {ENTITY_NAME} بنجاح",
+    "SAVED_SUCCESSFULLY": "تم حفظ {ENTITY_NAME} بنجاح",
+    "UPDATED_SUCCESSFULLY": "تم تحديث {ENTITY_NAME} بنجاح",
+    "ACTIVATED_SUCCESSFULLY": "تم تفعيل {ENTITY_NAME} بنجاح",
+    "DEACTIVATED_SUCCESSFULLY": "تم تعطيل {ENTITY_NAME} بنجاح",
+    "DELETED_SUCCESSFULLY": "تم حذف {ENTITY_NAME} بنجاح"
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
