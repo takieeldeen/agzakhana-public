@@ -82,6 +82,8 @@ export function RHFComboxbox<T>({
   const [val, setval] = React.useState(defaultValue);
   const [multipleVal, setMultipleVal] = React.useState(defaultValue);
   const t = useTranslations();
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
   // API Functions
   // default API /////////////////////////////////////////////////
 
@@ -154,11 +156,12 @@ export function RHFComboxbox<T>({
               <Popover open={open} onOpenChange={setOpen} modal>
                 <PopoverTrigger asChild>
                   <Button
+                    ref={buttonRef}
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                      "w-full min-h-12 h-fit justify-between dark:bg-dark-background dark:text-gray-200 pl-8",
+                      "w-full min-h-12 h-fit justify-between dark:bg-dark-background dark:text-gray-200 ",
                       !field.value &&
                         "text-muted-foreground dark:text-gray-500",
                       HAS_ERRORS && "border-red-600 dark:border-red-400"
@@ -167,7 +170,7 @@ export function RHFComboxbox<T>({
                     {/* {field.value
                       ? api.getOptionLabel(field.value)
                       : placeholder} */}
-                    <ul className="flex flex-row gap-2 flex-wrap">
+                    <ul className="flex flex-row gap-2 flex-wrap flex-1">
                       {Array.isArray(field?.value) && field?.value?.length > 0
                         ? field?.value?.map((option) => (
                             <OptionTag
@@ -180,7 +183,8 @@ export function RHFComboxbox<T>({
                           ))
                         : placeholder}
                     </ul>
-                    <div className="absolute right-3 rtl:left-3 rtl:right-auto top-6 -translate-y-1/2 flex flex-row items-center gap-2">
+                    <div className=" flex flex-row items-center gap-2">
+                      {/* <div className="absolute right-1 rtl:left-1 rtl:right-auto top-6 -translate-y-1/2 flex flex-row items-center gap-2"> */}
                       <Icon icon="mi:chevron-down" />
                       {isLoading && <Spinner />}
 
@@ -204,8 +208,14 @@ export function RHFComboxbox<T>({
                     </div>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-64 p-0">
+                <PopoverContent
+                  align="start"
+                  sideOffset={4}
+                  className="p-0 "
+                  style={{ width: buttonRef.current?.offsetWidth }}
+                >
                   <Command
+                    className="dark:bg-dark-card"
                     filter={(option, search) => {
                       const parsedOption = parseOption(option) as T;
                       if (
@@ -226,9 +236,9 @@ export function RHFComboxbox<T>({
                   >
                     <CommandInput
                       placeholder={placeholder}
-                      className={cn("h-9 ")}
+                      className={cn("h-9")}
                     />
-                    <CommandList>
+                    <CommandList className="dark:bg-dark-background">
                       {isLoading && (
                         <CommandLoading className="text-sm py-2 px-2 text-muted-foreground">
                           {t("COMMON.LOADING")}

@@ -17,10 +17,11 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
-import { ORDER_BY_OPTIONS } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutateRole } from "@/app/dashboard-api/roles";
 import { Role } from "@/app/dashboard-types/roles";
+import { useGetPermissionsHelper } from "@/app/dashboard-api/helpers";
+import { cn } from "@/lib/utils";
 
 type NewEditFormProps = {
   open: boolean;
@@ -36,7 +37,9 @@ export default function NewEditForm({
 }: NewEditFormProps) {
   const locale = useLocale();
   const t = useTranslations();
-  const { createRole } = useMutateRole();
+  const { createRole, editRole } = useMutateRole();
+  const { data: permissions, isLoading: permissionsLoading } =
+    useGetPermissionsHelper();
   const schema = Z.object({
     nameAr: Z.string().min(
       1,
@@ -67,7 +70,6 @@ export default function NewEditForm({
         _id: Z.string(),
         nameAr: Z.string(),
         nameEn: Z.string(),
-        value: Z.string(),
       })
     ).min(
       1,
@@ -82,26 +84,34 @@ export default function NewEditForm({
       nameEn: currentRole?.nameEn ?? "",
       descriptionAr: currentRole?.descriptionAr ?? "",
       descriptionEn: currentRole?.descriptionEn ?? "",
-      permissions: [],
+      permissions:
+        currentRole?.permissionGroups?.flatMap((group) => group.permissions) ??
+        [],
     }),
     [
       currentRole?.descriptionAr,
       currentRole?.descriptionEn,
       currentRole?.nameAr,
       currentRole?.nameEn,
+      currentRole?.permissionGroups,
     ]
   );
   const methods = useForm({ defaultValues, resolver: zodResolver(schema) });
   const {
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
+  console.log(errors);
   const onSubmit = useCallback(
     async (data: Z.output<typeof schema>) => {
-      await createRole.mutateAsync(data);
+      if (currentRole) {
+        await editRole.mutateAsync(data);
+      } else {
+        await createRole.mutateAsync(data);
+      }
       refetch();
       console.log(data);
     },
-    [createRole, refetch]
+    [createRole, currentRole, refetch, editRole]
   );
   return (
     <Drawer
@@ -110,22 +120,47 @@ export default function NewEditForm({
       direction={locale === "ar" ? "right" : "left"}
     >
       <DrawerContent className="border-r-0! p-0! border-l-0! bg-slate-50 dark:bg-dark-background">
-        <DrawerHeader className="bg-emerald-600 p-1 gap-0! py-4 px-2 rtl:items-start relative">
+        <DrawerHeader
+          className={cn(
+            "bg-emerald-600 p-1 gap-0! py-4 px-2 rtl:items-start relative",
+            currentRole && "bg-teal-600"
+          )}
+        >
           <DrawerClose className="" asChild>
-            <Button className="h-12 w-12 bg-emerald-600 hover:bg-emerald-700 absolute top-0 right-0 rtl:right-auto rtl:left-0 p-0 rounded-none shadow-none">
+            <Button
+              className={cn(
+                "h-12 w-12 bg-emerald-600 hover:bg-emerald-700 absolute top-0 right-0 rtl:right-auto rtl:left-0 p-0 rounded-none shadow-none",
+                currentRole && "bg-teal-600 hover:bg-teal-700"
+              )}
+            >
               <Icon
                 icon="basil:cross-solid"
                 className="h-8! w-8! dark:text-white"
               />
             </Button>
           </DrawerClose>
-          <div className="flex flex-row gap-2 items-center">
-            <Icon icon="gg:add" className="text-3xl text-white" />
+          <div className="flex flex-row gap-2 items-start">
+            <Icon
+              icon={
+                currentRole
+                  ? "iconamoon:edit-light"
+                  : "carbon:intent-request-create"
+              }
+              className="text-3xl text-white"
+            />
             <div className="flex flex-col rtl:items-start">
               <DrawerTitle className="text-white text-lg">
-                {t("COMMON.CREATION_TITLE", {
-                  ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-                })}
+                {currentRole
+                  ? t("COMMON.EDIT_FORM_TITLE", {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+                      ENTITY_VAL:
+                        locale === "ar"
+                          ? currentRole?.nameAr
+                          : currentRole?.nameEn,
+                    })
+                  : t("COMMON.CREATION_TITLE", {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+                    })}
               </DrawerTitle>
               <DrawerDescription className="text-muted dark:text-gray-300">
                 {t("COMMON.CREATION_SUBTITLE", {
@@ -178,7 +213,8 @@ export default function NewEditForm({
               name="permissions"
               label={t("ROLES_MANAGEMENT.PERMISSIONS")}
               placeholder={t("ROLES_MANAGEMENT.PERMISSIONS")}
-              options={ORDER_BY_OPTIONS}
+              isLoading={permissionsLoading}
+              options={permissions}
               getOptionLabel={(option) => {
                 if (!option) return "";
                 return locale === "ar" ? option?.nameAr : option?.nameEn;
@@ -198,12 +234,19 @@ export default function NewEditForm({
                 {t("COMMON.CANCEL")}
               </Button>
               <LoadingButton
-                className="flex-1 h-full bg-emerald-600 dark:text-white"
+                className={cn(
+                  "flex-1 h-full bg-emerald-600 dark:text-white",
+                  currentRole && "bg-teal-600"
+                )}
                 loading={isSubmitting}
               >
-                {t("COMMON.CREATE", {
-                  ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                })}
+                {currentRole
+                  ? t("COMMON.EDIT_TITLE", {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })
+                  : t("COMMON.CREATE", {
+                      ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })}
               </LoadingButton>
             </div>
           </DrawerFooter>

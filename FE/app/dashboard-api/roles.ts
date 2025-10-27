@@ -4,13 +4,14 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { dummyFetcher } from "./api";
+import { dummyFetcher, dummyPromise, getDummyFetcher } from "./api";
 import { APIListResponse } from "@/types/common";
 import { Role } from "../dashboard-types/roles";
-import { ROLES_MOCK_DATA } from "../_mock/_roles";
+import { ROLES_DETAILS_MOCK_DATA, ROLES_MOCK_DATA } from "../_mock/_roles";
 import { useMemo } from "react";
 import axios, { endpoints } from "./axios";
 import { AxiosRequestConfig } from "axios";
+import { ParamValue } from "next/dist/server/request/params";
 
 let FIRST_LIST_KEY: [string, AxiosRequestConfig<any>] | null = null;
 let LAST_LIST_KEY: [string, AxiosRequestConfig<any>] | null = null;
@@ -70,6 +71,32 @@ export function useGetRoles(
   return memoizedValue;
 }
 
+export function useGetRoleDetails(roleId: ParamValue | string | undefined) {
+  const URL = roleId ? endpoints.roles.details(roleId?.toString()) : "";
+  console.log(roleId);
+  const { data, isLoading, isFetching, refetch, error } = useQuery<
+    { content: Role },
+    Error
+  >({
+    queryKey: ["roles", URL],
+    queryFn: getDummyFetcher<any>(ROLES_DETAILS_MOCK_DATA),
+    staleTime: Infinity,
+  });
+  console.log(data);
+  const memoizedValue = useMemo(
+    () => ({
+      data: data?.content ?? null,
+      isLoading,
+      isFetching,
+      refetch,
+      error,
+    }),
+    [data?.content, error, isFetching, isLoading, refetch]
+  );
+
+  return memoizedValue;
+}
+
 export function useMutateRole() {
   const queryClient = useQueryClient();
 
@@ -80,6 +107,26 @@ export function useMutateRole() {
     mutationFn: async (data: any) => {
       const URL = endpoints.roles.list;
       return axios.post(URL, data);
+    },
+    onSuccess: (res) =>
+      queryClient.setQueryData(["roles"], (data) => {
+        console.log(data);
+        return data;
+      }),
+    onError: (res) =>
+      queryClient.setQueryData(["roles"], (data) => {
+        console.log(data);
+        return data;
+      }),
+  });
+  // -------------------------
+  // Update
+  // -------------------------
+  const editRole = useMutation({
+    mutationFn: async (data: any) => {
+      const URL = endpoints.roles.list;
+      return await dummyPromise();
+      // return axios.post(URL, data);
     },
     onSuccess: (res) =>
       queryClient.setQueryData(["roles"], (data) => {
@@ -138,5 +185,5 @@ export function useMutateRole() {
   //   },
   //   onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
   // });
-  return { createRole };
+  return { createRole, editRole };
 }

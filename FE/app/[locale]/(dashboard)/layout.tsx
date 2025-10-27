@@ -80,9 +80,9 @@ export default async function RootLayout({
                   >
                     <main className="flex flex-row h-full w-full overflow-x-hidden relative overflow-y-hidden">
                       <DashbaordSidebar />
-                      <div className="pt-0 w-full">
+                      <div className="pt-0 w-full h-[calc(100%_-70px)]">
                         <UserBar />
-                        <div className=" overflow-y-auto h-[90dvh]">
+                        <div className=" overflow-y-auto h-full">
                           {children}
                         </div>
                       </div>

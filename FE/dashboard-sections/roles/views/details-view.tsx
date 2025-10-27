@@ -11,179 +11,26 @@ import { Button } from "@/components/ui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
+import { lazy, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useGetRoleDetails } from "@/app/dashboard-api/roles";
+import { useParams } from "next/navigation";
+import { DetailsSkeletonView } from "./skeleton-view";
 
-const role = {
-  _id: "Xnjgsdddd_1",
-  nameAr: "مساعد صيدلي",
-  nameEn: "Pharmacist Assistant",
-  descriptionEn:
-    "The employee responsible for managing all aspects of procurement and supplies, including handling purchasing activities from both internal and external suppliers, ensuring the timely and high-quality availability of materials.",
-  descriptionAr:
-    "الموظف المسؤول عن جميع شئون التوريدات من الموردين الداخليين أو الخارجيين، وضمان توافر المستلزمات في الوقت المناسب وبأفضل جودة ممكنة.",
-  status: "ACTIVE",
-  permissionsCount: 22,
-  usersCount: 12,
-  createdBy: {
-    _id: "1",
-    nameAr: "تقي الدين أحمد علي",
-    nameEn: "Takie Eldeen Ahmed Ali",
-  },
-  permissionGroups: [
-    {
-      _id: "grp1",
-      nameAr: "إدارة المستخدمين",
-      nameEn: "User Management",
-      permissions: [
-        { _id: "perm1", nameAr: "عرض المستخدمين", nameEn: "View Users" },
-        { _id: "perm2", nameAr: "إضافة مستخدم جديد", nameEn: "Add New User" },
-        { _id: "perm3", nameAr: "تعديل بيانات المستخدم", nameEn: "Edit User" },
-        { _id: "perm4", nameAr: "حذف مستخدم", nameEn: "Delete User" },
-        {
-          _id: "perm5",
-          nameAr: "تغيير صلاحيات المستخدم",
-          nameEn: "Change User Permissions",
-        },
-      ],
-    },
-    {
-      _id: "grp2",
-      nameAr: "إدارة الأدوار",
-      nameEn: "Roles Management",
-      permissions: [
-        { _id: "perm6", nameAr: "عرض الأدوار", nameEn: "View Roles" },
-        { _id: "perm7", nameAr: "إضافة دور جديد", nameEn: "Add New Role" },
-        { _id: "perm8", nameAr: "تعديل الدور", nameEn: "Edit Role" },
-        { _id: "perm9", nameAr: "حذف الدور", nameEn: "Delete Role" },
-      ],
-    },
-    {
-      _id: "grp3",
-      nameAr: "إدارة المخازن",
-      nameEn: "Inventories Management",
-      permissions: [
-        { _id: "perm10", nameAr: "عرض المخزون", nameEn: "View Inventory" },
-        { _id: "perm11", nameAr: "إضافة كمية جديدة", nameEn: "Add New Stock" },
-        {
-          _id: "perm12",
-          nameAr: "تعديل بيانات المخزون",
-          nameEn: "Edit Inventory",
-        },
-        { _id: "perm13", nameAr: "حذف صنف", nameEn: "Delete Item" },
-        { _id: "perm14", nameAr: "تتبع الحركة", nameEn: "Track Movements" },
-        { _id: "perm15", nameAr: "طباعة التقارير", nameEn: "Print Reports" },
-      ],
-    },
-    {
-      _id: "grp4",
-      nameAr: "إدارة الفواتير",
-      nameEn: "Invoices Management",
-      permissions: [
-        { _id: "perm16", nameAr: "عرض الفواتير", nameEn: "View Invoices" },
-        {
-          _id: "perm17",
-          nameAr: "إنشاء فاتورة جديدة",
-          nameEn: "Create New Invoice",
-        },
-        { _id: "perm18", nameAr: "تعديل الفاتورة", nameEn: "Edit Invoice" },
-        { _id: "perm19", nameAr: "إلغاء الفاتورة", nameEn: "Cancel Invoice" },
-        {
-          _id: "perm20",
-          nameAr: "تحميل الفاتورة PDF",
-          nameEn: "Download Invoice PDF",
-        },
-      ],
-    },
-    {
-      _id: "grp5",
-      nameAr: "إدارة العملاء",
-      nameEn: "Customer Management",
-      permissions: [
-        { _id: "perm21", nameAr: "عرض العملاء", nameEn: "View Customers" },
-        {
-          _id: "perm22",
-          nameAr: "إضافة عميل جديد",
-          nameEn: "Add New Customer",
-        },
-        {
-          _id: "perm23",
-          nameAr: "تعديل بيانات العميل",
-          nameEn: "Edit Customer",
-        },
-        { _id: "perm24", nameAr: "حذف عميل", nameEn: "Delete Customer" },
-        {
-          _id: "perm25",
-          nameAr: "عرض سجل الطلبات",
-          nameEn: "View Order History",
-        },
-      ],
-    },
-    {
-      _id: "grp6",
-      nameAr: "إدارة الموردين",
-      nameEn: "Suppliers Management",
-      permissions: [
-        { _id: "perm26", nameAr: "عرض الموردين", nameEn: "View Suppliers" },
-        {
-          _id: "perm27",
-          nameAr: "إضافة مورد جديد",
-          nameEn: "Add New Supplier",
-        },
-        {
-          _id: "perm28",
-          nameAr: "تعديل بيانات المورد",
-          nameEn: "Edit Supplier",
-        },
-        { _id: "perm29", nameAr: "حذف مورد", nameEn: "Delete Supplier" },
-        { _id: "perm30", nameAr: "عرض المشتريات", nameEn: "View Purchases" },
-        {
-          _id: "perm31",
-          nameAr: "توليد تقرير الموردين",
-          nameEn: "Generate Supplier Report",
-        },
-      ],
-    },
-  ],
-  users: [
-    {
-      _id: "usr_001",
-      nameAr: "تقي الدين أحمد علي",
-      nameEn: "Takie Eldeen Ahmed Ali",
-      email: "takie@agzakhana.com",
-      imageUrl:
-        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/Abd_Elhay",
-    },
-    {
-      _id: "usr_002",
-      nameAr: "عبد الرحمن محمد حسن",
-      nameEn: "Abdelrahman Mohamed Hassan",
-      email: "abdo@agzakhana.com",
-      imageUrl:
-        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/abdelwahed",
-    },
-    {
-      _id: "usr_003",
-      nameAr: "سارة محمود عبد الله",
-      nameEn: "Sara Mahmoud Abdallah",
-      email: "sara@agzakhana.com",
-      imageUrl:
-        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/ahmed",
-    },
-    {
-      _id: "usr_004",
-      nameAr: "يوسف إبراهيم علي",
-      nameEn: "Youssef Ibrahim Ali",
-      email: "youssef@agzakhana.com",
-      imageUrl:
-        "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/alaa",
-    },
-  ],
-  createdAt: "2025-10-26T19:42:11.532Z",
-};
+const NewEditForm = lazy(() => import("../new-edit-form"));
+
 export default function DetailsView() {
+  const { roleId } = useParams();
+  const { data: role, isLoading: rolesLoading } = useGetRoleDetails(roleId);
+  const [showEditModal, setShowEditModal] = useState<
+    "CREATE" | "EDIT" | "HIDDEN"
+  >("HIDDEN");
+  console.log(role);
   const locale = useLocale();
   const t = useTranslations();
+  if (rolesLoading) return <DetailsSkeletonView />;
   return (
-    <div className="h-full dark:bg-dark-card">
+    <div className="h-full dark:bg-dark-card flex flex-col">
       {/* Details Header */}
       <div className="bg-emerald-600 h-1/8 p-6 flex flex-row gap-3">
         <div className="h-full w-fit">
@@ -196,8 +43,14 @@ export default function DetailsView() {
           <div>
             <h3 className="text-xl font-bold text-white flex flex-row items-center gap-3">
               {locale === "ar" ? role?.nameAr : role?.nameEn}
-              <span className="text-xs font-semibold text-white bg-emerald-800 px-2 py-1 rounded-full ">
-                {t(`COMMON.${role?.status}`)}
+              <span
+                className={cn(
+                  "text-xs font-semibold text-white bg-emerald-800 px-2 py-1 rounded-full "
+                )}
+              >
+                {role?.status
+                  ? t(`COMMON.${role?.status}`)
+                  : t("COMMON.UNKOWN")}
               </span>
             </h3>
             <p className="text-input dark:text-gray-200">{`${t(
@@ -210,8 +63,9 @@ export default function DetailsView() {
         </div>
         <div className="flex flex-row items-start gap-3 ">
           <Button
+            onClick={() => setShowEditModal("EDIT")}
             variant="ghost"
-            className="border-2 border-white text-white h-12 min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200"
+            className="border-2 border-white text-white h-12 min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200 rounded-xl"
           >
             <Icon icon="iconamoon:edit-light" className="h-6! w-6!" />
             {t("COMMON.EDIT_TITLE", {
@@ -220,7 +74,7 @@ export default function DetailsView() {
           </Button>
           <Button
             variant="ghost"
-            className="border-2 border-white text-white h-12 min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200"
+            className="border-2 border-white text-white h-12 min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200 rounded-xl"
           >
             <Icon icon="ci:pause" className="h-6! w-6!" />
             {t("COMMON.DEACTIVATE_TITLE", {
@@ -230,13 +84,17 @@ export default function DetailsView() {
         </div>
       </div>
       {/* Details Content */}
-      <div className="relative h-full ">
-        <div className=" overflow-hidden bg-red-500 h-full absolute overflow-y-auto">
-          <div className="p-3 flex flex-col gap-6 dark:bg-dark-card ">
+      <div className="relative flex-1 width-full">
+        <div className="h-full absolute overflow-y-auto w-full ">
+          <div className="p-3 flex flex-col gap-6 dark:bg-dark-card w-full ">
             <div className="flex flex-row gap-3">
               <ListItem
                 primaryLabel={t("COMMON.STATUS")}
-                secondaryLabel={t(`COMMON.${role?.status}`)}
+                secondaryLabel={
+                  role?.status
+                    ? t(`COMMON.${role?.status}`)
+                    : t("COMMON.UNKOWN")
+                }
               />
               <ListItem
                 primaryLabel={t("ROLES_MANAGEMENT.PERMISSIONS_COUNT")}
@@ -254,12 +112,12 @@ export default function DetailsView() {
                 primaryLabel={t("ROLES_MANAGEMENT.ROLE_PERMISSIONS")}
                 className="mb-2"
               />
-              <Accordion type="multiple" className="w-full">
+              <Accordion type="multiple" className="w-full ">
                 <ul className="flex flex-col gap-3">
                   {role?.permissionGroups?.map((group) => (
                     <li key={group?._id}>
-                      <AccordionItem value={group?._id}>
-                        <AccordionTrigger className="bg-gray-200 dark:bg-dark-background dark:text-white rounded-t-2xl rounded-b-none px-2 hover:no-underline cursor-pointer text-lg text-black [&[data-state=closed]]:rounded-b-2xl">
+                      <AccordionItem value={group?._id} className="">
+                        <AccordionTrigger className="bg-gray-200 dark:bg-dark-background dark:text-gray-300  rounded-t-2xl rounded-b-none px-4 hover:no-underline cursor-pointer text-lg text-black [&[data-state=closed]]:rounded-b-2xl">
                           {locale === "ar" ? group?.nameAr : group?.nameEn}
                         </AccordionTrigger>
                         <AccordionContent className="bg-gray-100 rounded-b-2xl rounded-t-none p-2 py-6 flex flex-row gap-2 flex-wrap text-balance dark:bg-dark-900">
@@ -291,17 +149,21 @@ export default function DetailsView() {
               />
               <ListItem
                 primaryLabel={t("ROLES_MANAGEMENT.CREATED_AT")}
-                secondaryLabel={new Intl.DateTimeFormat(
-                  locale === "ar" ? "ar-EG" : "en-US",
-                  {
-                    day: "2-digit",
-                    weekday: "long",
-                    month: "long",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                ).format(new Date(role?.createdAt ?? ""))}
+                secondaryLabel={
+                  role?.createdAt
+                    ? new Intl.DateTimeFormat(
+                        locale === "ar" ? "ar-EG" : "en-US",
+                        {
+                          day: "2-digit",
+                          weekday: "long",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      ).format(new Date(role?.createdAt ?? ""))
+                    : t("COMMON.UNKOWN")
+                }
               />
             </div>
             <div className="">
@@ -343,6 +205,14 @@ export default function DetailsView() {
           </div>
         </div>
       </div>
+      {showEditModal !== "HIDDEN" && (
+        <NewEditForm
+          open
+          onClose={() => setShowEditModal("HIDDEN")}
+          refetch={() => {}}
+          currentRole={role}
+        />
+      )}
     </div>
   );
 }

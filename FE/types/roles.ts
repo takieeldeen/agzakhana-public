@@ -8,5 +8,12 @@ export type RoleType = {
   descriptionEn: string;
   createdBy: UserType;
   updatedAt: Date;
-  permissions: { _id: string; nameAr: string; nameEn: string; value: string }[];
+  permissionGroups: { _id: string; nameAr: string; nameEn: string }[];
+};
+
+export type Permission = {
+  _id: string;
+  nameAr: string;
+  nameEn: string;
+  value: string;
 };

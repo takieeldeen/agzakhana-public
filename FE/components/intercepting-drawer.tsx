@@ -1,4 +1,5 @@
 "use client";
+import { useLocale } from "next-intl";
 import { Drawer } from "./ui/drawer";
 import { useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
@@ -13,6 +14,7 @@ export default function InterceptingDrawer({
 }: InterceptingDrawerProps) {
   const [showModal, setShowModal] = useState<boolean>(true);
   const router = useRouter();
+  const locale = useLocale();
   const handleClose = useCallback(() => {
     setShowModal(false);
   }, []);
@@ -26,7 +28,7 @@ export default function InterceptingDrawer({
   return (
     <Drawer
       open={showModal}
-      direction="right"
+      direction={locale === "ar" ? "right" : "left"}
       onClose={handleClose}
       onAnimationEnd={handleRouting}
     >

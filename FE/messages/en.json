@@ -84,6 +84,7 @@
     "DESC_AR": "Arabic Description",
     "DESC_EN": "English Description",
     "CREATION_TITLE": "{ENTITY_NAME} creation",
+    "EDIT_FORM_TITLE": "Edit {ENTITY_NAME}: {ENTITY_VAL}",
     "CREATION_SUBTITLE": "Please enter the information required for the {ENTITY_NAME} creation",
     "CANCEL": "Cancel"
   },

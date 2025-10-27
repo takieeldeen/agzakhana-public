@@ -7,4 +7,17 @@ export type Role = {
   status: string;
   permissionsCount: number;
   usersCount: number;
+  permissionGroups: {
+    _id: string;
+    nameAr: string;
+    nameEn: string;
+    permissions: Permission[];
+  }[];
+};
+
+export type Permission = {
+  _id: string;
+  nameAr: string;
+  nameEn: string;
+  value: string;
 };

@@ -10,6 +10,7 @@ export const endpoints = {
   },
   roles: {
     list: "/v1/roles",
+    details: (id: string) => `/v1/roles/${id}`,
   },
 };
 

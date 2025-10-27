@@ -1,6 +1,94 @@
-import { APIListResponse, LocalizedObject } from "@/types/common";
+import { APIListResponse } from "@/types/common";
 import { Role } from "../dashboard-types/roles";
 
+export const ROLES_DETAILS_MOCK_DATA = {
+  content: {
+    _id: "Xnjgsdddd_1",
+    nameAr: "مساعد صيدلي",
+    nameEn: "Pharmacist Assistant",
+    descriptionEn:
+      "The employee responsible for managing all aspects of procurement and supplies, including handling purchasing activities from both internal and external suppliers, ensuring the timely and high-quality availability of materials.",
+    descriptionAr:
+      "الموظف المسؤول عن جميع شئون التوريدات من الموردين الداخليين أو الخارجيين، وضمان توافر المستلزمات في الوقت المناسب وبأفضل جودة ممكنة.",
+    status: "ACTIVE",
+    permissionsCount: 22,
+    usersCount: 12,
+    createdBy: {
+      _id: "1",
+      nameAr: "تقي الدين أحمد علي",
+      nameEn: "Takie Eldeen Ahmed Ali",
+    },
+    permissionGroups: [
+      {
+        _id: "68fdf3a985e96e50c0b1a4d4",
+        nameAr: "إدارة الأدوار",
+        nameEn: "Roles Management",
+        permissions: [
+          {
+            _id: "68fdf2ef85e96e50c0b1a4c2",
+            nameAr: "إضافة دور",
+            nameEn: "Add Role",
+          },
+          {
+            _id: "68fdf36985e96e50c0b1a4c3",
+            nameAr: "تعديل الدور",
+            nameEn: "Edit Role",
+          },
+          {
+            _id: "68fdf38485e96e50c0b1a4c4",
+            nameAr: "عرض الأدوار",
+            nameEn: "View Roles",
+          },
+          {
+            _id: "68fdf3a985e96e50c0b1a4c5",
+            nameAr: "تفعيل/تعطيل الدور",
+            nameEn: "Activate/Deactivate Role",
+          },
+          {
+            _id: "68fdf46a85e96e50c0b1a4c6",
+            nameAr: "تفاصيل الدور",
+            nameEn: "View Role Details",
+          },
+        ],
+      },
+    ],
+    users: [
+      {
+        _id: "usr_001",
+        nameAr: "تقي الدين أحمد علي",
+        nameEn: "Takie Eldeen Ahmed Ali",
+        email: "takie@agzakhana.com",
+        imageUrl:
+          "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/Abd_Elhay",
+      },
+      {
+        _id: "usr_002",
+        nameAr: "عبد الرحمن محمد حسن",
+        nameEn: "Abdelrahman Mohamed Hassan",
+        email: "abdo@agzakhana.com",
+        imageUrl:
+          "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/abdelwahed",
+      },
+      {
+        _id: "usr_003",
+        nameAr: "سارة محمود عبد الله",
+        nameEn: "Sara Mahmoud Abdallah",
+        email: "sara@agzakhana.com",
+        imageUrl:
+          "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/ahmed",
+      },
+      {
+        _id: "usr_004",
+        nameAr: "يوسف إبراهيم علي",
+        nameEn: "Youssef Ibrahim Ali",
+        email: "youssef@agzakhana.com",
+        imageUrl:
+          "https://ukbahlwracfvnetnxlba.supabase.co/storage/v1/object/public/agzakhana-profilepic/alaa",
+      },
+    ],
+    createdAt: "2025-10-26T19:42:11.532Z",
+  },
+};
 export const ROLES_MOCK_DATA: APIListResponse<Role> = {
   status: "success",
   results: 19,
@@ -232,58 +320,6 @@ export const ROLES_MOCK_DATA: APIListResponse<Role> = {
       status: "ACTIVE",
       permissionsCount: 14,
       usersCount: 6,
-    },
-  ],
-};
-
-export const PERMISSIONS_HELPER_MOCK_DATA: APIListResponse<LocalizedObject> = {
-  results: 9,
-  status: "success",
-  content: [
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a01",
-      nameAr: "عرض المستخدمين",
-      nameEn: "View Users",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a02",
-      nameAr: "إضافة مستخدم",
-      nameEn: "Add User",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a03",
-      nameAr: "تعديل المستخدم",
-      nameEn: "Edit User",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a04",
-      nameAr: "حذف المستخدم",
-      nameEn: "Delete User",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a05",
-      nameAr: "عرض الأذونات",
-      nameEn: "View Permissions",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a06",
-      nameAr: "إضافة إذن",
-      nameEn: "Add Permission",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a07",
-      nameAr: "تعديل الإذن",
-      nameEn: "Edit Permission",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a08",
-      nameAr: "حذف الإذن",
-      nameEn: "Delete Permission",
-    },
-    {
-      _id: "6718d20a6f9a5b3c1a9f0a09",
-      nameAr: "عرض التقارير",
-      nameEn: "View Reports",
     },
   ],
 };

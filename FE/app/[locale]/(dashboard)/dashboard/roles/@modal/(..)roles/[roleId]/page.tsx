@@ -18,7 +18,7 @@ export async function generateMetadata({
 export default function Page() {
   return (
     <InterceptingDrawer>
-      <DrawerContent className=" data-[vaul-drawer-direction=right]:sm:max-w-[1200px] border-l-0 border-r-0 ">
+      <DrawerContent className="data-[vaul-drawer-direction=left]:sm:max-w-[1200px] data-[vaul-drawer-direction=right]:sm:max-w-[1200px] border-l-0 border-r-0 will-change-auto [transform:none]">
         <DetailsView />
       </DrawerContent>
     </InterceptingDrawer>

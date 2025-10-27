@@ -47,6 +47,7 @@
     "DEACTIVATE_TITLE": "تعطيل {ENTITY_NAME}",
     "DEACTIVATE_SUBTITLE": "تغيير حالة {ENTITY_NAME} إلى غير نشط",
     "EDIT_TITLE": "تعديل {ENTITY_NAME}",
+    "EDIT_FORM_TITLE": "تعديل {ENTITY_NAME}: {ENTITY_VAL}",
     "EDIT_SUBTITLE": "تعديل بعض البيانات الخاصة ب{ENTITY_NAME}",
     "SEARCH_BY_NAME": "البحث بواسطة الاسم",
     "STATUS": "الحالة",

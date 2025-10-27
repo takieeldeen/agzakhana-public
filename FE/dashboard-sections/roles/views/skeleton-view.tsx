@@ -142,3 +142,89 @@ export default function ListSkeletonView() {
     </div>
   );
 }
+
+export function DetailsSkeletonView() {
+  return (
+    <div className="h-full dark:bg-dark-card flex flex-col">
+      {/* Details Header */}
+      <div className="bg-emerald-600 h-1/8 p-6 flex flex-row gap-3">
+        <Skeleton className="h-full aspect-square rounded-full bg-emerald-800" />
+        <div className="flex-1 ">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row items-center gap-3">
+              <Skeleton className="w-24 h-6 bg-emerald-800" />
+              <Skeleton className="w-12 h-4 bg-emerald-800" />
+            </div>
+
+            <Skeleton className="w-48 h-3 bg-emerald-800" />
+          </div>
+        </div>
+        <div className="flex flex-row items-start gap-3 ">
+          <Skeleton className="w-36 h-12 rounded-xl bg-emerald-800" />
+          <Skeleton className="w-36 h-12 rounded-xl bg-emerald-800" />
+        </div>
+      </div>
+      {/* Details Content */}
+      <div className="relative flex-1 width-full">
+        <div className="h-full absolute overflow-y-auto w-full ">
+          <div className="p-3 flex flex-col gap-6 dark:bg-dark-card w-full ">
+            <div className="flex flex-row gap-3 w-full ">
+              <div className="flex flex-col gap-2 flex-1">
+                <Skeleton className="h-5 w-24 dark:bg-dark-975" />
+                <Skeleton className="h-3 w-48 dark:bg-dark-975" />
+              </div>
+              <div className="flex flex-col gap-2 flex-1">
+                <Skeleton className="h-5 w-24 dark:bg-dark-975" />
+                <Skeleton className="h-3 w-48 dark:bg-dark-975" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 flex-1">
+              <Skeleton className="h-5 w-24 dark:bg-dark-975" />
+              <Skeleton className="h-3 w-48 dark:bg-dark-975" />
+            </div>
+            <div className="">
+              <Skeleton className="h-5 w-24 mb-3 dark:bg-dark-975" />
+              <ul className="flex flex-col gap-3">
+                <Skeleton className="h-12 w-full rounded-xl dark:bg-dark-975" />
+                <Skeleton className="h-12 w-full rounded-xl dark:bg-dark-975" />
+                <Skeleton className="h-12 w-full rounded-xl dark:bg-dark-975" />
+                <Skeleton className="h-12 w-full rounded-xl dark:bg-dark-975" />
+              </ul>
+            </div>
+            <div className="flex flex-row gap-3">
+              <div className="flex flex-col gap-2 flex-1">
+                <Skeleton className="h-5 w-24 dark:bg-dark-975" />
+                <Skeleton className="h-3 w-48 dark:bg-dark-975" />
+              </div>
+              <div className="flex flex-col gap-2 flex-1">
+                <Skeleton className="h-5 w-24 dark:bg-dark-975" />
+                <Skeleton className="h-3 w-48 dark:bg-dark-975" />
+              </div>
+            </div>
+            <div className="">
+              <Skeleton className="h-5 w-24 mb-3 dark:bg-dark-975" />
+
+              <div className="flex flex-row gap-3 flex-wrap">
+                {[1, 2, 3, 4]?.map((user) => (
+                  <div
+                    key={user}
+                    className="flex w-[calc(50%_-_12px)] gap-3 flex-row shrink-0"
+                  >
+                    <Skeleton className="h-14 w-14 rounded-full dark:bg-dark-975" />
+                    <div className="flex flex-row flex-1 justify-between">
+                      <div className="flex flex-col gap-3">
+                        <Skeleton className="h-4 w-24 dark:bg-dark-975" />
+                        <Skeleton className="h-3 w-48 dark:bg-dark-975" />
+                      </div>
+                      <Skeleton className="h-12 w-32 rounded-full dark:bg-dark-975" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
