@@ -19,6 +19,8 @@ export type Role = {
   createdAt: string;
 };
 
+export type RoleListItem = Omit<Role,'permissionGroups'|'createdBy'|'createdAt'>
+
 export type Permission = {
   _id: string;
   nameAr: string;

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { dummyFetcher, getFetcher } from "./api";
+import { getFetcher } from "./api";
 import { APIListResponse, LocalizedObject } from "@/types/common";
-import { PERMISSIONS_HELPER_MOCK_DATA } from "../_mock/_roles";
 import { useMemo } from "react";
 import { endpoints } from "./axios";
 

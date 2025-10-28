@@ -1,5 +1,5 @@
 "use client";
-import { Role } from "@/app/dashboard-types/roles";
+import { RoleListItem } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,8 +19,8 @@ export default function ListTableRow({
   role,
   onActivateRow,
 }: {
-  role: Role;
-  onActivateRow: (role: Role) => void;
+  role: RoleListItem;
+  onActivateRow: (role: RoleListItem) => void;
 }) {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const locale = useLocale();

@@ -1,5 +1,5 @@
 "use client";
-import { Role } from "@/app/dashboard-types/roles";
+import { Role, RoleListItem } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,8 +18,8 @@ export default function GridTableRow({
   role,
   onActivateRow,
 }: {
-  role: Role;
-  onActivateRow: (role: Role) => void;
+  role: RoleListItem;
+  onActivateRow: (role: RoleListItem) => void;
 }) {
   const locale = useLocale();
   const t = useTranslations();

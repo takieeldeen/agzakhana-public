@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { dummyFetcher, dummyPromise, getDummyFetcher } from "./api";
 import { APIListResponse } from "@/types/common";
-import { Role } from "../dashboard-types/roles";
+import { Role, RoleListItem } from "../dashboard-types/roles";
 import {
   ROLES_DETAILS_MOCK_DATA,
   ROLES_MOCK_DATA,
@@ -26,9 +26,9 @@ export function useGetRoles(
   filters?: { [filter: string]: string | null },
   options?: Omit<
     UndefinedInitialDataOptions<
-      APIListResponse<Role>,
+      APIListResponse<RoleListItem>,
       Error,
-      APIListResponse<Role>,
+      APIListResponse<RoleListItem>,
       readonly unknown[]
     >,
     "queryKey" | "queryFn"
@@ -51,12 +51,12 @@ export function useGetRoles(
   if (!FIRST_LIST_KEY) FIRST_LIST_KEY = URL;
   LAST_LIST_KEY = URL;
   const { data, isLoading, isFetching, refetch, error } = useQuery<
-    APIListResponse<Role>,
+    APIListResponse<RoleListItem>,
     Error
   >({
     ...options,
     queryKey: ["roles", URL],
-    queryFn: dummyFetcher<APIListResponse<Role>>(ROLES_MOCK_DATA, URL, true),
+    queryFn: dummyFetcher<APIListResponse<RoleListItem>>(ROLES_MOCK_DATA, URL, true),
     staleTime: Infinity,
   });
 

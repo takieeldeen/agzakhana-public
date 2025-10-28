@@ -1,6 +1,7 @@
 "use client";
 import {
   createContext,
+  MouseEventHandler,
   ReactNode,
   useCallback,
   useContext,
@@ -23,6 +24,7 @@ type PromptContextProps = {
     content,
     icon,
     variant,
+    action,
     actionTitle,
   }: {
     dialogTitle?: string;
@@ -31,6 +33,7 @@ type PromptContextProps = {
     icon?: string;
     variant?: PromptVariant;
     actionTitle?: string;
+    action?:VoidFunction
   }) => void;
 };
 const PromptContext = createContext<PromptContextProps | undefined>(undefined);
@@ -87,6 +90,9 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
   const [actionTitle, setActionTitle] = useState<string>(
     variantProps?.SUCCESS?.actionTitle.text
   );
+  const [mainAction, setMainAction] = useState<VoidFunction|undefined>(
+    undefined
+  );
   const [content, setContent] = useState<string>("");
   const [variant, setVariant] = useState<PromptVariant>("SUCCESS");
   const [onClose, setOnClose] = useState<VoidFunction>(() =>
@@ -101,6 +107,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
       content,
       icon,
       variant = "SUCCESS",
+      action,
       actionTitle,
       onClose,
     }: {
@@ -108,6 +115,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
       title?: string;
       content?: string;
       icon?: string;
+      action?:VoidFunction;
       variant?: PromptVariant;
       actionTitle?: string;
       onClose?: VoidFunction;
@@ -120,9 +128,13 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
       setVariant(variant ?? "SUCCESS");
       setContent(content ?? "");
       setTitle(title ?? "");
+      setMainAction(action ? () => action : undefined);
     },
     [variantProps]
   );
+  const handleActionClick:  MouseEventHandler<HTMLButtonElement> = useCallback(()=>{
+    if(mainAction) mainAction?.();
+  },[mainAction]);
   const closePrompt = useCallback(() => {
     onClose?.();
     setPromptVisibility(false);
@@ -185,6 +197,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
                   {t("COMMON.CANCEL_ACTION")}
                 </Button>
                 <Button
+                onClick={handleActionClick}
                   className={cn(
                     "h-12 w-[calc(50%_-_12px)] dark:text-white",
                     variantProps?.[variant].actionTitle.styling

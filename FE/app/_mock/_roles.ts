@@ -1,5 +1,5 @@
 import { APIListResponse } from "@/types/common";
-import { Role } from "../dashboard-types/roles";
+import { Role, RoleListItem } from "../dashboard-types/roles";
 
 export const USER_PER_ROLE_MOCK_DATA = {
   content: [
@@ -96,7 +96,7 @@ export const ROLES_DETAILS_MOCK_DATA = {
     createdAt: "2025-10-26T19:42:11.532Z",
   },
 };
-export const ROLES_MOCK_DATA: APIListResponse<Role> = {
+export const ROLES_MOCK_DATA: APIListResponse<RoleListItem> = {
   status: "success",
   results: 19,
   content: [
