@@ -1,0 +1,18 @@
+{
+  "servers": {
+    "workflow-automation": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["build/server.js"],
+      "cwd": "${workspaceFolder}/MCP",
+      "dev": {
+        "watch": "build/**/*.js",
+        "debug": {
+          "type": "node"
+        },
+        "terminal": "integrated"
+      }
+    }
+  },
+  "inputs": []
+}

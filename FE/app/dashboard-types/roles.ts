@@ -1,3 +1,5 @@
+import { User } from "./users";
+
 export type Role = {
   _id: string;
   nameEn: string;
@@ -13,6 +15,8 @@ export type Role = {
     nameEn: string;
     permissions: Permission[];
   }[];
+  createdBy: Partial<User>;
+  createdAt: string;
 };
 
 export type Permission = {

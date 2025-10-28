@@ -14,7 +14,7 @@ import {
   useState,
 } from "react";
 import ListTableRow from "../list-table-row";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import TableToolbar from "../table-toolbar";
 import GridTableRow from "../grid-table-row";
 import DashboardPagination from "@/components/dashboard-pagination";
@@ -36,8 +36,7 @@ import {
   ORDER_DIR_OPTIONS,
 } from "../constants";
 import { useQueryParams } from "@/hooks/use-query-params";
-import { usePrompt } from "@/components/prompt-provider";
-import { Role } from "@/app/dashboard-types/roles";
+import { useMutate } from "../use-mutate";
 
 const NewEditForm = lazy(() => import("../new-edit-form"));
 export default function ListView() {
@@ -55,10 +54,8 @@ export default function ListView() {
   );
   // Custom Hooks ////////////////////////////////////
   const t = useTranslations();
-  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { showPrompt } = usePrompt();
   const defaultParams = useMemo(
     () => ({
       page: "1",
@@ -150,70 +147,8 @@ export default function ListView() {
   const notFound = canReset && results === 0;
   const isEmpty = !canReset && results === 0;
   // Callbacks ////////////////////////////////////////
-  const onActivateRow = useCallback(
-    (role: Role) =>
-      showPrompt({
-        variant: role?.status === "ACTIVE" ? "ALERT" : "SUCCESS",
-        dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
-          OPERATION_NAME: t(
-            role?.status === "ACTIVE"
-              ? "COMMON.DEACTIVATION"
-              : "COMMON.ACTIVATION"
-          ),
-        }),
-        title: t(
-          role?.status === "ACTIVE"
-            ? "COMMON.DEACTIVATION_TITLE"
-            : "COMMON.ACTIVATION_TITLE",
-          {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-          }
-        ),
-        content: t(
-          role?.status === "ACTIVE"
-            ? "COMMON.DEACTIVATION_DESC"
-            : "COMMON.ACTIVATION_DESC",
-          {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-          }
-        ),
-      }),
-    [locale, showPrompt, t]
-  );
-  const onEditRole = useCallback(
-    (role: Role) =>
-      showPrompt({
-        variant: role?.status === "ACTIVE" ? "ALERT" : "SUCCESS",
-        dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
-          OPERATION_NAME: t(
-            role?.status === "ACTIVE"
-              ? "COMMON.DEACTIVATION"
-              : "COMMON.ACTIVATION"
-          ),
-        }),
-        title: t(
-          role?.status === "ACTIVE"
-            ? "COMMON.DEACTIVATION_TITLE"
-            : "COMMON.ACTIVATION_TITLE",
-          {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-          }
-        ),
-        content: t(
-          role?.status === "ACTIVE"
-            ? "COMMON.DEACTIVATION_DESC"
-            : "COMMON.ACTIVATION_DESC",
-          {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-          }
-        ),
-      }),
-    [locale, showPrompt, t]
-  );
+  const { changeStatus } = useMutate();
+
   // LifeCycle Hooks ////////////////////////////////////////
   useEffect(() => {
     initParams();
@@ -345,7 +280,7 @@ export default function ListView() {
                       <ListTableRow
                         key={role?._id}
                         role={role}
-                        onActivateRow={onActivateRow}
+                        onActivateRow={changeStatus}
                       />
                     ))}
                 </motion.ul>
@@ -361,7 +296,7 @@ export default function ListView() {
                     <GridTableRow
                       key={role?._id}
                       role={role}
-                      onActivateRow={onActivateRow}
+                      onActivateRow={changeStatus}
                     />
                   ))}
                 </motion.ul>

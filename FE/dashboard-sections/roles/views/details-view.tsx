@@ -13,23 +13,27 @@ import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
 import { lazy, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useGetRoleDetails } from "@/app/dashboard-api/roles";
+import {
+  useGetRoleDetails,
+  useGetUsersPerRole,
+} from "@/app/dashboard-api/roles";
 import { useParams } from "next/navigation";
 import { DetailsSkeletonView } from "./skeleton-view";
-import { pushDashboardMessage } from "@/components/dashboard-toast-message";
+import { useMutate } from "../use-mutate";
 
 const NewEditForm = lazy(() => import("../new-edit-form"));
 
 export default function DetailsView() {
   const { roleId } = useParams();
   const { data: role, isLoading: rolesLoading } = useGetRoleDetails(roleId);
+  const { data: users, isLoading: usersLoading } = useGetUsersPerRole(roleId);
   const [showEditModal, setShowEditModal] = useState<
     "CREATE" | "EDIT" | "HIDDEN"
   >("HIDDEN");
-  console.log(role);
   const locale = useLocale();
   const t = useTranslations();
-  if (rolesLoading) return <DetailsSkeletonView />;
+  const { changeStatus } = useMutate();
+  if (rolesLoading || usersLoading) return <DetailsSkeletonView />;
   return (
     <div className="h-full dark:bg-dark-card flex flex-col">
       {/* Details Header */}
@@ -74,10 +78,18 @@ export default function DetailsView() {
             })}
           </Button>
           <Button
+            onClick={() => changeStatus(role!)}
             variant="ghost"
             className="border-2 border-white text-white h-12 min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200 rounded-xl"
           >
-            <Icon icon="ci:pause" className="h-6! w-6!" />
+            <Icon
+              icon={
+                role?.status === "ACTIVE"
+                  ? "ci:pause"
+                  : "material-symbols:check-rounded"
+              }
+              className="h-6! w-6!"
+            />
             {t("COMMON.DEACTIVATE_TITLE", {
               ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
             })}
@@ -173,7 +185,7 @@ export default function DetailsView() {
                 className="mb-4"
               />
               <div className="flex flex-row gap-3 flex-wrap">
-                {role?.users?.map((user) => (
+                {users?.map((user) => (
                   <div
                     key={user?._id}
                     className="flex w-[calc(50%_-_12px)] gap-3 flex-row shrink-0"
@@ -211,7 +223,7 @@ export default function DetailsView() {
           open
           onClose={() => setShowEditModal("HIDDEN")}
           refetch={() => {}}
-          currentRole={role}
+          currentRole={role ?? undefined}
         />
       )}
     </div>

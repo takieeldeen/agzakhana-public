@@ -7,7 +7,11 @@ import {
 import { dummyFetcher, dummyPromise, getDummyFetcher } from "./api";
 import { APIListResponse } from "@/types/common";
 import { Role } from "../dashboard-types/roles";
-import { ROLES_DETAILS_MOCK_DATA, ROLES_MOCK_DATA } from "../_mock/_roles";
+import {
+  ROLES_DETAILS_MOCK_DATA,
+  ROLES_MOCK_DATA,
+  USER_PER_ROLE_MOCK_DATA,
+} from "../_mock/_roles";
 import { useMemo } from "react";
 import axios, { endpoints } from "./axios";
 import { AxiosRequestConfig } from "axios";
@@ -73,7 +77,6 @@ export function useGetRoles(
 
 export function useGetRoleDetails(roleId: ParamValue | string | undefined) {
   const URL = roleId ? endpoints.roles.details(roleId?.toString()) : "";
-  console.log(roleId);
   const { data, isLoading, isFetching, refetch, error } = useQuery<
     { content: Role },
     Error
@@ -82,7 +85,6 @@ export function useGetRoleDetails(roleId: ParamValue | string | undefined) {
     queryFn: getDummyFetcher<any>(ROLES_DETAILS_MOCK_DATA),
     staleTime: Infinity,
   });
-  console.log(data);
   const memoizedValue = useMemo(
     () => ({
       data: data?.content ?? null,
@@ -92,6 +94,45 @@ export function useGetRoleDetails(roleId: ParamValue | string | undefined) {
       error,
     }),
     [data?.content, error, isFetching, isLoading, refetch]
+  );
+
+  return memoizedValue;
+}
+
+export function useGetUsersPerRole(roleId: ParamValue | string | undefined) {
+  const URL = roleId ? endpoints.roles.details(roleId?.toString()) : "";
+  const { data, isLoading, isFetching, refetch, error } = useQuery<
+    APIListResponse<{
+      _id: string;
+      nameAr: string;
+      nameEn: string;
+      imageUrl: string;
+      email: string;
+    }>,
+    Error
+  >({
+    queryKey: ["roles", "users", URL],
+    queryFn: getDummyFetcher<
+      APIListResponse<{
+        _id: string;
+        nameAr: string;
+        nameEn: string;
+        imageUrl: string;
+        email: string;
+      }>
+    >(USER_PER_ROLE_MOCK_DATA),
+    staleTime: Infinity,
+  });
+  const memoizedValue = useMemo(
+    () => ({
+      data: data?.content ?? [],
+      results: data?.results ?? 0,
+      isLoading,
+      isFetching,
+      refetch,
+      error,
+    }),
+    [data?.content, data?.results, error, isFetching, isLoading, refetch]
   );
 
   return memoizedValue;
@@ -110,12 +151,10 @@ export function useMutateRole() {
     },
     onSuccess: (res) =>
       queryClient.setQueryData(["roles"], (data) => {
-        console.log(data);
         return data;
       }),
     onError: (res) =>
       queryClient.setQueryData(["roles"], (data) => {
-        console.log(data);
         return data;
       }),
   });
@@ -124,39 +163,24 @@ export function useMutateRole() {
   // -------------------------
   const editRole = useMutation({
     mutationFn: async (data: any) => {
-      const URL = endpoints.roles.list;
+      const URL = endpoints.roles.details;
       return await dummyPromise();
       // return axios.post(URL, data);
     },
-    onSuccess: (res) =>
-      queryClient.setQueryData(["roles"], (data) => {
-        console.log(data);
-        return data;
-      }),
+    onSuccess: (res, data) =>
+      queryClient.setQueryData(
+        ["roles", endpoints.roles.details(data.id)],
+        (data) => {
+          console.log(data);
+          return data;
+        }
+      ),
     onError: (res) =>
       queryClient.setQueryData(["roles"], (data) => {
         console.log(data);
         return data;
       }),
   });
-
-  // -------------------------
-  // Remove From Cart
-  // -------------------------
-  // const removeFromCart = useMutation({
-  //   mutationFn: async (cartItemId: string) => {
-  //     const URL = endpoints.cart.single(cartItemId);
-  //     return await axios.delete(URL);
-  //   },
-  //   onSuccess: (res) => {
-  //     queryClient.setQueryData(["cart"], res?.data);
-  //     queryClient.setQueryData(["cart-details"], (oldData: any) => {
-  //       const modifiedData = JSON.parse(JSON.stringify(oldData));
-  //       modifiedData.content.cart = res?.data?.content?.cart;
-  //       return modifiedData;
-  //     });
-  //   },
-  // });
 
   // -------------------------
   // Clear Cart
