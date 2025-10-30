@@ -105,6 +105,7 @@ export default function NewEditForm({
   const onSubmit = useCallback(
     async (data: Z.output<typeof schema>) => {
       if (currentRole) {
+        (data as any)._id = currentRole?._id;
         await editRole.mutateAsync(data);
         onClose();
         pushDashboardMessage({

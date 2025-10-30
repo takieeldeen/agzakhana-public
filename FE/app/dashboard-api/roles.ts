@@ -4,14 +4,10 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { dummyFetcher, dummyPromise, getDummyFetcher } from "./api";
+import { dummyPromise, getDummyFetcher, getFetcher } from "./api";
 import { APIListResponse } from "@/types/common";
 import { Role, RoleListItem } from "../dashboard-types/roles";
-import {
-  ROLES_DETAILS_MOCK_DATA,
-  ROLES_MOCK_DATA,
-  USER_PER_ROLE_MOCK_DATA,
-} from "../_mock/_roles";
+import { USER_PER_ROLE_MOCK_DATA } from "../_mock/_roles";
 import { useMemo } from "react";
 import axios, { endpoints } from "./axios";
 import { AxiosRequestConfig } from "axios";
@@ -56,7 +52,7 @@ export function useGetRoles(
   >({
     ...options,
     queryKey: ["roles", URL],
-    queryFn: dummyFetcher<APIListResponse<RoleListItem>>(ROLES_MOCK_DATA, URL, true),
+    queryFn: getFetcher(URL),
     staleTime: Infinity,
   });
 
@@ -82,8 +78,7 @@ export function useGetRoleDetails(roleId: ParamValue | string | undefined) {
     Error
   >({
     queryKey: ["roles", URL],
-    queryFn: getDummyFetcher<any>(ROLES_DETAILS_MOCK_DATA),
-    staleTime: Infinity,
+    queryFn: getFetcher<any>(URL),
   });
   const memoizedValue = useMemo(
     () => ({
@@ -140,7 +135,6 @@ export function useGetUsersPerRole(roleId: ParamValue | string | undefined) {
 
 export function useMutateRole() {
   const queryClient = useQueryClient();
-
   // -------------------------
   // Creation
   // -------------------------
@@ -149,14 +143,97 @@ export function useMutateRole() {
       const URL = endpoints.roles.list;
       return axios.post(URL, data);
     },
-    onSuccess: (res) =>
-      queryClient.setQueryData(["roles"], (data) => {
-        return data;
-      }),
-    onError: (res) =>
-      queryClient.setQueryData(["roles"], (data) => {
-        return data;
-      }),
+    onSuccess: (res, payload) => {
+      queryClient.setQueryData(["roles"], (cachedData) => {
+        const updatedData = JSON.parse(JSON.stringify(cachedData));
+        updatedData.content = { ...updatedData.content, ...payload };
+        return updatedData;
+      });
+    },
+  });
+  // -------------------------
+  // Activate
+  // -------------------------
+  const activateRole = useMutation({
+    mutationFn: async (role: RoleListItem | Role) => {
+      const URL = endpoints.roles.activate(role?._id);
+      await axios.post(URL);
+    },
+    onSuccess: (res, role) => {
+      if (LAST_LIST_KEY) {
+        queryClient.setQueryData(
+          ["roles", LAST_LIST_KEY],
+          (cachedData: any) => {
+            if (!cachedData) return undefined;
+            const updatedData = JSON.parse(JSON.stringify(cachedData));
+            const targetListItem = updatedData?.content?.find(
+              (cur: RoleListItem) => cur._id === role?._id
+            );
+            if (!targetListItem) return;
+            targetListItem.status = "ACTIVE";
+            return updatedData;
+          }
+        );
+      }
+      queryClient.setQueryData(
+        ["roles", endpoints.roles.details(role?._id)],
+        (cachedData: any) => {
+          if (!cachedData) return undefined;
+          const updatedData = JSON.parse(JSON.stringify(cachedData));
+          updatedData.content = { ...updatedData.content, status: "ACTIVE" };
+          return updatedData;
+        }
+      );
+      if (!!LAST_LIST_KEY)
+        queryClient.invalidateQueries({
+          queryKey: ["roles", LAST_LIST_KEY],
+        });
+      queryClient.invalidateQueries({
+        queryKey: ["roles", endpoints.roles.details(role?._id)],
+      });
+    },
+  });
+  // -------------------------
+  // Deactivate
+  // -------------------------
+  const deactivateRole = useMutation({
+    mutationFn: async (role: RoleListItem | Role) => {
+      const URL = endpoints.roles.deactivate(role?._id);
+      await axios.post(URL);
+    },
+    onSuccess: (res, role) => {
+      if (LAST_LIST_KEY) {
+        queryClient.setQueryData(
+          ["roles", LAST_LIST_KEY],
+          (cachedData: any) => {
+            if (!cachedData) return undefined;
+            const updatedData = JSON.parse(JSON.stringify(cachedData));
+            const targetListItem = updatedData?.content?.find(
+              (cur: RoleListItem) => cur._id === role?._id
+            );
+            if (!targetListItem) return;
+            targetListItem.status = "INACTIVE";
+            return updatedData;
+          }
+        );
+      }
+      queryClient.setQueryData(
+        ["roles", endpoints.roles.details(role?._id)],
+        (cachedData: any) => {
+          if (!cachedData) return undefined;
+          const updatedData = JSON.parse(JSON.stringify(cachedData));
+          updatedData.content = { ...updatedData.content, status: "INACTIVE" };
+          return updatedData;
+        }
+      );
+      if (!!LAST_LIST_KEY)
+        queryClient.invalidateQueries({
+          queryKey: ["roles", LAST_LIST_KEY],
+        });
+      queryClient.invalidateQueries({
+        queryKey: ["roles", endpoints.roles.details(role?._id)],
+      });
+    },
   });
   // -------------------------
   // Update
@@ -164,50 +241,24 @@ export function useMutateRole() {
   const editRole = useMutation({
     mutationFn: async (data: any) => {
       const URL = endpoints.roles.details;
+      console.log(["roles", endpoints.roles.details(data._id)]);
       return await dummyPromise();
       // return axios.post(URL, data);
     },
-    onSuccess: (res, data) =>
+    onSuccess: (res, data) => {
       queryClient.setQueryData(
-        ["roles", endpoints.roles.details(data.id)],
-        (data) => {
-          console.log(data);
-          return data;
+        ["roles", endpoints.roles.details(data._id)],
+        (cachedData: any) => {
+          const updatedData = JSON.parse(JSON.stringify(cachedData));
+          updatedData.content = { ...updatedData.content, ...data };
+          return updatedData;
         }
-      ),
-    onError: (res) =>
-      queryClient.setQueryData(["roles"], (data) => {
-        console.log(data);
-        return data;
-      }),
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["roles", endpoints.roles.details(data._id)],
+      });
+    },
   });
 
-  // -------------------------
-  // Clear Cart
-  // -------------------------
-  // const clearCart = useMutation({
-  //   mutationFn: async () => {
-  //     const URL = endpoints.cart.list;
-  //     return await axios.delete(URL);
-  //   },
-  //   mutationKey: ["cart"],
-  //   onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
-  // });
-  // -------------------------
-  // Update Cart Item
-  // -------------------------
-  // const updateCartItem = useMutation({
-  //   mutationFn: async ({
-  //     cartItemId,
-  //     payload,
-  //   }: {
-  //     cartItemId: string;
-  //     payload: any;
-  //   }) => {
-  //     const URL = endpoints.cart.single(cartItemId);
-  //     return await axios.patch(URL, { cartItemId, ...payload });
-  //   },
-  //   onSuccess: (res) => queryClient.setQueryData(["cart"], res?.data),
-  // });
-  return { createRole, editRole };
+  return { createRole, activateRole, deactivateRole, editRole };
 }

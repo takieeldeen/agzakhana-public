@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import useSound from "use-sound";
+import { cn } from "@/lib/utils";
 
 type Props = {
   variant: "success" | "fail";
@@ -23,12 +24,18 @@ export default function ToastMessage({
   const variantProps = {
     success: {
       title: tr("TOAST.SUCCESSFUL_PROCESS"),
-      icon: "iconamoon:check-fill",
+      icon: {
+        name: "iconamoon:check-fill",
+        style: "bg-emerald-600",
+      },
       color: "bg-agzakhana-primary",
     },
     fail: {
       title: tr("TOAST.UNSUCCESSFUL_PROCESS"),
-      icon: "material-symbols:close-rounded",
+      icon: {
+        name: "material-symbols:close-rounded",
+        style: "bg-rose-800",
+      },
       color: "bg-red-500",
     },
   };
@@ -98,9 +105,15 @@ export default function ToastMessage({
           transition={{
             type: "spring",
           }}
-          className="h-12 w-12 bg-emerald-600 rounded-xl flex items-center justify-center"
+          className={cn(
+            "h-12 w-12 bg-emerald-600 rounded-xl flex items-center justify-center",
+            variantProps?.[variant]?.icon?.style
+          )}
         >
-          <Icon icon="line-md:confirm" className="h-10 w-10 text-white" />
+          <Icon
+            icon={variantProps?.[variant]?.icon?.name}
+            className="h-10 w-10 text-white"
+          />
         </motion.div>
       </motion.div>
     </AnimatePresence>

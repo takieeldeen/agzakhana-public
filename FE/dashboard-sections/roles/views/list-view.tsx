@@ -84,7 +84,7 @@ export default function ListView() {
       nameEn: Z.string(),
       value: Z.string(),
     }).nullable(),
-    size: Z.number(),
+    size: Z.union([Z.string(), Z.number()]),
   });
   const defaultValues = useMemo(
     () => ({
@@ -118,10 +118,12 @@ export default function ListView() {
       name: debouncedSearch,
       status: filtervalues?.status,
       sort: filtervalues?.sort?.value ?? null,
+      dir: filtervalues?.dir?.value ?? null,
       permissions: searchParams?.get("permission") ?? null,
     }),
     [
       debouncedSearch,
+      filtervalues?.dir?.value,
       filtervalues?.sort?.value,
       filtervalues?.status,
       searchParams,
@@ -137,7 +139,7 @@ export default function ListView() {
   }, []);
   // Data Fetching Hooks ////////////////////////////////////
   const { data, isLoading, isFetching, results } = useGetRoles(
-    filtervalues.size,
+    +filtervalues.size,
     page,
     filters,
     { enabled: filtersSynced },
@@ -168,21 +170,33 @@ export default function ListView() {
   if (isLoading) return <ListSkeletonView />;
   if (isEmpty)
     return (
-      <EmptyView
-        icon="solar:key-broken"
-        title={t("COMMON.EMPTY_TITLE", {
-          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-        })}
-        subtitle={t("COMMON.EMPTY_SUBTITLE", {
-          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-        })}
-        action={() => {
-          console.log("Hello World");
-        }}
-        actionTitle={t("COMMON.CREATE", {
-          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-        })}
-      />
+      <>
+        <EmptyView
+          icon="solar:key-broken"
+          title={t("COMMON.EMPTY_TITLE", {
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+          })}
+          subtitle={t("COMMON.EMPTY_SUBTITLE", {
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+          })}
+          action={() => {
+            setShowCreationModal("CREATE");
+          }}
+          actionTitle={t("COMMON.CREATE", {
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+          })}
+        />
+        {showCreationModal !== "HIDDEN" && (
+          <Suspense>
+            <NewEditForm
+              open
+              onClose={() => setShowCreationModal("HIDDEN")}
+              refetch={() => {}}
+              // currentRole={showCreationModal === 'EDIT' && }
+            />
+          </Suspense>
+        )}
+      </>
     );
   return (
     <div className="flex flex-col gap-3 h-full p-3 pt-0">
@@ -253,7 +267,7 @@ export default function ListView() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0, opacity: 0 }}
             >
-              <Badge className="bg-emerald-600">
+              <Badge className="bg-emerald-600 dark:text-white">
                 <Spinner />
                 {t("COMMON.SYNCING")}
               </Badge>
@@ -310,7 +324,7 @@ export default function ListView() {
           onSubmit={onSubmit}
           className="min-w-76 bg-card rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] md:h-[28rem] lg:h-full  relative md:sticky md:top-[4.5rem] flex flex-col gap-0 self-stretch dark:bg-dark-card"
         >
-          <TableToolbar />
+          <TableToolbar results={results ?? 0} />
         </RHFForm>
       </div>
       <AnimatePresence>
@@ -322,7 +336,7 @@ export default function ListView() {
           >
             <DashboardPagination
               totalRowsCount={results ?? 0}
-              rowsPerPage={filtervalues.size}
+              rowsPerPage={+filtervalues.size}
               page={page}
               onChange={(newPage) => {
                 const params = new URLSearchParams(searchParams.toString());

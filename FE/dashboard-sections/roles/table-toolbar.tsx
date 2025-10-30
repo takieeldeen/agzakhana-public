@@ -12,14 +12,16 @@ import { useFormContext } from "react-hook-form";
 import { LIST_COUNT, ORDER_BY_OPTIONS, ORDER_DIR_OPTIONS } from "./constants";
 import { useGetPermissionsHelper } from "@/app/dashboard-api/helpers";
 import { useQueryParams } from "@/hooks/use-query-params";
+import { Separator } from "@/components/ui/separator";
 
-export default function TableToolbar() {
+export default function TableToolbar({ results }: { results: number }) {
   const t = useTranslations();
   const {
-    formState: { dirtyFields },
+    formState: { dirtyFields, errors },
     setValue,
     reset,
   } = useFormContext();
+  console.log(errors);
   const searchParams = useSearchParams();
   const router = useRouter();
   const HAS_FILTERS = dirtyFields && Object.keys(dirtyFields).length > 0;
@@ -57,6 +59,11 @@ export default function TableToolbar() {
   return (
     <>
       <div className="p-3 mb-auto md:h-[22rem] overflow-y-auto lg:h-full">
+        <div className="flex flex-row justify-between font-bold mb-1 dark:text-gray-300">
+          <p className="text-lg ">{t("COMMON.TOTAL")}</p>
+          <p>({results ?? 0})</p>
+        </div>
+        <Separator className="mb-3" />
         <RHFTextfield
           name="name"
           label={t("COMMON.SEARCH_BY_NAME")}
@@ -102,26 +109,7 @@ export default function TableToolbar() {
             }}
           />
         </div>
-        <RHFComboxbox
-          clearable
-          name="sort"
-          label={t("COMMON.ORDER_BY")}
-          placeholder={t("COMMON.ORDER_BY")}
-          labelProps={{
-            className: "text-sm font-medium ",
-          }}
-          options={ORDER_BY_OPTIONS}
-          getOptionLabel={(option) => {
-            if (!option) return "";
-            return locale === "ar" ? option?.nameAr : option?.nameEn;
-          }}
-          optionValueComparator={(option, value) =>
-            option?.value === value?.value
-          }
-          onChange={(newVal, reason) => {
-            handleChangeParam("sort", newVal?.value, reason === "clear");
-          }}
-        />
+
         <RHFComboxbox
           clearable
           name="permission"
@@ -141,6 +129,26 @@ export default function TableToolbar() {
             handleChangeParam("permission", newVal?._id, reason === "clear");
           }}
           // getOptionValue
+        />
+        <RHFComboxbox
+          clearable
+          name="sort"
+          label={t("COMMON.ORDER_BY")}
+          placeholder={t("COMMON.ORDER_BY")}
+          labelProps={{
+            className: "text-sm font-medium ",
+          }}
+          options={ORDER_BY_OPTIONS}
+          getOptionLabel={(option) => {
+            if (!option) return "";
+            return locale === "ar" ? option?.nameAr : option?.nameEn;
+          }}
+          optionValueComparator={(option, value) =>
+            option?.value === value?.value
+          }
+          onChange={(newVal, reason) => {
+            handleChangeParam("sort", newVal?.value, reason === "clear");
+          }}
         />
         <RHFComboxbox
           clearable

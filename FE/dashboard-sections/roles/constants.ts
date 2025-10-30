@@ -9,13 +9,13 @@ export const ORDER_BY_OPTIONS = [
     _id: "2",
     nameAr: "الحاصلين على الدور",
     nameEn: "Number of users",
-    value: "userCount",
+    value: "usersCount",
   },
   {
     _id: "3",
     nameAr: "الصلاحيات",
     nameEn: "Permissions",
-    value: "permission",
+    value: "permissionsCount",
   },
 ];
 export const ORDER_DIR_OPTIONS = [

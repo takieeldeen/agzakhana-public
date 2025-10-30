@@ -29,6 +29,7 @@
     "VITAMINS_AND_SUPPLEMENTS_SUBTITLE": "مجموعة من الفيتامينات والمكملات الغذائية للصحة والعافية."
   },
   "COMMON": {
+    "TOTAL": "الإجمالي",
     "EGP": "{price} ج.م.",
     "EGP_CURRENCY": "ج.م.",
     "BACK_TO_HOME": "العودة إلى الصفحة الرئيسية",
@@ -92,7 +93,13 @@
     "UPDATED_SUCCESSFULLY": "تم تحديث {ENTITY_NAME} بنجاح",
     "ACTIVATED_SUCCESSFULLY": "تم تفعيل {ENTITY_NAME} بنجاح",
     "DEACTIVATED_SUCCESSFULLY": "تم تعطيل {ENTITY_NAME} بنجاح",
-    "DELETED_SUCCESSFULLY": "تم حذف {ENTITY_NAME} بنجاح"
+    "DELETED_SUCCESSFULLY": "تم حذف {ENTITY_NAME} بنجاح",
+    "CREATED_FAILED": "حدث خطأ ما أثناء إنشاء {ENTITY_NAME}",
+    "SAVED_FAILED": "حدث خطأ ما أثناء حفظ {ENTITY_NAME}",
+    "UPDATED_FAILED": "حدث خطأ ما أثناء تحديث {ENTITY_NAME}",
+    "ACTIVATED_FAILED": "حدث خطأ ما أثناء تفعيل {ENTITY_NAME}",
+    "DEACTIVATED_FAILED": "حدث خطأ ما أثناء تعطيل {ENTITY_NAME}",
+    "DELETED_FAILED": "حدث خطأ ما أثناء حذف {ENTITY_NAME}"
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",
@@ -374,6 +381,8 @@
     "CREATED_BY": "أنشئ بواسطة",
     "CREATED_AT": "آخر تحديث",
     "USERS_INFO_WITH_PERMISSIONS": "الحاصلين على الدور",
-    "DELETE": "إزالة"
+    "DELETE": "إزالة",
+    "EMPTY_USERS_TEXT": "حاصلين على هذا الدور",
+    "EMPTY_USERS_SUBTITLE": "مستخدم حاصل على هذا الدور"
   }
 }

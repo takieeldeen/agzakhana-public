@@ -11,6 +11,8 @@ export const endpoints = {
   roles: {
     list: "/v1/roles",
     details: (id: string) => `/v1/roles/${id}`,
+    activate: (id: string) => `/v1/roles/${id}/activate`,
+    deactivate: (id: string) => `/v1/roles/${id}/deactivate`,
   },
 };
 

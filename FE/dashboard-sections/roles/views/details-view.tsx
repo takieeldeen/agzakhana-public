@@ -20,12 +20,17 @@ import {
 import { useParams } from "next/navigation";
 import { DetailsSkeletonView } from "./skeleton-view";
 import { useMutate } from "../use-mutate";
+import { motion, AnimatePresence } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import { Spinner } from "@/components/ui/spinner";
+import EmptyView from "./empty-view";
 
 const NewEditForm = lazy(() => import("../new-edit-form"));
 
 export default function DetailsView() {
   const { roleId } = useParams();
-  const { data: role, isLoading: rolesLoading } = useGetRoleDetails(roleId);
+  const { data, isLoading, isFetching } = useGetRoleDetails(roleId);
+  console.log(isFetching);
   const { data: users, isLoading: usersLoading } = useGetUsersPerRole(roleId);
   const [showEditModal, setShowEditModal] = useState<
     "CREATE" | "EDIT" | "HIDDEN"
@@ -33,7 +38,9 @@ export default function DetailsView() {
   const locale = useLocale();
   const t = useTranslations();
   const { changeStatus } = useMutate();
-  if (rolesLoading || usersLoading) return <DetailsSkeletonView />;
+  console.log(data);
+  const usersEmpty = users?.length === 0 && !usersLoading;
+  if (isLoading || usersLoading) return <DetailsSkeletonView />;
   return (
     <div className="h-full dark:bg-dark-card flex flex-col">
       {/* Details Header */}
@@ -47,22 +54,37 @@ export default function DetailsView() {
         <div className="flex-1 ">
           <div>
             <h3 className="text-xl font-bold text-white flex flex-row items-center gap-3">
-              {locale === "ar" ? role?.nameAr : role?.nameEn}
+              {locale === "ar" ? data?.nameAr : data?.nameEn}
+
               <span
                 className={cn(
                   "text-xs font-semibold text-white bg-emerald-800 px-2 py-1 rounded-full "
                 )}
               >
-                {role?.status
-                  ? t(`COMMON.${role?.status}`)
+                {data?.status
+                  ? t(`COMMON.${data?.status}`)
                   : t("COMMON.UNKOWN")}
               </span>
+              <AnimatePresence>
+                {isFetching && (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                  >
+                    <Badge className="bg-emerald-800 dark:text-white">
+                      <Spinner />
+                      {t("COMMON.SYNCING")}
+                    </Badge>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </h3>
             <p className="text-input dark:text-gray-200">{`${t(
               "ROLES_MANAGEMENT.PERMISSIONS_CNT",
-              { count: 9 }
+              { count: data?.permissionsCount }
             )} - ${t("ROLES_MANAGEMENT.USERS_WITH_PERMISSIONS", {
-              count: 0,
+              count: users?.length,
             })}`}</p>
           </div>
         </div>
@@ -78,13 +100,16 @@ export default function DetailsView() {
             })}
           </Button>
           <Button
-            onClick={() => changeStatus(role!)}
+            onClick={(e) => {
+              e.stopPropagation();
+              changeStatus(data!);
+            }}
             variant="ghost"
             className="border-2 border-white text-white h-12 min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200 rounded-xl"
           >
             <Icon
               icon={
-                role?.status === "ACTIVE"
+                data?.status === "ACTIVE"
                   ? "ci:pause"
                   : "material-symbols:check-rounded"
               }
@@ -104,20 +129,20 @@ export default function DetailsView() {
               <ListItem
                 primaryLabel={t("COMMON.STATUS")}
                 secondaryLabel={
-                  role?.status
-                    ? t(`COMMON.${role?.status}`)
+                  data?.status
+                    ? t(`COMMON.${data?.status}`)
                     : t("COMMON.UNKOWN")
                 }
               />
               <ListItem
                 primaryLabel={t("ROLES_MANAGEMENT.PERMISSIONS_COUNT")}
-                secondaryLabel={role?.permissionsCount}
+                secondaryLabel={data?.permissionsCount}
               />
             </div>
             <ListItem
               primaryLabel={t("ROLES_MANAGEMENT.ROLE_DESCRIPTION")}
               secondaryLabel={
-                locale === "ar" ? role?.descriptionAr : role?.descriptionEn
+                locale === "ar" ? data?.descriptionAr : data?.descriptionEn
               }
             />
             <div className="">
@@ -127,7 +152,7 @@ export default function DetailsView() {
               />
               <Accordion type="multiple" className="w-full ">
                 <ul className="flex flex-col gap-3">
-                  {role?.permissionGroups?.map((group) => (
+                  {data?.permissionGroups?.map((group) => (
                     <li key={group?._id}>
                       <AccordionItem value={group?._id} className="">
                         <AccordionTrigger className="bg-gray-200 dark:bg-dark-background dark:text-gray-300  rounded-t-2xl rounded-b-none px-4 hover:no-underline cursor-pointer text-lg text-black [&[data-state=closed]]:rounded-b-2xl">
@@ -156,14 +181,14 @@ export default function DetailsView() {
                 primaryLabel={t("ROLES_MANAGEMENT.CREATED_BY")}
                 secondaryLabel={
                   locale === "ar"
-                    ? role?.createdBy?.nameAr
-                    : role?.createdBy?.nameEn
+                    ? data?.createdBy?.nameAr
+                    : data?.createdBy?.nameEn
                 }
               />
               <ListItem
                 primaryLabel={t("ROLES_MANAGEMENT.CREATED_AT")}
                 secondaryLabel={
-                  role?.createdAt
+                  data?.createdAt
                     ? new Intl.DateTimeFormat(
                         locale === "ar" ? "ar-EG" : "en-US",
                         {
@@ -174,7 +199,7 @@ export default function DetailsView() {
                           hour: "2-digit",
                           minute: "2-digit",
                         }
-                      ).format(new Date(role?.createdAt ?? ""))
+                      ).format(new Date(data?.createdAt ?? ""))
                     : t("COMMON.UNKOWN")
                 }
               />
@@ -185,34 +210,48 @@ export default function DetailsView() {
                 className="mb-4"
               />
               <div className="flex flex-row gap-3 flex-wrap">
-                {users?.map((user) => (
-                  <div
-                    key={user?._id}
-                    className="flex w-[calc(50%_-_12px)] gap-3 flex-row shrink-0"
-                  >
-                    <Avatar className="h-14 w-14">
-                      <AvatarImage src={user?.imageUrl} alt="@shadcn" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-row flex-1 justify-between">
-                      <div className="flex flex-col">
-                        <p className="text-black text-lg font-semibold dark:text-white">
-                          {locale === "ar" ? user?.nameAr : user?.nameEn}
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-300">
-                          {user?.email}
-                        </p>
-                      </div>
-                      <Button
-                        className="rounded-full h-12 w-32 text-rose-800 dark:text-rose-600 border-rose-800 dark:border-rose-600 border-2 hover:bg-rose-800 hover:dark:bg-rose-600 hover:dark:text-white hover:text-white"
-                        variant="ghost"
-                      >
-                        <Icon icon="mynaui:trash" className="h-6! w-6!" />
-                        {t("ROLES_MANAGEMENT.DELETE")}
-                      </Button>
-                    </div>
+                {usersEmpty && (
+                  <div className="h-64 w-full">
+                    <EmptyView
+                      icon="solar:users-group-two-rounded-linear"
+                      title={t("COMMON.EMPTY_TITLE", {
+                        ENTITY_NAME: t("ROLES_MANAGEMENT.EMPTY_USERS_TEXT"),
+                      })}
+                      subtitle={t("COMMON.EMPTY_SUBTITLE", {
+                        ENTITY_NAME: t("ROLES_MANAGEMENT.EMPTY_USERS_SUBTITLE"),
+                      })}
+                    />
                   </div>
-                ))}
+                )}
+                {!usersEmpty &&
+                  users?.map((user) => (
+                    <div
+                      key={user?._id}
+                      className="flex w-[calc(50%_-_12px)] gap-3 flex-row shrink-0"
+                    >
+                      <Avatar className="h-14 w-14">
+                        <AvatarImage src={user?.imageUrl} alt="@shadcn" />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-row flex-1 justify-between">
+                        <div className="flex flex-col">
+                          <p className="text-black text-lg font-semibold dark:text-white">
+                            {locale === "ar" ? user?.nameAr : user?.nameEn}
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-300">
+                            {user?.email}
+                          </p>
+                        </div>
+                        <Button
+                          className="rounded-full h-12 w-32 text-rose-800 dark:text-rose-600 border-rose-800 dark:border-rose-600 border-2 hover:bg-rose-800 hover:dark:bg-rose-600 hover:dark:text-white hover:text-white"
+                          variant="ghost"
+                        >
+                          <Icon icon="mynaui:trash" className="h-6! w-6!" />
+                          {t("ROLES_MANAGEMENT.DELETE")}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
@@ -223,7 +262,7 @@ export default function DetailsView() {
           open
           onClose={() => setShowEditModal("HIDDEN")}
           refetch={() => {}}
-          currentRole={role ?? undefined}
+          currentRole={data ?? undefined}
         />
       )}
     </div>

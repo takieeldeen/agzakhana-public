@@ -1,5 +1,5 @@
 import { APIListResponse } from "@/types/common";
-import { Role, RoleListItem } from "../dashboard-types/roles";
+import { RoleListItem } from "../dashboard-types/roles";
 
 export const USER_PER_ROLE_MOCK_DATA = {
   content: [
@@ -43,7 +43,7 @@ export const USER_PER_ROLE_MOCK_DATA = {
 export const ROLES_DETAILS_MOCK_DATA = {
   status: "success",
   content: {
-    _id: "Xnjgsdddd_1",
+    _id: "1",
     nameAr: "مساعد صيدلي",
     nameEn: "Pharmacist Assistant",
     descriptionEn:

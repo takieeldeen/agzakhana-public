@@ -94,13 +94,15 @@ export function useQueryParams<
   }, [defaultParams, router]);
 
   const initParams = useCallback(() => {
-    const url = new URLSearchParams();
-
+    const url = new URLSearchParams(searchParams?.toString());
     if (!defaultParams) return;
     Object.entries(defaultParams).forEach(([key, value]) => {
-      if (url.get(key) === undefined && !!value) url.set(key, value);
+      const previousVal = url.get(key);
+      const NO_PREV_VAL = previousVal === null;
+      if (NO_PREV_VAL && !!value) url.set(key, value);
     });
-  }, [defaultParams]);
+    router.replace(`?${url.toString()}`);
+  }, [defaultParams, router, searchParams]);
 
   const syncParams = useCallback(
     (valueMappingOptions?: ValueMappingOptions<any>) => {

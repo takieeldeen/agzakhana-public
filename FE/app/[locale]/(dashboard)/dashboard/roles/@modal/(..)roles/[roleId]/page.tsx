@@ -1,5 +1,4 @@
 import InterceptingDrawer from "@/components/intercepting-drawer";
-import { DrawerContent } from "@/components/ui/drawer";
 import DetailsView from "@/dashboard-sections/roles/views/details-view";
 
 export async function generateMetadata({
@@ -18,9 +17,12 @@ export async function generateMetadata({
 export default function Page() {
   return (
     <InterceptingDrawer>
-      <DrawerContent className="data-[vaul-drawer-direction=left]:sm:max-w-[1200px] data-[vaul-drawer-direction=right]:sm:max-w-[1200px] border-l-0! border-r-0! will-change-auto [transform:none]">
-        <DetailsView />
-      </DrawerContent>
+      {/* <DrawerContent
+        onInteractOutside={() => alert("interacted")}
+        className="data-[vaul-drawer-direction=left]:sm:max-w-[1200px] data-[vaul-drawer-direction=right]:sm:max-w-[1200px] border-l-0! border-r-0! will-change-auto [transform:none]"
+      > */}
+      <DetailsView />
+      {/* </DrawerContent> */}
     </InterceptingDrawer>
     // <DetailsView />
   );
