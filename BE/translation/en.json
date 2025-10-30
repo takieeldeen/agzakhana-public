@@ -49,7 +49,9 @@
     "CITY": "City",
     "ADDRESS": "Address",
     "RESET_TOKEN": "Password reset token",
-    "VALUE": "Value"
+    "VALUE": "Value",
+    "DESC_AR": "Arabic Description",
+    "DESC_EN": "English Description"
   },
   "MESSAGES": {
     "FORGET_PASSWORD_SUCCESSFUL": "Please check your email to reset your password.",
