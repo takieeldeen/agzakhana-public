@@ -30,7 +30,6 @@ const NewEditForm = lazy(() => import("../new-edit-form"));
 export default function DetailsView() {
   const { roleId } = useParams();
   const { data, isLoading, isFetching } = useGetRoleDetails(roleId);
-  console.log(isFetching);
   const { data: users, isLoading: usersLoading } = useGetUsersPerRole(roleId);
   const [showEditModal, setShowEditModal] = useState<
     "CREATE" | "EDIT" | "HIDDEN"
@@ -38,7 +37,6 @@ export default function DetailsView() {
   const locale = useLocale();
   const t = useTranslations();
   const { changeStatus } = useMutate();
-  console.log(data);
   const usersEmpty = users?.length === 0 && !usersLoading;
   if (isLoading || usersLoading) return <DetailsSkeletonView />;
   return (
@@ -58,7 +56,7 @@ export default function DetailsView() {
 
               <span
                 className={cn(
-                  "text-xs font-semibold text-white bg-emerald-800 px-2 py-1 rounded-full "
+                  "text-xs font-semibold text-white bg-emerald-800  px-2 py-1 rounded-full "
                 )}
               >
                 {data?.status
@@ -82,10 +80,8 @@ export default function DetailsView() {
             </h3>
             <p className="text-input dark:text-gray-200">{`${t(
               "ROLES_MANAGEMENT.PERMISSIONS_CNT",
-              { count: data?.permissionsCount }
-            )} - ${t("ROLES_MANAGEMENT.USERS_WITH_PERMISSIONS", {
-              count: users?.length,
-            })}`}</p>
+              { count: data?.permissionsCount ?? 0 }
+            )} `}</p>
           </div>
         </div>
         <div className="flex flex-row items-start gap-3 ">
@@ -115,9 +111,14 @@ export default function DetailsView() {
               }
               className="h-6! w-6!"
             />
-            {t("COMMON.DEACTIVATE_TITLE", {
-              ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-            })}
+            {t(
+              data?.status === "ACTIVE"
+                ? "COMMON.DEACTIVATE_TITLE"
+                : "COMMON.ACTIVATE_TITLE",
+              {
+                ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+              }
+            )}
           </Button>
         </div>
       </div>
@@ -181,14 +182,14 @@ export default function DetailsView() {
                 primaryLabel={t("ROLES_MANAGEMENT.CREATED_BY")}
                 secondaryLabel={
                   locale === "ar"
-                    ? data?.createdBy?.nameAr
-                    : data?.createdBy?.nameEn
+                    ? data?.createdBy?.nameAr ?? t("COMMON.UNKOWN")
+                    : data?.createdBy?.nameEn ?? t("COMMON.UNKOWN")
                 }
               />
               <ListItem
                 primaryLabel={t("ROLES_MANAGEMENT.CREATED_AT")}
                 secondaryLabel={
-                  data?.createdAt
+                  data?.updatedAt
                     ? new Intl.DateTimeFormat(
                         locale === "ar" ? "ar-EG" : "en-US",
                         {
@@ -199,7 +200,7 @@ export default function DetailsView() {
                           hour: "2-digit",
                           minute: "2-digit",
                         }
-                      ).format(new Date(data?.createdAt ?? ""))
+                      ).format(new Date(data?.updatedAt ?? ""))
                     : t("COMMON.UNKOWN")
                 }
               />

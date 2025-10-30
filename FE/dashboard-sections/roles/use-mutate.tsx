@@ -11,6 +11,9 @@ export function useMutate() {
   const { activateRole, deactivateRole } = useMutateRole();
   const { showPrompt, closePrompt } = usePrompt();
 
+  const editRole = useCallback((role: Role) => {
+    console.log(role, "payload");
+  }, []);
   const changeStatus = useCallback(
     (role: Role | RoleListItem) => {
       const actionProps = {
@@ -87,8 +90,9 @@ export function useMutate() {
   const memoizedValue = useMemo(
     () => ({
       changeStatus,
+      editRole,
     }),
-    [changeStatus]
+    [changeStatus, editRole]
   );
   return memoizedValue;
 }

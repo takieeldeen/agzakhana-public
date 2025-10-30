@@ -32,9 +32,6 @@ export default function InterceptingDrawer({
       direction={locale === "ar" ? "right" : "left"}
       onClose={handleClose}
       onAnimationEnd={handleRouting}
-      onDrag={() => {
-        alert("test");
-      }}
       dismissible={false}
     >
       <DrawerContent

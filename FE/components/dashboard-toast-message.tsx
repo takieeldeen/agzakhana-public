@@ -58,7 +58,7 @@ export default function ToastMessage({
         <AnimatePresence>
           <motion.div
             initial={{ width: 0, opacity: 0.8 }}
-            animate={{ width: 240, opacity: 1 }}
+            animate={{ width: 360, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{
               delay: 0.6,

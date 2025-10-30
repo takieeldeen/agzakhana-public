@@ -4,7 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { dummyPromise, getDummyFetcher, getFetcher } from "./api";
+import { getDummyFetcher, getFetcher } from "./api";
 import { APIListResponse } from "@/types/common";
 import { Role, RoleListItem } from "../dashboard-types/roles";
 import { USER_PER_ROLE_MOCK_DATA } from "../_mock/_roles";
@@ -53,7 +53,6 @@ export function useGetRoles(
     ...options,
     queryKey: ["roles", URL],
     queryFn: getFetcher(URL),
-    staleTime: Infinity,
   });
 
   const memoizedValue = useMemo(
@@ -71,7 +70,13 @@ export function useGetRoles(
   return memoizedValue;
 }
 
-export function useGetRoleDetails(roleId: ParamValue | string | undefined) {
+export function useGetRoleDetails(
+  roleId: ParamValue | string | undefined,
+  options?: Omit<
+    UndefinedInitialDataOptions<any, Error, any, readonly unknown[]>,
+    "queryKey" | "queryFn"
+  >
+) {
   const URL = roleId ? endpoints.roles.details(roleId?.toString()) : "";
   const { data, isLoading, isFetching, refetch, error } = useQuery<
     { content: Role },
@@ -79,6 +84,7 @@ export function useGetRoleDetails(roleId: ParamValue | string | undefined) {
   >({
     queryKey: ["roles", URL],
     queryFn: getFetcher<any>(URL),
+    ...(options ?? {}),
   });
   const memoizedValue = useMemo(
     () => ({
@@ -239,21 +245,46 @@ export function useMutateRole() {
   // Update
   // -------------------------
   const editRole = useMutation({
-    mutationFn: async (data: any) => {
-      const URL = endpoints.roles.details;
-      console.log(["roles", endpoints.roles.details(data._id)]);
-      return await dummyPromise();
-      // return axios.post(URL, data);
+    mutationFn: async (payload: any) => {
+      const URL = endpoints.roles.details(payload?._id);
+      return await axios.patch(URL, payload);
     },
     onSuccess: (res, data) => {
+      if (LAST_LIST_KEY) {
+        queryClient.setQueryData(
+          ["roles", LAST_LIST_KEY],
+          (cachedData: any) => {
+            if (!cachedData) return undefined;
+            const updatedData = JSON.parse(JSON.stringify(cachedData));
+            const targetListItem = updatedData?.content?.find(
+              (cur: RoleListItem) => cur._id === data?._id
+            );
+            if (!targetListItem) return;
+            if (data.status) targetListItem.status = data.status;
+            if (data.nameAr) targetListItem.nameAr = data.nameAr;
+            if (data.nameEn) targetListItem.nameEn = data.nameEn;
+            if (data.descriptionAr)
+              targetListItem.descriptionAr = data.descriptionAr;
+            if (data.descriptionEn)
+              targetListItem.descriptionEn = data.descriptionAr;
+            return updatedData;
+          }
+        );
+      }
       queryClient.setQueryData(
         ["roles", endpoints.roles.details(data._id)],
         (cachedData: any) => {
+          if (!cachedData) return undefined;
           const updatedData = JSON.parse(JSON.stringify(cachedData));
+          console.log(updatedData);
           updatedData.content = { ...updatedData.content, ...data };
           return updatedData;
         }
       );
+      if (!!LAST_LIST_KEY)
+        queryClient.invalidateQueries({
+          queryKey: ["roles", LAST_LIST_KEY],
+        });
       queryClient.invalidateQueries({
         queryKey: ["roles", endpoints.roles.details(data._id)],
       });

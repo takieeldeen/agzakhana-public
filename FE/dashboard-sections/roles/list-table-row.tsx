@@ -18,9 +18,11 @@ import { useState } from "react";
 export default function ListTableRow({
   role,
   onActivateRow,
+  onEditRole,
 }: {
   role: RoleListItem;
   onActivateRow: (role: RoleListItem) => void;
+  onEditRole: (roleId: string) => void;
 }) {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const locale = useLocale();
@@ -164,7 +166,10 @@ export default function ListTableRow({
               </div>
             </li>
             <Separator />
-            <li className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300">
+            <li
+              onClick={() => onEditRole(role?._id)}
+              className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300"
+            >
               <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
                 <Icon
                   icon="iconamoon:edit-thin"

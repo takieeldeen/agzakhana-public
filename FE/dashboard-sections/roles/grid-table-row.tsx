@@ -1,5 +1,5 @@
 "use client";
-import { Role, RoleListItem } from "@/app/dashboard-types/roles";
+import { RoleListItem } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,11 @@ import { useLocale, useTranslations } from "next-intl";
 export default function GridTableRow({
   role,
   onActivateRow,
+  onEditRole,
 }: {
   role: RoleListItem;
   onActivateRow: (role: RoleListItem) => void;
+  onEditRole: (roleId: string) => void;
 }) {
   const locale = useLocale();
   const t = useTranslations();
@@ -112,7 +114,12 @@ export default function GridTableRow({
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white">
+            <Button
+              onClick={() => {
+                onEditRole(role?._id);
+              }}
+              className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white"
+            >
               <Icon
                 icon="iconamoon:edit-thin"
                 className="h-6! w-6! text-teal-700 group-hover:text-gray-100 transition-all duration-300"

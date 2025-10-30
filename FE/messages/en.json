@@ -73,7 +73,7 @@
     "DEACTIVATION_TITLE": "Do you want to deactivate {ENTITY_NAME} {ENTITY_VALUE}?",
     "DEACTIVATION_DESC": "When you deactivate {ENTITY_NAME} {ENTITY_VALUE}, all its settings and features will be disabled immediately.",
 
-    "CONFIRMATION_DIALOG_TITLE": "{{OPERATION_NAME}} Confirmation",
+    "CONFIRMATION_DIALOG_TITLE": "{OPERATION_NAME} Confirmation",
     "ACTIVATION": "Activation",
     "DEACTIVATION": "deactivation",
     "SEARCH_ANYTHING": "Search for anything....",

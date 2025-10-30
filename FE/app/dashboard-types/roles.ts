@@ -17,9 +17,13 @@ export type Role = {
   }[];
   createdBy: Partial<User>;
   createdAt: string;
+  updatedAt: string;
 };
 
-export type RoleListItem = Omit<Role,'permissionGroups'|'createdBy'|'createdAt'>
+export type RoleListItem = Omit<
+  Role,
+  "permissionGroups" | "createdBy" | "createdAt" | "updatedAt"
+>;
 
 export type Permission = {
   _id: string;

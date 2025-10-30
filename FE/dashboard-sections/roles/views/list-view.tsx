@@ -37,6 +37,7 @@ import {
 } from "../constants";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { useMutate } from "../use-mutate";
+import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 
 const NewEditForm = lazy(() => import("../new-edit-form"));
 export default function ListView() {
@@ -47,6 +48,7 @@ export default function ListView() {
   const [showCreationModal, setShowCreationModal] = useState<
     "CREATE" | "EDIT" | "HIDDEN"
   >("HIDDEN");
+  const [editedRoleId, setEditedRoleId] = useState<string | null>(null);
   const [filtersSynced, setFiltersSynced] = useState<boolean>(false);
   // const [filtersLoaded,set]
   const [viewMode, setViewMode] = useState<"LIST" | "GRID">(
@@ -63,6 +65,7 @@ export default function ListView() {
     }),
     []
   );
+  useKeyboardShortcut("ctrl+k", () => setShowCreationModal("CREATE"));
   // Filters /////////////////////////////////////////////
   const filtersSchema = Z.object({
     name: Z.string(),
@@ -150,7 +153,10 @@ export default function ListView() {
   const isEmpty = !canReset && results === 0;
   // Callbacks ////////////////////////////////////////
   const { changeStatus } = useMutate();
-
+  const onEditRole = useCallback((roleId: string) => {
+    setShowCreationModal("EDIT");
+    setEditedRoleId(roleId);
+  }, []);
   // LifeCycle Hooks ////////////////////////////////////////
   useEffect(() => {
     initParams();
@@ -181,6 +187,7 @@ export default function ListView() {
           })}
           action={() => {
             setShowCreationModal("CREATE");
+            setEditedRoleId(null);
           }}
           actionTitle={t("COMMON.CREATE", {
             ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
@@ -190,7 +197,10 @@ export default function ListView() {
           <Suspense>
             <NewEditForm
               open
-              onClose={() => setShowCreationModal("HIDDEN")}
+              onClose={() => {
+                setShowCreationModal("HIDDEN");
+                setEditedRoleId(null);
+              }}
               refetch={() => {}}
               // currentRole={showCreationModal === 'EDIT' && }
             />
@@ -206,9 +216,25 @@ export default function ListView() {
           <h3 className="text-3xl font-bold dark:text-white">
             {t("ROLES_MANAGEMENT.LIST_TITLE")}
           </h3>
-          <p className="dark:text-gray-200">
-            {t("ROLES_MANAGEMENT.LIST_SUBTITLE")}
-          </p>
+          <div className="flex flex-row gap-4">
+            <p className="dark:text-gray-200">
+              {t("ROLES_MANAGEMENT.LIST_SUBTITLE")}
+            </p>
+            <AnimatePresence>
+              {isFetching && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                >
+                  <Badge className="bg-emerald-600 dark:text-white">
+                    <Spinner />
+                    {t("COMMON.SYNCING")}
+                  </Badge>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
         <div className="flex flex-row gap-2">
           {mdUp && (
@@ -259,22 +285,7 @@ export default function ListView() {
         </div>
       </div>
       {/* View Bar */}
-      <div className="flex flex-row justify-between items-end">
-        <AnimatePresence>
-          {isFetching && (
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-            >
-              <Badge className="bg-emerald-600 dark:text-white">
-                <Spinner />
-                {t("COMMON.SYNCING")}
-              </Badge>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+      {/* <div className="flex flex-row justify-between items-end"></div> */}
       {/* List View */}
       <div className="flex md:flex-row flex-col-reverse gap-3 relative items-stretch md:h-full">
         {/* List  */}
@@ -295,6 +306,7 @@ export default function ListView() {
                         key={role?._id}
                         role={role}
                         onActivateRow={changeStatus}
+                        onEditRole={onEditRole}
                       />
                     ))}
                 </motion.ul>
@@ -311,6 +323,7 @@ export default function ListView() {
                       key={role?._id}
                       role={role}
                       onActivateRow={changeStatus}
+                      onEditRole={onEditRole}
                     />
                   ))}
                 </motion.ul>
@@ -353,6 +366,8 @@ export default function ListView() {
             open
             onClose={() => setShowCreationModal("HIDDEN")}
             refetch={() => {}}
+            mode={editedRoleId ? "EDIT" : "NEW"}
+            roleId={editedRoleId!}
             // currentRole={showCreationModal === 'EDIT' && }
           />
         </Suspense>
