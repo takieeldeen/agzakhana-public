@@ -128,20 +128,107 @@ export const createRole = catchAsync(
     });
   }
 );
+export const editRole = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id, nameAr, nameEn, descriptionAr, descriptionEn, permissions } =
+      req.body;
+    const updatedData = {
+      nameAr,
+      nameEn,
+      descriptionAr,
+      descriptionEn,
+      permissions,
+    };
+    const role = await Role.findByIdAndUpdate(_id, updatedData, { new: true });
+    res.status(200).json({
+      status: "success",
+      content: role,
+    });
+  }
+);
 export const getRoleDetails = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { roleId } = req?.params;
     const role = await Role.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(roleId) } },
+
       {
-        $addFields: {
-          permissionsCount: 9,
+        $facet: {
+          role: [
+            {
+              $project: {
+                _id: 1,
+                nameAr: 1,
+                nameEn: 1,
+                descriptionAr: 1,
+                descriptionEn: 1,
+                permissionsCount: { $size: "$permissions" },
+                status: 1,
+                updatedAt: 1,
+              },
+            },
+            {
+              $addFields: {
+                usersCount: 0,
+                // permissionsCount: { $size: "$permissions" },
+              },
+            },
+          ],
+          permissionGroups: [
+            {
+              $lookup: {
+                from: "permissions",
+                foreignField: "_id",
+                localField: "permissions",
+                as: "permissions",
+              },
+            },
+            { $unwind: "$permissions" },
+
+            {
+              $lookup: {
+                from: "permissiongroups",
+                localField: "permissions.permissionGroup",
+                foreignField: "_id",
+                as: "permissionGroup",
+              },
+            },
+            { $unwind: "$permissionGroup" },
+            {
+              $group: {
+                _id: "$permissionGroup._id",
+                count: { $sum: 1 },
+                nameAr: { $first: "$permissionGroup.nameAr" },
+                nameEn: { $first: "$permissionGroup.nameEn" },
+                permissions: {
+                  $push: {
+                    _id: "$permissions._id",
+                    nameAr: "$permissions.nameAr",
+                    nameEn: "$permissions.nameEn",
+                    permissionGroup: "$permissions.permissionGroup",
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          role: { $arrayElemAt: ["$role", 0] },
+          permissionGroups: "$permissionGroups",
         },
       },
     ]);
-    res.status(201).json({
+    console.log(role?.[0]?.role);
+    const content = {
+      ...(role?.[0]?.role ?? {}),
+      permissionGroups: role?.[0]?.permissionGroups,
+    };
+
+    res.status(200).json({
       status: "success",
-      content: role?.[0],
+      content,
     });
   }
 );

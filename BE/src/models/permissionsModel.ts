@@ -37,6 +37,10 @@ const permissionsSchema = new Schema<PermissionType>({
       }),
     ],
   },
+  permissionGroup: {
+    type: mongoose.Types.ObjectId,
+    ref: "PermissionGroup",
+  },
 });
 
 const Permission = mongoose.model<PermissionType>(
