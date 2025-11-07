@@ -1,8 +1,8 @@
-import mongoose, { Schema } from "mongoose";
-import { PermissionGroupsType } from "../types/permissionsGroups";
+import mongoose from "mongoose";
+import { LocalizaedObject } from "../types/common";
 import { tr } from "../utils/string";
 
-const permissionGroupSchema = new Schema<PermissionGroupsType>({
+const citySchema = new mongoose.Schema<LocalizaedObject>({
   nameAr: {
     type: String,
     required: [
@@ -25,16 +25,8 @@ const permissionGroupSchema = new Schema<PermissionGroupsType>({
       }),
     ],
   },
-  permissions: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: "Permission",
-    },
-  ],
 });
 
-const PermissionGroup = mongoose.model<PermissionGroupsType>(
-  "PermissionGroup",
-  permissionGroupSchema
-);
-export default PermissionGroup;
+const City = mongoose.model<LocalizaedObject>("City", citySchema);
+
+export default City;

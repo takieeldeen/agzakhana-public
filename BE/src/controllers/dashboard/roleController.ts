@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import catchAsync from "../utils/catchAsync";
-import { Role } from "../models/rolesModel";
-import { clientLocale } from "../app";
+import catchAsync from "../../utils/catchAsync";
+import { Role } from "../../models/dashboard/rolesModel";
+import { clientLocale } from "../../app";
 import mongoose from "mongoose";
 
 export const getAllRoles = catchAsync(
@@ -13,7 +13,6 @@ export const getAllRoles = catchAsync(
     const filterObj: any = {};
     let sortObj: any;
     if (req.query.status) filterObj.status = status;
-    console.log(req.query);
     if (req.query.name && clientLocale === "ar") {
       filterObj.nameAr = { $regex: `.*${req.query.name}.*` };
     } else if (req.query.name && clientLocale === "en") {
@@ -71,7 +70,6 @@ export const getAllRoles = catchAsync(
         },
       },
     ]);
-    console.log(content);
     res.status(200).json({
       status: "success",
       content: content?.[0].roles,
@@ -220,12 +218,43 @@ export const getRoleDetails = catchAsync(
         },
       },
     ]);
-    console.log(role?.[0]?.role);
     const content = {
       ...(role?.[0]?.role ?? {}),
       permissionGroups: role?.[0]?.permissionGroups,
     };
 
+    if (!role?.[0]?.role) {
+      res.status(404).json({
+        status: "fail",
+        message: "not-found",
+        content: null,
+      });
+    } else {
+      res.status(200).json({
+        status: "success",
+        content,
+      });
+    }
+  }
+);
+
+export const deleteRole = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { roleId } = req.params;
+    await Role.findOneAndDelete({ _id: roleId });
+    res.status(204).json({
+      status: "success",
+    });
+  }
+);
+
+export const getAllActiveRoles = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const content = await Role.find({ status: "ACTIVE" }).select([
+      "_id",
+      "nameAr",
+      "nameEn",
+    ]);
     res.status(200).json({
       status: "success",
       content,

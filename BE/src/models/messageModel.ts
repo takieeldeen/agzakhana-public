@@ -31,7 +31,7 @@ const messageSchema = new Schema<MessageType>({
       true,
       tr("VALIDATIONS.REQUIRED_FIELD", {
         placeholders: {
-          field: "FIELDS.EMAIL",
+          field: "FIELDS.email",
         },
       }),
     ],

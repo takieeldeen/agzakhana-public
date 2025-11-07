@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import { LocalizaedObject } from "./common";
+import { FileType } from "./files";
+import { RoleType } from "./roles";
 export type UserType = {
   _id: mongoose.Types.ObjectId;
   id: mongoose.Types.ObjectId;
@@ -17,4 +20,38 @@ export type UserType = {
   gender: "MALE" | "FEMALE";
   birthDate: Date;
   activationToken: string;
+};
+
+export type DashboardUserType = {
+  _id: mongoose.Types.ObjectId;
+  imageUrl: string;
+  nameAr: string;
+  nameEn: string;
+  password: string;
+  passwordConfirmation: string;
+  email: string;
+  gender: "MALE" | "FEMALE";
+  nationalId: string;
+  birthDate: Date;
+  joiningDate: Date;
+  nationality: mongoose.Types.ObjectId | LocalizaedObject;
+  city: mongoose.Types.ObjectId | LocalizaedObject;
+  branch: mongoose.Types.ObjectId;
+  phoneNumber: string;
+  permissions: mongoose.Types.ObjectId[];
+  createdAt: string;
+  updatedAt: string;
+  provider: "GOOGLE" | "LOCAL";
+  activationToken: string;
+  documents: string[];
+  location: { type: string; coordinates: [number, number] };
+  address: {
+    lng: number;
+    lat: number;
+    displayName: string;
+  };
+  files: mongoose.Types.ObjectId[] | FileType[];
+  googleMapUrl: string;
+  roles: mongoose.Types.ObjectId[] | RoleType[];
+  status: "ACTIVE" | "INACTIVE";
 };

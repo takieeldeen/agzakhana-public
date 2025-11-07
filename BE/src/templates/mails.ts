@@ -17,7 +17,6 @@ export const generateMailTemplate = ({
   actionTitle?: string;
 }) => {
   const isAr = clientLocale === "ar";
-  console.log(clientLocale);
   return `<!DOCTYPE html>
 <html lang="ar" dir="${isAr ? "rtl" : "ltr"}">
   <head>

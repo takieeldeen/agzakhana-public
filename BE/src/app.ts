@@ -18,9 +18,7 @@ import { paymentRouter } from "./routers/paymentRouter";
 import { stripeWebhookHandler } from "./controllers/paymentController";
 import ordersRouter from "./routers/orderRouter";
 import axios from "axios";
-import permissionsRouter from "./routers/permissionsRouter";
-import PermissionGroup from "./models/permissionGroupModel";
-import roleRouter from "./routers/roleRouter";
+import dashboardRouter from "./routers/dashboard";
 
 export let clientLocale = "ar";
 const app = express();
@@ -80,7 +78,6 @@ app.use(
 app.use(middleware.handle(i18next));
 app.get("/", async (req, res) => {
   const { data } = await axios.get("https://api.ipify.org?format=json");
-  console.log("this is your ip");
   res.send(data);
 });
 app.use("/api/v1/auth", authRouter);
@@ -92,8 +89,8 @@ app.use("/api/v1/deals", dealsRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/payments", paymentRouter);
 app.use("/api/v1/orders", ordersRouter);
-app.use("/api/v1/permissions", permissionsRouter);
-app.use("/api/v1/roles", roleRouter);
+
+app.use("/api/v1/dashboard", dashboardRouter);
 
 app.use("/*splat", (req, res) => {
   res.status(404).json({

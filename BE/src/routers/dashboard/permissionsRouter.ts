@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllPermissions } from "../controllers/permissionsController";
+import { getAllPermissions } from "../../controllers/dashboard/permissionsController";
 
 const permissionsRouter = Router();
 

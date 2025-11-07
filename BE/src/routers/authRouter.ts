@@ -1,7 +1,6 @@
 import { Request, Router } from "express";
 import * as authController from "../controllers/authController";
 import multer from "multer";
-import { AppError } from "../utils/errors";
 import { authenticateUser } from "../utils/auth";
 
 const authRouter = Router();

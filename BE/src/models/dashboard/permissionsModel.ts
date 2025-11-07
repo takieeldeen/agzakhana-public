@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { PermissionType } from "../types/permission";
-import { tr } from "../utils/string";
+import { PermissionType } from "../../types/permission";
+import { tr } from "../../utils/string";
 
 const permissionsSchema = new Schema<PermissionType>({
   nameAr: {

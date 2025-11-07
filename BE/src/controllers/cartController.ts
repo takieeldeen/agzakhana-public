@@ -150,7 +150,6 @@ export const updateCartItem = catchAsync(
         select: PRODUCT_VISIBLE_FIELDS,
       },
     ]);
-    console.log(cart);
     res.status(200).json({
       status: "success",
       content: cart,

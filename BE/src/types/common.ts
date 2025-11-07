@@ -1,5 +1,5 @@
 export type LocalizaedObject = {
-  id: string;
+  _id: string;
   nameAr: string;
   nameEn: string;
 };

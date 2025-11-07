@@ -31,12 +31,14 @@
     "FUTURE_DATE": "The {{field}} must be in the future",
     "PAST_DATE": "The {{field}} must be in the past",
     "POSITVE_NUMBER": "The {{field}} must be a positive number",
-    "PASSWORD_MISMATCH": "Password and password confirmation must match."
+    "PASSWORD_MISMATCH": "Password and password confirmation must match.",
+    "INVALID_FORMAT": "Please enter a valid {{field}}",
+    "UNIQUE_FIELD": "{{field}} is already in use."
   },
   "FIELDS": {
     "FIRST_NAME": "First Name",
     "LAST_NAME": "Last Name",
-    "EMAIL": "Email Address",
+    "email": "Email Address",
     "MESSAGE": "Message",
     "USER": "User",
     "TOTAL": "Total",
@@ -51,7 +53,24 @@
     "RESET_TOKEN": "Password reset token",
     "VALUE": "Value",
     "DESC_AR": "Arabic Description",
-    "DESC_EN": "English Description"
+    "DESC_EN": "English Description",
+    "PASSWORD": "Password",
+    "PASSWORD_CONFIRMATION": "Password Confirmation",
+    "IMAGE_URL": "User Image",
+    "GENDER": "Gender",
+    "nationalId": "National ID",
+    "BIRTH_DATE": "Birth Date",
+    "JOINING_DATE": "Joining Date",
+    "NATIONALITY": "Nationality",
+    "BRANCH": "Branch",
+    "PHONE_NUMBER": "Phone Number",
+    "PERMISSIONS": "Permissions",
+    "CREATED_AT": "Created At",
+    "UPDATED_AT": "Updated At",
+    "PROVIDER": "Provider",
+    "ACTIVATION_TOKEN": "Activation Token",
+    "DOCUMENTS": "Documents",
+    "LOCATION": "Location"
   },
   "MESSAGES": {
     "FORGET_PASSWORD_SUCCESSFUL": "Please check your email to reset your password.",

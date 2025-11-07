@@ -3,6 +3,7 @@ import {
   generateDevelopmentError,
   generateProductionError,
   handleCastErrors,
+  handleMongoServerError,
   handleValidationErrors,
 } from "../utils/errors";
 
@@ -19,6 +20,9 @@ const errorController = (
   Object.assign(finalError, error);
   finalError.message = error.message;
   switch (error?.name) {
+    case "MongoServerError":
+      finalError = handleMongoServerError(error);
+      break;
     case "ValidationError":
       finalError = handleValidationErrors(error);
       break;

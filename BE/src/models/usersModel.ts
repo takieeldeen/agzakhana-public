@@ -12,7 +12,7 @@ const userSchema = new Schema<UserType>({
     type: String,
     trim: true,
     lowercase: true,
-    unique: true,
+    unique: [true, "Please enter a unique name"],
     required: [true, "please enter the email address"],
     validate: [validator.isEmail, "Please provide a valid email"],
   },
@@ -94,7 +94,6 @@ const userSchema = new Schema<UserType>({
 });
 // Pre validations
 // userSchema.pre("validate", function (next) {
-//   console.log("test");
 //   const { provider, password, passwordConfirmation } = this;
 //   if (provider === "LOCAL" && (typeof password !== "string" || password === ""))
 //     this.invalidate("password", "please enter the password");
@@ -115,7 +114,6 @@ const userSchema = new Schema<UserType>({
 // });
 
 userSchema.pre("save", async function (next) {
-  console.log("hashing middleware triggered");
   if (!!this.password && this.isModified("password"))
     this.password = await hash(this.password, 8);
   this.passwordConfirmation = "";

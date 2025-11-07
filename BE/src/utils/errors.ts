@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import { tr } from "./string";
 // import { t } from "i18next";
 
 export class AppError extends Error {
@@ -35,6 +36,17 @@ export class FormError extends Error {
   }
 }
 
+export const handleMongoServerError = (error: any) => {
+  const errorObject: { [fieldName: string]: string } = {};
+  const errorKey = Object.keys(error.keyValue ?? {})?.[0]!;
+  if (!errorKey) return new AppError(400, error?.message);
+  errorObject[errorKey] = tr("VALIDATIONS.UNIQUE_FIELD", {
+    placeholders: {
+      field: `FIELDS.${errorKey}`,
+    },
+  })();
+  return new FormError(400, "Validation Errors", errorObject);
+};
 export const handleValidationErrors = (
   error: mongoose.Error.ValidationError
 ) => {
