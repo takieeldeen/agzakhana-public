@@ -84,6 +84,7 @@ export function useGetRoleDetails(
   >({
     queryKey: ["roles", URL],
     queryFn: getFetcher<any>(URL),
+    retry: false,
     ...(options ?? {}),
   });
   const memoizedValue = useMemo(
@@ -146,15 +147,12 @@ export function useMutateRole() {
   // -------------------------
   const createRole = useMutation({
     mutationFn: async (data: any) => {
-      const URL = endpoints.roles.list;
+      const URL = endpoints.users.list;
       return axios.post(URL, data);
     },
-    onSuccess: (res, payload) => {
-      queryClient.setQueryData(["roles"], (cachedData) => {
-        const updatedData = JSON.parse(JSON.stringify(cachedData));
-        updatedData.content = { ...updatedData.content, ...payload };
-        return updatedData;
-      });
+    onSuccess: () => {
+      if (FIRST_LIST_KEY)
+        queryClient.invalidateQueries({ queryKey: ["users", FIRST_LIST_KEY] });
     },
   });
   // -------------------------
@@ -290,6 +288,34 @@ export function useMutateRole() {
       });
     },
   });
-
-  return { createRole, activateRole, deactivateRole, editRole };
+  // -------------------------
+  // Deletion
+  // -------------------------
+  const deleteRole = useMutation({
+    mutationFn: async (roleId: string) => {
+      const URL = endpoints.roles.details(roleId);
+      return axios.delete(URL);
+    },
+    onSuccess: (res, roleId) => {
+      if (LAST_LIST_KEY) {
+        queryClient.setQueryData(["roles", LAST_LIST_KEY], (cachedData) => {
+          if (!cachedData) return undefined;
+          const updatedData = JSON.parse(JSON.stringify(cachedData));
+          updatedData.content = updatedData.content?.filter(
+            (role: RoleListItem) => role?._id !== roleId
+          );
+          return updatedData;
+        });
+        queryClient.setQueryData(
+          ["roles", endpoints.roles.details(roleId)],
+          undefined
+        );
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["roles", endpoints.roles.details(roleId)],
+      });
+      queryClient.invalidateQueries({ queryKey: ["roles", LAST_LIST_KEY] });
+    },
+  });
+  return { createRole, activateRole, deactivateRole, editRole, deleteRole };
 }

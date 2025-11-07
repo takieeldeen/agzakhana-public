@@ -40,6 +40,7 @@ const parseOption = (str: string) => {
 
 type RHFComboboxProps<T> = {
   name: string;
+  mandatoryField?: boolean;
   label?: string;
   placeholder?: string;
   clearable?: boolean;
@@ -52,10 +53,12 @@ type RHFComboboxProps<T> = {
   onChange?: (newVal: T, reason: "clear" | "change") => void;
   isLoading?: boolean;
   multiple?: boolean;
-};
+  triggerProps?: React.ComponentProps<"button">;
+} & React.ComponentProps<"div">;
 
 export function RHFComboxbox<T>({
   name,
+  mandatoryField,
   label,
   placeholder,
   clearable = true,
@@ -68,6 +71,8 @@ export function RHFComboxbox<T>({
   onChange,
   isLoading = false,
   multiple,
+  triggerProps,
+  ...other
 }: RHFComboboxProps<T>) {
   // RHF Hooks /////////////////////////////////////
   const form = useFormContext();
@@ -143,13 +148,19 @@ export function RHFComboxbox<T>({
         control={form.control}
         name={name}
         render={({ field }) => (
-          <FormItem className="flex flex-col">
+          <FormItem
+            {...other}
+            className={cn("flex flex-col flex-1", other?.className)}
+          >
             {!!label && (
               <FormLabel
                 {...labelProps}
                 className={cn("dark:text-gray-200", labelProps?.className)}
               >
                 {label}
+                {mandatoryField && (
+                  <span className="font-bold text-red-700">*</span>
+                )}
               </FormLabel>
             )}
             <div className="relative w-full ">
@@ -160,11 +171,13 @@ export function RHFComboxbox<T>({
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
+                    {...triggerProps}
                     className={cn(
-                      "w-full min-h-12 h-fit justify-between dark:bg-dark-background dark:text-gray-200 ",
+                      "w-full min-h-12 h-fit justify-between dark:bg-dark-background dark:text-gray-200 hover:dark:brightness-100 hover:dark:bg-dark-card-background hover:dark:border-emerald-600",
                       !field.value &&
                         "text-muted-foreground dark:text-gray-500",
-                      HAS_ERRORS && "border-red-600 dark:border-red-400"
+                      HAS_ERRORS && "border-red-600 dark:border-red-400",
+                      triggerProps?.className
                     )}
                   >
                     {/* {field.value
@@ -215,7 +228,7 @@ export function RHFComboxbox<T>({
                   style={{ width: buttonRef.current?.offsetWidth }}
                 >
                   <Command
-                    className="dark:bg-dark-card"
+                    className="dark:bg-dark-card "
                     filter={(option, search) => {
                       const parsedOption = parseOption(option) as T;
                       if (
@@ -304,25 +317,33 @@ export function RHFComboxbox<T>({
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem className={cn("flex flex-col flex-1", other?.className)}>
           {!!label && (
             <FormLabel
               {...labelProps}
               className={cn("dark:text-gray-200", labelProps?.className)}
             >
               {label}
+              {mandatoryField && (
+                <span className="font-bold text-red-700">*</span>
+              )}
             </FormLabel>
           )}
           <div className="relative w-full ">
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
+                  ref={buttonRef}
                   variant="outline"
                   role="combobox"
+                  {...triggerProps}
                   aria-expanded={open}
                   className={cn(
-                    "w-full h-12 justify-between dark:bg-dark-card dark:text-gray-200",
-                    !field.value && "text-muted-foreground dark:text-gray-500"
+                    "w-full h-12 justify-between dark:bg-dark-card dark:text-gray-200 hover:dark:bg-dark-card-background hover:dark:border-emerald-600",
+                    !field.value && "text-muted-foreground dark:text-gray-500",
+                    HAS_ERRORS && "border-red-600 dark:border-red-400",
+
+                    triggerProps?.className
                   )}
                 >
                   {field.value ? api.getOptionLabel(field.value) : placeholder}
@@ -350,8 +371,14 @@ export function RHFComboxbox<T>({
                   </div>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-64 p-0">
+              <PopoverContent
+                align="start"
+                sideOffset={4}
+                className="p-0 "
+                style={{ width: buttonRef.current?.offsetWidth }}
+              >
                 <Command
+                  className="dark:bg-dark-card"
                   filter={(option, search) => {
                     const parsedOption = parseOption(option) as T;
                     if (api.optionValueComparator(parsedOption, val)) return 0;
@@ -369,7 +396,7 @@ export function RHFComboxbox<T>({
                     placeholder={placeholder}
                     className={cn("h-9 ")}
                   />
-                  <CommandList>
+                  <CommandList className="dark:bg-dark-background">
                     {isLoading && (
                       <CommandLoading className="text-sm py-2 px-2 text-muted-foreground">
                         {t("COMMON.LOADING")}

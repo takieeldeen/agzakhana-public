@@ -1,5 +1,5 @@
 "use client";
-import { RoleListItem } from "@/app/dashboard-types/roles";
+import { Role, RoleListItem } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,10 +18,12 @@ export default function GridTableRow({
   role,
   onActivateRow,
   onEditRole,
+  onDeleteRow,
 }: {
   role: RoleListItem;
   onActivateRow: (role: RoleListItem) => void;
   onEditRole: (roleId: string) => void;
+  onDeleteRow: (role: Role | RoleListItem) => void;
 }) {
   const locale = useLocale();
   const t = useTranslations();
@@ -29,7 +31,7 @@ export default function GridTableRow({
   return (
     <li
       key={role?._id}
-      className="bg-card w-full md:w-auto md:min-w-76 md:max-w-[calc(33%_-_12px)] md:aspect-square overflow-hidden  rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-col items-center gap-3 dark:bg-dark-card "
+      className="bg-card w-full md:w-128 md:min-w-76 md:max-w-[calc(33%_-_12px)] md:aspect-square overflow-hidden  rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-col items-center gap-3 dark:bg-dark-card "
     >
       <div className="bg-teal-600 dark:bg-teal-800 w-full h-24 md:max-h-24 md:min-h-[calc(31%)] flex flex-row gap-3 items-center px-3">
         <Icon
@@ -46,7 +48,7 @@ export default function GridTableRow({
           </Badge>
         </div>
       </div>
-      <div className="flex flex-col gap-1 px-3">
+      <div className="flex flex-col gap-1 px-3 items-start  w-full">
         <p className="font-semibold text-black dark:text-white">
           {t("ROLES_MANAGEMENT.ROLE_DESCRIPTION")}
         </p>
@@ -128,6 +130,26 @@ export default function GridTableRow({
           </TooltipTrigger>
           <TooltipContent>
             {t("COMMON.EDIT_TITLE", {
+              ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+            })}
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => {
+                onDeleteRow(role);
+              }}
+              className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white"
+            >
+              <Icon
+                icon="ion:trash-outline"
+                className="h-6! w-6! text-teal-700 group-hover:text-gray-100 transition-all duration-300"
+              />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            {t("COMMON.REMOVE_TITLE", {
               ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
             })}
           </TooltipContent>

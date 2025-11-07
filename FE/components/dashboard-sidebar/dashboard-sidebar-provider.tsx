@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -16,6 +17,7 @@ type SidebarContextType =
       openedMenu: string;
       onToggleCollapse: VoidFunction;
       onTabClick: (
+        path: string,
         newTabId: string,
         hasChildren?: boolean,
         isChild?: boolean
@@ -34,7 +36,7 @@ export default function DashboardSidebarProvider({
   const [activeTab, setActiveTab] = useState<string>("");
   const [openedMenu, setOpenedMenu] = useState<string>("");
   const [activeChild, setActiveChild] = useState<string>("");
-
+  const router = useRouter();
   const onToggleCollapse = useCallback(() => {
     setCollapsed((prev) => !prev);
     if (!collapsed) setOpenedMenu("");
@@ -42,6 +44,7 @@ export default function DashboardSidebarProvider({
 
   const onTabClick = useCallback(
     (
+      path: string,
       newTabId: string,
       hasChildren: boolean = false,
       isChild: boolean = false
@@ -60,8 +63,9 @@ export default function DashboardSidebarProvider({
         setActiveTab("");
         setOpenedMenu("");
       }
+      if (!hasChildren) router.push(path);
     },
-    [collapsed]
+    [collapsed, router]
   );
 
   const memoizedValue = useMemo(

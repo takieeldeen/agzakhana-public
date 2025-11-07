@@ -132,7 +132,6 @@ export default function ListView() {
       searchParams,
     ]
   );
-  console.log(filtervalues);
   // Helper Constants ////////////////////////////////////////
   const GRID_MODE = viewMode === "GRID";
   const LIST_MODE = viewMode === "LIST";
@@ -152,7 +151,7 @@ export default function ListView() {
   const notFound = canReset && results === 0;
   const isEmpty = !canReset && results === 0;
   // Callbacks ////////////////////////////////////////
-  const { changeStatus } = useMutate();
+  const { changeStatus, onDelete } = useMutate();
   const onEditRole = useCallback((roleId: string) => {
     setShowCreationModal("EDIT");
     setEditedRoleId(roleId);
@@ -180,17 +179,17 @@ export default function ListView() {
         <EmptyView
           icon="solar:key-broken"
           title={t("COMMON.EMPTY_TITLE", {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_PLURAL"),
           })}
           subtitle={t("COMMON.EMPTY_SUBTITLE", {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_NAME"),
           })}
           action={() => {
             setShowCreationModal("CREATE");
             setEditedRoleId(null);
           }}
           actionTitle={t("COMMON.CREATE", {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_NAME"),
           })}
         />
         {showCreationModal !== "HIDDEN" && (
@@ -214,11 +213,11 @@ export default function ListView() {
       <div className="flex md:flex-row flex-col md:gap-0 gap-2  justify-between md:sticky relative md:top-0 bg-slate-50 pt-2 z-20 dark:bg-dark-background">
         <div className="flex flex-col">
           <h3 className="text-3xl font-bold dark:text-white">
-            {t("ROLES_MANAGEMENT.LIST_TITLE")}
+            {t("USERS_MANAGEMENT.LIST_TITLE")}
           </h3>
           <div className="flex flex-row gap-4">
             <p className="dark:text-gray-200">
-              {t("ROLES_MANAGEMENT.LIST_SUBTITLE")}
+              {t("USERS_MANAGEMENT.LIST_SUBTITLE")}
             </p>
             <AnimatePresence>
               {isFetching && (
@@ -279,7 +278,7 @@ export default function ListView() {
           >
             <Icon icon="gg:add" className="w-6! h-6!" />
             {t("COMMON.ADD_ENTITY", {
-              ENTITY_NAME: t("ROLES_MANAGEMENT.INDIFINITE_ENTITY_NAME"),
+              ENTITY_NAME: t("USERS_MANAGEMENT.INDIFINITE_ENTITY_NAME"),
             })}
           </Button>
         </div>
@@ -291,24 +290,28 @@ export default function ListView() {
         {/* List  */}
         {notFound && <NoResultsView />}
         {!notFound && (
-          <div className="h-full w-full relative">
-            <div className="w-full overflow-y-auto px-2 h-full absolute">
+          <div className=" md:h-full w-full relative pb-12 md:pb-0 ">
+            <div className="w-full overflow-y-auto px-2 h-fit md:h-full relative md:absolute">
               {LIST_MODE && (
                 <motion.ul
                   initial={{ x: -100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: 100, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
                   className="flex flex-col gap-3 w-full"
                 >
-                  {!isLoading &&
-                    data?.map((role) => (
-                      <ListTableRow
-                        key={role?._id}
-                        role={role}
-                        onActivateRow={changeStatus}
-                        onEditRole={onEditRole}
-                      />
-                    ))}
+                  <AnimatePresence>
+                    {!isLoading &&
+                      data?.map((role) => (
+                        <ListTableRow
+                          key={role?._id}
+                          role={role}
+                          onActivateRow={changeStatus}
+                          onDeleteRow={onDelete}
+                          onEditRole={onEditRole}
+                        />
+                      ))}
+                  </AnimatePresence>
                 </motion.ul>
               )}
               {GRID_MODE && (
@@ -323,6 +326,7 @@ export default function ListView() {
                       key={role?._id}
                       role={role}
                       onActivateRow={changeStatus}
+                      onDeleteRow={onDelete}
                       onEditRole={onEditRole}
                     />
                   ))}

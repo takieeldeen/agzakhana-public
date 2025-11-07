@@ -71,7 +71,7 @@ export default function RHFTextfield({
           <div className="min-h-4 ">
             <FormMessage
               {...helperTextProps}
-              className={cn("text-right", helperTextProps?.className)}
+              className={cn("rtl:text-right", helperTextProps?.className)}
             />
           </div>
         </FormItem>

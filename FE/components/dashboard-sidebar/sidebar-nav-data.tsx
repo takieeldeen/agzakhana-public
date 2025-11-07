@@ -1,5 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
+import { paths } from "./paths";
 
 export type Tab = {
   id: string;
@@ -13,25 +14,25 @@ export const useDashboardNavData = () => {
   const tabs: Tab[] = [
     {
       id: "ROLES_MANAGEMENT_1",
-      label: t("DASHBOARD_NAV_BAR.ROLES_MANAGEMENT"),
-      path: "/",
+      label: t("DASHBOARD_NAV_BAR.USER_MANAGEMENT"),
+      path: paths.dashboard.users.list,
       icon: "solar:key-broken",
     },
     {
       id: "USERS_MANAGEMENT",
-      label: t("DASHBOARD_NAV_BAR.USER_MANAGEMENT"),
-      path: "/",
+      label: t("DASHBOARD_NAV_BAR.PERMISSIONS_MANAGEMENT"),
+      path: paths.dashboard.roles.list,
       icon: "solar:key-broken",
       children: [
         {
           id: "ROLES_MANAGEMENT",
           label: t("DASHBOARD_NAV_BAR.ROLES_MANAGEMENT"),
-          path: "/",
+          path: paths.dashboard.roles.list,
         },
         {
           id: "PERMISSIONS_MANAGEMENT",
           label: t("DASHBOARD_NAV_BAR.PERMISSIONS_MANAGEMENT"),
-          path: "/",
+          path: paths.dashboard.permissions.list,
         },
       ],
     },

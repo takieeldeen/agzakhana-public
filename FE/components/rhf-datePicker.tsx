@@ -20,12 +20,14 @@ import {
 } from "@/components/ui/popover";
 import { useLocale } from "next-intl";
 import { arSA, enUS } from "date-fns/locale";
+import React from "react";
 
 type RHFDatePickerProps = {
   name: string;
   label?: string;
   placeholder?: string;
   clearable?: boolean;
+  mandatoryField?: boolean;
 };
 
 export function RHFDatePicker({
@@ -33,19 +35,25 @@ export function RHFDatePicker({
   label,
   placeholder,
   clearable = true,
+  mandatoryField,
 }: RHFDatePickerProps) {
   const form = useFormContext();
   const locale = useLocale();
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
   return (
-    <div>
+    <div className="w-full flex-1">
       <FormField
         control={form.control}
         name={name}
         render={({ field }) => (
-          <FormItem className="flex flex-col">
+          <FormItem className="flex flex-col w-full flex-1">
             {!!label && (
-              <FormLabel className="dark:text-gray-200 rtl:justify-end">
+              <FormLabel className="dark:text-gray-200 ">
                 {label}
+                {mandatoryField && (
+                  <span className="font-bold text-red-700">*</span>
+                )}
               </FormLabel>
             )}
             <div className="relative w-full ">
@@ -53,10 +61,12 @@ export function RHFDatePicker({
                 <PopoverTrigger asChild>
                   <FormControl className="">
                     <Button
+                      ref={buttonRef}
                       variant="outline"
                       className={cn(
-                        "w-full h-12 pl-3 pr-10 text-left rtl:text-right rtl:flex-row-reverse  font-normal dark:text-gray-200 ",
-                        !field.value && "text-muted-foreground",
+                        "w-full h-12 pl-3 pr-10 text-left justify-between rtl:text-right  font-normal dark:text-white ",
+                        !field.value &&
+                          "text-muted-foreground dark:text-muted-foreground",
                         "bg-transparent!"
                       )}
                     >
@@ -67,18 +77,23 @@ export function RHFDatePicker({
                       ) : (
                         <span>{placeholder}</span>
                       )}
-                      <CalendarIcon className="ml-auto rtl:ml-0 rtl:mr-auto  h-4 w-4 opacity-50" />
+                      <CalendarIcon className="   h-4 w-4 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-full p-0" align="start">
+                <PopoverContent
+                  className="w-full p-0"
+                  align="start"
+                  // style={{ width: buttonRef.current?.offsetWidth }}
+                >
                   <Calendar
                     locale={locale === "ar" ? arSA : enUS}
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
                     captionLayout="dropdown"
+                    className="h-full w-96 dark:bg-dark-background! rounded-lg"
                   />
                 </PopoverContent>
               </Popover>

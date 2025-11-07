@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Tab, useDashboardNavData } from "./sidebar-nav-data";
 import { useLocale } from "next-intl";
 import EllipsisTypography from "../ellipsis-typography";
+import { useActiveLink } from "@/hooks/use-active-link";
 
 export default function DashbaordSidebarDesktop({
   mobile = false,
@@ -71,7 +72,6 @@ function NavItem({ tab, mobile = false }: { tab: Tab; mobile?: boolean }) {
   const {
     collapsed: navbarCollapsed,
     onTabClick,
-    activeTab,
     openedMenu,
     activeChild,
   } = useDashboardSidebar();
@@ -80,18 +80,18 @@ function NavItem({ tab, mobile = false }: { tab: Tab; mobile?: boolean }) {
   // Helper Constants /////////////////////////////////////////
   const locale = useLocale();
   const isRtl = locale === "ar";
-  const IS_ACTIVE = activeTab === tab?.id;
   const HAS_CHILDREN = (tab?.children?.length ?? 0) > 0;
+  const IS_ACTIVE = useActiveLink(tab.path, HAS_CHILDREN);
+
   const MENU_OPENED = tab?.id === openedMenu;
   const HAS_ACTIVE_CHILD = !!tab?.children?.find(
     (tab) => tab?.id === activeChild
   );
-
   const CollapsedMenuNavItem = (
     <li>
       <Popover
         open={MENU_OPENED}
-        onOpenChange={() => onTabClick(tab?.id, HAS_CHILDREN)}
+        onOpenChange={() => onTabClick(tab?.path, tab?.id, HAS_CHILDREN)}
       >
         <PopoverTrigger asChild>
           <div
@@ -165,7 +165,7 @@ function NavItem({ tab, mobile = false }: { tab: Tab; mobile?: boolean }) {
   const RegularMenuNavItem = (
     <li>
       <div
-        onClick={() => onTabClick(tab?.id, HAS_CHILDREN)}
+        onClick={() => onTabClick(tab?.path, tab?.id, HAS_CHILDREN)}
         className={cn(
           "flex flex-row items-center rounded-md gap-3 h-12 hover:bg-gray-200 dark:hover:bg-dark-800 transition-all font-semibold text-muted-foreground dark:text-muted-foreground cursor-pointer p-3 w-full text-base relative",
           collapsed && "flex flex-col gap-2 h-19 w-full overflow-hidden py-2",
@@ -224,13 +224,12 @@ function ChildNavItem({
 }: {
   tab: { id: string; label: string; path: string };
 }) {
-  const { onTabClick, activeChild, collapsed } = useDashboardSidebar();
+  const { onTabClick, collapsed } = useDashboardSidebar();
   // Helper Constants /////////////////////////////////////////
-  const IS_ACTIVE = activeChild === tab?.id;
-
+  const IS_ACTIVE = useActiveLink(tab.path, false);
   return (
     <li
-      onClick={() => onTabClick(tab?.id, false, true)}
+      onClick={() => onTabClick(tab?.path, tab?.id, false, true)}
       key={tab?.id}
       className={cn(
         "h-9 flex items-center rounded-md pl-2 rtl:pl-0 rtl:pr-2 text-sm font-semibold text-muted-foreground hover:bg-gray-200 dark:hover:bg-dark-800 cursor-pointer transition-all duration-300 relative  ",

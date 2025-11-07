@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
         hostname: "ukbahlwracfvnetnxlba.supabase.co",
         pathname: "/**",
       },
+
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",

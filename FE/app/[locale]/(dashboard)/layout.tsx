@@ -65,7 +65,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable}  antialiased bg-slate-50 dark:bg-dark-background h-screen w-screen min-h-screen max-w-auto m-auto text-text-primary!`}
+        className={`${geistSans.variable} ${geistMono.variable}  antialiased bg-slate-50 dark:bg-dark-background md:h-screen w-screen md:min-h-screen h-[100dvh] max-w-auto m-auto text-text-primary!`}
       >
         <NextIntlClientProvider>
           <PromptProvider>
@@ -78,7 +78,7 @@ export default async function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                   >
-                    <main className="flex flex-row h-full w-full overflow-x-hidden relative overflow-y-hidden">
+                    <main className="flex flex-row h-full w-full overflow-x-hidden relative overflow-y-hidden pb-12 md:pb-0">
                       <DashbaordSidebar />
                       <div className="pt-0 w-full h-[calc(100%_-70px)]">
                         <UserBar />

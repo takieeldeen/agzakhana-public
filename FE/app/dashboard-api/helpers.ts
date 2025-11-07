@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { endpoints } from "./axios";
 
 export function useGetPermissionsHelper() {
-  const URL = endpoints.helpers.permissions;
+  const URL = endpoints.valueHelp.permissions;
 
   const { data, isLoading, isFetching, refetch, error } = useQuery<
     APIListResponse<LocalizedObject>,

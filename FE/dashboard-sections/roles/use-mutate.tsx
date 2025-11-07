@@ -8,12 +8,57 @@ import { useCallback, useMemo } from "react";
 export function useMutate() {
   const t = useTranslations();
   const locale = useLocale();
-  const { activateRole, deactivateRole } = useMutateRole();
+  const { activateRole, deactivateRole, deleteRole } = useMutateRole();
   const { showPrompt, closePrompt } = usePrompt();
 
   const editRole = useCallback((role: Role) => {
     console.log(role, "payload");
   }, []);
+
+  const onDelete = useCallback(
+    (role: Role | RoleListItem) => {
+      const actionProps = {
+        actionFn: async () => {
+          try {
+            await deleteRole.mutateAsync(role?._id);
+            pushDashboardMessage({
+              title: t("COMMON.SUCCESS_DIALOG_TITLE"),
+              subtitle: t(`COMMON.DELETED_SUCCESSFULLY`, {
+                ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+              }),
+              variant: "success",
+            });
+          } catch {
+            pushDashboardMessage({
+              title: t("COMMON.FAIL_DIALOG_TITLE"),
+              subtitle: t(`COMMON.DELETED_FAILED`, {
+                ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+              }),
+              variant: "fail",
+            });
+          } finally {
+            closePrompt();
+          }
+        },
+      };
+      showPrompt({
+        actionProps,
+        variant: "ALERT",
+        dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
+          OPERATION_NAME: t("COMMON.DELETION"),
+        }),
+        title: t("COMMON.DELETION_TITLE", {
+          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+          ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+        }),
+        content: t("COMMON.DELETION_DESC", {
+          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+          ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+        }),
+      });
+    },
+    [closePrompt, deleteRole, locale, showPrompt, t]
+  );
   const changeStatus = useCallback(
     (role: Role | RoleListItem) => {
       const actionProps = {
@@ -91,8 +136,9 @@ export function useMutate() {
     () => ({
       changeStatus,
       editRole,
+      onDelete,
     }),
-    [changeStatus, editRole]
+    [changeStatus, editRole, onDelete]
   );
   return memoizedValue;
 }

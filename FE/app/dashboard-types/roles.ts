@@ -1,4 +1,4 @@
-import { User } from "./users";
+import { UserListItem } from "./users";
 
 export type Role = {
   _id: string;
@@ -15,7 +15,7 @@ export type Role = {
     nameEn: string;
     permissions: Permission[];
   }[];
-  createdBy: Partial<User>;
+  createdBy: Partial<UserListItem>;
   createdAt: string;
   updatedAt: string;
 };

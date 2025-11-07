@@ -9,3 +9,7 @@ export type APIListResponse<T> = {
   results: number;
   content: T[];
 };
+export type APIDetailsResponse<T> = {
+  status: "success" | "fail";
+  content: T;
+};

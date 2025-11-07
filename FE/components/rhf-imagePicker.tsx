@@ -65,10 +65,10 @@ export default function RHFImagePicker({ name, label }: ImagePickerProps) {
                     </div>
                   )}
                   {!hasImage && (
-                    <div className="w-48 h-48 rounded-full flex items-center justify-center bg-gray-200">
+                    <div className="w-48 h-48 rounded-full flex items-center justify-center bg-gray-200 dark:bg-dark-background">
                       <Icon
                         icon="solar:user-outline"
-                        className="h-36 w-36 text-gray-400"
+                        className="h-36 w-36 text-gray-400 dark:text-dark-card"
                       />
                     </div>
                   )}
@@ -102,6 +102,7 @@ export default function RHFImagePicker({ name, label }: ImagePickerProps) {
                 <FormControl>
                   <Input
                     type="file"
+                    accept="image/*"
                     {...rest}
                     onChange={(event) => {
                       const { files, displayUrl } = getImageData(event);

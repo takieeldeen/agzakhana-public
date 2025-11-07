@@ -48,7 +48,6 @@ export default function NewEditForm({
     enabled: fetchRole,
   });
   const isEdit = currentRole || mode === "EDIT";
-  console.log(isEdit, currentRole, mode);
   const { createRole, editRole } = useMutateRole();
   const { data: permissions, isLoading: permissionsLoading } =
     useGetPermissionsHelper();
@@ -139,7 +138,8 @@ export default function NewEditForm({
           });
         }
         refetch();
-      } catch {
+      } catch (err) {
+        console.log(err);
         pushDashboardMessage({
           title: t("COMMON.FAIL_DIALOG_TITLE"),
           subtitle: t("COMMON.CREATED_FAILED", {
@@ -313,7 +313,11 @@ export default function NewEditForm({
                   <Button
                     className="flex-1 h-full border-border border-2 dark:border-gray-500 dark:text-gray-300"
                     variant="ghost"
-                    onClick={onClose}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onClose();
+                    }}
                   >
                     {t("COMMON.CANCEL")}
                   </Button>
