@@ -1,7 +1,6 @@
 import "leaflet/dist/leaflet.css";
 import { RHFComboxbox } from "@/components/rhf-combobox";
 import RHFTextfield from "@/components/rhf-textfield";
-import { GENDER_OPTIONS } from "./constants";
 import { useLocale, useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import L from "leaflet";

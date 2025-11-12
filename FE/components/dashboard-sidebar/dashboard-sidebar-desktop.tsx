@@ -98,10 +98,10 @@ function NavItem({ tab, mobile = false }: { tab: Tab; mobile?: boolean }) {
             className={cn(
               "flex flex-row items-center rounded-md gap-3 h-12 hover:bg-gray-200 dark:hover:bg-dark-800 transition-all font-semibold text-muted-foreground cursor-pointer p-3 w-full text-base relative",
               collapsed &&
-                "flex flex-col gap-0 justify-between h-19 w-full overflow-hidden py-2",
+                "flex flex-col gap-2  h-19 w-full overflow-hidden py-2",
               IS_ACTIVE &&
                 "bg-[#5BE49B]/15 text-emerald-600 dark:text-emerald-400 hover:bg-[#5BE49B]/25",
-              MENU_OPENED && "bg-gray-200",
+              MENU_OPENED && "bg-gray-200 dark:bg-dark-background",
               HAS_ACTIVE_CHILD &&
                 "bg-[#5BE49B]/15 text-emerald-600 dark:text-emerald-400 hover:bg-[#5BE49B]/25"
             )}

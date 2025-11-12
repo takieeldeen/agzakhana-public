@@ -11,6 +11,12 @@ export type UserListItem = {
   roles: localizedObject[];
   joiningDate: string;
   branch: localizedObject;
+  address: {
+    lat: number;
+    lng: number;
+    displayName: string;
+  };
+  phoneNumber: string;
   gender: "MALE" | "FEMALE";
 };
 
@@ -23,6 +29,12 @@ export type User = {
   phoneNumber: string;
   branch: LocalizedObject;
   status: "ACTIVE" | "INACTIVE";
+  gender: "MALE" | "FEMALE";
+  birthDate: Date;
+  joiningDate: Date;
+  nationalId: string;
+  nationality: LocalizedObject;
+  city: LocalizedObject;
   roles: (LocalizedObject & { status: string })[];
   location: {
     lat: number;
@@ -38,4 +50,8 @@ export type User = {
   googleMapUrl: string;
   lastLogin: string;
   updatedAt: string;
+  files: (
+    | File
+    | { _id: string; name: string; type: string; url: string; size: number }
+  )[];
 };

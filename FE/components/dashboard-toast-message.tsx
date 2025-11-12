@@ -16,7 +16,6 @@ export default function ToastMessage({
   variant = "success",
   title,
   subtitle,
-  t,
 }: Props) {
   const [play] = useSound("/sounds/success.mp3");
 

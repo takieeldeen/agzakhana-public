@@ -179,17 +179,17 @@ export default function ListView() {
         <EmptyView
           icon="solar:key-broken"
           title={t("COMMON.EMPTY_TITLE", {
-            ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_PLURAL"),
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_PLURAL"),
           })}
           subtitle={t("COMMON.EMPTY_SUBTITLE", {
-            ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
           })}
           action={() => {
             setShowCreationModal("CREATE");
             setEditedRoleId(null);
           }}
           actionTitle={t("COMMON.CREATE", {
-            ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
           })}
         />
         {showCreationModal !== "HIDDEN" && (
@@ -213,11 +213,11 @@ export default function ListView() {
       <div className="flex md:flex-row flex-col md:gap-0 gap-2  justify-between md:sticky relative md:top-0 bg-slate-50 pt-2 z-20 dark:bg-dark-background">
         <div className="flex flex-col">
           <h3 className="text-3xl font-bold dark:text-white">
-            {t("USERS_MANAGEMENT.LIST_TITLE")}
+            {t("ROLES_MANAGEMENT.LIST_TITLE")}
           </h3>
           <div className="flex flex-row gap-4">
             <p className="dark:text-gray-200">
-              {t("USERS_MANAGEMENT.LIST_SUBTITLE")}
+              {t("ROLES_MANAGEMENT.LIST_SUBTITLE")}
             </p>
             <AnimatePresence>
               {isFetching && (
@@ -278,7 +278,7 @@ export default function ListView() {
           >
             <Icon icon="gg:add" className="w-6! h-6!" />
             {t("COMMON.ADD_ENTITY", {
-              ENTITY_NAME: t("USERS_MANAGEMENT.INDIFINITE_ENTITY_NAME"),
+              ENTITY_NAME: t("ROLES_MANAGEMENT.INDIFINITE_ENTITY_NAME"),
             })}
           </Button>
         </div>

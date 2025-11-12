@@ -14,6 +14,12 @@ export const useDashboardNavData = () => {
   const tabs: Tab[] = [
     {
       id: "ROLES_MANAGEMENT_1",
+      label: t("DASHBOARD_NAV_BAR.BRANCHES_MANAGEMENT"),
+      path: paths.dashboard.branches.list,
+      icon: "streamline-plump:store-2",
+    },
+    {
+      id: "ROLES_MANAGEMENT_1",
       label: t("DASHBOARD_NAV_BAR.USER_MANAGEMENT"),
       path: paths.dashboard.users.list,
       icon: "solar:key-broken",

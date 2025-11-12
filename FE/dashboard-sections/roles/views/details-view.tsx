@@ -20,6 +20,7 @@ import {
 import { useParams } from "next/navigation";
 import { DetailsSkeletonView } from "./skeleton-view";
 import { useMutate } from "../use-mutate";
+import { useMutate as useMutateUser } from "../../users/use-mutate";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
@@ -38,6 +39,7 @@ export default function DetailsView() {
   const locale = useLocale();
   const t = useTranslations();
   const { changeStatus } = useMutate();
+  const { onDeleteUserRole } = useMutateUser();
   const usersEmpty = users?.length === 0 && !usersLoading;
   if (isLoading || usersLoading) return <DetailsSkeletonView />;
   return (
@@ -250,12 +252,12 @@ export default function DetailsView() {
                             </p>
                           </div>
                           <Button
+                            onClick={() => onDeleteUserRole(user as any, data!)}
                             className="rounded-full h-12 aspect-square md:aspect-auto md:w-32 text-rose-800 dark:text-rose-600 border-rose-800 dark:border-rose-600 border-2 hover:bg-rose-800 hover:dark:bg-rose-600 hover:dark:text-white hover:text-white p-0! "
                             variant="ghost"
                           >
                             <Icon icon="mynaui:trash" className="h-6! w-6!" />
                             <span className="hidden md:block">
-                              {" "}
                               {t("ROLES_MANAGEMENT.DELETE")}{" "}
                             </span>
                           </Button>

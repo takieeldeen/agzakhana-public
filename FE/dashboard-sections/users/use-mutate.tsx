@@ -1,6 +1,6 @@
 import { useMutateUser } from "@/app/dashboard-api/users";
-import { Role, RoleListItem } from "@/app/dashboard-types/roles";
-import { User } from "@/app/dashboard-types/users";
+import { Role } from "@/app/dashboard-types/roles";
+import { User, UserListItem } from "@/app/dashboard-types/users";
 import { pushDashboardMessage } from "@/components/dashboard-toast-message";
 import { usePrompt } from "@/components/prompt-provider";
 import { LocalizedObject } from "@/types/common";
@@ -10,7 +10,7 @@ import { useCallback, useMemo } from "react";
 export function useMutate() {
   const t = useTranslations();
   const locale = useLocale();
-  const { activateRole, deactivateRole, deleteRole, deleteUserRole } =
+  const { activateUser, deactivateUser, deleteUser, deleteUserRole } =
     useMutateUser();
   const { showPrompt, closePrompt } = usePrompt();
 
@@ -49,30 +49,39 @@ export function useMutate() {
           }
         },
       };
-      showPrompt({
-        actionProps,
-        variant: "ALERT",
-        dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
-          OPERATION_NAME: t("COMMON.DELETION"),
-        }),
-        title: t("COMMON.DELETION_TITLE", {
-          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-          ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-        }),
-        content: t("COMMON.DELETION_DESC", {
-          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-          ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
-        }),
-      });
+      if (user?.roles?.length > 1) {
+        showPrompt({
+          actionProps,
+          variant: "ALERT",
+          dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
+            OPERATION_NAME: t("COMMON.DELETION"),
+          }),
+          title: t("COMMON.DELETION_TITLE", {
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+          }),
+          content: t("COMMON.DELETION_DESC", {
+            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+          }),
+        });
+      } else {
+        showPrompt({
+          variant: "ERROR",
+          title: t("VALIDATIONS.LAST_USER_ROLE", {
+            user: locale === "ar" ? user?.nameAr : user?.nameEn,
+          }),
+        });
+      }
     },
     [closePrompt, deleteUserRole, locale, showPrompt, t]
   );
   const onDelete = useCallback(
-    (role: Role | RoleListItem) => {
+    (role: User | UserListItem) => {
       const actionProps = {
         actionFn: async () => {
           try {
-            await deleteRole.mutateAsync(role?._id);
+            await deleteUser.mutateAsync(role?._id);
             pushDashboardMessage({
               title: t("COMMON.SUCCESS_DIALOG_TITLE"),
               subtitle: t(`COMMON.DELETED_SUCCESSFULLY`, {
@@ -109,23 +118,23 @@ export function useMutate() {
         }),
       });
     },
-    [closePrompt, deleteRole, locale, showPrompt, t]
+    [closePrompt, deleteUser, locale, showPrompt, t]
   );
   const changeStatus = useCallback(
-    (role: Role | RoleListItem) => {
+    (user: User | UserListItem) => {
       const actionProps = {
         actionFn: async () => {
           try {
-            if (role?.status === "INACTIVE") {
-              await activateRole.mutateAsync(role);
+            if (user?.status === "INACTIVE") {
+              await activateUser.mutateAsync(user);
             } else {
-              await deactivateRole.mutateAsync(role);
+              await deactivateUser.mutateAsync(user);
             }
             pushDashboardMessage({
               title: t("COMMON.SUCCESS_DIALOG_TITLE"),
               subtitle: t(
                 `COMMON.${
-                  role?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
+                  user?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
                 }_SUCCESSFULLY`,
                 {
                   ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
@@ -138,7 +147,7 @@ export function useMutate() {
               title: t("COMMON.FAIL_DIALOG_TITLE"),
               subtitle: t(
                 `COMMON.${
-                  role?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
+                  user?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
                 }_FAILED`,
                 {
                   ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
@@ -153,35 +162,35 @@ export function useMutate() {
       };
       showPrompt({
         actionProps,
-        variant: role?.status === "ACTIVE" ? "ALERT" : "SUCCESS",
+        variant: user?.status === "ACTIVE" ? "ALERT" : "SUCCESS",
         dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
           OPERATION_NAME: t(
-            role?.status === "ACTIVE"
+            user?.status === "ACTIVE"
               ? "COMMON.DEACTIVATION"
               : "COMMON.ACTIVATION"
           ),
         }),
         title: t(
-          role?.status === "ACTIVE"
+          user?.status === "ACTIVE"
             ? "COMMON.DEACTIVATION_TITLE"
             : "COMMON.ACTIVATION_TITLE",
           {
             ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+            ENTITY_VALUE: locale === "ar" ? user?.nameAr : user?.nameEn,
           }
         ),
         content: t(
-          role?.status === "ACTIVE"
+          user?.status === "ACTIVE"
             ? "COMMON.DEACTIVATION_DESC"
             : "COMMON.ACTIVATION_DESC",
           {
             ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+            ENTITY_VALUE: locale === "ar" ? user?.nameAr : user?.nameEn,
           }
         ),
       });
     },
-    [activateRole, closePrompt, deactivateRole, locale, showPrompt, t]
+    [activateUser, closePrompt, deactivateUser, locale, showPrompt, t]
   );
 
   const memoizedValue = useMemo(

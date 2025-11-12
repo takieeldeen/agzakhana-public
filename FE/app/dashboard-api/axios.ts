@@ -25,6 +25,9 @@ export const endpoints = {
     details: (id: string) => `/v1/dashboard/users/${id}`,
     deleteUserRole: (roleId: string, userId: string) =>
       `/v1/dashboard/users/${userId}/roles/${roleId}`,
+    activate: (id: string) => `/v1/dashboard/users/${id}/activate`,
+    deactivate: (id: string) => `/v1/dashboard/users/${id}/deactivate`,
+    userPerRoles: (roleId: string) => `/v1/dashboard/roles/${roleId}/users`,
   },
   valueHelp: {
     permissions: "/v1/dashboard/permissions",

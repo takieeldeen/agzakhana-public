@@ -4,10 +4,9 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { getDummyFetcher, getFetcher } from "./api";
+import { getFetcher } from "./api";
 import { APIListResponse } from "@/types/common";
 import { Role, RoleListItem } from "../dashboard-types/roles";
-import { USER_PER_ROLE_MOCK_DATA } from "../_mock/_roles";
 import { useMemo } from "react";
 import axios, { endpoints } from "./axios";
 import { AxiosRequestConfig } from "axios";
@@ -102,7 +101,7 @@ export function useGetRoleDetails(
 }
 
 export function useGetUsersPerRole(roleId: ParamValue | string | undefined) {
-  const URL = roleId ? endpoints.roles.details(roleId?.toString()) : "";
+  const URL = roleId ? endpoints.users.userPerRoles(roleId?.toString()) : "";
   const { data, isLoading, isFetching, refetch, error } = useQuery<
     APIListResponse<{
       _id: string;
@@ -114,16 +113,7 @@ export function useGetUsersPerRole(roleId: ParamValue | string | undefined) {
     Error
   >({
     queryKey: ["roles", "users", URL],
-    queryFn: getDummyFetcher<
-      APIListResponse<{
-        _id: string;
-        nameAr: string;
-        nameEn: string;
-        imageUrl: string;
-        email: string;
-      }>
-    >(USER_PER_ROLE_MOCK_DATA),
-    staleTime: Infinity,
+    queryFn: getFetcher<any>(URL),
   });
   const memoizedValue = useMemo(
     () => ({

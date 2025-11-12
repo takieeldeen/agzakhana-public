@@ -1,5 +1,4 @@
 "use client";
-import { Role, RoleListItem } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,19 +14,23 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { UserListItem } from "@/app/dashboard-types/users";
+import { User, UserListItem } from "@/app/dashboard-types/users";
 import Image from "next/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function ListTableRow({
   data,
   onActivateRow,
-  onEditRole,
   onDeleteRow,
 }: {
   data: UserListItem;
-  onActivateRow: (role: RoleListItem) => void;
-  onEditRole: (roleId: string) => void;
-  onDeleteRow: (role: Role | RoleListItem) => void;
+  onActivateRow: (user: UserListItem) => void;
+  onEditRole: (userId: string) => void;
+  onDeleteRow: (user: User | UserListItem) => void;
 }) {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const locale = useLocale();
@@ -68,15 +71,40 @@ export default function ListTableRow({
             {data?.email}
           </EllipsisTypography>
           <ul className="flex flex-row gap-2 w-full flex-wrap">
-            {data?.roles?.length > 0 &&
-              data?.roles?.map((role) => (
-                <Badge
-                  key={role?._id}
-                  className="bg-transparent border-2 border-emerald-700 text-emerald-700 dark:border-emerald-600 dark:text-emerald-600 font-semibold rounded-full"
-                >
-                  {locale === "ar" ? role?.nameAr : role?.nameEn}
-                </Badge>
-              ))}
+            {data?.roles?.length > 0 && (
+              <Badge className="bg-transparent border-2 border-emerald-700 text-emerald-700 dark:border-emerald-600 dark:text-emerald-600 font-semibold rounded-full">
+                {locale === "ar"
+                  ? data?.roles?.[0]?.nameAr
+                  : data?.roles?.[0]?.nameEn}
+              </Badge>
+            )}
+            {data?.roles?.length > 1 && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <Badge className="bg-transparent border-2 border-emerald-700 text-emerald-700 dark:border-emerald-600 dark:text-emerald-600 font-semibold rounded-full">
+                    {t("USERS_MANAGEMENT.MORE_ROLES", {
+                      count: data?.roles?.length - 1,
+                    })}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent className="shadow-lg dark:bg-dark-background dark:text-white">
+                  <ul className="flex flex-col py-2">
+                    {data?.roles?.slice(1)?.map((role, i) => (
+                      <li
+                        key={role?._id}
+                        className={cn(
+                          "flex items-center h-10",
+                          i !== data.roles.length - 2 &&
+                            "border-gray-600  border-b-[1px]"
+                        )}
+                      >
+                        {locale === "ar" ? role?.nameAr : role?.nameEn}
+                      </li>
+                    ))}
+                  </ul>
+                </TooltipContent>
+              </Tooltip>
+            )}
           </ul>
         </div>
       </div>
@@ -151,7 +179,7 @@ export default function ListTableRow({
             <li>
               <Link
                 className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300 "
-                href={`users/${data?._id}`}
+                href={`users/details/${data?._id}`}
               >
                 <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
                   <Icon
@@ -212,28 +240,30 @@ export default function ListTableRow({
               </div>
             </li>
             <Separator />
-            <li
-              onClick={() => onEditRole(data?._id)}
-              className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300"
-            >
-              <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
-                <Icon
-                  icon="iconamoon:edit-thin"
-                  className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
-                />
-              </div>
-              <div>
-                <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
-                  {t("COMMON.EDIT_TITLE", {
-                    ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                  })}
-                </p>
-                <p className="text-sm text-muted-foreground transition-all group-hover:text-gray-200">
-                  {t("COMMON.EDIT_SUBTITLE", {
-                    ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                  })}
-                </p>
-              </div>
+            <li>
+              <Link
+                className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300 "
+                href={`users/edit/${data?._id}`}
+              >
+                <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
+                  <Icon
+                    icon="iconamoon:edit-thin"
+                    className="h-6 w-6 text-gray-700 group-hover:text-gray-100 transition-all duration-300 dark:text-gray-200"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-black dark:text-gray-200 transition-all group-hover:text-white font-semibold">
+                    {t("COMMON.EDIT_TITLE", {
+                      ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })}
+                  </p>
+                  <p className="text-sm text-muted-foreground transition-all group-hover:text-gray-200">
+                    {t("COMMON.EDIT_SUBTITLE", {
+                      ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })}
+                  </p>
+                </div>
+              </Link>
             </li>
             <Separator />
             <li

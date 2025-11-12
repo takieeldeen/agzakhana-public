@@ -11,17 +11,19 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale } from "next-intl";
 import { useTranslations } from "use-intl";
 import { cn } from "@/lib/utils";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { DetailsSkeletonView } from "./skeleton-view";
 import { useMutate } from "../use-mutate";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import ErrorGuard from "@/components/error-guard";
 import { useGetUserDetails } from "@/app/dashboard-api/users";
 import FallbackImage from "@/components/fallback-image";
-import Map, { MapMarker } from "@/components/map";
+import Map, { MapMarker } from "@/components/map/map";
 import Link from "next/link";
+import { downloadFile } from "@/utils/files";
 
 export default function DetailsView() {
   const { userId } = useParams();
@@ -30,6 +32,7 @@ export default function DetailsView() {
   const locale = useLocale();
   const t = useTranslations();
   const { changeStatus, onDeleteUserRole } = useMutate();
+  const router = useRouter();
   if (isLoading) return <DetailsSkeletonView />;
   return (
     <div className="h-full dark:bg-dark-card flex flex-col">
@@ -84,7 +87,7 @@ export default function DetailsView() {
           </div>
           <div className="flex flex-col w-full md:w-fit md:flex-row items-start gap-3">
             <Button
-              // onClick={() => setShowEditModal("EDIT")}
+              onClick={() => router.push(`/dashboard/users/edit/${userId}`)}
               variant="ghost"
               className="border-2 border-white text-white h-12 w-full md:w-fit md:min-w-36 text-base hover:bg-transparent hover:border-gray-200 hover:text-gray-200 rounded-xl"
             >
@@ -166,6 +169,64 @@ export default function DetailsView() {
                   secondaryLabel={data?.email ?? t("COMMON.UNKOWN")}
                 />
               </div>
+              <div className="flex flex-col md:flex-row gap-3">
+                <ListItem
+                  primaryLabel={t("USERS_MANAGEMENT.CITY")}
+                  secondaryLabel={
+                    data?.status
+                      ? t(`COMMON.${data?.status}`)
+                      : t("COMMON.UNKOWN")
+                  }
+                />
+                <ListItem
+                  primaryLabel={t("USERS_MANAGEMENT.NATIONALITY")}
+                  secondaryLabel={
+                    data?.nationality?.[
+                      locale === "ar" ? "nameAr" : "nameEn"
+                    ] ?? t("COMMON.UNKOWN")
+                  }
+                />
+              </div>
+              <div className="flex flex-col md:flex-row gap-3">
+                <ListItem
+                  primaryLabel={t("USERS_MANAGEMENT.NATIONAL_ID")}
+                  secondaryLabel={data?.nationalId ?? t("COMMON.UNKOWN")}
+                />
+                <ListItem
+                  primaryLabel={t("USERS_MANAGEMENT.BIRTH_DATE")}
+                  secondaryLabel={
+                    data?.birthDate
+                      ? new Intl.DateTimeFormat(
+                          locale === "ar" ? "ar-EG" : "en-US",
+                          {
+                            day: "2-digit",
+                            weekday: "long",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        ).format(new Date(data?.birthDate ?? ""))
+                      : t("COMMON.UNKOWN")
+                  }
+                />
+              </div>
+              <div className="flex flex-col md:flex-row gap-3">
+                <ListItem
+                  primaryLabel={t("USERS_MANAGEMENT.JOINING_DATE")}
+                  secondaryLabel={
+                    data?.joiningDate
+                      ? new Intl.DateTimeFormat(
+                          locale === "ar" ? "ar-EG" : "en-US",
+                          {
+                            day: "2-digit",
+                            weekday: "long",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        ).format(new Date(data?.joiningDate ?? ""))
+                      : t("COMMON.UNKOWN")
+                  }
+                />
+              </div>
 
               <div className="">
                 <ListItem
@@ -197,6 +258,27 @@ export default function DetailsView() {
                     ))}
                   </ul>
                 </Accordion>
+              </div>
+
+              <div>
+                <div className="flex flex-row items-start gap-4 w-fit">
+                  <ListItem
+                    primaryLabel={t("USERS_MANAGEMENT.LOCATION")}
+                    className="mb-4"
+                  />
+                  <Link
+                    href={data?.googleMapUrl ?? ""}
+                    className="dark:text-emerald-400 flex flex-row items-center gap-2 text-emerald-600 font-semibold"
+                  >
+                    <Icon icon="hugeicons:maps" className="h-6 w-6" />
+                    {t("USERS_MANAGEMENT.GO_TO_GOOGLE_MAPS")}
+                  </Link>
+                </div>
+                <div className="rounded-lg overflow-hidden flex-1 h-96 w-full">
+                  <Map>
+                    {data?.location && <MapMarker position={data?.location} />}
+                  </Map>
+                </div>
               </div>
               <div className="flex flex-col md:flex-row gap-3">
                 <ListItem
@@ -236,26 +318,6 @@ export default function DetailsView() {
                   }
                 />
               </div>
-              <div>
-                <div className="flex flex-row items-start gap-4 w-fit">
-                  <ListItem
-                    primaryLabel={t("USERS_MANAGEMENT.LOCATION")}
-                    className="mb-4"
-                  />
-                  <Link
-                    href={data?.googleMapUrl ?? ""}
-                    className="dark:text-gray-200 flex flex-row items-center gap-2"
-                  >
-                    <Icon icon="hugeicons:maps" />
-                    {t("USERS_MANAGEMENT.GO_TO_GOOGLE_MAPS")}
-                  </Link>
-                </div>
-                <div className="rounded-lg overflow-hidden flex-1 h-96 w-full">
-                  <Map>
-                    {data?.location && <MapMarker position={data?.location} />}
-                  </Map>
-                </div>
-              </div>
               <div className="">
                 <ListItem
                   primaryLabel={t("USERS_MANAGEMENT.ROLES")}
@@ -294,6 +356,45 @@ export default function DetailsView() {
                           <span className="hidden md:block">
                             {t("USERS_MANAGEMENT.DELETE")}{" "}
                           </span>
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="">
+                <ListItem
+                  primaryLabel={t("USERS_MANAGEMENT.OFFICIAL_DOCUMENTS")}
+                  className="mb-4"
+                />
+                <div className="flex md:flex-row gap-3 md:flex-wrap flex-col">
+                  {data?.files?.map((file: any) => (
+                    <div
+                      key={file?._id}
+                      className="flex w-full md:w-[calc(50%_-_12px)] gap-3 flex-row shrink-0 "
+                    >
+                      <Icon
+                        icon="mdi-light:file"
+                        className="h-[3.5rem] w-[3.5rem] text-border"
+                      />
+                      <div className="flex flex-row flex-1 justify-between">
+                        <div className="flex flex-col">
+                          <p className="text-black text-lg font-semibold dark:text-white">
+                            {file?.name}
+                          </p>
+                          <span className="text-sm text-muted-foreground whitespace-nowrap ">
+                            {Math.round(file?.size / 1024)} {t("COMMON.KB")}
+                          </span>
+                        </div>
+                        <Button
+                          className="rounded-lg h-12 w-12 aspect-square md:aspect-auto  text-emerald-800 dark:text-emerald-600 border-emerald-800 dark:border-emerald-600 border-2 hover:bg-emerald-800 hover:dark:bg-emerald-600 hover:dark:text-white hover:text-white p-0! "
+                          variant="ghost"
+                          onClick={() => downloadFile(file?.url, file?.name)}
+                        >
+                          <Icon
+                            icon="heroicons-outline:download"
+                            className="h-6! w-6!"
+                          />
                         </Button>
                       </div>
                     </div>

@@ -4,14 +4,8 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { getDummyFetcher, getFetcher } from "./api";
-import {
-  APIDetailsResponse,
-  APIListResponse,
-  LocalizedObject,
-} from "@/types/common";
-import { Role, RoleListItem } from "../dashboard-types/roles";
-import { USER_PER_ROLE_MOCK_DATA } from "../_mock/_roles";
+import { getFetcher } from "./api";
+import { APIDetailsResponse, APIListResponse } from "@/types/common";
 import { useMemo } from "react";
 import axios, { endpoints } from "./axios";
 import { AxiosRequestConfig } from "axios";
@@ -107,45 +101,6 @@ export function useGetUserDetails(
   return memoizedValue;
 }
 
-export function useGetUsersPerRole(roleId: ParamValue | string | undefined) {
-  const URL = roleId ? endpoints.roles.details(roleId?.toString()) : "";
-  const { data, isLoading, isFetching, refetch, error } = useQuery<
-    APIListResponse<{
-      _id: string;
-      nameAr: string;
-      nameEn: string;
-      imageUrl: string;
-      email: string;
-    }>,
-    Error
-  >({
-    queryKey: ["roles", "users", URL],
-    queryFn: getDummyFetcher<
-      APIListResponse<{
-        _id: string;
-        nameAr: string;
-        nameEn: string;
-        imageUrl: string;
-        email: string;
-      }>
-    >(USER_PER_ROLE_MOCK_DATA),
-    staleTime: Infinity,
-  });
-  const memoizedValue = useMemo(
-    () => ({
-      data: data?.content ?? [],
-      results: data?.results ?? 0,
-      isLoading,
-      isFetching,
-      refetch,
-      error,
-    }),
-    [data?.content, data?.results, error, isFetching, isLoading, refetch]
-  );
-
-  return memoizedValue;
-}
-
 export function useMutateUser() {
   const queryClient = useQueryClient();
   const createUser = useMutation({
@@ -182,20 +137,20 @@ export function useMutateUser() {
   // -------------------------
   // Activate
   // -------------------------
-  const activateRole = useMutation({
-    mutationFn: async (role: RoleListItem | Role) => {
-      const URL = endpoints.roles.activate(role?._id);
+  const activateUser = useMutation({
+    mutationFn: async (user: UserListItem | User) => {
+      const URL = endpoints.users.activate(user?._id);
       await axios.post(URL);
     },
-    onSuccess: (res, role) => {
+    onSuccess: (res, user) => {
       if (LAST_LIST_KEY) {
         queryClient.setQueryData(
-          ["roles", LAST_LIST_KEY],
+          ["users", LAST_LIST_KEY],
           (cachedData: any) => {
             if (!cachedData) return undefined;
             const updatedData = JSON.parse(JSON.stringify(cachedData));
             const targetListItem = updatedData?.content?.find(
-              (cur: RoleListItem) => cur._id === role?._id
+              (cur: UserListItem) => cur._id === user?._id
             );
             if (!targetListItem) return;
             targetListItem.status = "ACTIVE";
@@ -204,7 +159,7 @@ export function useMutateUser() {
         );
       }
       queryClient.setQueryData(
-        ["roles", endpoints.roles.details(role?._id)],
+        ["users", endpoints.users.details(user?._id)],
         (cachedData: any) => {
           if (!cachedData) return undefined;
           const updatedData = JSON.parse(JSON.stringify(cachedData));
@@ -214,30 +169,30 @@ export function useMutateUser() {
       );
       if (!!LAST_LIST_KEY)
         queryClient.invalidateQueries({
-          queryKey: ["roles", LAST_LIST_KEY],
+          queryKey: ["users", LAST_LIST_KEY],
         });
       queryClient.invalidateQueries({
-        queryKey: ["roles", endpoints.roles.details(role?._id)],
+        queryKey: ["users", endpoints.users.details(user?._id)],
       });
     },
   });
   // -------------------------
   // Deactivate
   // -------------------------
-  const deactivateRole = useMutation({
-    mutationFn: async (role: RoleListItem | Role) => {
-      const URL = endpoints.roles.deactivate(role?._id);
+  const deactivateUser = useMutation({
+    mutationFn: async (user: UserListItem | User) => {
+      const URL = endpoints.users.deactivate(user?._id);
       await axios.post(URL);
     },
-    onSuccess: (res, role) => {
+    onSuccess: (res, user) => {
       if (LAST_LIST_KEY) {
         queryClient.setQueryData(
-          ["roles", LAST_LIST_KEY],
+          ["users", LAST_LIST_KEY],
           (cachedData: any) => {
             if (!cachedData) return undefined;
             const updatedData = JSON.parse(JSON.stringify(cachedData));
             const targetListItem = updatedData?.content?.find(
-              (cur: RoleListItem) => cur._id === role?._id
+              (cur: UserListItem) => cur._id === user?._id
             );
             if (!targetListItem) return;
             targetListItem.status = "INACTIVE";
@@ -246,7 +201,7 @@ export function useMutateUser() {
         );
       }
       queryClient.setQueryData(
-        ["roles", endpoints.roles.details(role?._id)],
+        ["users", endpoints.users.details(user?._id)],
         (cachedData: any) => {
           if (!cachedData) return undefined;
           const updatedData = JSON.parse(JSON.stringify(cachedData));
@@ -256,89 +211,82 @@ export function useMutateUser() {
       );
       if (!!LAST_LIST_KEY)
         queryClient.invalidateQueries({
-          queryKey: ["roles", LAST_LIST_KEY],
+          queryKey: ["users", LAST_LIST_KEY],
         });
       queryClient.invalidateQueries({
-        queryKey: ["roles", endpoints.roles.details(role?._id)],
+        queryKey: ["users", endpoints.users.details(user?._id)],
       });
     },
   });
   // -------------------------
   // Update
   // -------------------------
-  const editRole = useMutation({
-    mutationFn: async (payload: any) => {
-      const URL = endpoints.roles.details(payload?._id);
-      return await axios.patch(URL, payload);
+  const editUser = useMutation({
+    mutationFn: async (data: any) => {
+      const URL = endpoints.users.details(data?._id);
+      const modifiedData = {
+        imageUrl:
+          typeof data?.imageUrl === "string"
+            ? data?.imageUrl
+            : data?.imageUrl?.[0],
+        nameAr: data?.nameAr,
+        nameEn: data?.nameEn,
+        email: data?.email,
+        gender: data?.gender?.value,
+        nationalId: data?.nationalId,
+        birthDate: data?.birthDate,
+        joiningDate: data?.joiningDate,
+        nationality: data?.nationality?._id,
+        city: data?.city?._id,
+        branch: data?.branch?._id ?? null,
+        phoneNumber: data?.phoneNumber,
+        lat: data?.location?.lat,
+        lng: data?.location?.lng,
+        displayName: data?.location?.displayName,
+        files: data?.files?.map((file: any) => file?._id),
+        googleMapUrl: data?.googleMapUrl ?? data?.location?.googleMapUrl,
+        roles: data?.roles?.map((role: any) => role?._id),
+      };
+      const formData = objectToFormData(modifiedData);
+      return await axios.patch(URL, formData);
     },
     onSuccess: (res, data) => {
-      if (LAST_LIST_KEY) {
-        queryClient.setQueryData(
-          ["roles", LAST_LIST_KEY],
-          (cachedData: any) => {
-            if (!cachedData) return undefined;
-            const updatedData = JSON.parse(JSON.stringify(cachedData));
-            const targetListItem = updatedData?.content?.find(
-              (cur: RoleListItem) => cur._id === data?._id
-            );
-            if (!targetListItem) return;
-            if (data.status) targetListItem.status = data.status;
-            if (data.nameAr) targetListItem.nameAr = data.nameAr;
-            if (data.nameEn) targetListItem.nameEn = data.nameEn;
-            if (data.descriptionAr)
-              targetListItem.descriptionAr = data.descriptionAr;
-            if (data.descriptionEn)
-              targetListItem.descriptionEn = data.descriptionAr;
-            return updatedData;
-          }
-        );
-      }
-      queryClient.setQueryData(
-        ["roles", endpoints.roles.details(data._id)],
-        (cachedData: any) => {
-          if (!cachedData) return undefined;
-          const updatedData = JSON.parse(JSON.stringify(cachedData));
-          console.log(updatedData);
-          updatedData.content = { ...updatedData.content, ...data };
-          return updatedData;
-        }
-      );
       if (!!LAST_LIST_KEY)
         queryClient.invalidateQueries({
-          queryKey: ["roles", LAST_LIST_KEY],
+          queryKey: ["users", LAST_LIST_KEY],
         });
       queryClient.invalidateQueries({
-        queryKey: ["roles", endpoints.roles.details(data._id)],
+        queryKey: ["users", endpoints.users.details(data._id)],
       });
     },
   });
   // -------------------------
   // Deletion
   // -------------------------
-  const deleteRole = useMutation({
-    mutationFn: async (roleId: string) => {
-      const URL = endpoints.roles.details(roleId);
+  const deleteUser = useMutation({
+    mutationFn: async (id: string) => {
+      const URL = endpoints.users.details(id);
       return axios.delete(URL);
     },
-    onSuccess: (res, roleId) => {
+    onSuccess: (res, id) => {
       if (LAST_LIST_KEY) {
-        queryClient.setQueryData(["roles", LAST_LIST_KEY], (cachedData) => {
+        queryClient.setQueryData(["users", LAST_LIST_KEY], (cachedData) => {
           if (!cachedData) return undefined;
           const updatedData = JSON.parse(JSON.stringify(cachedData));
           updatedData.content = updatedData.content?.filter(
-            (role: RoleListItem) => role?._id !== roleId
+            (cur: UserListItem) => cur?._id !== id
           );
           return updatedData;
         });
         queryClient.setQueryData(
-          ["roles", endpoints.roles.details(roleId)],
+          ["users", endpoints.users.details(id)],
           undefined
         );
       }
       queryClient.invalidateQueries({
-        queryKey: ["roles", endpoints.roles.details(roleId)],
+        queryKey: ["users", endpoints.users.details(id)],
       });
-      queryClient.invalidateQueries({ queryKey: ["roles", LAST_LIST_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["users", LAST_LIST_KEY] });
     },
   });
   // -------------------------
@@ -366,14 +314,21 @@ export function useMutateUser() {
         queryKey: ["users", endpoints.users.details(payload?.roleId)],
       });
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({
+        queryKey: [
+          "roles",
+          "users",
+          endpoints.users.userPerRoles(payload.roleId?.toString()),
+        ],
+      });
     },
   });
   return {
     createUser,
-    activateRole,
-    deactivateRole,
-    editRole,
-    deleteRole,
+    activateUser,
+    deactivateUser,
+    editUser,
+    deleteUser,
     deleteUserRole,
   };
 }

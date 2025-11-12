@@ -1,20 +1,30 @@
 "use client";
 import { useLocale } from "next-intl";
 import { Drawer, DrawerContent } from "./ui/drawer";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ReactNode, useCallback, useState } from "react";
 
 type InterceptingDrawerProps = {
   url?: string;
   children: ReactNode;
+  paramName?: string;
+  whiteList?: string[];
 };
 export default function InterceptingDrawer({
   url,
   children,
+  paramName,
+  whiteList,
 }: InterceptingDrawerProps) {
   const [showModal, setShowModal] = useState<boolean>(true);
   const router = useRouter();
   const locale = useLocale();
+  const params = useParams();
+  const paramValue =
+    params[paramName ?? ""] && Array.isArray(params[paramName ?? ""])
+      ? params[paramName ?? ""]?.[0]
+      : params[paramName ?? ""];
+  const HIDE_MODAL = !!whiteList && whiteList.includes(paramValue as string);
   const handleClose = useCallback(() => {
     setShowModal(false);
   }, []);
@@ -25,6 +35,7 @@ export default function InterceptingDrawer({
       router.back();
     }
   }, [router, url]);
+  if (HIDE_MODAL) return children;
   return (
     <Drawer
       modal={true}
@@ -38,7 +49,6 @@ export default function InterceptingDrawer({
         onInteractOutside={(event) => {
           // Check if the click target is the overlay
           const target = event.target as HTMLElement;
-          console.log(target);
           // You can add a class or data attribute to your overlay, e.g., "drawer-overlay"
           if (target.closest('[data-slot="drawer-overlay"]')) {
             handleClose();

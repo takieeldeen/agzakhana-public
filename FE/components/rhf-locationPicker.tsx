@@ -1,6 +1,6 @@
 "use client";
 
-import { XIcon } from "lucide-react";
+import { Check, Pin, XIcon } from "lucide-react";
 import {
   ControllerRenderProps,
   FieldValues,
@@ -23,21 +23,22 @@ import {
 import { useTranslations } from "next-intl";
 import React, { useCallback, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMapEvents,
-} from "react-leaflet";
+import { Marker, Popup, useMapEvents } from "react-leaflet";
 import { LatLng, LeafletMouseEvent } from "leaflet";
 import { endpoints } from "@/app/dashboard-api/axios";
 import { Spinner } from "./ui/spinner";
-import { Input } from "./ui/input";
 import { useGetLocationSuggestions } from "@/app/dashboard-api/common";
 import { useDebounce } from "@/hooks/use-debounce";
-import EllipsisTypography from "./ellipsis-typography";
 import axios from "axios";
+import Map, { MapMarker } from "./map/map";
+import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "./ui/command";
+import { CommandLoading } from "cmdk";
 
 export type Location = {
   lat: number;
@@ -83,6 +84,7 @@ export function RHFLocationPicker({
   onChange,
   mandatoryField,
 }: RHFLocationPickerProps) {
+  const [val, setVal] = useState<[number, number] | null>(null);
   const [zoomLevel, setZoomLevel] = useState<number>(25);
   const [fieldValue, setFieldValue] = useState<string>("");
   const [opened, setOpened] = useState<boolean>(false);
@@ -90,7 +92,6 @@ export function RHFLocationPicker({
   const form = useFormContext();
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const t = useTranslations();
-  const showSuggestions = fieldValue.length > 0 && opened;
 
   const debouncedSearch = useDebounce(fieldValue);
   const {
@@ -162,25 +163,26 @@ export function RHFLocationPicker({
                       ref={buttonRef}
                       variant="outline"
                       className={cn(
-                        "w-full h-12 text-left justify-between rtl:text-right  font-normal dark:text-gray-300 ",
-                        !field.value && "text-muted-foreground",
-                        "bg-transparent!"
+                        "w-full h-12 justify-between rtl:text-right font-normal dark:text-gray-300 bg-transparent overflow-hidden dark:bg-transparent",
+                        !field.value && "text-muted-foreground"
                       )}
                     >
-                      {field?.value
-                        ? getLocationLabel?.(field.value) ??
-                          Object.values(field?.value)?.join(", ")
-                        : placeholder}
-                      <div className="flex flex-row items-center gap-3">
-                        {isLoading && <Spinner />}
+                      <span className="flex-1 truncate text-left rtl:text-right">
+                        {field?.value
+                          ? getLocationLabel?.(field.value) ??
+                            Object.values(field?.value)?.join(", ")
+                          : placeholder}
+                      </span>
 
+                      <div className="flex flex-row items-center gap-3 flex-shrink-0">
+                        {isLoading && <Spinner />}
                         <Icon icon="tdesign:location" />
                         {clearable && field.value && (
                           <Button
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className=" h-6 w-6 p-0 text-muted-foreground hover:text-destructive "
+                            className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive"
                             onClick={(e) => {
                               field.onChange(null);
                               onChange?.(null);
@@ -202,70 +204,90 @@ export function RHFLocationPicker({
                 >
                   <div className="p-3 dark:bg-dark-card relative rounded-lg overflow-hidden flex flex-col gap-2">
                     <div className="relative">
-                      <Input
+                      {/* <Input
                         className="h-12"
                         value={fieldValue}
                         onChange={(e) => {
                           setFieldValue(e.target.value);
                           setZoomLevel(10);
                         }}
-                      />
+                      /> */}
+                      {/* Suggestion Container */}
+                      <div>
+                        <Command className="dark:bg-dark-card">
+                          <CommandInput
+                            value={fieldValue}
+                            placeholder={t(
+                              "USERS_MANAGEMENT.LOCATION_PLACEHOLDER"
+                            )}
+                            className={cn("h-12 ")}
+                            onValueChange={(newVal: string) => {
+                              setFieldValue(newVal);
+                              setZoomLevel(10);
+                            }}
+                          />
+                          <CommandList className="dark:bg-dark-background">
+                            {loadingSuggestions && (
+                              <CommandLoading className="text-sm py-2 px-2 text-muted-foreground">
+                                {t("COMMON.LOADING")}
+                              </CommandLoading>
+                            )}
+                            {/* <CommandEmpty>
+                              {t("USERS_MANAGEMENT.LOCATION_NO_RESULTS")}
+                            </CommandEmpty> */}
+                            <CommandGroup className="max-h-48 overflow-y-auto">
+                              {Array.isArray(data) &&
+                                data?.length > 0 &&
+                                data?.map((suggestion: any) => (
+                                  <CommandItem
+                                    className="h-12 "
+                                    key={JSON.stringify(suggestion)}
+                                    value={suggestion?.display_name}
+                                    onSelect={() => {
+                                      setOpened(false);
+                                      setVal([suggestion.lat, suggestion.lon]);
+                                      handleLocationClick(
+                                        {
+                                          latlng: new LatLng(
+                                            suggestion.lat,
+                                            suggestion.lon
+                                          ),
+                                        } as any,
+                                        field
+                                      );
+                                    }}
+                                  >
+                                    <Pin
+                                      className={cn(
+                                        val?.[0] === suggestion?.lat &&
+                                          val?.[1] === suggestion?.lon &&
+                                          "text-emerald-600"
+                                      )}
+                                    />
+                                    <p className="">
+                                      {suggestion?.display_name}
+                                    </p>
+
+                                    <Check
+                                      className={cn(
+                                        "ml-auto rtl:mr-auto rtl:ml-0 ",
+                                        val?.[0] === suggestion?.lat &&
+                                          val?.[1] === suggestion?.lon
+                                          ? "opacity-100 text-emerald-600"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </div>
                     </div>
 
                     <div className="flex flex-row gap-2 h-64">
-                      <div className="flex-1 h-full rounded-lg overflow-hidden">
-                        {!showSuggestions && (
-                          <p className="text-gray-400">
-                            {t("USERS_MANAGEMENT.LOCATION_PLACEHOLDER")}
-                          </p>
-                        )}
-                        {showSuggestions && data?.length === 0 && (
-                          <p className="text-gray-400">
-                            {t("USERS_MANAGEMENT.LOCATION_NO_RESULTS")}
-                          </p>
-                        )}
-                        {showSuggestions && (
-                          <ul className="min-h-36 overflow-y-auto flex flex-col w-full h-full">
-                            {loadingSuggestions && (
-                              <div className="flex items-center justify-center h-full w-full">
-                                <Spinner className="h-24 w-24 text-emerald-600" />
-                              </div>
-                            )}
-
-                            {!loadingSuggestions &&
-                              Array.isArray(data) &&
-                              data?.map((suggestion: any) => (
-                                <li
-                                  onClick={() => {
-                                    setOpened(false);
-                                    handleLocationClick(
-                                      {
-                                        latlng: new LatLng(
-                                          suggestion.lat,
-                                          suggestion.lon
-                                        ),
-                                      } as any,
-                                      field
-                                    );
-                                  }}
-                                  key={suggestion?.display_name}
-                                  className="text-sm h-12 flex flex-row gap-2 items-center shrink-0  border-b-2 border-gray-100 cursor-pointer hover:bg-gray-200 transition-all duration-300"
-                                >
-                                  <Icon
-                                    icon="weui:location-outlined"
-                                    className="h-8 w-8 text-emerald-600"
-                                  />
-                                  <EllipsisTypography className="max-w-[90%]">
-                                    {suggestion?.display_name}
-                                  </EllipsisTypography>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                      </div>
                       <div className="rounded-lg overflow-hidden flex-1 h-full">
-                        <MapContainer
-                          key={JSON.stringify(bounds)}
+                        <Map
                           bounds={[
                             [bounds.minLat, bounds.minLng], // southwest corner
                             [bounds.maxLat, bounds.maxLng], // northeast corner
@@ -279,21 +301,20 @@ export function RHFLocationPicker({
                           zoom={zoomLevel}
                           style={{ height: "100%", width: "100%" }}
                         >
-                          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                          {Array.isArray(data) &&
-                            data?.map((suggestion: any) => (
-                              <Marker
-                                key={suggestion?.lat}
-                                position={[suggestion?.lat, suggestion?.lon]}
-                              >
-                                <Popup>You are here</Popup>
-                              </Marker>
-                            ))}
                           <LocationMarker
                             field={field}
                             onClick={handleLocationClick}
                           />
-                        </MapContainer>
+                          {Array.isArray(data) &&
+                            data?.map((suggestion: any) => (
+                              <MapMarker
+                                key={suggestion?.lat}
+                                position={[suggestion?.lat, suggestion?.lon]}
+                              >
+                                <Popup>You are here</Popup>
+                              </MapMarker>
+                            ))}
+                        </Map>
                       </div>
                     </div>
                   </div>

@@ -9,10 +9,16 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { LIST_COUNT, ORDER_BY_OPTIONS, ORDER_DIR_OPTIONS } from "./constants";
+import {
+  GENDER_OPTIONS,
+  LIST_COUNT,
+  ORDER_BY_OPTIONS,
+  ORDER_DIR_OPTIONS,
+} from "./constants";
 import { useGetPermissionsHelper } from "@/app/dashboard-api/helpers";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { Separator } from "@/components/ui/separator";
+import { useGetAllActiveRoles } from "@/app/dashboard-api/valueHelp";
 
 export default function TableToolbar({ results }: { results: number }) {
   const t = useTranslations();
@@ -26,7 +32,7 @@ export default function TableToolbar({ results }: { results: number }) {
   const router = useRouter();
   const HAS_FILTERS = dirtyFields && Object.keys(dirtyFields).length > 0;
   const { syncParam } = useQueryParams({ setValue });
-  const { data: permissions, isLoading } = useGetPermissionsHelper();
+  const { data: roles, isLoading: rolesLoading } = useGetAllActiveRoles();
   const handleChangeParam = useCallback(
     (paramName: string, value: string, deleteParam: boolean = false) => {
       const params = new URLSearchParams(searchParams?.toString());
@@ -49,13 +55,11 @@ export default function TableToolbar({ results }: { results: number }) {
 
   const locale = useLocale();
   useEffect(() => {
-    const param = searchParams.get("permission");
-    if (permissions?.length > 0 && param) {
-      syncParam("permission", (val) =>
-        permissions.find((per) => per._id === val)
-      );
+    const param = searchParams.get("role");
+    if (roles?.length > 0 && param) {
+      syncParam("role", (val) => roles.find((per) => per._id === val));
     }
-  }, [permissions, searchParams, syncParam]);
+  }, [roles, searchParams, syncParam]);
   return (
     <>
       <div className="p-3 mb-auto md:h-[22rem] overflow-y-auto lg:h-full">
@@ -112,23 +116,40 @@ export default function TableToolbar({ results }: { results: number }) {
 
         <RHFComboxbox
           clearable
-          name="permission"
-          isLoading={isLoading}
-          label={t("ROLES_MANAGEMENT.PERMISSIONS")}
-          placeholder={t("ROLES_MANAGEMENT.PERMISSIONS")}
+          name="gender"
+          label={t("USERS_MANAGEMENT.GENDER")}
+          placeholder={t("USERS_MANAGEMENT.GENDER")}
           labelProps={{
             className: "text-sm font-medium",
           }}
-          options={permissions}
+          options={Object.values(GENDER_OPTIONS)}
           getOptionLabel={(option) => {
             if (!option) return "";
             return locale === "ar" ? option?.nameAr : option?.nameEn;
           }}
           optionValueComparator={(option, value) => option?._id === value?._id}
           onChange={(newVal, reason) => {
-            handleChangeParam("permission", newVal?._id, reason === "clear");
+            handleChangeParam("gender", newVal?.value, reason === "clear");
           }}
-          // getOptionValue
+        />
+        <RHFComboxbox
+          clearable
+          name="role"
+          isLoading={rolesLoading}
+          label={t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME")}
+          placeholder={t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME")}
+          labelProps={{
+            className: "text-sm font-medium",
+          }}
+          options={roles}
+          getOptionLabel={(option) => {
+            if (!option) return "";
+            return locale === "ar" ? option?.nameAr : option?.nameEn;
+          }}
+          optionValueComparator={(option, value) => option?._id === value?._id}
+          onChange={(newVal, reason) => {
+            handleChangeParam("role", newVal?._id, reason === "clear");
+          }}
         />
         <RHFComboxbox
           clearable
@@ -153,7 +174,6 @@ export default function TableToolbar({ results }: { results: number }) {
         <RHFComboxbox
           clearable
           name="dir"
-          isLoading={isLoading}
           label={t("COMMON.ORDER_DIR")}
           placeholder={t("COMMON.ORDER_DIR")}
           labelProps={{
@@ -173,7 +193,6 @@ export default function TableToolbar({ results }: { results: number }) {
         <RHFComboxbox
           clearable={false}
           name="size"
-          isLoading={isLoading}
           label={t("COMMON.ROWS_PER_LIST")}
           placeholder={t("COMMON.ROWS_PER_LIST")}
           labelProps={{

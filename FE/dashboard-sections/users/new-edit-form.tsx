@@ -8,7 +8,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetRoleDetails } from "@/app/dashboard-api/roles";
 import { Role } from "@/app/dashboard-types/roles";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -16,15 +15,16 @@ import { paths } from "@/components/dashboard-sidebar/paths";
 import UserPersonalInfoForm from "./user-personal-info-form";
 import UserLocationInfoForm from "./user-contact-info-form";
 import UserDocumentInfoForm from "./user-document-info-form";
-import { useMutateUser } from "@/app/dashboard-api/users";
+import { useGetUserDetails, useMutateUser } from "@/app/dashboard-api/users";
 import Fade from "@/components/Fade";
 import { pushDashboardMessage } from "@/components/dashboard-toast-message";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/spinner";
+import { GENDER_OPTIONS } from "./constants";
 
 type NewEditFormProps = {
   mode?: "NEW" | "EDIT";
-  currentRole?: Role;
+  currentEntity?: Role;
   roleId?: string;
 };
 
@@ -52,25 +52,23 @@ export const ACCEPTED_FILE_TYPES = [
   "application/pdf",
 ];
 export const MAX_FILE_COUNT = 5;
-export default function NewEditForm({
-  currentRole,
-  mode = "NEW",
-  roleId,
-}: NewEditFormProps) {
+export default function NewEditForm({}: // currentEntity,
+NewEditFormProps) {
   // State Management ////////////////////////////////////////////////////////
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  // State Management ////////////////////////////////////////////////////////
+  // Custom Hooks ////////////////////////////////////////////////////////
+  const { userId } = useParams();
   const locale = useLocale();
   const t = useTranslations();
   const router = useRouter();
-  const fetchRole = mode === "EDIT" && !!roleId && !currentRole;
-  const { data: fetchedRole, isLoading } = useGetRoleDetails(roleId, {
-    enabled: fetchRole,
-  });
-  const { createUser } = useMutateUser();
+  const { createUser, editUser } = useMutateUser();
 
-  const isEdit = currentRole || mode === "EDIT";
+  const isEdit = !!userId;
+  const { data: currentEntity, isLoading } = useGetUserDetails(userId, {
+    enabled: isEdit,
+  });
+  console.log(currentEntity);
   const steps = [
     {
       title: t("USERS_MANAGEMENT.PERSONAL_INFORMATION"),
@@ -176,19 +174,21 @@ export default function NewEditForm({
           }),
         }
       ),
-    birthDate: Z.date()
+    birthDate: Z.union([Z.string(), Z.date()])
+      .transform((val) => (typeof val === "string" ? new Date(val) : val))
       .nullable()
       .refine((val) => val !== null, {
-        error: t("FORM_VALIDATIONS.REQUIRED_FIELD", {
+        message: t("FORM_VALIDATIONS.REQUIRED_FIELD", {
           field: t("USERS_MANAGEMENT.BIRTH_DATE"),
         }),
       })
-      .refine((val) => val! < new Date(), {
-        error: t("FORM_VALIDATIONS.PAST_DATE", {
+      .refine((val) => (val ? val < new Date() : true), {
+        message: t("FORM_VALIDATIONS.PAST_DATE", {
           field: t("USERS_MANAGEMENT.BIRTH_DATE"),
         }),
       }),
-    joiningDate: Z.date()
+    joiningDate: Z.union([Z.string(), Z.date()])
+      .transform((val) => (typeof val === "string" ? new Date(val) : val))
       .nullable()
       .refine((val) => val !== null, {
         error: t("FORM_VALIDATIONS.REQUIRED_FIELD", {
@@ -218,7 +218,7 @@ export default function NewEditForm({
         }),
       }),
     branch: Z.object({
-      _id: Z.number(),
+      _id: Z.string(),
       nameAr: Z.string(),
       nameEn: Z.string(),
     }).nullable(),
@@ -275,29 +275,48 @@ export default function NewEditForm({
       })
     ),
     googleMapUrl: Z.string(),
-
-    // imageUrl: Z.string(),
   });
   const defaultValues = useMemo(
     () => ({
-      nameAr: currentRole?.nameAr ?? "",
-      nameEn: currentRole?.nameEn ?? "",
-      email: "",
-      gender: null,
-      location: null,
-      nationalId: "",
-      birthDate: null,
-      joiningDate: null,
-      nationality: null,
-      city: null,
-      branch: null,
-      phoneNumber: "",
-      files: [],
-      imageUrl: null,
-      roles: [],
-      googleMapUrl: "",
+      imageUrl: currentEntity?.imageUrl ?? null,
+      nameAr: currentEntity?.nameAr ?? "",
+      nameEn: currentEntity?.nameEn ?? "",
+      email: currentEntity?.email ?? "",
+      gender: currentEntity?.gender
+        ? GENDER_OPTIONS?.[currentEntity?.gender]
+        : null,
+      nationalId: currentEntity?.nationalId ?? "",
+      birthDate: currentEntity?.birthDate ?? null,
+      joiningDate: currentEntity?.joiningDate ?? null,
+      nationality: currentEntity?.nationality ?? null,
+      city: currentEntity?.city ?? null,
+      branch: currentEntity?.branch ?? null,
+      phoneNumber: currentEntity?.phoneNumber ?? "",
+      location: currentEntity?.location ?? null,
+      files: currentEntity?.files ?? [],
+      roles: currentEntity?.roles ?? [],
+      googleMapUrl: currentEntity?.googleMapUrl ?? "",
+      lat: currentEntity?.location?.lat ?? "",
+      lng: currentEntity?.location?.lng ?? "",
     }),
-    [currentRole?.nameAr, currentRole?.nameEn]
+    [
+      currentEntity?.birthDate,
+      currentEntity?.branch,
+      currentEntity?.city,
+      currentEntity?.email,
+      currentEntity?.files,
+      currentEntity?.gender,
+      currentEntity?.googleMapUrl,
+      currentEntity?.imageUrl,
+      currentEntity?.joiningDate,
+      currentEntity?.location,
+      currentEntity?.nameAr,
+      currentEntity?.nameEn,
+      currentEntity?.nationalId,
+      currentEntity?.nationality,
+      currentEntity?.phoneNumber,
+      currentEntity?.roles,
+    ]
   );
   const methods = useForm({
     defaultValues,
@@ -310,16 +329,15 @@ export default function NewEditForm({
     trigger,
     setError,
     formState: { isSubmitting },
-    watch,
     reset,
   } = methods;
-  console.log(watch());
   const onSubmit = useCallback(
     async (data: Z.output<typeof schema>) => {
       try {
         if (isEdit) {
-          // (data as any)._id = currentRole?._id ?? fetchedRole?._id;
-          // await editRole.mutateAsync(data);
+          (data as any)._id = currentEntity?._id;
+          await editUser.mutateAsync(data);
+          router.replace(`/dashboard/users`);
           // onClose();
           pushDashboardMessage({
             title: t("COMMON.SUCCESS_DIALOG_TITLE"),
@@ -366,7 +384,7 @@ export default function NewEditForm({
         });
       }
     },
-    [createUser, isEdit, router, setError, t]
+    [createUser, currentEntity?._id, editUser, isEdit, router, setError, t]
   );
   const handlePreviousStep = useCallback(async () => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -378,29 +396,9 @@ export default function NewEditForm({
     setCurrentStep((prev) => Math.min(prev + 1, 3));
   }, [currentStep, trigger]);
   useEffect(() => {
-    if (fetchRole && !isLoading) {
-      const defaultValues = {
-        nameAr: fetchedRole?.nameAr ?? "",
-        nameEn: fetchedRole?.nameEn ?? "",
-        descriptionAr: fetchedRole?.descriptionAr ?? "",
-        descriptionEn: fetchedRole?.descriptionEn ?? "",
-        permissions:
-          fetchedRole?.permissionGroups?.flatMap(
-            (group) => group.permissions
-          ) ?? [],
-      };
-      reset(defaultValues);
-    }
-  }, [
-    fetchRole,
-    fetchedRole?.descriptionAr,
-    fetchedRole?.descriptionEn,
-    fetchedRole?.nameAr,
-    fetchedRole?.nameEn,
-    fetchedRole?.permissionGroups,
-    isLoading,
-    reset,
-  ]);
+    reset(defaultValues);
+  }, [defaultValues, reset]);
+  if (isLoading) return null;
   return (
     <div className="h-full w-full flex flex-col ltr:pr-4 rtl:pl-4">
       {/* Header */}
@@ -438,8 +436,16 @@ export default function NewEditForm({
         </ul>
         <div className="w-full h-full flex flex-col items-center gap-12 py-6">
           <div className="flex flex-col items-center gap-1">
-            <h3 className="text-xl font-semibold text-gray-500 dark:text-gray-300">
-              {t("USERS_MANAGEMENT.USER_CREATION")}
+            <h3 className="text-xl font-semibold text-gray-500 dark:text-gray-400">
+              {currentEntity
+                ? t("COMMON.EDIT_FORM_TITLE", {
+                    ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    ENTITY_VAL:
+                      locale === "ar"
+                        ? currentEntity?.nameAr
+                        : currentEntity?.nameEn,
+                  })
+                : t("USERS_MANAGEMENT.USER_CREATION")}
             </h3>
             <h5 className="text-3xl font-bold dark:text-white">
               {t("USERS_MANAGEMENT.PERSONAL_INFORMATION")}
@@ -487,9 +493,13 @@ export default function NewEditForm({
                 disabled={isSubmitting}
               >
                 {isSubmitting && <Spinner />}
-                {t("COMMON.CREATE", {
-                  ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
-                })}
+                {currentEntity
+                  ? t("COMMON.EDIT_TITLE", {
+                      ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })
+                  : t("COMMON.CREATE", {
+                      ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                    })}
               </Button>
             </Fade>
           </div>
@@ -529,7 +539,7 @@ function FormStep({
           )}
         />
         <Button
-          // onClick={() => onChangeStep(stepValue)}
+          type="button"
           className={cn(
             "flex flex-row justify-start gap-2 items-center bg-transparent py-8! rounded-xl  shadow-none transition-all duration-300 cursor-default w-full flex-1 min-w-56",
             currentStep === stepValue &&

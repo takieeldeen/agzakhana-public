@@ -34,9 +34,10 @@ type ImagePickerProps = {
 export default function RHFImagePicker({ name, label }: ImagePickerProps) {
   const form = useFormContext();
   const {
-    formState: { defaultValues },
+    watch,
+    // formState: { defaultValues },
   } = form;
-  const defaultValue = defaultValues?.[name];
+  const defaultValue = watch()?.[name];
   const [preview, setPreview] = useState(defaultValue);
   const hasImage = !!preview && preview !== "";
   // useEffect(() => {
@@ -57,6 +58,7 @@ export default function RHFImagePicker({ name, label }: ImagePickerProps) {
                   {hasImage && (
                     <div className="w-48 h-48 rounded-full relative overflow-hidden">
                       <Image
+                        key={defaultValue}
                         src={preview}
                         alt={preview}
                         fill

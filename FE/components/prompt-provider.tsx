@@ -21,7 +21,7 @@ import { Button, LoadingButton } from "./ui/button";
 import EllipsisTypography from "./ellipsis-typography";
 import { useTranslations } from "next-intl";
 
-type PromptVariant = "SUCCESS" | "ALERT";
+type PromptVariant = "SUCCESS" | "ALERT" | "ERROR";
 type PromptContextProps = {
   closePrompt: VoidFunction;
   showPrompt: ({
@@ -66,6 +66,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
           styling: "bg-emerald-600",
           text: t("COMMON.CONFIRM_ACTION"),
         },
+        showActionButton: true,
       },
       ALERT: {
         dialogTitle: {
@@ -84,6 +85,26 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
           styling: "bg-rose-800",
           text: t("COMMON.CONFIRM_ACTION"),
         },
+        showActionButton: true,
+      },
+      ERROR: {
+        dialogTitle: {
+          styling: "bg-rose-800",
+          text: t("COMMON.ERROR_DIALOG_TITLE"),
+        },
+        icon: {
+          styling: "text-rose-800",
+          name: "charm:cross",
+        },
+        title: {
+          styling: "text-black",
+          text: "Confirmation",
+        },
+        actionTitle: {
+          styling: "bg-rose-800",
+          text: t("COMMON.CLOSE"),
+        },
+        showActionButton: false,
       },
     }),
     [t]
@@ -139,7 +160,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
             setPromptVisibility(false);
           },
         });
-      if (icon) setIcon(icon ?? variantProps?.[variant]?.icon.name);
+      setIcon(icon ?? variantProps?.[variant]?.icon.name);
       setDialogTitle(dialogTitle ?? variantProps?.[variant]?.dialogTitle?.text);
       setVariant(variant ?? "SUCCESS");
       setContent(content ?? "");
@@ -148,6 +169,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
     },
     [variantProps]
   );
+  console.log(icon);
   const handleActionClick: MouseEventHandler<HTMLButtonElement> =
     useCallback(async () => {
       try {
@@ -177,7 +199,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
           <DialogOverlay className="backdrop-blur-sm">
             <DialogContent
               showCloseButton={false}
-              className="bg-white dark:bg-dark-card p-0 !outline-none !ring-0 !border-0 shadow-none overflow-hidden"
+              className="bg-white dark:bg-dark-card p-0 !outline-none !ring-0 !border-0 shadow-none overflow-hidden "
             >
               <DialogTitle
                 className={cn(
@@ -187,7 +209,7 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
               >
                 {dialogTitle}
               </DialogTitle>
-              <div className="flex flex-col items-center gap-2 py-2">
+              <div className="flex flex-col items-center gap-2 py-2 px-2">
                 <div
                   className={cn(
                     "h-32 w-32 rounded-full border-gray-300 border-2 flex items-center justify-center text-8xl dark:border-dark-600",
@@ -220,17 +242,19 @@ export default function PromptProvider({ children }: { children: ReactNode }) {
                   >
                     {t("COMMON.CANCEL_ACTION")}
                   </Button>
-                  <LoadingButton
-                    loading={isLoading}
-                    onClick={handleActionClick}
-                    className={cn(
-                      "h-12 w-[calc(50%_-_12px)] dark:text-white",
-                      variantProps?.[variant].actionTitle.styling
-                    )}
-                  >
-                    {mainAction?.actionTitle ??
-                      variantProps?.[variant]?.actionTitle?.text}
-                  </LoadingButton>
+                  {variantProps?.[variant]?.showActionButton && (
+                    <LoadingButton
+                      loading={isLoading}
+                      onClick={handleActionClick}
+                      className={cn(
+                        "h-12 w-[calc(50%_-_12px)] dark:text-white",
+                        variantProps?.[variant].actionTitle.styling
+                      )}
+                    >
+                      {mainAction?.actionTitle ??
+                        variantProps?.[variant]?.actionTitle?.text}
+                    </LoadingButton>
+                  )}
                 </div>
               </div>
             </DialogContent>

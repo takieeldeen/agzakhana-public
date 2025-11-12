@@ -5,14 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import {
-  lazy,
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ListTableRow from "../list-table-row";
 import { useTranslations } from "next-intl";
 import TableToolbar from "../table-toolbar";
@@ -30,6 +23,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   DEFAULT_PAGE_SIZE,
+  GENDER_OPTIONS,
   LIST_COUNT,
   ORDER_BY_OPTIONS,
   ORDER_DIR_OPTIONS,
@@ -38,21 +32,17 @@ import { useQueryParams } from "@/hooks/use-query-params";
 import { useMutate } from "../use-mutate";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import { useGetUsers } from "@/app/dashboard-api/users";
+import UsersMap from "./map-view";
 
-const NewEditForm = lazy(() => import("../new-edit-form"));
 export default function ListView() {
   const mdUp = useResponsive("up", "md");
   const pathname = usePathname();
-  const IS_INTERCEPTED = pathname.includes("/roles/");
-  // State Management ////////////////////////////////////
-  const [showCreationModal, setShowCreationModal] = useState<
-    "CREATE" | "EDIT" | "HIDDEN"
-  >("HIDDEN");
-  const [editedRoleId, setEditedRoleId] = useState<string | null>(null);
+  const IS_INTERCEPTED = !pathname.endsWith("users");
   const [filtersSynced, setFiltersSynced] = useState<boolean>(false);
   // const [filtersLoaded,set]
-  const [viewMode, setViewMode] = useState<"LIST" | "GRID">(
-    !mdUp ? "GRID" : "LIST"
+  const [viewMode, setViewMode] = useState<"LIST" | "GRID" | "MAP">(
+    // !mdUp ? "GRID" : "LIST"
+    "MAP"
   );
   // Custom Hooks ////////////////////////////////////
   const t = useTranslations();
@@ -69,6 +59,12 @@ export default function ListView() {
   const filtersSchema = Z.object({
     name: Z.string(),
     status: Z.string().nullable(),
+    gender: Z.object({
+      _id: Z.string(),
+      nameAr: Z.string(),
+      nameEn: Z.string(),
+      value: Z.string(),
+    }).nullable(),
     sort: Z.object({
       _id: Z.string(),
       nameAr: Z.string(),
@@ -92,6 +88,7 @@ export default function ListView() {
     () => ({
       name: "",
       status: null,
+      gender: null,
       sort: null,
       permission: null,
       dir: null,
@@ -119,13 +116,15 @@ export default function ListView() {
     () => ({
       name: debouncedSearch,
       status: filtervalues?.status,
+      gender: filtervalues?.gender?.value ?? null,
       sort: filtervalues?.sort?.value ?? null,
       dir: filtervalues?.dir?.value ?? null,
-      permissions: searchParams?.get("permission") ?? null,
+      roles: searchParams?.get("role") ?? null,
     }),
     [
       debouncedSearch,
       filtervalues?.dir?.value,
+      filtervalues?.gender,
       filtervalues?.sort?.value,
       filtervalues?.status,
       searchParams,
@@ -134,6 +133,7 @@ export default function ListView() {
   // Helper Constants ////////////////////////////////////////
   const GRID_MODE = viewMode === "GRID";
   const LIST_MODE = viewMode === "LIST";
+  const MAP_MODE = viewMode === "MAP";
   const page = +(searchParams.get("page") ?? 1);
   const onSubmit = useCallback((data: any) => {
     console.log(data);
@@ -151,10 +151,7 @@ export default function ListView() {
   const isEmpty = !canReset && results === 0;
   // Callbacks ////////////////////////////////////////
   const { changeStatus, onDelete } = useMutate();
-  const onEditRole = useCallback((roleId: string) => {
-    setShowCreationModal("EDIT");
-    setEditedRoleId(roleId);
-  }, []);
+  const onEditRole = useCallback(() => {}, []);
   const handleCreationTrigger = useCallback(() => {
     router.push("./users/create");
   }, [router]);
@@ -166,16 +163,18 @@ export default function ListView() {
   }, [initParams]);
 
   useEffect(() => {
-    if (filtersSynced) return;
+    if (filtersSynced || IS_INTERCEPTED) return;
     syncParams({
       sort: (val: any) => ORDER_BY_OPTIONS?.find((opt) => opt?.value === val),
       dir: (val: any) => ORDER_DIR_OPTIONS?.find((opt) => opt?.value === val),
+      gender: (val: any) =>
+        Object.values(GENDER_OPTIONS)?.find((opt) => opt?.value === val),
       size: (val: any) => LIST_COUNT?.find((opt) => opt === val) ?? "9",
       permission: () => null,
     });
 
     setFiltersSynced(true);
-  }, [filtersSynced, searchParams, setValue, syncParams]);
+  }, [IS_INTERCEPTED, filtersSynced, searchParams, setValue, syncParams]);
   if (isLoading) return <ListSkeletonView />;
   if (isEmpty)
     return (
@@ -190,7 +189,6 @@ export default function ListView() {
           })}
           action={() => {
             handleCreationTrigger();
-            setEditedRoleId(null);
           }}
           actionTitle={t("COMMON.CREATE", {
             ENTITY_NAME: t("USERS_MANAGEMENT.ENTITY_NAME"),
@@ -229,6 +227,22 @@ export default function ListView() {
         <div className="flex flex-row gap-2">
           {mdUp && (
             <div className="h-12 bg-gray-200 rounded-md dark:bg-dark-card ml-auto rtl:ml-0 rtl:mr-auto">
+              <Button
+                className={cn(
+                  "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent transition-all duration-300",
+                  viewMode === "MAP" && "border-emerald-600"
+                )}
+                onClick={() => setViewMode("MAP")}
+              >
+                <Icon
+                  icon="tdesign:map-filled"
+                  className={cn(
+                    "text-black h-6! w-6! transition-all duration-300 dark:text-white",
+                    viewMode === "MAP" &&
+                      "text-emerald-600 dark:text-emerald-600"
+                  )}
+                />
+              </Button>
               <Button
                 className={cn(
                   "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent  transition-all duration-300",
@@ -323,6 +337,7 @@ export default function ListView() {
                   ))}
                 </motion.ul>
               )}
+              {MAP_MODE && <UsersMap data={data} />}
             </div>
           </div>
         )}

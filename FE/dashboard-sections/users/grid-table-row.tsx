@@ -1,6 +1,6 @@
 "use client";
 import { Role, RoleListItem } from "@/app/dashboard-types/roles";
-import { UserListItem } from "@/app/dashboard-types/users";
+import { User, UserListItem } from "@/app/dashboard-types/users";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function GridTableRow({
   data,
@@ -23,9 +24,9 @@ export default function GridTableRow({
   onDeleteRow,
 }: {
   data: UserListItem;
-  onActivateRow: (role: RoleListItem) => void;
-  onEditRole: (roleId: string) => void;
-  onDeleteRow: (role: Role | RoleListItem) => void;
+  onActivateRow: (user: UserListItem) => void;
+  onEditRole: (userId: string) => void;
+  onDeleteRow: (user: User | UserListItem) => void;
 }) {
   const locale = useLocale();
   const t = useTranslations();
@@ -105,12 +106,15 @@ export default function GridTableRow({
       <div className="w-full transition-all duration-300 hover:bg-teal-600 h-16 flex flex-row items-center justify-center gap-3 border-t-2 group">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button className="h-11 w-11 rounded-full boredr-2 border-teal-700 group-hover:border-white bg-transparent border-2">
+            <Link
+              href={`users/details/${data?._id}`}
+              className="h-11 w-11 rounded-full boredr-2 border-teal-700 group-hover:border-white bg-transparent border-2 flex items-center justify-center"
+            >
               <Icon
                 icon="mdi:eye-outline"
                 className="h-6! w-6! text-teal-700 group-hover:text-gray-100 transition-all duration-300"
               />
-            </Button>
+            </Link>
           </TooltipTrigger>
           <TooltipContent>
             {t("COMMON.DETAILS_TITLE", {

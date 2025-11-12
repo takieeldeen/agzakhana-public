@@ -54,7 +54,7 @@ type RHFComboboxProps<T> = {
   isLoading?: boolean;
   multiple?: boolean;
   triggerProps?: React.ComponentProps<"button">;
-} & React.ComponentProps<"div">;
+} & Omit<React.ComponentProps<"div">, "onChange">;
 
 export function RHFComboxbox<T>({
   name,
@@ -173,7 +173,7 @@ export function RHFComboxbox<T>({
                     aria-expanded={open}
                     {...triggerProps}
                     className={cn(
-                      "w-full min-h-12 h-fit justify-between dark:bg-dark-background dark:text-gray-200 hover:dark:brightness-100 hover:dark:bg-dark-card-background hover:dark:border-emerald-600",
+                      "w-full min-h-12 h-fit justify-between bg-transparent dark:bg-transparent dark:text-gray-200 hover:dark:brightness-100 hover:dark:bg-dark-card-background hover:dark:border-emerald-600",
                       !field.value &&
                         "text-muted-foreground dark:text-gray-500",
                       HAS_ERRORS && "border-red-600 dark:border-red-400",
@@ -330,7 +330,7 @@ export function RHFComboxbox<T>({
             </FormLabel>
           )}
           <div className="relative w-full ">
-            <Popover open={open} onOpenChange={setOpen}>
+            <Popover open={open} onOpenChange={setOpen} modal>
               <PopoverTrigger asChild>
                 <Button
                   ref={buttonRef}
@@ -339,7 +339,7 @@ export function RHFComboxbox<T>({
                   {...triggerProps}
                   aria-expanded={open}
                   className={cn(
-                    "w-full h-12 justify-between dark:bg-dark-card dark:text-gray-200 hover:dark:bg-dark-card-background hover:dark:border-emerald-600",
+                    "w-full h-12 justify-between bg-transparent dark:bg-transparent  dark:text-gray-200 hover:dark:bg-dark-card-background hover:dark:border-emerald-600",
                     !field.value && "text-muted-foreground dark:text-gray-500",
                     HAS_ERRORS && "border-red-600 dark:border-red-400",
 
