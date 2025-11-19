@@ -8,6 +8,7 @@ import { clientLocale } from "../../app";
 import DashboardUser from "../../models/dashboard/userModel";
 import { createClient } from "@supabase/supabase-js";
 import mongoose from "mongoose";
+import { AppError } from "../../utils/errors";
 
 export const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -27,6 +28,7 @@ export const createUser = catchAsync(
       lat,
       lng,
       displayName,
+      files,
       imageUrl,
       googleMapUrl,
       roles,
@@ -57,6 +59,10 @@ export const createUser = catchAsync(
       password: "test",
       passwordConfirmation: "test",
       googleMapUrl,
+      files: files
+        ?.toString()
+        ?.split(",")
+        ?.map((file: string) => new mongoose.Types.ObjectId(file)),
       roles: roles
         ?.split(",")
         ?.map((role: string) => new mongoose.Types.ObjectId(role)),
@@ -107,23 +113,106 @@ export const createUser = catchAsync(
     });
   }
 );
+export const editUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params;
+    const {
+      nameAr,
+      nameEn,
+      email,
+      gender,
+      nationalId,
+      birthDate,
+      joiningDate,
+      nationality,
+      city,
+      branch,
+      phoneNumber,
+      permissions,
+      lat,
+      lng,
+      displayName,
+      files,
+      imageUrl,
+      googleMapUrl,
+      roles,
+    } = req.body;
+    const newUser: Partial<DashboardUserType> = {
+      nameAr,
+      nameEn,
+      email,
+      gender,
+      nationalId,
+      birthDate,
+      joiningDate,
+      nationality,
+      city,
+      branch,
+      phoneNumber,
+      location: {
+        type: "Point",
+        coordinates: [lat, lng],
+      },
+      address: {
+        displayName: displayName,
+        lat: lat,
+        lng: lng,
+      },
+      imageUrl,
+      permissions,
+      password: "test",
+      passwordConfirmation: "test",
+      googleMapUrl,
+      files: files
+        ?.split(",")
+        ?.map((file: string) => new mongoose.Types.ObjectId(file)),
+      roles: roles
+        ?.split(",")
+        ?.map((role: string) => new mongoose.Types.ObjectId(role)),
+    };
+    if (req?.file && typeof req?.file !== "string") {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+      const imageName = `${req?.body?.email?.split("@")?.[0]}-${
+        req?.body?.nationalId
+      }`;
+      await supabase.storage
+        .from("Dashboard-profile-pics")
+        .upload(imageName, req?.file?.buffer, {
+          upsert: true,
+          contentType: req?.file?.mimetype,
+        });
+      const { data } = supabase.storage
+        .from("Dashboard-profile-pics")
+        .getPublicUrl(imageName);
+      newUser.imageUrl = data?.publicUrl;
+    }
+    await DashboardUser.findByIdAndUpdate(userId, newUser);
+    res.status(200).json({
+      status: "success",
+    });
+  }
+);
 export const getAllUsers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { status } = req?.query;
+    const { status, gender } = req?.query;
     const pageNum = req.query.page ? +req.query.page : 1;
     const pageSize = req.query.size ? +req.query.size : 9;
 
     const filterObj: any = {};
     let sortObj: any;
     if (req.query.status) filterObj.status = status;
+    if (req.query.gender) filterObj.gender = gender;
     if (req.query.name && clientLocale === "ar") {
       filterObj.nameAr = { $regex: `.*${req.query.name}.*` };
     } else if (req.query.name && clientLocale === "en") {
       filterObj.nameEn = { $regex: `.*${req.query.name}.*` };
     }
-    if (req.query.permissions) {
-      filterObj.permissions = {
-        $in: [new mongoose.Types.ObjectId(req.query.permissions as string)],
+    if (req.query.roles) {
+      filterObj.roles = {
+        $in: [new mongoose.Types.ObjectId(req.query.roles as string)],
       };
     }
     if (req.query.sort && req.query.sort === "name") {
@@ -162,6 +251,7 @@ export const getAllUsers = catchAsync(
         $project: {
           nameAr: 1,
           nameEn: 1,
+          address: 1,
           email: 1,
           status: 1,
           imageUrl: 1,
@@ -169,6 +259,7 @@ export const getAllUsers = catchAsync(
           joiningDate: 1,
           branch: 1,
           gender: 1,
+          phoneNumber: 1,
         },
       },
       { $sort: sortObj ?? { createdAt: -1 } },
@@ -186,6 +277,18 @@ export const getAllUsers = catchAsync(
     });
   }
 );
+export const getUsersPerRole = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { roleId } = req.params;
+    const content = await DashboardUser.find({
+      roles: { $in: [roleId] },
+    }).select(["nameAr", "nameEn", "imageUrl", "email", "roles"]);
+    res.status(200).json({
+      status: "success",
+      content,
+    });
+  }
+);
 export const getUserDetails = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req?.params;
@@ -196,14 +299,22 @@ export const getUserDetails = catchAsync(
           _id: 1,
           imageUrl: 1,
           nameAr: 1,
+          gender: 1,
           nameEn: 1,
           email: 1,
           status: 1,
+          nationalId: 1,
+          birthDate: 1,
+          joiningDate: 1,
+          nationality: 1,
+          city: 1,
           roles: 1,
           branch: 1,
           location: "$address",
           phoneNumber: 1,
           updatedAt: 1,
+          googleMapUrl: 1,
+          files: 1,
         },
       },
       {
@@ -218,6 +329,32 @@ export const getUserDetails = catchAsync(
                 pipeline: [{ $project: { nameAr: 1, nameEn: 1, status: 1 } }],
               },
             },
+            {
+              $lookup: {
+                from: "nationalities",
+                foreignField: "_id",
+                localField: "nationality",
+                as: "nationality",
+              },
+            },
+            {
+              $lookup: {
+                from: "cities",
+                localField: "city",
+                foreignField: "_id",
+                as: "city",
+              },
+            },
+            {
+              $lookup: {
+                from: "files",
+                localField: "files",
+                foreignField: "_id",
+                as: "files",
+              },
+            },
+            { $unwind: "$nationality" },
+            { $unwind: "$city" },
           ],
           permissionGroups: [
             {
@@ -309,7 +446,9 @@ export const getUserDetails = catchAsync(
 export const deleteUserRole = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId, roleId } = req.params;
-
+    const user = await DashboardUser.findById(userId);
+    if (user?.roles?.length === 1)
+      return next(new AppError(400, req.t("VALIDATIONS.MIN_ROLES_REACHED")));
     const updatedUser = await DashboardUser.findByIdAndUpdate(userId, {
       $pull: { roles: { $eq: roleId } },
     }).populate({
@@ -319,6 +458,59 @@ export const deleteUserRole = catchAsync(
     res.status(200).json({
       status: "success",
       content: updatedUser,
+    });
+  }
+);
+export const activateUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params;
+
+    const user = await DashboardUser.findByIdAndUpdate(
+      userId,
+      { status: "ACTIVE" },
+      { new: true }
+    );
+    res.status(200).json({
+      status: "success",
+      content: user,
+    });
+  }
+);
+export const deactivateUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params;
+
+    const user = await DashboardUser.findByIdAndUpdate(
+      userId,
+      { status: "INACTIVE" },
+      { new: true }
+    );
+    res.status(200).json({
+      status: "success",
+      content: user,
+    });
+  }
+);
+export const deleteUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId } = req.params;
+    await DashboardUser.findOneAndDelete({ _id: userId });
+    res.status(204).json({
+      status: "success",
+    });
+  }
+);
+
+export const getAllActiveUsers = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const content = await DashboardUser.find({ status: "ACTIVE" }).select([
+      "nameAr",
+      "nameEn",
+    ]);
+    res.status(200).json({
+      status: "success",
+      content: content ?? [],
+      results: content?.length ?? 0,
     });
   }
 );

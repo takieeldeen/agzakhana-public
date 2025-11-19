@@ -8,6 +8,7 @@ import {
   getAllRoles,
   getRoleDetails,
 } from "../../controllers/dashboard/roleController";
+import { getUsersPerRole } from "../../controllers/dashboard/userController";
 
 const roleRouter = Router();
 
@@ -18,6 +19,7 @@ roleRouter
   .patch(editRole)
   .delete(deleteRole);
 
+roleRouter.route("/:roleId/users").get(getUsersPerRole);
 roleRouter.route("/:roleId/activate").post(activateRole);
 roleRouter.route("/:roleId/deactivate").post(deactivateRole);
 

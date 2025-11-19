@@ -33,7 +33,8 @@
     "POSITVE_NUMBER": "يجب أن يكون {{field}} رقم موجب",
     "PASSWORD_MISMATCH": "كلمة المرور وتأكيدها يجب ان يكونو متطابقين",
     "INVALID_FORMAT": "يرجى إدخال {{field}} صالح",
-    "UNIQUE_FIELD": "{{field}} مستخد من قبل."
+    "UNIQUE_FIELD": "{{field}} مستخد من قبل.",
+    "MIN_ROLES_REACHED": "لا يمكنك حذف جميع الأدوار الخاصة بالمستخدم"
   },
   "FIELDS": {
     "FIRST_NAME": "الاسم الأول",
@@ -70,7 +71,10 @@
     "ACTIVATION_TOKEN": "رمز التفعيل",
     "DOCUMENTS": "المستندات",
     "LOCATION": "الموقع",
-    "ADDRESS": "العنوان"
+    "ADDRESS": "العنوان",
+    "BRANCH_MANAGER": "مدير الفرع",
+    "START_HOUR": "بداية الدوام",
+    "END_HOUR": "نهاية الدوام"
   },
   "MESSAGES": {
     "FORGET_PASSWORD_SUCCESSFUL": "برجاء التحقق من بريدك الالكتروني لاسترجاع كلمة المرور.",

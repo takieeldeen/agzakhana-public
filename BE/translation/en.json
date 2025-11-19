@@ -33,7 +33,8 @@
     "POSITVE_NUMBER": "The {{field}} must be a positive number",
     "PASSWORD_MISMATCH": "Password and password confirmation must match.",
     "INVALID_FORMAT": "Please enter a valid {{field}}",
-    "UNIQUE_FIELD": "{{field}} is already in use."
+    "UNIQUE_FIELD": "{{field}} is already in use.",
+    "MIN_ROLES_REACHED": "You can't delete all roles related to this user."
   },
   "FIELDS": {
     "FIRST_NAME": "First Name",
@@ -70,7 +71,10 @@
     "PROVIDER": "Provider",
     "ACTIVATION_TOKEN": "Activation Token",
     "DOCUMENTS": "Documents",
-    "LOCATION": "Location"
+    "LOCATION": "Location",
+    "BRANCH_MANAGER": "Branch Manager",
+    "START_HOUR": "Shift Start",
+    "END_HOUR": "Shift End"
   },
   "MESSAGES": {
     "FORGET_PASSWORD_SUCCESSFUL": "Please check your email to reset your password.",

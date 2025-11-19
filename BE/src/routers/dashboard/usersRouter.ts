@@ -1,7 +1,11 @@
 import { Request, Router } from "express";
 import {
+  activateUser,
   createUser,
+  deactivateUser,
+  deleteUser,
   deleteUserRole,
+  editUser,
   getAllUsers,
   getUserDetails,
 } from "../../controllers/dashboard/userController";
@@ -21,7 +25,13 @@ userRouter
   .post(upload?.single?.("imageUrl"), createUser)
   .get(getAllUsers);
 
-userRouter.route("/:userId").get(getUserDetails);
+userRouter
+  .route("/:userId")
+  .get(getUserDetails)
+  .patch(upload?.single?.("imageUrl"), editUser)
+  .delete(deleteUser);
+// Action
 userRouter.route("/:userId/roles/:roleId").post(deleteUserRole);
-
+userRouter.route("/:userId/activate").post(activateUser);
+userRouter.route("/:userId/deactivate").post(deactivateUser);
 export default userRouter;
