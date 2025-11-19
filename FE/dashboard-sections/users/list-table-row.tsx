@@ -58,18 +58,20 @@ export default function ListTableRow({
         <p className="font-semibold text-black dark:text-white">
           {data?.[isRtl ? "nameAr" : "nameEn"]}
         </p>
-        <div className="flex flex-row items-start gap-3">
-          <Badge
-            className={cn(
-              "bg-emerald-600 capitalize dark:text-white",
-              data?.status === "INACTIVE" && "bg-rose-800"
-            )}
-          >
-            {t(`COMMON.${data?.status}`)}
-          </Badge>
-          <EllipsisTypography className="text-muted-foreground font-semibold max-w-fit">
-            {data?.email}
-          </EllipsisTypography>
+        <div className="flex flex-col md:flex-row items-start gap-3">
+          <div className="flex flex-row gap-3">
+            <Badge
+              className={cn(
+                "bg-emerald-600 capitalize dark:text-white",
+                data?.status === "INACTIVE" && "bg-rose-800"
+              )}
+            >
+              {t(`COMMON.${data?.status}`)}
+            </Badge>
+            <EllipsisTypography className="text-muted-foreground font-semibold max-w-fit">
+              {data?.email}
+            </EllipsisTypography>
+          </div>
           <ul className="flex flex-row gap-2 w-full flex-wrap">
             {data?.roles?.length > 0 && (
               <Badge className="bg-transparent border-2 border-emerald-700 text-emerald-700 dark:border-emerald-600 dark:text-emerald-600 font-semibold rounded-full">

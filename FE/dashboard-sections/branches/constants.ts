@@ -1,21 +1,15 @@
 export const ORDER_BY_OPTIONS = [
   {
     _id: "1",
-    nameAr: "اسم الدور",
-    nameEn: "Role Name",
+    nameAr: "اسم الفرع",
+    nameEn: "Branch Name",
     value: "name",
   },
   {
     _id: "2",
-    nameAr: "الحاصلين على الدور",
-    nameEn: "Number of users",
-    value: "usersCount",
-  },
-  {
-    _id: "3",
-    nameAr: "الصلاحيات",
-    nameEn: "Permissions",
-    value: "permissionsCount",
+    nameAr: "الحالة",
+    nameEn: "Status",
+    value: "status",
   },
 ];
 export const ORDER_DIR_OPTIONS = [

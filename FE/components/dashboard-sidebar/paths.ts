@@ -1,8 +1,11 @@
 export const paths = {
   dashboard: {
     users: {
-      list: "/dashboard/users",
-      map: "/dashboard/users/map",
+      list: "/dashboard/users/staff",
+      allocation: "/dashboard/users/staff-allocation",
+    },
+    shifts: {
+      list: "/dashboard/users/shifts",
     },
     roles: {
       list: "/dashboard/roles",

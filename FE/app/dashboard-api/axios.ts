@@ -28,13 +28,25 @@ export const endpoints = {
     activate: (id: string) => `/v1/dashboard/users/${id}/activate`,
     deactivate: (id: string) => `/v1/dashboard/users/${id}/deactivate`,
     userPerRoles: (roleId: string) => `/v1/dashboard/roles/${roleId}/users`,
+    staff: {
+      allocated: "/v1/dashboardd/users/allocated-staff",
+    },
   },
   valueHelp: {
     permissions: "/v1/dashboard/permissions",
     cities: "/v1/dashboard/valueHelp/city",
     nationalities: "/v1/dashboard/valueHelp/nationality",
-    activeBranches: "/v1/dashboard/valueHelp/branches/active-branches",
+    activeBranches: "/v1/dashboard/valueHelp/branches/active",
+    staffCountedActiveBranches:
+      "/v1/dashboard/valueHelp/branches/staff-counted-active-branches",
     activeRoles: "/v1/dashboard/valueHelp/roles/active",
+    activeUsers: "/v1/dashboard/valueHelp/users/active",
+  },
+  branches: {
+    list: "/v1/dashboard/branches",
+    details: (id: string) => `/v1/dashboard/branches/${id}`,
+    activate: (id: string) => `/v1/dashboard/branches/${id}/activate`,
+    deactivate: (id: string) => `/v1/dashboard/branches/${id}/deactivate`,
   },
 };
 

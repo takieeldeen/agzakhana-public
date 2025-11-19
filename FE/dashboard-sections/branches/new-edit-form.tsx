@@ -1,7 +1,6 @@
 import * as Z from "zod";
 import { RHFComboxbox } from "@/components/rhf-combobox";
 import RHFForm from "@/components/rhf-form";
-import RHFTextarea from "@/components/rhf-textarea";
 import RHFTextfield from "@/components/rhf-textfield";
 import { Button, LoadingButton } from "@/components/ui/button";
 import {
@@ -18,14 +17,15 @@ import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetRoleDetails, useMutateRole } from "@/app/dashboard-api/roles";
-import { useGetPermissionsHelper } from "@/app/dashboard-api/helpers";
+import { useGetRoleDetails } from "@/app/dashboard-api/roles";
 import { cn } from "@/lib/utils";
 import { pushDashboardMessage } from "@/components/dashboard-toast-message";
 import { Spinner } from "@/components/ui/spinner";
 import { BranchType } from "@/app/dashboard-types/branches";
 import RHFTimePicker from "@/components/rhf-timepicker";
 import { RHFLocationPicker } from "@/components/rhf-locationPicker";
+import { useGetAllActiveUsers } from "@/app/dashboard-api/valueHelp";
+import { useMutateBranch } from "@/app/dashboard-api/branches";
 
 type NewEditFormProps = {
   open: boolean;
@@ -50,9 +50,8 @@ export default function NewEditForm({
     enabled: fetchRole,
   });
   const isEdit = currentEntity || mode === "EDIT";
-  const { createRole, editRole } = useMutateRole();
-  const { data: permissions, isLoading: permissionsLoading } =
-    useGetPermissionsHelper();
+  const { createBranch, editRole } = useMutateBranch();
+  const { data: users, isLoading: usersLoading } = useGetAllActiveUsers();
   const schema = Z.object({
     nameAr: Z.string().min(
       1,
@@ -88,6 +87,18 @@ export default function NewEditForm({
           field: t("USERS_MANAGEMENT.LOCATION"),
         }),
       }),
+    startHour: Z.string().min(
+      1,
+      t("FORM_VALIDATIONS.REQUIRED_FIELD", {
+        field: t("BRANCHES_MANAGEMENT.START_HOUR"),
+      })
+    ),
+    endHour: Z.string().min(
+      1,
+      t("FORM_VALIDATIONS.REQUIRED_FIELD", {
+        field: t("BRANCHES_MANAGEMENT.END_HOUR"),
+      })
+    ),
     phoneNumber: Z.string()
       .min(
         1,
@@ -98,7 +109,7 @@ export default function NewEditForm({
       .refine(
         (val) =>
           /^(010|011|012|015|016)\d{8}$/.test(val) || // Mobile
-          /^0(2|3|4[0-9]|5[0-9]|6[0-9]|8[0-9]|9[0-9])\d{6,7}$/.test(val), // Landline
+          /^0(2|3|4[0-10]|5[0-10]|6[0-10]|8[0-10]|9[0-10])\d{6,7}$/.test(val), // Landline
         {
           message: t("FORM_VALIDATIONS.INVALID_FORMAT", {
             field: t("USERS_MANAGEMENT.PHONE_NUMBER"),
@@ -112,6 +123,8 @@ export default function NewEditForm({
       nameEn: currentEntity?.nameEn ?? "",
       manager: currentEntity?.manager ?? null,
       address: currentEntity?.address ?? null,
+      startHour: "",
+      endHour: "",
       phoneNumber: currentEntity?.phoneNumber ?? "",
     }),
     [
@@ -133,7 +146,7 @@ export default function NewEditForm({
     reset,
   } = methods;
   const values = watch();
-  console.log(errors);
+  console.log(errors, "errors", values, "values");
   const onSubmit = useCallback(
     async (data: Z.output<typeof schema>) => {
       try {
@@ -149,7 +162,7 @@ export default function NewEditForm({
             variant: "success",
           });
         } else {
-          await createRole.mutateAsync(data);
+          await createBranch.mutateAsync(data);
           onClose();
           pushDashboardMessage({
             title: t("COMMON.SUCCESS_DIALOG_TITLE"),
@@ -179,7 +192,7 @@ export default function NewEditForm({
       editRole,
       onClose,
       t,
-      createRole,
+      createBranch,
     ]
   );
   useEffect(() => {
@@ -309,7 +322,7 @@ export default function NewEditForm({
                     className="flex-1"
                   />
                   <RHFTimePicker
-                    name="endHout"
+                    name="endHour"
                     className="flex-1"
                     label={t("BRANCHES_MANAGEMENT.END_HOUR")}
                     placeholder={t("BRANCHES_MANAGEMENT.END_HOUR")}
@@ -319,8 +332,8 @@ export default function NewEditForm({
                   name="manager"
                   label={t("BRANCHES_MANAGEMENT.BRANCH_MANAGER")}
                   placeholder={t("BRANCHES_MANAGEMENT.BRANCH_MANAGER")}
-                  isLoading={permissionsLoading}
-                  options={permissions}
+                  isLoading={usersLoading}
+                  options={users}
                   getOptionLabel={(option) => {
                     if (!option) return "";
                     return locale === "ar" ? option?.nameAr : option?.nameEn;

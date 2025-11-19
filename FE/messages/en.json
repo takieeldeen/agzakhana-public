@@ -392,7 +392,8 @@
     "NOTIFICATIONS": "Notifications",
     "SEARCH": "Search",
     "PROFILE": "Profile",
-    "USERS_MAP": "Users Map"
+    "USERS_MAP": "Users Map",
+    "USERS_DISTRIBUTION": "Staff Allocation"
   },
   "ROLES_MANAGEMENT": {
     "LIST_TITLE": "Roles Management",
@@ -552,6 +553,17 @@
     "BRANCH_MANAGER": "Branch Manager",
     "WORKING_HOURS": "Working Hours",
     "START_HOUR": "Shift Start",
-    "END_HOUR": "Shift End"
+    "END_HOUR": "Shift End",
+    "BRANCH_NAME": "Branch Name"
+  },
+  "STAFF_ALLOCATION": {
+    "LIST_SUBTITLE": "Reallocate Users to different branches of the phramacy",
+
+    "NOT_ALLOCATED": "No Staff Allocated to this branch",
+    "UNALLOCATE": "Unallocate staff",
+    "CHANGE_SHIFT": "Change Staff Shift",
+    "UNALLOCATE_SUBTITLE": "Unallocate the staff member from this branch to become an Unallocated member.",
+    "CHANGE_SHIFT_SUBTITLE": "Change working days and hours for this staff member",
+    "SHIFT_MANAGEMENT": "Shift Management"
   }
 }

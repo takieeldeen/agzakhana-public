@@ -5,7 +5,11 @@ export type BranchListItem = {
   nameAr: string;
   nameEn: string;
   status: string;
-  address: string;
+  address: {
+    lat: number;
+    lng: number;
+    displayName: string;
+  };
   phoneNumber: string;
   manager: LocalizedObject;
   startHour: string;

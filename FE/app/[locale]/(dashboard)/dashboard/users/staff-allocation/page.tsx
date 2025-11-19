@@ -1,4 +1,4 @@
-// import ListView from "@/dashboard-sections/staff-allocation/views/list-view";
+import KanbanView from "@/dashboard-sections/staff-allocation/views/kanban-view";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function StaffAllocation() {
-  return <></>;
+  return <KanbanView />;
 }

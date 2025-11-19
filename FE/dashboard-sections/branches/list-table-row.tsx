@@ -1,5 +1,4 @@
 "use client";
-import { Role, RoleListItem } from "@/app/dashboard-types/roles";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,19 +14,19 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { BranchListItem } from "@/app/dashboard-types/branches";
+import { BranchListItem, BranchType } from "@/app/dashboard-types/branches";
 import { formatTime } from "@/utils/datetime";
 
 export default function ListTableRow({
   rowData,
-  onActivateRow,
-  onEditRole,
-  onDeleteRow,
+  onActivate,
+  onEdit,
+  onDelete,
 }: {
   rowData: BranchListItem;
-  onActivateRow: (role: RoleListItem) => void;
-  onEditRole: (roleId: string) => void;
-  onDeleteRow: (role: Role | RoleListItem) => void;
+  onActivate: (branch: BranchListItem) => void;
+  onEdit: (branchId: string) => void;
+  onDelete: (branch: BranchType | BranchListItem) => void;
 }) {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const locale = useLocale();
@@ -60,7 +59,7 @@ export default function ListTableRow({
             {t(`COMMON.${rowData?.status}`)}
           </Badge>
           <EllipsisTypography className="text-muted-foreground">
-            {rowData?.address}
+            {rowData?.address?.displayName}
           </EllipsisTypography>
         </div>
       </div>
@@ -87,8 +86,8 @@ export default function ListTableRow({
             {t("BRANCHES_MANAGEMENT.WORKING_HOURS")}
           </EllipsisTypography>
           <EllipsisTypography className="text-muted-foreground">
-            {formatTime(rowData?.startHour, "ar")} -{" "}
-            {formatTime(rowData?.endHour, "ar")}
+            {formatTime(rowData?.startHour, locale)} {" - "}
+            {formatTime(rowData?.endHour, locale)}
           </EllipsisTypography>
         </div>
       </div>
@@ -155,7 +154,7 @@ export default function ListTableRow({
             </li>
             <Separator />
             <li
-              onClick={() => onActivateRow(rowData as any)}
+              onClick={() => onActivate(rowData as any)}
               className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300"
             >
               <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
@@ -197,7 +196,7 @@ export default function ListTableRow({
             </li>
             <Separator />
             <li
-              onClick={() => onEditRole(rowData?._id)}
+              onClick={() => onEdit(rowData?._id)}
               className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-emerald-600 group transition-all duration-300"
             >
               <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-emerald-700 group-hover:dark:bg-emerald-700   aspect-square">
@@ -221,7 +220,7 @@ export default function ListTableRow({
             </li>
             <Separator />
             <li
-              onClick={() => onDeleteRow(rowData as any)}
+              onClick={() => onDelete(rowData as any)}
               className="flex flex-row gap-3 p-3 cursor-pointer hover:bg-rose-800 group transition-all duration-300"
             >
               <div className="h-12 w-12 rounded-lg flex items-center justify-center bg-gray-100 dark:bg-dark-900 transition-all group-hover:bg-rose-900 group-hover:dark:bg-rose-900   aspect-square">

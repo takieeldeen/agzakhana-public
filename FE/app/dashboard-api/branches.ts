@@ -4,15 +4,14 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { dummyFetcher, getFetcher } from "./api";
+import { getFetcher } from "./api";
 import { APIListResponse } from "@/types/common";
 import { Role, RoleListItem } from "../dashboard-types/roles";
 import { useMemo } from "react";
 import axios, { endpoints } from "./axios";
 import { AxiosRequestConfig } from "axios";
 import { ParamValue } from "next/dist/server/request/params";
-import { BranchListItem } from "../dashboard-types/branches";
-import { BRANCHES_MOCK_DATA } from "../_mock/_branches";
+import { BranchListItem, BranchType } from "../dashboard-types/branches";
 
 let FIRST_LIST_KEY: [string, AxiosRequestConfig<any>] | null = null;
 let LAST_LIST_KEY: [string, AxiosRequestConfig<any>] | null = null;
@@ -36,7 +35,7 @@ export function useGetBranches(
     useLastKey && LAST_LIST_KEY
       ? LAST_LIST_KEY
       : [
-          endpoints.roles.list,
+          endpoints.branches.list,
           {
             params: {
               page,
@@ -53,7 +52,7 @@ export function useGetBranches(
   >({
     ...options,
     queryKey: ["branches", URL],
-    queryFn: dummyFetcher(BRANCHES_MOCK_DATA, URL, true),
+    queryFn: getFetcher(URL),
   });
 
   const memoizedValue = useMemo(
@@ -102,68 +101,62 @@ export function useGetRoleDetails(
   return memoizedValue;
 }
 
-export function useGetUsersPerRole(roleId: ParamValue | string | undefined) {
-  const URL = roleId ? endpoints.users.userPerRoles(roleId?.toString()) : "";
-  const { data, isLoading, isFetching, refetch, error } = useQuery<
-    APIListResponse<{
-      _id: string;
-      nameAr: string;
-      nameEn: string;
-      imageUrl: string;
-      email: string;
-    }>,
-    Error
-  >({
-    queryKey: ["roles", "users", URL],
-    queryFn: getFetcher<any>(URL),
-  });
-  const memoizedValue = useMemo(
-    () => ({
-      data: data?.content ?? [],
-      results: data?.results ?? 0,
-      isLoading,
-      isFetching,
-      refetch,
-      error,
-    }),
-    [data?.content, data?.results, error, isFetching, isLoading, refetch]
-  );
-
-  return memoizedValue;
-}
-
-export function useMutateRole() {
+export function useMutateBranch() {
   const queryClient = useQueryClient();
   // -------------------------
   // Creation
   // -------------------------
-  const createRole = useMutation({
+  const createBranch = useMutation({
     mutationFn: async (data: any) => {
-      const URL = endpoints.users.list;
-      return axios.post(URL, data);
+      const URL = endpoints.branches.list;
+      const {
+        nameAr,
+        nameEn,
+        startHour,
+        endHour,
+        address,
+        manager,
+        phoneNumber,
+      } = data;
+      const modifiedData = {
+        nameAr,
+        nameEn,
+        startHour,
+        endHour,
+        address: {
+          lat: address?.lat,
+          lng: address?.lng,
+          displayName: address?.displayName,
+        },
+        manager: manager?._id,
+        phoneNumber,
+      };
+      return axios.post(URL, modifiedData);
     },
     onSuccess: () => {
       if (FIRST_LIST_KEY)
-        queryClient.invalidateQueries({ queryKey: ["users", FIRST_LIST_KEY] });
+        queryClient.invalidateQueries({
+          queryKey: ["branches", FIRST_LIST_KEY],
+        });
     },
   });
   // -------------------------
   // Activate
   // -------------------------
-  const activateRole = useMutation({
-    mutationFn: async (role: RoleListItem | Role) => {
-      const URL = endpoints.roles.activate(role?._id);
+  const activateBranch = useMutation({
+    mutationFn: async (branch: BranchListItem | BranchType) => {
+      const URL = endpoints.branches.activate(branch?._id);
       await axios.post(URL);
     },
-    onSuccess: (res, role) => {
+    onSuccess: (res, branch) => {
       if (LAST_LIST_KEY) {
         queryClient.setQueryData(
-          ["roles", LAST_LIST_KEY],
+          ["branches", LAST_LIST_KEY],
           (cachedData: any) => {
             if (!cachedData) return undefined;
             const updatedData = JSON.parse(JSON.stringify(cachedData));
             const targetListItem = updatedData?.content?.find(
-              (cur: RoleListItem) => cur._id === role?._id
+              (cur: BranchListItem) => cur._id === branch?._id
             );
             if (!targetListItem) return;
             targetListItem.status = "ACTIVE";
@@ -172,7 +165,7 @@ export function useMutateRole() {
         );
       }
       queryClient.setQueryData(
-        ["roles", endpoints.roles.details(role?._id)],
+        ["branches", endpoints.branches.details(branch?._id)],
         (cachedData: any) => {
           if (!cachedData) return undefined;
           const updatedData = JSON.parse(JSON.stringify(cachedData));
@@ -182,30 +175,30 @@ export function useMutateRole() {
       );
       if (!!LAST_LIST_KEY)
         queryClient.invalidateQueries({
-          queryKey: ["roles", LAST_LIST_KEY],
+          queryKey: ["branches", LAST_LIST_KEY],
         });
       queryClient.invalidateQueries({
-        queryKey: ["roles", endpoints.roles.details(role?._id)],
+        queryKey: ["branches", endpoints.branches.details(branch?._id)],
       });
     },
   });
   // -------------------------
   // Deactivate
   // -------------------------
-  const deactivateRole = useMutation({
-    mutationFn: async (role: RoleListItem | Role) => {
-      const URL = endpoints.roles.deactivate(role?._id);
+  const deactivateBranch = useMutation({
+    mutationFn: async (branch: BranchListItem | BranchType) => {
+      const URL = endpoints.branches.deactivate(branch?._id);
       await axios.post(URL);
     },
-    onSuccess: (res, role) => {
+    onSuccess: (res, branch) => {
       if (LAST_LIST_KEY) {
         queryClient.setQueryData(
-          ["roles", LAST_LIST_KEY],
+          ["branches", LAST_LIST_KEY],
           (cachedData: any) => {
             if (!cachedData) return undefined;
             const updatedData = JSON.parse(JSON.stringify(cachedData));
             const targetListItem = updatedData?.content?.find(
-              (cur: RoleListItem) => cur._id === role?._id
+              (cur: BranchListItem) => cur._id === branch?._id
             );
             if (!targetListItem) return;
             targetListItem.status = "INACTIVE";
@@ -214,7 +207,7 @@ export function useMutateRole() {
         );
       }
       queryClient.setQueryData(
-        ["roles", endpoints.roles.details(role?._id)],
+        ["branches", endpoints.branches.details(branch?._id)],
         (cachedData: any) => {
           if (!cachedData) return undefined;
           const updatedData = JSON.parse(JSON.stringify(cachedData));
@@ -224,10 +217,10 @@ export function useMutateRole() {
       );
       if (!!LAST_LIST_KEY)
         queryClient.invalidateQueries({
-          queryKey: ["roles", LAST_LIST_KEY],
+          queryKey: ["branches", LAST_LIST_KEY],
         });
       queryClient.invalidateQueries({
-        queryKey: ["roles", endpoints.roles.details(role?._id)],
+        queryKey: ["branches", endpoints.branches.details(branch?._id)],
       });
     },
   });
@@ -283,31 +276,37 @@ export function useMutateRole() {
   // -------------------------
   // Deletion
   // -------------------------
-  const deleteRole = useMutation({
-    mutationFn: async (roleId: string) => {
-      const URL = endpoints.roles.details(roleId);
+  const deleteBranch = useMutation({
+    mutationFn: async (branchId: string) => {
+      const URL = endpoints.branches.details(branchId);
       return axios.delete(URL);
     },
-    onSuccess: (res, roleId) => {
+    onSuccess: (res, branchId) => {
       if (LAST_LIST_KEY) {
-        queryClient.setQueryData(["roles", LAST_LIST_KEY], (cachedData) => {
+        queryClient.setQueryData(["branches", LAST_LIST_KEY], (cachedData) => {
           if (!cachedData) return undefined;
           const updatedData = JSON.parse(JSON.stringify(cachedData));
           updatedData.content = updatedData.content?.filter(
-            (role: RoleListItem) => role?._id !== roleId
+            (branch: BranchListItem) => branch?._id !== branchId
           );
           return updatedData;
         });
         queryClient.setQueryData(
-          ["roles", endpoints.roles.details(roleId)],
+          ["branches", endpoints.branches.details(branchId)],
           undefined
         );
       }
       queryClient.invalidateQueries({
-        queryKey: ["roles", endpoints.roles.details(roleId)],
+        queryKey: ["branches", endpoints.branches.details(branchId)],
       });
-      queryClient.invalidateQueries({ queryKey: ["roles", LAST_LIST_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["branches", LAST_LIST_KEY] });
     },
   });
-  return { createRole, activateRole, deactivateRole, editRole, deleteRole };
+  return {
+    createBranch,
+    activateBranch,
+    deactivateBranch,
+    editRole,
+    deleteBranch,
+  };
 }

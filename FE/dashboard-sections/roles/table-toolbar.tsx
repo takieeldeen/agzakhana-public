@@ -24,7 +24,10 @@ export default function TableToolbar({ results }: { results: number }) {
   console.log(errors);
   const searchParams = useSearchParams();
   const router = useRouter();
-  const HAS_FILTERS = dirtyFields && Object.keys(dirtyFields).length > 0;
+  const HAS_FILTERS =
+    dirtyFields &&
+    Object.keys(dirtyFields)?.filter((key) => key !== "page" && key !== "size")
+      .length > 0;
   const { syncParam } = useQueryParams({ setValue });
   const { data: permissions, isLoading } = useGetPermissionsHelper();
   const handleChangeParam = useCallback(

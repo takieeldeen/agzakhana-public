@@ -1,5 +1,6 @@
-import { useMutateRole } from "@/app/dashboard-api/roles";
-import { Role, RoleListItem } from "@/app/dashboard-types/roles";
+import { useMutateBranch } from "@/app/dashboard-api/branches";
+import { BranchListItem, BranchType } from "@/app/dashboard-types/branches";
+import { Role } from "@/app/dashboard-types/roles";
 import { pushDashboardMessage } from "@/components/dashboard-toast-message";
 import { usePrompt } from "@/components/prompt-provider";
 import { useLocale, useTranslations } from "next-intl";
@@ -8,7 +9,7 @@ import { useCallback, useMemo } from "react";
 export function useMutate() {
   const t = useTranslations();
   const locale = useLocale();
-  const { activateRole, deactivateRole, deleteRole } = useMutateRole();
+  const { activateBranch, deactivateBranch, deleteBranch } = useMutateBranch();
   const { showPrompt, closePrompt } = usePrompt();
 
   const editRole = useCallback((role: Role) => {
@@ -16,15 +17,15 @@ export function useMutate() {
   }, []);
 
   const onDelete = useCallback(
-    (role: Role | RoleListItem) => {
+    (branch: BranchType | BranchListItem) => {
       const actionProps = {
         actionFn: async () => {
           try {
-            await deleteRole.mutateAsync(role?._id);
+            await deleteBranch.mutateAsync(branch?._id);
             pushDashboardMessage({
               title: t("COMMON.SUCCESS_DIALOG_TITLE"),
               subtitle: t(`COMMON.DELETED_SUCCESSFULLY`, {
-                ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
               }),
               variant: "success",
             });
@@ -32,7 +33,7 @@ export function useMutate() {
             pushDashboardMessage({
               title: t("COMMON.FAIL_DIALOG_TITLE"),
               subtitle: t(`COMMON.DELETED_FAILED`, {
-                ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
               }),
               variant: "fail",
             });
@@ -48,35 +49,35 @@ export function useMutate() {
           OPERATION_NAME: t("COMMON.DELETION"),
         }),
         title: t("COMMON.DELETION_TITLE", {
-          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-          ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+          ENTITY_NAME: t("BRANCHES_MANAGEMENT.ENTITY_NAME"),
+          ENTITY_VALUE: locale === "ar" ? branch?.nameAr : branch?.nameEn,
         }),
         content: t("COMMON.DELETION_DESC", {
-          ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-          ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+          ENTITY_NAME: t("BRANCHES_MANAGEMENT.ENTITY_NAME"),
+          ENTITY_VALUE: locale === "ar" ? branch?.nameAr : branch?.nameEn,
         }),
       });
     },
-    [closePrompt, deleteRole, locale, showPrompt, t]
+    [closePrompt, deleteBranch, locale, showPrompt, t]
   );
   const changeStatus = useCallback(
-    (role: Role | RoleListItem) => {
+    (branch: BranchType | BranchListItem) => {
       const actionProps = {
         actionFn: async () => {
           try {
-            if (role?.status === "INACTIVE") {
-              await activateRole.mutateAsync(role);
+            if (branch?.status === "INACTIVE") {
+              await activateBranch.mutateAsync(branch);
             } else {
-              await deactivateRole.mutateAsync(role);
+              await deactivateBranch.mutateAsync(branch);
             }
             pushDashboardMessage({
               title: t("COMMON.SUCCESS_DIALOG_TITLE"),
               subtitle: t(
                 `COMMON.${
-                  role?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
+                  branch?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
                 }_SUCCESSFULLY`,
                 {
-                  ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                  ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
                 }
               ),
               variant: "success",
@@ -86,10 +87,10 @@ export function useMutate() {
               title: t("COMMON.FAIL_DIALOG_TITLE"),
               subtitle: t(
                 `COMMON.${
-                  role?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
+                  branch?.status === "INACTIVE" ? "ACTIVATED" : "DEACTIVATED"
                 }_FAILED`,
                 {
-                  ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                  ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
                 }
               ),
               variant: "fail",
@@ -101,35 +102,35 @@ export function useMutate() {
       };
       showPrompt({
         actionProps,
-        variant: role?.status === "ACTIVE" ? "ALERT" : "SUCCESS",
+        variant: branch?.status === "ACTIVE" ? "ALERT" : "SUCCESS",
         dialogTitle: t("COMMON.CONFIRMATION_DIALOG_TITLE", {
           OPERATION_NAME: t(
-            role?.status === "ACTIVE"
+            branch?.status === "ACTIVE"
               ? "COMMON.DEACTIVATION"
               : "COMMON.ACTIVATION"
           ),
         }),
         title: t(
-          role?.status === "ACTIVE"
+          branch?.status === "ACTIVE"
             ? "COMMON.DEACTIVATION_TITLE"
             : "COMMON.ACTIVATION_TITLE",
           {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+            ENTITY_NAME: t("BRANCHES_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_VALUE: locale === "ar" ? branch?.nameAr : branch?.nameEn,
           }
         ),
         content: t(
-          role?.status === "ACTIVE"
+          branch?.status === "ACTIVE"
             ? "COMMON.DEACTIVATION_DESC"
             : "COMMON.ACTIVATION_DESC",
           {
-            ENTITY_NAME: t("ROLES_MANAGEMENT.ENTITY_NAME"),
-            ENTITY_VALUE: locale === "ar" ? role?.nameAr : role?.nameEn,
+            ENTITY_NAME: t("BRANCHES_MANAGEMENT.ENTITY_NAME"),
+            ENTITY_VALUE: locale === "ar" ? branch?.nameAr : branch?.nameEn,
           }
         ),
       });
     },
-    [activateRole, closePrompt, deactivateRole, locale, showPrompt, t]
+    [activateBranch, closePrompt, deactivateBranch, locale, showPrompt, t]
   );
 
   const memoizedValue = useMemo(

@@ -10,9 +10,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { LIST_COUNT, ORDER_BY_OPTIONS, ORDER_DIR_OPTIONS } from "./constants";
-import { useGetPermissionsHelper } from "@/app/dashboard-api/helpers";
 import { useQueryParams } from "@/hooks/use-query-params";
 import { Separator } from "@/components/ui/separator";
+import { useGetAllActiveUsers } from "@/app/dashboard-api/valueHelp";
 
 export default function TableToolbar({ results }: { results: number }) {
   const t = useTranslations();
@@ -24,9 +24,12 @@ export default function TableToolbar({ results }: { results: number }) {
   console.log(errors);
   const searchParams = useSearchParams();
   const router = useRouter();
-  const HAS_FILTERS = dirtyFields && Object.keys(dirtyFields).length > 0;
+  const HAS_FILTERS =
+    dirtyFields &&
+    Object.keys(dirtyFields)?.filter((key) => key !== "page" && key !== "size")
+      .length > 0;
   const { syncParam } = useQueryParams({ setValue });
-  const { data: permissions, isLoading } = useGetPermissionsHelper();
+  const { data: users, isLoading } = useGetAllActiveUsers();
   const handleChangeParam = useCallback(
     (paramName: string, value: string, deleteParam: boolean = false) => {
       const params = new URLSearchParams(searchParams?.toString());
@@ -49,13 +52,11 @@ export default function TableToolbar({ results }: { results: number }) {
 
   const locale = useLocale();
   useEffect(() => {
-    const param = searchParams.get("permission");
-    if (permissions?.length > 0 && param) {
-      syncParam("permission", (val) =>
-        permissions.find((per) => per._id === val)
-      );
+    const param = searchParams.get("manager");
+    if (users?.length > 0 && param) {
+      syncParam("manager", (val) => users.find((per) => per._id === val));
     }
-  }, [permissions, searchParams, syncParam]);
+  }, [users, searchParams, syncParam]);
   return (
     <>
       <div className="p-3 mb-auto md:h-[22rem] overflow-y-auto lg:h-full">
@@ -112,21 +113,21 @@ export default function TableToolbar({ results }: { results: number }) {
 
         <RHFComboxbox
           clearable
-          name="permission"
+          name="manager"
           isLoading={isLoading}
-          label={t("ROLES_MANAGEMENT.PERMISSIONS")}
-          placeholder={t("ROLES_MANAGEMENT.PERMISSIONS")}
+          label={t("BRANCHES_MANAGEMENT.BRANCH_MANAGER")}
+          placeholder={t("BRANCHES_MANAGEMENT.BRANCH_MANAGER")}
           labelProps={{
             className: "text-sm font-medium",
           }}
-          options={permissions}
+          options={users}
           getOptionLabel={(option) => {
             if (!option) return "";
             return locale === "ar" ? option?.nameAr : option?.nameEn;
           }}
           optionValueComparator={(option, value) => option?._id === value?._id}
           onChange={(newVal, reason) => {
-            handleChangeParam("permission", newVal?._id, reason === "clear");
+            handleChangeParam("manager", newVal?._id, reason === "clear");
           }}
           // getOptionValue
         />

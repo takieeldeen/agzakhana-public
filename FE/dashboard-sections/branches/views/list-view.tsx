@@ -27,7 +27,6 @@ import { useResponsive } from "@/hooks/use-responsive";
 import { useForm } from "react-hook-form";
 import RHFForm from "@/components/rhf-form";
 import { useDebounce } from "@/hooks/use-debounce";
-import { useGetRoles } from "@/app/dashboard-api/roles";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   DEFAULT_PAGE_SIZE,
@@ -39,6 +38,7 @@ import { useQueryParams } from "@/hooks/use-query-params";
 import { useMutate } from "../use-mutate";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import { useGetBranches } from "@/app/dashboard-api/branches";
+import MapView from "./map-view";
 
 const NewEditForm = lazy(() => import("../new-edit-form"));
 export default function ListView() {
@@ -52,7 +52,7 @@ export default function ListView() {
   const [editedRoleId, setEditedRoleId] = useState<string | null>(null);
   const [filtersSynced, setFiltersSynced] = useState<boolean>(false);
   // const [filtersLoaded,set]
-  const [viewMode, setViewMode] = useState<"LIST" | "GRID">(
+  const [viewMode, setViewMode] = useState<"LIST" | "GRID" | "MAP">(
     !mdUp ? "GRID" : "LIST"
   );
   // Custom Hooks ////////////////////////////////////
@@ -77,7 +77,7 @@ export default function ListView() {
       nameEn: Z.string(),
       value: Z.string(),
     }).nullable(),
-    permission: Z.object({
+    manager: Z.object({
       _id: Z.string(),
       nameAr: Z.string(),
       nameEn: Z.string(),
@@ -95,7 +95,7 @@ export default function ListView() {
       name: "",
       status: null,
       sort: null,
-      permission: null,
+      manager: null,
       dir: null,
       size: DEFAULT_PAGE_SIZE,
     }),
@@ -123,7 +123,7 @@ export default function ListView() {
       status: filtervalues?.status,
       sort: filtervalues?.sort?.value ?? null,
       dir: filtervalues?.dir?.value ?? null,
-      permissions: searchParams?.get("permission") ?? null,
+      manager: searchParams?.get("manager") ?? null,
     }),
     [
       debouncedSearch,
@@ -136,6 +136,7 @@ export default function ListView() {
   // Helper Constants ////////////////////////////////////////
   const GRID_MODE = viewMode === "GRID";
   const LIST_MODE = viewMode === "LIST";
+  const MAP_MODE = viewMode === "MAP";
   const page = +(searchParams.get("page") ?? 1);
   const onSubmit = useCallback((data: any) => {
     console.log(data);
@@ -148,7 +149,11 @@ export default function ListView() {
     { enabled: filtersSynced },
     IS_INTERCEPTED
   );
-  const canReset = Object.values(dirtyFields).length > 0;
+
+  const canReset =
+    Object.keys(dirtyFields)?.filter(
+      (keyName) => keyName !== "page" && keyName !== "size"
+    ).length > 0;
   const notFound = canReset && results === 0;
   const isEmpty = !canReset && results === 0;
   // Callbacks ////////////////////////////////////////
@@ -168,7 +173,7 @@ export default function ListView() {
       sort: (val: any) => ORDER_BY_OPTIONS?.find((opt) => opt?.value === val),
       dir: (val: any) => ORDER_DIR_OPTIONS?.find((opt) => opt?.value === val),
       size: (val: any) => LIST_COUNT?.find((opt) => opt === val) ?? "9",
-      permission: () => null,
+      manager: () => null,
     });
 
     setFiltersSynced(true);
@@ -241,6 +246,22 @@ export default function ListView() {
             <div className="h-12 bg-gray-200 rounded-md dark:bg-dark-card ml-auto rtl:ml-0 rtl:mr-auto">
               <Button
                 className={cn(
+                  "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent transition-all duration-300",
+                  viewMode === "MAP" && "border-emerald-600"
+                )}
+                onClick={() => setViewMode("MAP")}
+              >
+                <Icon
+                  icon="tdesign:map-filled"
+                  className={cn(
+                    "text-black h-6! w-6! transition-all duration-300 dark:text-white",
+                    viewMode === "MAP" &&
+                      "text-emerald-600 dark:text-emerald-600"
+                  )}
+                />
+              </Button>
+              <Button
+                className={cn(
                   "w-12 p-0 h-full bg-gray-200 dark:bg-dark-card border-2 border-transparent  transition-all duration-300",
                   viewMode === "GRID" && "border-emerald-600"
                 )}
@@ -274,7 +295,7 @@ export default function ListView() {
             </div>
           )}
           <Button
-            className="bg-emerald-600 h-12 text-sm dark:text-white"
+            className="bg-emerald-600 h-12 text-sm dark:text-white w-full md:w-fit"
             onClick={() => setShowCreationModal("CREATE")}
           >
             <Icon icon="gg:add" className="w-6! h-6!" />
@@ -293,6 +314,8 @@ export default function ListView() {
         {!notFound && (
           <div className=" md:h-full w-full relative pb-12 md:pb-0 ">
             <div className="w-full overflow-y-auto px-2 h-fit md:h-full relative md:absolute">
+              {MAP_MODE && <MapView data={data} />}
+
               {LIST_MODE && (
                 <motion.ul
                   initial={{ x: -100, opacity: 0 }}
@@ -307,14 +330,15 @@ export default function ListView() {
                         <ListTableRow
                           key={role?._id}
                           rowData={role}
-                          onActivateRow={changeStatus}
-                          onDeleteRow={onDelete}
-                          onEditRole={onEditRole}
+                          onActivate={changeStatus}
+                          onDelete={onDelete}
+                          onEdit={onEditRole}
                         />
                       ))}
                   </AnimatePresence>
                 </motion.ul>
               )}
+
               {GRID_MODE && (
                 <motion.ul
                   initial={{ x: -100, opacity: 0 }}
@@ -325,10 +349,10 @@ export default function ListView() {
                   {data?.map((role) => (
                     <GridTableRow
                       key={role?._id}
-                      role={role as any}
-                      onActivateRow={changeStatus}
-                      onDeleteRow={onDelete}
-                      onEditRole={onEditRole}
+                      row={role as any}
+                      onActivate={changeStatus}
+                      onDelete={onDelete}
+                      onEdit={onEditRole}
                     />
                   ))}
                 </motion.ul>

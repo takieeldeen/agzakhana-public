@@ -1,8 +1,7 @@
-import { UserListItem } from "@/app/dashboard-types/users";
+import { BranchListItem } from "@/app/dashboard-types/branches";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import Map from "@/components/map/map";
 import { CustomMapMarker } from "@/components/map/map-marker";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   Popover,
@@ -10,27 +9,22 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { cn } from "@/lib/utils";
-import { getInitials } from "@/utils/string";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { useTranslations } from "use-intl";
 
-export default function UsersMap({ data }: { data: UserListItem[] }) {
+export default function MapView({ data }: { data: BranchListItem[] }) {
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
   console.log(mapCenter);
   const locale = useLocale();
   const t = useTranslations();
   const handleRowClick = useCallback(
-    (row: UserListItem) => {
+    (row: BranchListItem) => {
       if (row?._id === currentUser) {
         setCurrentUser(null);
         setMapCenter(null);
@@ -51,7 +45,7 @@ export default function UsersMap({ data }: { data: UserListItem[] }) {
                 key={row?._id}
                 rowData={row}
                 currentCard={currentUser}
-                onClick={(cardRow: UserListItem) => {
+                onClick={(cardRow: BranchListItem) => {
                   handleRowClick(cardRow);
                 }}
               />
@@ -85,51 +79,52 @@ export default function UsersMap({ data }: { data: UserListItem[] }) {
                   }}
                 >
                   <PopoverTrigger>
-                    <div
-                      className={cn(
-                        "h-12 w-12 flex items-center justify-center bg-white rounded-full drop-shadow-md",
-                        currentUser === row?._id &&
-                          "bg-emerald-600 drop-shadow-2xl drop-shadow-emerald-600"
-                      )}
-                    >
-                      <Avatar className="h-11 w-11 ">
-                        <AvatarImage src={row?.imageUrl} />
-                        <AvatarFallback className="font-semibold dark:text-white">
-                          {getInitials(row?.nameEn)}
-                        </AvatarFallback>
-                      </Avatar>
+                    <div className="flex flex-col items-center gap-1">
+                      <div
+                        className={cn(
+                          "h-12 w-12 flex items-center justify-center bg-white rounded-full drop-shadow-md",
+                          currentUser === row?._id &&
+                            "bg-emerald-600 drop-shadow-2xl drop-shadow-emerald-600"
+                        )}
+                      >
+                        <div className="h-11 w-11 flex items-center justify-center rounded-full bg-dark-700">
+                          <Icon
+                            icon="streamline-plump:store-2"
+                            className="h-6 w-6 text-white"
+                          />
+                        </div>
+                      </div>
+                      <div className="bg-dark-700 text-white rounded-3xl px-2 border-2 border-white whitespace-nowrap font-cairo">
+                        {locale === "ar" ? row?.nameAr : row?.nameEn}
+                      </div>
                     </div>
                   </PopoverTrigger>
                   <PopoverContent className="bg-white drop-shadow-lg dark:bg-dark-card w-96 min-h-48 py-3 gap-3 flex flex-col">
                     <div className="flex flex-row items-start gap-3">
-                      <Avatar className="h-24 w-24">
-                        <AvatarImage src={row?.imageUrl} />
-                        <AvatarFallback className="font-semibold">
-                          {getInitials(row?.nameEn)}
-                        </AvatarFallback>
-                      </Avatar>
+                      <Icon
+                        icon="streamline-plump:store-2"
+                        className="h-24 w-24 text-border"
+                      />
                       <div className="flex flex-col gap-1">
                         <div className="w-full flex flex-col">
-                          <EllipsisTypography className="text-primary text-lg font-semibold">
-                            {locale === "ar" ? row?.nameAr : row?.nameEn}
-                          </EllipsisTypography>
-                          <EllipsisTypography className="text-sm font-semibold text-gray-600 dark:text-gray-300">
-                            {row?.email}
-                          </EllipsisTypography>
+                          <div className="flex flex-row gap-2">
+                            <EllipsisTypography className="text-primary text-lg font-semibold max-w-fit">
+                              {locale === "ar" ? row?.nameAr : row?.nameEn}
+                            </EllipsisTypography>
+                            <Badge
+                              className={cn(
+                                "bg-emerald-600 capitalize dark:text-white",
+                                row?.status === "INACTIVE" && "bg-rose-800"
+                              )}
+                            >
+                              {t(`COMMON.${row?.status}`)}
+                            </Badge>
+                          </div>
                         </div>
                         <div className="flex flex-row items-center gap-3 mb-2">
-                          <Badge
-                            className={cn(
-                              "bg-emerald-600 capitalize dark:text-white",
-                              row?.status === "INACTIVE" && "bg-rose-800"
-                            )}
-                          >
-                            {t(`COMMON.${row?.status}`)}
-                          </Badge>
-
                           <p className="flex flex-row items-center gap-1 text-primary text-base">
-                            {t("USERS_MANAGEMENT.BRANCH")} :
-                            {row?.branch?.[
+                            {t("BRANCHES_MANAGEMENT.BRANCH_MANAGER")} :
+                            {row?.manager?.[
                               locale === "ar" ? "nameAr" : "nameEn"
                             ] ?? t("COMMON.UNKOWN")}
                           </p>
@@ -149,10 +144,12 @@ export default function UsersMap({ data }: { data: UserListItem[] }) {
                     </EllipsisTypography>
                     <Link
                       href={`/dashboard/users/details/${row?._id}`}
-                      className="bg-emerald-600 w-full h-10 rounded-md flex items-center justify-center text-sm hover:bg-emerald-700 transition-all duration-300 text-white "
+                      className="bg-emerald-600 w-full h-10 rounded-md flex items-center justify-center text-sm hover:bg-emerald-700 transition-all duration-300 dark:text-white text-white"
                     >
                       {t("COMMON.DETAILS_TITLE", {
-                        ENTITY_NAME: t("USERS_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                        ENTITY_NAME: t(
+                          "BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"
+                        ),
                       })}
                     </Link>
                   </PopoverContent>
@@ -171,17 +168,13 @@ function SingleCard({
   currentCard,
   onClick,
 }: {
-  rowData: UserListItem;
+  rowData: BranchListItem;
   currentCard: string | null;
-  onClick: (user: UserListItem) => void;
+  onClick: (user: BranchListItem) => void;
 }) {
   const locale = useLocale();
   const t = useTranslations();
-  const initials = rowData?.nameEn
-    ?.split(" ")
-    ?.map((name) => name?.[0])
-    ?.slice(0, 2)
-    ?.join("");
+
   return (
     <li
       onClick={() => onClick(rowData)}
@@ -191,58 +184,36 @@ function SingleCard({
       )}
     >
       <div className="flex flex-row gap-2">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={rowData?.imageUrl} />
-          <AvatarFallback className="font-semibold dark:text-gray-300">
-            {initials}
-          </AvatarFallback>
-        </Avatar>
+        <Icon
+          icon="streamline-plump:store-2"
+          className="h-16 w-16 text-border"
+        />
         <div className="flex flex-col">
           <p className="font-semibold dark:text-white">
             {locale === "ar" ? rowData?.nameAr : rowData?.nameEn}
           </p>
           <p className="font-semibold text-sm text-gray-500 dark:text-gray-300">
-            {rowData?.email}
+            {rowData?.address?.displayName}
           </p>
         </div>
       </div>
       <Separator />
-      <ul className="flex flex-row gap-2 w-full flex-wrap">
-        {rowData?.roles?.length > 0 && (
-          <Badge className="bg-transparent border-2 border-emerald-700 text-emerald-700 dark:border-emerald-600 dark:text-emerald-600 font-semibold rounded-full">
-            {locale === "ar"
-              ? rowData?.roles?.[0]?.nameAr
-              : rowData?.roles?.[0]?.nameEn}
-          </Badge>
-        )}
-        {rowData?.roles?.length > 1 && (
-          <Tooltip>
-            <TooltipTrigger>
-              <Badge className="bg-transparent border-2 border-emerald-700 text-emerald-700 dark:border-emerald-600 dark:text-emerald-600 font-semibold rounded-full">
-                {t("USERS_MANAGEMENT.MORE_ROLES", {
-                  count: rowData?.roles?.length - 1,
-                })}
-              </Badge>
-            </TooltipTrigger>
-            <TooltipContent className="shadow-lg dark:bg-dark-background dark:text-white">
-              <ul className="flex flex-col py-2">
-                {rowData?.roles?.slice(1)?.map((role, i) => (
-                  <li
-                    key={role?._id}
-                    className={cn(
-                      "flex items-center h-10",
-                      i !== rowData.roles.length - 2 &&
-                        "border-gray-600  border-b-[1px]"
-                    )}
-                  >
-                    {locale === "ar" ? role?.nameAr : role?.nameEn}
-                  </li>
-                ))}
-              </ul>
-            </TooltipContent>
-          </Tooltip>
-        )}
-      </ul>
+      <div className="flex flex-row items-center gap-3 mb-2">
+        <Badge
+          className={cn(
+            "bg-emerald-600 capitalize dark:text-white",
+            rowData?.status === "INACTIVE" && "bg-rose-800"
+          )}
+        >
+          {t(`COMMON.${rowData?.status}`)}
+        </Badge>
+
+        <p className="flex flex-row items-center gap-1 text-primary text-base">
+          {t("BRANCHES_MANAGEMENT.BRANCH_MANAGER")} :
+          {rowData?.manager?.[locale === "ar" ? "nameAr" : "nameEn"] ??
+            t("COMMON.UNKOWN")}
+        </p>
+      </div>
     </li>
   );
 }

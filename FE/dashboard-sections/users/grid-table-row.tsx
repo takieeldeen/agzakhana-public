@@ -1,5 +1,4 @@
 "use client";
-import { Role, RoleListItem } from "@/app/dashboard-types/roles";
 import { User, UserListItem } from "@/app/dashboard-types/users";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";

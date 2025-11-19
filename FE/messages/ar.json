@@ -388,7 +388,8 @@
     "NOTIFICATIONS": "الإشعارات",
     "SEARCH": "بحث",
     "PROFILE": "حسابي",
-    "USERS_MAP": "خريطة المستخدمين"
+    "USERS_MAP": "خريطة المستخدمين",
+    "USERS_DISTRIBUTION": "توزيع المستخدمين"
   },
   "ROLES_MANAGEMENT": {
     "LIST_TITLE": "إدارة الأدوار",
@@ -554,6 +555,16 @@
     "BRANCH_MANAGER": "مدير الفرع",
     "WORKING_HOURS": "ساعات العمل",
     "START_HOUR": "بدء الدوام",
-    "END_HOUR": "نهاية الدوام"
+    "END_HOUR": "نهاية الدوام",
+    "BRANCH_NAME": "اسم الفرع"
+  },
+  "STAFF_ALLOCATION": {
+    "LIST_SUBTITLE": "إعادة تعيين الموظفين بأفرع الصيدلية",
+    "NOT_ALLOCATED": "لا يوجد موظفين بالفرع",
+    "UNALLOCATE": "إلغاء التعيين الموظف",
+    "CHANGE_SHIFT": "تغيير دوام الموظف",
+    "UNALLOCATE_SUBTITLE": "إزالة تعيين الموظف بالفرع الحالي ليصبح من الموظفية غير المعينيين",
+    "CHANGE_SHIFT_SUBTITLE": "تغيير ايام وساعات العمل الخاصة بالموظف",
+    "SHIFT_MANAGEMENT": "إدارة الدوام"
   }
 }

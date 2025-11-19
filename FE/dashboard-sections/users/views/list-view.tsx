@@ -37,12 +37,11 @@ import UsersMap from "./map-view";
 export default function ListView() {
   const mdUp = useResponsive("up", "md");
   const pathname = usePathname();
-  const IS_INTERCEPTED = !pathname.endsWith("users");
+  const IS_INTERCEPTED =
+    pathname.split("/")[pathname.split("/").length - 1] !== "staff";
   const [filtersSynced, setFiltersSynced] = useState<boolean>(false);
-  // const [filtersLoaded,set]
   const [viewMode, setViewMode] = useState<"LIST" | "GRID" | "MAP">(
-    // !mdUp ? "GRID" : "LIST"
-    "MAP"
+    !mdUp ? "GRID" : "LIST"
   );
   // Custom Hooks ////////////////////////////////////
   const t = useTranslations();
@@ -146,7 +145,11 @@ export default function ListView() {
     { enabled: filtersSynced },
     IS_INTERCEPTED
   );
-  const canReset = Object.values(dirtyFields).length > 0;
+  console.log(filtersSynced, IS_INTERCEPTED);
+  const canReset =
+    Object.keys(dirtyFields)?.filter(
+      (keyName) => keyName !== "page" && keyName !== "size"
+    ).length > 0;
   const notFound = canReset && results === 0;
   const isEmpty = !canReset && results === 0;
   // Callbacks ////////////////////////////////////////
@@ -278,7 +281,7 @@ export default function ListView() {
             </div>
           )}
           <Button
-            className="bg-emerald-600 h-12 text-sm dark:text-white"
+            className="bg-emerald-600 h-12 text-sm dark:text-white w-full md:w-fit"
             onClick={handleCreationTrigger}
           >
             <Icon icon="gg:add" className="w-6! h-6!" />

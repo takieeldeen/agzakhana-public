@@ -19,13 +19,30 @@ export const useDashboardNavData = () => {
       icon: "streamline-plump:store-2",
     },
     {
-      id: "ROLES_MANAGEMENT_1",
+      id: "USER_MANAGEMENT_GROUP",
       label: t("DASHBOARD_NAV_BAR.USER_MANAGEMENT"),
       path: paths.dashboard.users.list,
-      icon: "solar:key-broken",
+      icon: "mynaui:users",
+      children: [
+        {
+          id: "USER_LIST",
+          label: t("DASHBOARD_NAV_BAR.USER_MANAGEMENT"),
+          path: paths.dashboard.users.list,
+        },
+        {
+          id: "USER_DISTRIBUTION",
+          label: t("DASHBOARD_NAV_BAR.USERS_DISTRIBUTION"),
+          path: paths.dashboard.users.allocation,
+        },
+        {
+          id: "SHIFT_MANAGEMENT",
+          label: t("STAFF_ALLOCATION.SHIFT_MANAGEMENT"),
+          path: paths.dashboard.shifts.list,
+        },
+      ],
     },
     {
-      id: "USERS_MANAGEMENT",
+      id: "PERMISSIONS_MANAGEMENT_GROUP",
       label: t("DASHBOARD_NAV_BAR.PERMISSIONS_MANAGEMENT"),
       path: paths.dashboard.roles.list,
       icon: "solar:key-broken",

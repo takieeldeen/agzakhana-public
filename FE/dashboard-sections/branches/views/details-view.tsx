@@ -41,7 +41,8 @@ export default function DetailsView() {
   const usersEmpty = users?.length === 0 && !usersLoading;
   if (isLoading || usersLoading) return <DetailsSkeletonView />;
   return (
-    <div className="h-full dark:bg-dark-card flex flex-col">
+    <div className="h-full dark:bg-dark-card flex flex-col overflow-y-scroll md:overflow-y-auto">
+      {" "}
       <ErrorGuard error={error}>
         {/* Details Header */}
         <div className="bg-emerald-600 md:h-1/8 md:min-h-48 p-6 flex flex-col md:flex-row gap-3 items-center">

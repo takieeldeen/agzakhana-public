@@ -1,5 +1,5 @@
 "use client";
-import { Role, RoleListItem } from "@/app/dashboard-types/roles";
+import { BranchListItem, BranchType } from "@/app/dashboard-types/branches";
 import EllipsisTypography from "@/components/ellipsis-typography";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,26 +11,27 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { formatTime } from "@/utils/datetime";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useLocale, useTranslations } from "next-intl";
 
 export default function GridTableRow({
-  role,
-  onActivateRow,
-  onEditRole,
-  onDeleteRow,
+  row,
+  onActivate,
+  onEdit,
+  onDelete,
 }: {
-  role: RoleListItem;
-  onActivateRow: (role: RoleListItem) => void;
-  onEditRole: (roleId: string) => void;
-  onDeleteRow: (role: Role | RoleListItem) => void;
+  row: BranchListItem;
+  onActivate: (branch: BranchListItem) => void;
+  onEdit: (branchId: string) => void;
+  onDelete: (branch: BranchType | BranchListItem) => void;
 }) {
   const locale = useLocale();
   const t = useTranslations();
   const isRtl = locale === "ar";
   return (
     <li
-      key={role?._id}
+      key={row?._id}
       className="bg-card w-full md:w-128 md:min-w-76 md:max-w-[calc(33%_-_12px)] md:aspect-square overflow-hidden  rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] flex flex-col items-center gap-3 dark:bg-dark-card "
     >
       <div className="bg-teal-600 dark:bg-teal-800 w-full h-24 md:max-h-24 md:min-h-[calc(31%)] flex flex-row gap-3 items-center px-3">
@@ -41,34 +42,47 @@ export default function GridTableRow({
         />
         <div>
           <p className="text-primary-foreground xl:text-xl dark:text-white">
-            {role?.[isRtl ? "nameAr" : "nameEn"]}
+            {row?.[isRtl ? "nameAr" : "nameEn"]}
           </p>
           <Badge className={cn("bg-teal-700 capitalize dark:text-white")}>
-            {t(`COMMON.${role?.status}`)}
+            {t(`COMMON.${row?.status}`)}
           </Badge>
         </div>
       </div>
       <div className="flex flex-col gap-1 px-3 items-start  w-full">
         <p className="font-semibold text-black dark:text-white">
-          {t("ROLES_MANAGEMENT.ROLE_DESCRIPTION")}
+          {t("BRANCHES_MANAGEMENT.ADDRESS")}
         </p>
-        <EllipsisTypography className="text-muted-foreground" maxLines={3}>
-          {role?.[isRtl ? "descriptionAr" : "descriptionEn"]}
+        <EllipsisTypography className="text-muted-foreground">
+          {row?.address?.displayName}
         </EllipsisTypography>
       </div>
       <Separator />
       <div className="flex flex-row w-full  mb-auto p-2">
         <div className="flex flex-col gap-1 p-2 w-full">
           <p className="font-semibold text-black dark:text-white">
-            {t("ROLES_MANAGEMENT.USERS_COUNT")}
+            {t("BRANCHES_MANAGEMENT.PHONE_NUMBER")}
           </p>
-          <p className="text-muted-foreground">{role?.usersCount}</p>
+          <p className="text-muted-foreground">{row?.phoneNumber}</p>
         </div>
         <div className="flex flex-col gap-1 p-2 w-full">
           <p className="font-semibold text-black dark:text-white">
-            {t("ROLES_MANAGEMENT.PERMISSIONS_COUNT")}
+            {t("BRANCHES_MANAGEMENT.WORKING_HOURS")}
           </p>
-          <p className="text-muted-foreground">{role?.permissionsCount}</p>
+          <p className="text-muted-foreground">
+            {formatTime(row?.startHour, locale)} {" - "}
+            {formatTime(row?.endHour, locale)}
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-row w-full  mb-auto p-2">
+        <div className="flex flex-col gap-1 p-2 w-full">
+          <p className="font-semibold text-black dark:text-white">
+            {t("BRANCHES_MANAGEMENT.BRANCH_MANAGER")}
+          </p>
+          <p className="text-muted-foreground">
+            {row?.manager?.[locale === "ar" ? "nameAr" : "nameEn"]}
+          </p>
         </div>
       </div>
       <div className="w-full transition-all duration-300 hover:bg-teal-600 h-16 flex flex-row items-center justify-center gap-3 border-t-2 group">
@@ -83,7 +97,7 @@ export default function GridTableRow({
           </TooltipTrigger>
           <TooltipContent>
             {t("COMMON.DETAILS_TITLE", {
-              ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+              ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
             })}
           </TooltipContent>
         </Tooltip>
@@ -91,11 +105,11 @@ export default function GridTableRow({
           <TooltipTrigger asChild>
             <Button
               className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white"
-              onClick={() => onActivateRow(role)}
+              onClick={() => onActivate(row)}
             >
               <Icon
                 icon={
-                  role?.status === "ACTIVE"
+                  row?.status === "ACTIVE"
                     ? "maki:cross"
                     : "material-symbols:check-rounded"
                 }
@@ -105,11 +119,11 @@ export default function GridTableRow({
           </TooltipTrigger>
           <TooltipContent>
             {t(
-              role?.status === "ACTIVE"
+              row?.status === "ACTIVE"
                 ? "COMMON.DEACTIVATE_TITLE"
                 : "COMMON.ACTIVATE_TITLE",
               {
-                ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+                ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
               }
             )}
           </TooltipContent>
@@ -118,7 +132,7 @@ export default function GridTableRow({
           <TooltipTrigger asChild>
             <Button
               onClick={() => {
-                onEditRole(role?._id);
+                onEdit(row?._id);
               }}
               className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white"
             >
@@ -130,7 +144,7 @@ export default function GridTableRow({
           </TooltipTrigger>
           <TooltipContent>
             {t("COMMON.EDIT_TITLE", {
-              ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+              ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
             })}
           </TooltipContent>
         </Tooltip>
@@ -138,7 +152,7 @@ export default function GridTableRow({
           <TooltipTrigger asChild>
             <Button
               onClick={() => {
-                onDeleteRow(role);
+                onDelete(row);
               }}
               className="h-11 w-11 rounded-full boredr-2 border-teal-700 bg-transparent border-2 group-hover:border-white"
             >
@@ -150,7 +164,7 @@ export default function GridTableRow({
           </TooltipTrigger>
           <TooltipContent>
             {t("COMMON.REMOVE_TITLE", {
-              ENTITY_NAME: t("ROLES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
+              ENTITY_NAME: t("BRANCHES_MANAGEMENT.DEFINITE_ENTITY_NAME"),
             })}
           </TooltipContent>
         </Tooltip>
