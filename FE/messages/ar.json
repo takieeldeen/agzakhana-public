@@ -131,7 +131,9 @@
     "FINISH": "إنهاء",
     "NO_MAX_FILE_SIZE": "لا يوجد حد اقصى للملف",
     "ERROR_DIALOG_TITLE": "خطأ",
-    "CLOSE": "إغلاق"
+    "CLOSE": "إغلاق",
+    "FROM": "من",
+    "TO": "إلى"
   },
   "HOME_PAGE": {
     "TITLE": "لا تفوت العروض المذهلة من الصيدلية",

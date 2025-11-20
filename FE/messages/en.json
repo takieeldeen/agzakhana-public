@@ -131,7 +131,9 @@
     "FINISH": "Finish",
     "NO_MAX_FILE_SIZE": "No limit for the file size.",
     "ERROR_DIALOG_TITLE": "Error",
-    "CLOSE": "Close"
+    "CLOSE": "Close",
+    "FROM": "From",
+    "TO": "To"
   },
   "HOME_PAGE": {
     "TITLE": "Don’t miss amazing pharmacy deals",
